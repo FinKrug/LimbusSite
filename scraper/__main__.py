@@ -3,6 +3,7 @@
     python -m scraper                 # fetch live data -> data/
     python -m scraper --offline       # rebuild from cached responses only
     python -m scraper --skip-identities
+    python -m scraper --include-unobtainable   # keep non-Mirror-Dungeon gifts too
 """
 
 from __future__ import annotations
@@ -29,6 +30,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", type=Path, default=Path("data"), help="output folder (default: data)")
     ap.add_argument("--offline", action="store_true", help="use cached API responses only")
     ap.add_argument("--skip-identities", action="store_true", help="only scrape E.G.O gifts")
+    ap.add_argument("--include-unobtainable", action="store_true",
+                    help="also keep Story Dungeon and Legacy gifts (default: Mirror Dungeon only)")
     ap.add_argument("--api", default=DEFAULT_API, help="MediaWiki api.php URL")
     ap.add_argument("--delay", type=float, default=1.0, help="seconds between requests (default 1)")
     args = ap.parse_args(argv)
@@ -64,12 +67,6 @@ def main(argv: list[str] | None = None) -> int:
     sections = build.section_comments(pages[GIFT_DATA]["content"])
     gifts, packs, fusions, w = build.build_gifts(gift_data, gift_list, sections)
     warnings += w
-    _write(out / "gifts.json", gifts)
-    _write(out / "theme_packs.json", packs)
-    _write(out / "fusions.json", fusions)
-    md = sum(g["mirror_dungeon"] for g in gifts)
-    print(f"  {len(gifts)} gifts ({md} obtainable in Mirror Dungeon), "
-          f"{len(packs)} theme packs, {len(fusions)} fusion recipes")
 
     # -- identities ------------------------------------------------------------
     identities: list[dict] = []
@@ -83,8 +80,35 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         identities, w = build.build_identities(cats)
         warnings += w
-        _write(out / "identities.json", identities)
-        print(f"  {len(identities)} identities")
+
+    # -- theme pack wiki pages ---------------------------------------------------
+    print("Checking which theme packs have wiki pages ...")
+    pack_pages: dict[str, str | None] | None
+    try:
+        candidates = {p["name"]: build.pack_page_candidates(p["name"]) for p in packs}
+        found = client.existing_titles([t for ts in candidates.values() for t in ts])
+        pack_pages = {
+            name: next((found[t] for t in ts if found.get(t)), None)
+            for name, ts in candidates.items()
+        }
+    except WikiError as e:
+        warnings.append(f"theme pack pages not checked, so they have no links ({e})")
+        pack_pages = None
+
+    # -- write -------------------------------------------------------------------
+    data, w = build.export_for_app(
+        gifts, packs, fusions, identities, pack_pages,
+        include_unobtainable=args.include_unobtainable,
+    )
+    warnings += w
+    for name, rows in data.items():
+        if name == "identities" and args.skip_identities:
+            continue
+        _write(out / f"{name}.json", rows)
+    print(f"  {len(data['gifts'])} gifts"
+          f"{'' if args.include_unobtainable else ' (Mirror Dungeon only)'}, "
+          f"{len(data['theme_packs'])} theme packs, {len(data['fusions'])} fusion recipes, "
+          f"{len(data['identities'])} identities")
 
     # -- meta + report ---------------------------------------------------------------
     meta = {
@@ -92,12 +116,8 @@ def main(argv: list[str] | None = None) -> int:
         "source": args.api,
         "offline": args.offline,
         "pages": {t: {k: v for k, v in p.items() if k != "content"} for t, p in pages.items()},
-        "counts": {
-            "gifts": len(gifts),
-            "mirror_dungeon_gifts": sum(g["mirror_dungeon"] for g in gifts),
-            "theme_packs": len(packs),
-            "fusions": len(fusions), "identities": len(identities),
-        },
+        "include_unobtainable": args.include_unobtainable,
+        "counts": {name: len(rows) for name, rows in data.items()},
         "warnings": len(warnings),
     }
     _write(out / "meta.json", meta)

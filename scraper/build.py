@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import re
 import unicodedata
+import urllib.parse
 from typing import Any
 
 from . import wikitext
@@ -232,7 +233,7 @@ def build_gifts(
                     })
                     break
                 if src["linked"]:
-                    _add_unique(g["events"], src["text"])
+                    _add_unique(g["events"], {"name": src["text"], "page": src["target"]})
                 elif pool in ("themed", "extreme", "cursed"):
                     _add_unique(g["theme_packs"], src["text"])
                     _add_unique(_pack(packs, src["text"], pool)["gifts"], gid)
@@ -308,6 +309,143 @@ def build_identities(page_cats: dict[str, list[str]]) -> tuple[list[dict], list[
     order = {s: i for i, s in enumerate(SINNERS)}
     out.sort(key=lambda i: (order[i["sinner"]], i["rarity"] or 0, i["name"]))
     return out, warnings
+
+
+# -- app export -------------------------------------------------------------------
+WIKI_BASE = "https://limbuscompany.wiki.gg/wiki/"
+GIFT_LIST_PAGE = "List_of_E.G.O_Gifts"
+
+
+def wiki_url(title: str) -> str:
+    return WIKI_BASE + urllib.parse.quote(title.replace(" ", "_"), safe="()'!,:;@*$/.")
+
+
+def gift_list_url(name: str) -> str:
+    """Gifts have no pages of their own, so link to the gift list and let the
+    browser jump to the name (a URL text fragment: #:~:text=...)."""
+    frag = urllib.parse.quote(name, safe="").replace("-", "%2D")
+    return f"{WIKI_BASE}{GIFT_LIST_PAGE}#:~:text={frag}"
+
+
+def pack_page_candidates(name: str) -> list[str]:
+    """Wiki titles a theme pack's page might have, best guess first."""
+    return [f"{name} Theme Pack", name]
+
+
+def export_for_app(
+    gifts: list[dict],
+    packs: list[dict],
+    fusions: list[dict],
+    identities: list[dict],
+    pack_pages: dict[str, str | None] | None = None,
+    include_unobtainable: bool = False,
+) -> tuple[dict[str, list[dict]], list[str]]:
+    """Slim the full build down to what the web app needs.
+
+    Only Mirror Dungeon gifts are kept (unless include_unobtainable), long
+    descriptions are left on the wiki (we keep the base effect text for
+    tooltips and scoring) and every record gets a wiki link instead.
+
+    pack_pages maps a pack name to its verified wiki page title (or None if it
+    has none). If it's None altogether, pack pages weren't checked.
+    """
+    warnings: list[str] = []
+    keep = {g["id"] for g in gifts if include_unobtainable or g["mirror_dungeon"]}
+
+    # Theme pack ids: unique per (name, pool).
+    pack_id: dict[tuple[str, str], str] = {}
+    used: set[str] = set()
+    for p in packs:
+        pid = p["id"]
+        if pid in used:
+            pid = f"{pid}-{p['pool']}"
+        used.add(pid)
+        pack_id[(p["name"], p["pool"])] = pid
+    pack_by_name: dict[str, list[str]] = {}
+    for (name, _pool), pid in pack_id.items():
+        pack_by_name.setdefault(name, []).append(pid)
+
+    out_gifts = []
+    for g in gifts:
+        if g["id"] not in keep:
+            continue
+        recipe = g["fusion_recipe"]
+        ingredients = None
+        if recipe:
+            ingredients = [i for i in recipe["ingredients"] if i in keep]
+            if len(ingredients) != len(recipe["ingredients"]) or recipe["unresolved"]:
+                warnings.append(f"fusion {g['name']!r}: some ingredients can't drop in Mirror Dungeon")
+        out = {
+            "id": g["id"],
+            "name": g["name"],
+            "sin": g["sin"],
+            "tier": g["tier"],
+            "cost": g["cost"],
+            "keyword": g["keyword"],
+            "secondary_keyword": g["secondary_keyword"],
+            "status_effects": g["status_effects"],
+            "effect": g["levels"][0]["desc"] if g["levels"] else "",
+            "max_level": g["max_level"],
+            "pools": [p for p in g["pools"] if p in MD_POOLS] or g["pools"],
+            "theme_packs": [pid for n in g["theme_packs"] for pid in pack_by_name.get(n, [])],
+            "events": [
+                {"name": e["name"], "wiki_url": wiki_url(e["page"]) if e.get("page") else None}
+                for e in g["events"]
+            ],
+            "fusion_recipe": ingredients,
+            "wiki_url": gift_list_url(g["name"]),
+        }
+        if include_unobtainable:
+            out["mirror_dungeon"] = g["mirror_dungeon"]
+            out["legacy"] = g["legacy"]
+        out_gifts.append(out)
+
+    out_packs = []
+    for p in packs:
+        members = [gid for gid in p["gifts"] if gid in keep]
+        if not members and not include_unobtainable:
+            continue
+        if pack_pages is None:
+            url = None
+        else:
+            page = pack_pages.get(p["name"])
+            url = wiki_url(page) if page else None
+            if page is None:
+                warnings.append(f"theme pack {p['name']!r}: no wiki page found")
+        out_packs.append({
+            "id": pack_id[(p["name"], p["pool"])],
+            "name": p["name"],
+            "pool": p["pool"],
+            "gifts": members,
+            "wiki_url": url,
+        })
+
+    out_fusions = [
+        {"result": f["result"], "ingredients": f["ingredients"]}
+        for f in fusions
+        if f["result"] in keep and all(i in keep for i in f["ingredients"]) and not f["unresolved"]
+    ]
+
+    out_ids = [
+        {
+            "id": i["id"],
+            "name": i["name"],
+            "sinner": i["sinner"],
+            "rarity": i["rarity"],
+            "affinities": i["affinities"],
+            "keywords": i["keywords"],
+            "status_effects": i["status_effects"],
+            "wiki_url": wiki_url(i["name"]),
+        }
+        for i in identities
+        if not i["incomplete"]  # event-only units can't be taken into Mirror Dungeon
+    ]
+    return {
+        "gifts": out_gifts,
+        "theme_packs": out_packs,
+        "fusions": out_fusions,
+        "identities": out_ids,
+    }, warnings
 
 
 # -- utils -----------------------------------------------------------------------

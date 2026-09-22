@@ -140,6 +140,23 @@ class WikiClient:
             titles += [m["title"] for m in data["query"]["categorymembers"]]
         return titles
 
+    def existing_titles(self, titles: list[str]) -> dict[str, str | None]:
+        """{requested title: final page title after redirects, or None if missing}"""
+        out: dict[str, str | None] = {}
+        for batch in _chunks(list(dict.fromkeys(titles)), 50):
+            data = self.get(action="query", prop="info", redirects=1,
+                            titles="|".join(batch), maxlag=5)
+            q = data.get("query", {})
+            norm = {n["from"]: n["to"] for n in q.get("normalized", [])}
+            redir = {r["from"]: r["to"] for r in q.get("redirects", [])}
+            exists = {p["title"] for p in q.get("pages", [])
+                      if not p.get("missing") and not p.get("invalid")}
+            for t in batch:
+                final = norm.get(t, t)
+                final = redir.get(final, final)
+                out[t] = final if final in exists else None
+        return out
+
     def page_categories(self, titles: list[str]) -> dict[str, list[str]]:
         """{title: [category names without the 'Category:' prefix]}"""
         out: dict[str, list[str]] = {t: [] for t in titles}

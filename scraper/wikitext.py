@@ -54,9 +54,9 @@ def to_plain(markup: str) -> str:
 def split_sources(event: str) -> list[dict]:
     """Split an EgoGiftList `event` string into sources.
 
-    Returns dicts like {"text": "Automated Factory", "linked": False}.
-    Linked entries ([[...]]) are wiki pages, usually abnormality events;
-    plain entries are usually theme-pack names.
+    Returns dicts like {"text": "Automated Factory", "linked": False, "target": None}.
+    Linked entries ([[Page|text]]) are wiki pages, usually abnormality events,
+    and carry the page title in "target"; plain entries are usually theme-pack names.
     """
     if not event:
         return []
@@ -65,8 +65,12 @@ def split_sources(event: str) -> list[dict]:
         chunk = chunk.strip()
         if not chunk:
             continue
-        linked = bool(_LINK_RE.search(chunk))
-        out.append({"text": to_plain(chunk), "linked": linked})
+        m = _LINK_RE.search(chunk)
+        out.append({
+            "text": to_plain(chunk),
+            "linked": bool(m),
+            "target": m.group(1).strip() if m else None,
+        })
     return out
 
 

@@ -1,22 +1,5 @@
 [
   {
-    "id": "cheery-chickies-class-captain-yi-sang",
-    "name": "Cheery Chickies Class Captain Yi Sang",
-    "sinner": "Yi Sang",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Cheery Chickies Identities",
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Pages using Tabber parser tag",
-      "Yi Sang Identities"
-    ]
-  },
-  {
     "id": "lcb-sinner-yi-sang",
     "name": "LCB Sinner Yi Sang",
     "sinner": "Yi Sang",
@@ -36,26 +19,7 @@
       "SP Healing",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Damage Up",
-      "Identities with Fragile",
-      "Identities with Guard Skills",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Sloth Affinity",
-      "World of Limbus Company",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Yi_Sang"
   },
   {
     "id": "dieci-assoc-south-section-4-yi-sang",
@@ -77,27 +41,7 @@
       "Insight",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Dieci Association Identities",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Discard",
-      "Identities with Guard Skills",
-      "Identities with Insight",
-      "Identities with Sinking",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sloth Affinity",
-      "World of the Dieci Association Southern Branch",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Yi_Sang"
   },
   {
     "id": "lce-e-g-o-lantern-yi-sang",
@@ -123,33 +67,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "E.G.O Gear Identities",
-      "Envy Affinity",
-      "Event Reward Identities and E.G.O",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bind",
-      "Identities with Counter Skills",
-      "Identities with Minus Coin Skills",
-      "Identities with Rupture",
-      "Identities with SP Healing",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "LCE Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 5 Event",
-      "Sloth Affinity",
-      "World of the LCE",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Lantern_Yi_Sang"
   },
   {
     "id": "molar-office-fixer-yi-sang",
@@ -171,28 +89,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Event Reward Identities and E.G.O",
-      "Fixer Identities",
-      "Identities",
-      "Identities with Defense Level Down",
-      "Identities with Discard",
-      "Identities with Guard Skills",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Lust Affinity",
-      "Molar Office Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 2 Event",
-      "Sloth Affinity",
-      "World of Molar Office",
-      "Wrath Affinity",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Office_Fixer_Yi_Sang"
   },
   {
     "id": "seven-assoc-south-section-6-yi-sang",
@@ -214,27 +111,7 @@
       "Pierce Fragility",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Fragile",
-      "Identities with Guard Skills",
-      "Identities with Paralyze",
-      "Identities with Pierce Fragility",
-      "Identities with Rupture",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Seven Association Identities",
-      "Sloth Affinity",
-      "World of the Seven Association Southern Branch",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Yi_Sang"
   },
   {
     "id": "the-pequod-first-mate-yi-sang",
@@ -257,26 +134,7 @@
       "Evade Skills",
       "Poise"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Bleed",
-      "Identities with Coin Reuse",
-      "Identities with Evade Skills",
-      "Identities with Poise",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 3",
-      "The Pequod Identities",
-      "World of U Corp.",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_First_Mate_Yi_Sang"
   },
   {
     "id": "blade-lineage-salsu-yi-sang",
@@ -295,24 +153,7 @@
       "Counter Skills",
       "Poise"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Blade Lineage Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Counter Skills",
-      "Identities with Poise",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan and Blade Lineage",
-      "Wrath Affinity",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Yi_Sang"
   },
   {
     "id": "effloresced-e-g-o-spicebush-yi-sang",
@@ -336,27 +177,7 @@
       "Sinking Deluge",
       "Tremor"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Evade Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with SP Loss",
-      "Identities with Sinking",
-      "Identities with Sinking Deluge",
-      "Identities with Tremor",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 2",
-      "Sloth Affinity",
-      "Technology Liberation Alliance Identities",
-      "World of K Corp.",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Effloresced_E.G.O::Spicebush_Yi_Sang"
   },
   {
     "id": "heishou-pack-wu-branch-adept-yi-sang",
@@ -387,38 +208,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Heishou Pack - Wu Branch Identities",
-      "Heishou Pack Adept Identities",
-      "Heishou Pack Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Attack Power Up",
-      "Identities with Bind",
-      "Identities with Clashable Guard",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Up",
-      "Identities with Rupture",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Jia Family Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 6 Event",
-      "Sloth Affinity",
-      "World of H Corp.",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Wu_Branch_Adept_Yi_Sang"
   },
   {
     "id": "lce-e-g-o-dimension-shredder-yi-sang",
@@ -448,36 +238,7 @@
       "Unfocused Volley",
       "Unique Stage Interactions"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Charge Barrier",
-      "Identities with Charge Potency",
-      "Identities with Coin Reuse",
-      "Identities with Dimensional Rift",
-      "Identities with Evade Skills",
-      "Identities with HP Healing",
-      "Identities with Haste",
-      "Identities with Increased Atk Weight",
-      "Identities with Rupture",
-      "Identities with Unfocused Volley",
-      "Identities with Unique Stage Interactions",
-      "Identity ID",
-      "LCE Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Pride Affinity",
-      "Season 7",
-      "World of the LCE - 2",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Dimension_Shredder_Yi_Sang"
   },
   {
     "id": "liu-assoc-south-section-3-yi-sang",
@@ -497,25 +258,7 @@
       "Counter Skills",
       "SP Healing"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Identities",
-      "Identities with Burn",
-      "Identities with Counter Skills",
-      "Identities with SP Healing",
-      "Identity ID",
-      "Liu Association Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sloth Affinity",
-      "World of the Liu Association Southern Branch",
-      "Wrath Affinity",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_3_Yi_Sang"
   },
   {
     "id": "lobotomy-e-g-o-solemn-lament-yi-sang",
@@ -541,32 +284,7 @@
       "The Living & The Departed",
       "Unique Ammo"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Butterfly",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Reload",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Sinking",
-      "Identities with The Living & The Departed",
-      "Identities with Unique Ammo",
-      "Identity ID",
-      "Lobotomy Corp. Headquarters Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "Walpurgis Night",
-      "World of Lobotomy Corporation Headquarters - 1",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Solemn_Lament_Yi_Sang"
   },
   {
     "id": "n-corp-e-g-o-fell-bullet-yi-sang",
@@ -595,34 +313,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with Damage Up",
-      "Identities with Increased Atk Weight",
-      "Identities with Poise",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Torn Memory",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "N Corp. Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Pride Affinity",
-      "Season 6",
-      "World of N Corp.",
-      "Wrath Affinity",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._E.G.O::Fell_Bullet_Yi_Sang"
   },
   {
     "id": "the-house-of-spiders-the-index-nursefather-yi-sang",
@@ -663,46 +354,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with 7 Atk Weight",
-      "Identities with Bind",
-      "Identities with Blunt Fragility",
-      "Identities with Burn",
-      "Identities with Defense Level Down",
-      "Identities with Evade Skills",
-      "Identities with Fragile",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Up",
-      "Identities with Pierce Fragility",
-      "Identities with Poise",
-      "Identities with Prescript",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identities with Slash Fragility",
-      "Identities with The Prescript's Target",
-      "Identities with Unbreakable Coin",
-      "Identities with Unfocused Volley",
-      "Identities with Unlock",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 7",
-      "The Fingers Identities",
-      "The House of Spiders Identities",
-      "The Index Identities",
-      "The Oracle's Proxy Identities",
-      "World of the House of Spiders",
-      "Wrath Affinity",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Index_Nursefather_Yi_Sang"
   },
   {
     "id": "the-ring-pointillist-student-yi-sang",
@@ -732,33 +384,7 @@
       "Sinking",
       "Tremor"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Burn",
-      "Identities with Coin Reuse",
-      "Identities with Guard Skills",
-      "Identities with Offense Level Up",
-      "Identities with Rupture",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identities with Tremor",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "School of Pointillism Identities",
-      "Sloth Affinity",
-      "The Fingers Identities",
-      "The Ring Identities",
-      "The Ring Student Identities",
-      "World of the Ring Pointillists",
-      "Yi Sang Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Pointillist_Student_Yi_Sang"
   },
   {
     "id": "w-corp-l3-cleanup-agent-yi-sang",
@@ -783,45 +409,7 @@
       "Haste",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Charge",
-      "Identities with Charge Barrier",
-      "Identities with Dimensional Rift",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Rupture",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sloth Affinity",
-      "W Corp. Identities",
-      "World of W Corp.",
-      "Yi Sang Identities"
-    ]
-  },
-  {
-    "id": "early-elephants-class-captain-faust",
-    "name": "Early Elephants Class Captain Faust",
-    "sinner": "Faust",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Early Elephants Identities",
-      "Faust Identities",
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Pages using Tabber parser tag"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Yi_Sang"
   },
   {
     "id": "lcb-sinner-faust",
@@ -840,25 +428,7 @@
       "Offense Level Down",
       "Paralyze"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Faust Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Attack Power Down",
-      "Identities with Evade Skills",
-      "Identities with Offense Level Down",
-      "Identities with Paralyze",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "World of Limbus Company"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Faust"
   },
   {
     "id": "lobotomy-corp-remnant-faust",
@@ -880,26 +450,7 @@
       "Poise",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Faust Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Poise",
-      "Identities with Rupture",
-      "Identity ID",
-      "Lobotomy Corp. Branch Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 1",
-      "World of L Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_Corp._Remnant_Faust"
   },
   {
     "id": "w-corp-l2-cleanup-agent-faust",
@@ -921,26 +472,7 @@
       "Guard Skills",
       "Paralyze"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Faust Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Attack Power Down",
-      "Identities with Bind",
-      "Identities with Charge",
-      "Identities with Guard Skills",
-      "Identities with Paralyze",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "W Corp. Identities",
-      "World of W Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Faust"
   },
   {
     "id": "wuthering-heights-butler-faust",
@@ -961,26 +493,7 @@
       "SP Healing",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Faust Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Echoes of the Manor",
-      "Identities with Guard Skills",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 4",
-      "World of Wuthering Heights",
-      "Wrath Affinity",
-      "Wuthering Heights Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wuthering_Heights_Butler_Faust"
   },
   {
     "id": "zwei-assoc-south-section-4-faust",
@@ -1000,27 +513,7 @@
       "HP Healing",
       "Haste"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Faust Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Defense Level Up",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Haste",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "World of the Zwei Association Southern Branch",
-      "Zwei Association Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_4_Faust"
   },
   {
     "id": "blade-lineage-salsu-faust",
@@ -1043,28 +536,7 @@
       "Slash Fragility",
       "Unique Bleed"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Blade Lineage Identities",
-      "Faust Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Defense Level Down",
-      "Identities with Guard Skills",
-      "Identities with Poise",
-      "Identities with Slash Fragility",
-      "Identities with Unique Bleed",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 3 Event",
-      "Sloth Affinity",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan and Blade Lineage"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Faust"
   },
   {
     "id": "dawn-office-fixer-faust",
@@ -1099,39 +571,7 @@
       "Unfocused Volley",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Dawn Office Identities",
-      "Faust Identities",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Amplitude Conversion",
-      "Identities with Burn",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Up",
-      "Identities with HP Healing",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Up",
-      "Identities with Power Down",
-      "Identities with Tremor",
-      "Identities with Tremor - Scorch",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with Unfocused Volley",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "Walpurgis Night",
-      "World of the Former Library Guests - Dawn Office",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Fixer_Faust"
   },
   {
     "id": "heishou-pack-mao-branch-adept-faust",
@@ -1165,40 +605,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Faust Identities",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Heishou Pack - Mao Branch Identities",
-      "Heishou Pack Adept Identities",
-      "Heishou Pack Identities",
-      "Identities",
-      "Identities with Assist Defense",
-      "Identities with Clashable Counter",
-      "Identities with Clashable Guard",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Deathrite -Fissure-",
-      "Identities with Deathrite -Haste-",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Offense Level Up",
-      "Identities with Poise",
-      "Identities with Protection",
-      "Identities with Rupture",
-      "Identities with Strider -Mao-",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 6",
-      "Sloth Affinity",
-      "World of H Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Adept_Faust"
   },
   {
     "id": "lce-e-g-o-ardor-blossom-star-faust",
@@ -1221,30 +628,7 @@
       "Unbreakable Coin",
       "unique Sanity mechanics"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Faust Identities",
-      "Identities",
-      "Identities with Burn",
-      "Identities with Evade Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Up",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Sanity mechanics",
-      "Identity ID",
-      "LCE Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Pride Affinity",
-      "Season 5 Event",
-      "Sloth Affinity",
-      "World of the LCE",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Ardor_Blossom_Star_Faust"
   },
   {
     "id": "lobotomy-e-g-o-regret-faust",
@@ -1272,33 +656,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Faust Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Blunt Power Up",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Down",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Down",
-      "Identities with Plus Coin Drop",
-      "Identities with SP Loss",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Lobotomy Corp. Headquarters Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "Walpurgis Night",
-      "World of Lobotomy Corporation Headquarters - 1",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Regret_Faust"
   },
   {
     "id": "multicrack-office-rep-faust",
@@ -1319,27 +677,7 @@
       "Envy Fragility",
       "Guard Skills"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Faust Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Envy Fragility",
-      "Identities with Guard Skills",
-      "Identity ID",
-      "Lust Affinity",
-      "Mechanical Amalgam Identities",
-      "MultiCrack Office Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 4 Event",
-      "World of MultiCrack Office"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/MultiCrack_Office_Rep_Faust"
   },
   {
     "id": "seven-assoc-south-section-4-faust",
@@ -1364,29 +702,7 @@
       "Slash Power Up",
       "Weakness Analyzed"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Faust Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Poise",
-      "Identities with Rupture",
-      "Identities with Slash Power Up",
-      "Identities with Weakness Analyzed",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Seven Association Identities",
-      "World of the Seven Association Southern Branch"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_4_Faust"
   },
   {
     "id": "shi-assoc-east-section-3-faust",
@@ -1412,30 +728,7 @@
       "Slash DMG Up",
       "Unclashable Skills"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Faust Identities",
-      "Fixer Identities",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Defense Level Down",
-      "Identities with Evade Skills",
-      "Identities with Guard Skills",
-      "Identities with Pierce DMG Up",
-      "Identities with Poise",
-      "Identities with Slash DMG Up",
-      "Identities with Unclashable Skills",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Shi Association Identities",
-      "World of the Shi Association Eastern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._East_Section_3_Faust"
   },
   {
     "id": "the-house-of-spiders-the-ring-apprentice-faust",
@@ -1475,47 +768,7 @@
       "Unique Charge",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Faust Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Assist Defense",
-      "Identities with Bind",
-      "Identities with Bleed",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Clashable Counter",
-      "Identities with Clashable Guard",
-      "Identities with Corpus Ingredient",
-      "Identities with Counter Skills",
-      "Identities with Damage Down",
-      "Identities with Defense Level Down",
-      "Identities with Defense Level Up",
-      "Identities with Evade Skills",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Increased Atk Weight",
-      "Identities with Protection",
-      "Identities with SP Healing",
-      "Identities with Slash DMG Up",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Charge",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Mechanical Amalgam Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "School of Corporism Identities",
-      "Season 7",
-      "The Fingers Identities",
-      "The House of Spiders Identities",
-      "The Ring Identities",
-      "World of the House of Spiders"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Ring_Apprentice_Faust"
   },
   {
     "id": "the-index-proselyte-paper-slip-faust",
@@ -1540,29 +793,7 @@
       "The Prescript's Target",
       "Unbreakable Coin"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Faust Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Counter Skills",
-      "Identities with Poise",
-      "Identities with Prescript",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identities with The Prescript's Target",
-      "Identities with Unbreakable Coin",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 7",
-      "Sloth Affinity",
-      "The Fingers Identities",
-      "The Index Identities",
-      "World of the Index"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Index_Proselyte:%E3%80%90Paper_Slip%E3%80%91Faust"
   },
   {
     "id": "the-one-who-grips-faust",
@@ -1589,49 +820,7 @@
       "SP Healing",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Faust Identities",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Blunt DMG Up",
-      "Identities with Evade Skills",
-      "Identities with Fanatic",
-      "Identities with Nails",
-      "Identities with Paralyze",
-      "Identities with Pierce DMG Up",
-      "Identities with SP Damage",
-      "Identities with SP Healing",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "N Corp. Fanatic Identities",
-      "N Corp. Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 1",
-      "World of N Corp. Fanatics"
-    ]
-  },
-  {
-    "id": "early-elephants-sinnerling-don-quixote",
-    "name": "Early Elephants Sinnerling Don Quixote",
-    "sinner": "Don Quixote",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Don Quixote Identities",
-      "Early Elephants Identities",
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Pages using Tabber parser tag"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_One_Who_Grips_Faust"
   },
   {
     "id": "lcb-sinner-don-quixote",
@@ -1653,26 +842,7 @@
       "Haste",
       "Unique Stage Interactions"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Don Quixote Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Bleed",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Unique Stage Interactions",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "World of Limbus Company"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Don_Quixote"
   },
   {
     "id": "blade-lineage-salsu-don-quixote",
@@ -1692,26 +862,7 @@
       "Poise",
       "Slash DMG Up"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Blade Lineage Identities",
-      "Don Quixote Identities",
-      "Envy Affinity",
-      "Event Reward Identities and E.G.O",
-      "Identities",
-      "Identities with Evade Skills",
-      "Identities with Poise",
-      "Identities with Slash DMG Up",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 3 Event",
-      "Sloth Affinity",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan and Blade Lineage"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Don_Quixote"
   },
   {
     "id": "lobotomy-e-g-o-lantern-don-quixote",
@@ -1733,27 +884,7 @@
       "HP Healing",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Don Quixote Identities",
-      "E.G.O Gear Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Coin Reuse",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Rupture",
-      "Identity ID",
-      "Lobotomy Corp. Headquarters Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Walpurgis Night",
-      "World of Lobotomy Corporation Headquarters - 1"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Lantern_Don_Quixote"
   },
   {
     "id": "n-corp-mittelhammer-don-quixote",
@@ -1777,29 +908,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Don Quixote Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Attack Power Down",
-      "Identities with Fanatic",
-      "Identities with Guard Skills",
-      "Identities with Nails",
-      "Identities with Paralyze",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Lust Affinity",
-      "N Corp. Fanatic Identities",
-      "N Corp. Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 1",
-      "World of N Corp. Fanatics",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Mittelhammer_Don_Quixote"
   },
   {
     "id": "shi-assoc-south-section-5-director-don-quixote",
@@ -1819,25 +928,7 @@
       "Haste",
       "Poise"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Don Quixote Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Identities",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Poise",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Shi Association Identities",
-      "World of the Shi Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Director_Don_Quixote"
   },
   {
     "id": "cinq-assoc-east-section-3-don-quixote",
@@ -1861,28 +952,7 @@
       "Nerve Strike",
       "Poise"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Cinq Association Identities",
-      "Don Quixote Identities",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Burn",
-      "Identities with Defense Level Down",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Nerve Strike",
-      "Identities with Poise",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "World of the Cinq Association Eastern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._East_Section_3_Don_Quixote"
   },
   {
     "id": "cinq-assoc-south-section-5-director-don-quixote",
@@ -1903,28 +973,7 @@
       "SP Damage",
       "SP Healing"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Cinq Association Identities",
-      "Don Quixote Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Declared Duel",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with SP Damage",
-      "Identities with SP Healing",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "World of the Cinq Association Southern Branch"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_5_Director_Don_Quixote"
   },
   {
     "id": "heishou-pack-wei-branch-don-quixote",
@@ -1949,30 +998,7 @@
       "Sinking",
       "Unbreakable Coin"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Don Quixote Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Heishou Pack - Wei Branch Identities",
-      "Heishou Pack Identities",
-      "Identities",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Down",
-      "Identities with Panic Type Altering Status Effects",
-      "Identities with Rupture",
-      "Identities with Sinking",
-      "Identities with Unbreakable Coin",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 6",
-      "World of H Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Wei_Branch_Don_Quixote"
   },
   {
     "id": "lobotomy-e-g-o-in-the-name-of-love-and-hate-don-quixote",
@@ -2005,37 +1031,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Don Quixote Identities",
-      "E.G.O Gear Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Clashable Guard",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Increased Atk Weight",
-      "Identities with Minus Coin Skills",
-      "Identities with Rupture",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Sinking",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Charge",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lobotomy Corp. Headquarters Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Walpurgis Night",
-      "World of Lobotomy Corporation Headquarters - 1",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::In_the_Name_of_Love_and_Hate_Don_Quixote"
   },
   {
     "id": "t-corp-class-3-collection-staff-don-quixote",
@@ -2062,31 +1058,7 @@
       "Tremor - Chain",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Don Quixote Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Amplitude Conversion",
-      "Identities with Bind",
-      "Identities with Borrowed Time",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Time Moratorium",
-      "Identities with Tremor",
-      "Identities with Tremor - Chain",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Sloth Affinity",
-      "T Corp. Identities",
-      "World of T Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_3_Collection_Staff_Don_Quixote"
   },
   {
     "id": "the-index-proxy-effloresced-e-g-o-procuration-don-quixote",
@@ -2116,35 +1088,7 @@
       "Unlock",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Don Quixote Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with Damage Up",
-      "Identities with Poise",
-      "Identities with Prescript",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Sinking",
-      "Identities with The Prescript's Target",
-      "Identities with Unbreakable Coin",
-      "Identities with Unlock",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 7",
-      "The Fingers Identities",
-      "The House of Spiders Identities",
-      "The Index Identities",
-      "World of the House of Spiders"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Index_Proxy_-_Effloresced_E.G.O::Procuration_Don_Quixote"
   },
   {
     "id": "the-manager-of-la-manchaland-don-quixote",
@@ -2172,34 +1116,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Bloodfiend Identities",
-      "Don Quixote Identities",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Bloodfeast",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with Damage Up",
-      "Identities with HP Healing",
-      "Identities with Increased Atk Weight",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Stage Interactions",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "La Manchaland Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 5",
-      "Second Kindred Identities",
-      "Sloth Affinity",
-      "World of La Manchaland",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Manager_of_La_Manchaland_Don_Quixote"
   },
   {
     "id": "the-middle-little-sister-don-quixote",
@@ -2223,29 +1140,7 @@
       "SP Healing",
       "Vengeance Mark"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Don Quixote Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Blunt DMG Up",
-      "Identities with Counter Skills",
-      "Identities with Damage Down",
-      "Identities with Envy DMG Up",
-      "Identities with SP Healing",
-      "Identities with Vengeance Mark",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 3",
-      "The Fingers Identities",
-      "The Middle Identities",
-      "World of the Middle",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Sister_Don_Quixote"
   },
   {
     "id": "w-corp-l3-cleanup-agent-don-quixote",
@@ -2267,42 +1162,7 @@
       "Fragile",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Don Quixote Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Evade Skills",
-      "Identities with Fragile",
-      "Identities with Rupture",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sloth Affinity",
-      "W Corp. Identities",
-      "World of W Corp."
-    ]
-  },
-  {
-    "id": "early-elephants-sinnerling-ryoshu",
-    "name": "Early Elephants Sinnerling Ryōshū",
-    "sinner": "Ryōshū",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Early Elephants Identities",
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Pages using Tabber parser tag",
-      "Ryōshū Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Don_Quixote"
   },
   {
     "id": "lcb-sinner-ryoshu",
@@ -2322,25 +1182,7 @@
       "Poise",
       "Slash DMG Up"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Evade Skills",
-      "Identities with Poise",
-      "Identities with Slash DMG Up",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Ryōshū Identities",
-      "Tiansha Star Identities",
-      "World of Limbus Company"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "district-20-yurodivy-ryoshu",
@@ -2360,26 +1202,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Event Reward Identities and E.G.O",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Guard Skills",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Ryōshū Identities",
-      "Season 4 Event",
-      "Sloth Affinity",
-      "Syndicate Identities",
-      "World of the District 20 Backstreets",
-      "Yurodiviye Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/District_20_Yurodivy_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "lccb-assistant-manager-ryoshu",
@@ -2407,31 +1230,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Ammo",
-      "Identities with Guard Skills",
-      "Identities with Offense Level Down",
-      "Identities with Poise",
-      "Identities with Rupture",
-      "Identities with SP Damage",
-      "Identities with SP Healing",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "LCC Identities",
-      "Limbus Company Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Ryōshū Identities",
-      "Season 3",
-      "World of the LCCB"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "liu-assoc-south-section-4-ryoshu",
@@ -2450,24 +1249,7 @@
       "Burn",
       "Guard Skills"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Burn",
-      "Identities with Guard Skills",
-      "Identity ID",
-      "Liu Association Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Ryōshū Identities",
-      "World of the Liu Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "seven-assoc-south-section-6-ryoshu",
@@ -2489,27 +1271,7 @@
       "Rupture",
       "Slash Fragility"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Down",
-      "Identities with Rupture",
-      "Identities with Slash Fragility",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Ryōshū Identities",
-      "Seven Association Identities",
-      "Sloth Affinity",
-      "World of the Seven Association Southern Branch"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "blade-of-the-house-of-spiders-ryoshu",
@@ -2541,38 +1303,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Dihui Star Identities",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Burn",
-      "Identities with Crossed-Out Traits",
-      "Identities with Entangled Life -羅生-",
-      "Identities with Evade Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Poise",
-      "Identities with Slash Fragility",
-      "Identities with Unbreakable Coin",
-      "Identities with Unclashable Skills",
-      "Identities with Unique Stage Interactions",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Ryōshū Identities",
-      "Season 7",
-      "The Fingers Identities",
-      "The House of Spiders Identities",
-      "The Pinky Identities",
-      "Tiansha Star Identities",
-      "World of the House of Spiders",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_of_the_House_of_Spiders_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "drifting-blade-of-hongyuan-ryoshu",
@@ -2598,29 +1329,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Clashable Guard",
-      "Identities with Guard Skills",
-      "Identities with Poise",
-      "Identities with Rupture",
-      "Identities with SP Healing",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Ryōshū Identities",
-      "Season 6",
-      "World of Usurped H Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Drifting_Blade_of_Hongyuan_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "edgar-family-chief-butler-ryoshu",
@@ -2645,30 +1354,7 @@
       "Unique Stage Interactions",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Edgar Family Identities",
-      "Fixer Identities",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Increased Atk Weight",
-      "Identities with Poise",
-      "Identities with Skill Reuse",
-      "Identities with Unique Stage Interactions",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Ryōshū Identities",
-      "Season 4",
-      "World of Wuthering Heights",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Chief_Butler_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "haute-couture-le-noir-footwear-hall-ryoshu",
@@ -2694,31 +1380,7 @@
       "Unbreakable Coin",
       "Unique Charge"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Charge",
-      "Identity ID",
-      "Le Noir Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with broken file links",
-      "Pride Affinity",
-      "Ryōshū Identities",
-      "Season 8",
-      "Sisyphe Identities",
-      "Sloth Affinity",
-      "World of the Grand Magasin Sisyphe"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Le_Noir_Footwear_Hall_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "heishou-pack-mao-branch-ryoshu",
@@ -2742,30 +1404,7 @@
       "Rupture",
       "Strider -Mao-"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Heishou Pack - Mao Branch Identities",
-      "Heishou Pack Identities",
-      "Identities",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Deathrite -Haste-",
-      "Identities with Haste",
-      "Identities with Rupture",
-      "Identities with Strider -Mao-",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Ryōshū Identities",
-      "Season 5 Event",
-      "World of H Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "kurokumo-clan-wakashu-ryoshu",
@@ -2787,27 +1426,7 @@
       "Offense Level Down",
       "Paralyze"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Damage Down",
-      "Identities with Guard Skills",
-      "Identities with Offense Level Down",
-      "Identities with Paralyze",
-      "Identity ID",
-      "Kurokumo Clan Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Ryōshū Identities",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan and Blade Lineage"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "lobotomy-e-g-o-faint-aroma-solitude-ryoshu",
@@ -2841,38 +1460,7 @@
       "Unique Ammo",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Evade Skills",
-      "Identities with Fragile",
-      "Identities with HP Healing",
-      "Identities with Increased Atk Weight",
-      "Identities with Panic Type Altering Status Effects",
-      "Identities with Reload",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Sinking",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identities with Unclashable Skills",
-      "Identities with Unfocused Volley",
-      "Identities with Unique Ammo",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lobotomy Corp. Headquarters Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Ryōshū Identities",
-      "Sloth Affinity",
-      "Walpurgis Night",
-      "World of Lobotomy Corporation Headquarters - 1"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Faint_Aroma_%26_Solitude_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "lobotomy-e-g-o-red-eyes-penitence-ryoshu",
@@ -2901,34 +1489,7 @@
       "Unique Charge",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Attack Power Down",
-      "Identities with Bind",
-      "Identities with Bleed",
-      "Identities with Charge",
-      "Identities with Counter Skills",
-      "Identities with HP Healing",
-      "Identities with Haste",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Unique Charge",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lobotomy Corp. Headquarters Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Ryōshū Identities",
-      "Walpurgis Night",
-      "World of Lobotomy Corporation Headquarters - 1"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Red_Eyes_%26_Penitence_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "n-corp-e-g-o-contempt-awe-ryoshu",
@@ -2958,35 +1519,7 @@
       "Tremor Burst",
       "Unbreakable Coin"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Amplitude Conversion",
-      "Identities with Bind",
-      "Identities with Bleed",
-      "Identities with Contempt of the Gaze",
-      "Identities with Gaze of Contempt",
-      "Identities with Guard Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Tremor",
-      "Identities with Tremor - Hemorrhage",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identity ID",
-      "Lust Affinity",
-      "N Corp. Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Ryōshū Identities",
-      "Season 6",
-      "Sloth Affinity",
-      "World of N Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._E.G.O::Contempt,_Awe_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "r-b-chef-de-cuisine-ryoshu",
@@ -3010,30 +1543,7 @@
       "Haste",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Bleed",
-      "Identities with Evade Skills",
-      "Identities with HP Healing",
-      "Identities with HP Healing Down",
-      "Identities with Haste",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "R.B. Identities",
-      "Ryōshū Identities",
-      "Season 1 Event",
-      "Syndicate Identities",
-      "The Backstreets Identities",
-      "World of the District 23 Backstreets",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/R.B._Chef_de_Cuisine_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "w-corp-l3-cleanup-agent-ryoshu",
@@ -3055,43 +1565,7 @@
       "Haste",
       "Slash Fragility"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Charge Barrier",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Slash Fragility",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Ryōshū Identities",
-      "W Corp. Identities",
-      "World of W Corp."
-    ]
-  },
-  {
-    "id": "perky-penguins-sinnerling-meursault",
-    "name": "Perky Penguins Sinnerling Meursault",
-    "sinner": "Meursault",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Meursault Identities",
-      "Pages using Tabber parser tag",
-      "Perky Penguins Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Ry%C5%8Dsh%C5%AB"
   },
   {
     "id": "lcb-sinner-meursault",
@@ -3113,26 +1587,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Defense Power Up",
-      "Identities with Guard Skills",
-      "Identities with Protection",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "World of Limbus Company"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Meursault"
   },
   {
     "id": "dead-rabbits-boss-meursault",
@@ -3152,25 +1607,7 @@
       "Offense Level Down",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Counter Skills",
-      "Identities with Offense Level Down",
-      "Identities with Rupture",
-      "Identity ID",
-      "Lust Affinity",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 4",
-      "Syndicate Identities",
-      "The Dead Rabbits Identities",
-      "World of Wuthering Heights",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dead_Rabbits_Boss_Meursault"
   },
   {
     "id": "liu-assoc-south-section-6-meursault",
@@ -3189,24 +1626,7 @@
       "Burn",
       "Guard Skills"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Identities",
-      "Identities with Burn",
-      "Identities with Guard Skills",
-      "Identity ID",
-      "Liu Association Identities",
-      "Lust Affinity",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sloth Affinity",
-      "World of the Liu Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_6_Meursault"
   },
   {
     "id": "rosespanner-workshop-fixer-meursault",
@@ -3230,28 +1650,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Attack Power Down",
-      "Identities with Charge",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Rosespanner Workshop Identities",
-      "Season 2",
-      "Sloth Affinity",
-      "World of K Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Fixer_Meursault"
   },
   {
     "id": "the-middle-little-brother-meursault",
@@ -3276,30 +1675,7 @@
       "SP Healing",
       "Vengeance Mark"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Counter Skills",
-      "Identities with Envy DMG Up",
-      "Identities with Envy Fragility",
-      "Identities with Envy Power Up",
-      "Identities with Plus Coin Drop",
-      "Identities with SP Healing",
-      "Identities with Vengeance Mark",
-      "Identity ID",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 3",
-      "Sloth Affinity",
-      "The Fingers Identities",
-      "The Middle Identities",
-      "World of the Middle",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Brother_Meursault"
   },
   {
     "id": "blade-lineage-mentor-meursault",
@@ -3328,33 +1704,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Blade Lineage Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bleed",
-      "Identities with Counter Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Minus Coin Skills",
-      "Identities with Paralyze",
-      "Identities with Poise",
-      "Identities with Slash Power Up",
-      "Identities with Unique Stage Interactions",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 3 Event",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan and Blade Lineage",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Mentor_Meursault"
   },
   {
     "id": "cinq-assoc-west-section-3-meursault",
@@ -3378,28 +1728,7 @@
       "Rupture",
       "Skill Reuse"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Cinq Association Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Evade Skills",
-      "Identities with Focused Attack",
-      "Identities with Haste",
-      "Identities with Poise",
-      "Identities with Rupture",
-      "Identities with Skill Reuse",
-      "Identity ID",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 5",
-      "World of the Cinq Association Western Branch"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._West_Section_3_Meursault"
   },
   {
     "id": "dieci-assoc-south-section-4-director-meursault",
@@ -3424,30 +1753,7 @@
       "Pierce DMG Up",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Dieci Association Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Blunt DMG Up",
-      "Identities with Discard",
-      "Identities with Erudition",
-      "Identities with Guard Skills",
-      "Identities with Insight",
-      "Identities with Pierce DMG Up",
-      "Identities with Sinking",
-      "Identity ID",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sloth Affinity",
-      "World of the Dieci Association Southern Branch"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Director_Meursault"
   },
   {
     "id": "lobotomy-e-g-o-hornet-alteration-meursault",
@@ -3479,36 +1785,7 @@
       "Unique Ammo",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Burn",
-      "Identities with Clash Power Up",
-      "Identities with Evade Skills",
-      "Identities with HP Healing",
-      "Identities with Haste",
-      "Identities with Increased Atk Weight",
-      "Identities with Pierce Fragility",
-      "Identities with Protection",
-      "Identities with Reload",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Ammo",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lobotomy Corp. Headquarters Identities",
-      "Lust Affinity",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Walpurgis Night",
-      "World of Lobotomy Corporation Headquarters - 1",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Hornet%E3%80%90Alteration%E3%80%91Meursault"
   },
   {
     "id": "n-corp-gro-hammer-meursault",
@@ -3533,32 +1810,7 @@
       "Nails",
       "Protection"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Attack Power Down",
-      "Identities with Attack Power Up",
-      "Identities with Bind",
-      "Identities with Counter Skills",
-      "Identities with Fanatic",
-      "Identities with HP Healing",
-      "Identities with Minus Coin Skills",
-      "Identities with Nails",
-      "Identities with Protection",
-      "Identity ID",
-      "Meursault Identities",
-      "N Corp. Fanatic Identities",
-      "N Corp. Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 1",
-      "Sloth Affinity",
-      "World of N Corp. Fanatics",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Gro%C3%9Fhammer_Meursault"
   },
   {
     "id": "r-corp-4th-pack-rhino-meursault",
@@ -3580,25 +1832,7 @@
       "Charge",
       "Guard Skills"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bleed",
-      "Identities with Charge",
-      "Identities with Guard Skills",
-      "Identity ID",
-      "Lust Affinity",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "R Corp. Identities",
-      "Regular",
-      "World of R Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Rhino_Meursault"
   },
   {
     "id": "the-prince-of-la-manchaland-meursault",
@@ -3629,36 +1863,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Bloodfiend Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Bloodfeast",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Up",
-      "Identities with HP Healing",
-      "Identities with Haste",
-      "Identities with Increased Atk Weight",
-      "Identities with Lust Fragility",
-      "Identities with Offense Level Up",
-      "Identities with Rupture",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "La Manchaland Identities",
-      "Lust Affinity",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 6 Event",
-      "Third Kindred Identities",
-      "World of Fallen La Manchaland"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Prince_of_La_Manchaland_Meursault"
   },
   {
     "id": "the-ring-fauvist-student-meursault",
@@ -3687,36 +1892,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Event Reward Identities and E.G.O",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Blunt DMG Up",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Down",
-      "Identities with Mauled Color",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "School of Fauvism Identities",
-      "Season 7 Event",
-      "The Fingers Identities",
-      "The Ring Identities",
-      "The Ring Student Identities",
-      "World of the Ring Fauvists",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Fauvist_Student_Meursault"
   },
   {
     "id": "the-thumb-east-capo-iiii-meursault",
@@ -3745,34 +1921,7 @@
       "Unique Ammo",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Capo Identities",
-      "Identities",
-      "Identities with Amplitude Conversion",
-      "Identities with Burn",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Tremor",
-      "Identities with Tremor - Scorch",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Ammo",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 6",
-      "Sloth Affinity",
-      "The Fingers Identities",
-      "The Thumb Identities",
-      "World of the Thumb",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Thumb_East_Capo_IIII_Meursault"
   },
   {
     "id": "w-corp-l2-cleanup-agent-meursault",
@@ -3796,44 +1945,7 @@
       "Slash Fragility",
       "Slash Protection"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Defense Level Down",
-      "Identities with Guard Skills",
-      "Identities with Rupture",
-      "Identities with Slash Fragility",
-      "Identities with Slash Protection",
-      "Identity ID",
-      "Meursault Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "W Corp. Identities",
-      "World of W Corp."
-    ]
-  },
-  {
-    "id": "early-elephants-sinnerling-hong-lu",
-    "name": "Early Elephants Sinnerling Hong Lu",
-    "sinner": "Hong Lu",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Early Elephants Identities",
-      "Hong Lu Identities",
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Pages using Tabber parser tag"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Meursault"
   },
   {
     "id": "lcb-sinner-hong-lu",
@@ -3856,26 +1968,7 @@
       "SP Healing",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Attack Power Down",
-      "Identities with Evade Skills",
-      "Identities with Rupture",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "World of Limbus Company"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Hong_Lu"
   },
   {
     "id": "fanghunt-office-fixer-hong-lu",
@@ -3897,27 +1990,7 @@
       "HP Healing Down",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fanghunt Office Identities",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Coin Reuse",
-      "Identities with Defense Level Down",
-      "Identities with Guard Skills",
-      "Identities with HP Healing Down",
-      "Identities with Rupture",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 5",
-      "World of Fanghunt Office",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Fanghunt_Office_Fixer_Hong_Lu"
   },
   {
     "id": "hook-office-fixer-hong-lu",
@@ -3939,28 +2012,7 @@
       "Haste",
       "SP Healing"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Hong Lu Identities",
-      "Hook Office Identities",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Bleed",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with SP Healing",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "The Backstreets Identities",
-      "Walpurgis Night",
-      "World of the Former Library Guests - Hook Office",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hook_Office_Fixer_Hong_Lu"
   },
   {
     "id": "kurokumo-clan-wakashu-hong-lu",
@@ -3981,26 +2033,7 @@
       "Guard Skills",
       "Paralyze"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Coin Reuse",
-      "Identities with Guard Skills",
-      "Identities with Paralyze",
-      "Identity ID",
-      "Kurokumo Clan Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Sloth Affinity",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan and Blade Lineage"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Hong_Lu"
   },
   {
     "id": "liu-assoc-south-section-5-hong-lu",
@@ -4020,25 +2053,7 @@
       "Guard Skills",
       "SP Healing"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Burn",
-      "Identities with Guard Skills",
-      "Identities with SP Healing",
-      "Identity ID",
-      "Liu Association Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "World of the Liu Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_5_Hong_Lu"
   },
   {
     "id": "w-corp-l2-cleanup-agent-hong-lu",
@@ -4061,26 +2076,7 @@
       "Haste",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Gluttony Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Charge Barrier",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Rupture",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "W Corp. Identities",
-      "World of W Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Hong_Lu"
   },
   {
     "id": "cinq-assoc-east-section-3-hong-lu",
@@ -4106,30 +2102,7 @@
       "Poise",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Cinq Association Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Burn",
-      "Identities with Defense Level Down",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Nerve Strike",
-      "Identities with Poise",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "World of the Cinq Association Eastern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._East_Section_3_Hong_Lu"
   },
   {
     "id": "dieci-assoc-south-section-4-hong-lu",
@@ -4153,29 +2126,7 @@
       "SP Healing",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Dieci Association Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Coin Reuse",
-      "Identities with Damage Up",
-      "Identities with Discard",
-      "Identities with Evade Skills",
-      "Identities with Insight",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sloth Affinity",
-      "World of the Dieci Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Hong_Lu"
   },
   {
     "id": "district-20-yurodivy-hong-lu",
@@ -4198,28 +2149,7 @@
       "Tremor - Reverb",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Amplitude Entanglement",
-      "Identities with Damage Up",
-      "Identities with Guard Skills",
-      "Identities with Tremor",
-      "Identities with Tremor - Reverb",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 4 Event",
-      "Sloth Affinity",
-      "Syndicate Identities",
-      "World of the District 20 Backstreets",
-      "Yurodiviye Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/District_20_Yurodivy_Hong_Lu"
   },
   {
     "id": "full-stop-office-rep-hong-lu",
@@ -4249,35 +2179,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Fixer Identities",
-      "Full-Stop Office Identities",
-      "Gloom Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Ammo",
-      "Identities with Assist Attack",
-      "Identities with Attack Power Down",
-      "Identities with Bind",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with Evade Skills",
-      "Identities with Pierce Fragility",
-      "Identities with Poise",
-      "Identities with Reload",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "Walpurgis Night",
-      "World of the Former Library Guests - Full-Stop Office"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stop_Office_Rep_Hong_Lu"
   },
   {
     "id": "k-corp-class-3-excision-staff-hong-lu",
@@ -4300,27 +2202,7 @@
       "Rupture",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gluttony Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Fragile",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Rupture",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "K Corp. Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 2",
-      "Sloth Affinity",
-      "World of K Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/K_Corp._Class_3_Excision_Staff_Hong_Lu"
   },
   {
     "id": "r-corp-4th-pack-reindeer-hong-lu",
@@ -4344,27 +2226,7 @@
       "Sinking",
       "Unfocused Volley"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Guard Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Sinking",
-      "Identities with Unfocused Volley",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "R Corp. Identities",
-      "Regular",
-      "World of R Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Hong_Lu"
   },
   {
     "id": "s-corp-ch-unokkun-hong-lu",
@@ -4392,33 +2254,7 @@
       "Pride Fragility",
       "Unbreakable Coin"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Event Reward Identities and E.G.O",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Attack Power Down",
-      "Identities with Bind",
-      "Identities with Bleed",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Haste",
-      "Identities with Poise",
-      "Identities with Pride Fragility",
-      "Identities with Unbreakable Coin",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "S Corp. Identities",
-      "Season 7 Event",
-      "World of S Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/S_Corp._Ch'unokkun_Hong_Lu"
   },
   {
     "id": "the-house-of-spiders-the-ring-nursefather-hong-lu",
@@ -4465,53 +2301,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Assist Defense",
-      "Identities with Bind",
-      "Identities with Bleed",
-      "Identities with Burn",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Clashable Counter",
-      "Identities with Corpus Ingredient",
-      "Identities with Counter Skills",
-      "Identities with Crossed-Out Traits",
-      "Identities with Damage Down",
-      "Identities with Defense Level Down",
-      "Identities with Defense Level Up",
-      "Identities with Defense Power Down",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Down",
-      "Identities with Offense Level Up",
-      "Identities with Protection",
-      "Identities with SP Damage",
-      "Identities with SP Healing",
-      "Identities with Slash DMG Up",
-      "Identities with Unbreakable Coin",
-      "Identities with Unclashable Skills",
-      "Identities with Unique Charge",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Mechanical Amalgam Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "School of Corporism Identities",
-      "Season 7",
-      "The Fingers Identities",
-      "The House of Spiders Identities",
-      "The Ring Identities",
-      "World of the House of Spiders"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Ring_Nursefather_Hong_Lu"
   },
   {
     "id": "the-lord-of-hongyuan-hong-lu",
@@ -4555,47 +2345,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Assist Attack",
-      "Identities with Assist Defense",
-      "Identities with Attack Power Up",
-      "Identities with Clashable Counter",
-      "Identities with Clashable Guard",
-      "Identities with Counter Skills",
-      "Identities with Crossed-Out Traits",
-      "Identities with Damage Up",
-      "Identities with Defense Level Down",
-      "Identities with Defense Power Up",
-      "Identities with Gluttony DMG Up",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Down",
-      "Identities with Poise",
-      "Identities with Retreat",
-      "Identities with Rupture",
-      "Identities with SP Healing",
-      "Identities with Slash Power Up",
-      "Identities with Slash Resist Down",
-      "Identities with Tarnished Blood",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Stage Interactions",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 6",
-      "World of H Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Lord_of_Hongyuan_Hong_Lu"
   },
   {
     "id": "tingtang-gang-gangleader-hong-lu",
@@ -4617,45 +2367,7 @@
       "SP Healing",
       "Skill Reuse"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "Hong Lu Identities",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Coin Reuse",
-      "Identities with Evade Skills",
-      "Identities with SP Healing",
-      "Identities with Skill Reuse",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 1",
-      "Syndicate Identities",
-      "The Backstreets Identities",
-      "Tingtang Gang Identities",
-      "World of the J Corp. Backstreets"
-    ]
-  },
-  {
-    "id": "cheery-chickies-sinnerling-heathcliff",
-    "name": "Cheery Chickies Sinnerling Heathcliff",
-    "sinner": "Heathcliff",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Cheery Chickies Identities",
-      "Heathcliff Identities",
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Pages using Tabber parser tag"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tingtang_Gang_Gangleader_Hong_Lu"
   },
   {
     "id": "lcb-sinner-heathcliff",
@@ -4677,26 +2389,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Envy Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Counter Skills",
-      "Identities with Damage Up",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "World of Limbus Company",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Heathcliff"
   },
   {
     "id": "multicrack-office-fixer-heathcliff",
@@ -4722,33 +2415,7 @@
       "Haste",
       "Photoelectricity"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Event Reward Identities and E.G.O",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Blunt Fragility",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Clash Power Up",
-      "Identities with Defense Level Down",
-      "Identities with Guard Skills",
-      "Identities with HP Healing Down",
-      "Identities with Haste",
-      "Identities with Photoelectricity",
-      "Identity ID",
-      "Mechanical Amalgam Identities",
-      "MultiCrack Office Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 4 Event",
-      "World of MultiCrack Office",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/MultiCrack_Office_Fixer_Heathcliff"
   },
   {
     "id": "n-corp-kleinhammer-heathcliff",
@@ -4771,28 +2438,7 @@
       "Plus Coin Drop",
       "SP Healing"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Blunt Power Up",
-      "Identities with Guard Skills",
-      "Identities with Nails",
-      "Identities with Plus Coin Drop",
-      "Identities with SP Healing",
-      "Identity ID",
-      "Lust Affinity",
-      "N Corp. Fanatic Identities",
-      "N Corp. Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 1",
-      "World of N Corp. Fanatics"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Kleinhammer_Heathcliff"
   },
   {
     "id": "seven-assoc-south-section-4-heathcliff",
@@ -4812,25 +2458,7 @@
       "Guard Skills",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Defense Level Down",
-      "Identities with Guard Skills",
-      "Identities with Rupture",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Seven Association Identities",
-      "World of the Seven Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_4_Heathcliff"
   },
   {
     "id": "shi-assoc-south-section-5-heathcliff",
@@ -4850,25 +2478,7 @@
       "Increased Atk Weight",
       "Poise"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Counter Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Poise",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Shi Association Identities",
-      "World of the Shi Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Heathcliff"
   },
   {
     "id": "full-stop-office-fixer-heathcliff",
@@ -4901,38 +2511,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Full-Stop Office Identities",
-      "Gloom Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Ammo",
-      "Identities with Assist Attack",
-      "Identities with Clashable Guard",
-      "Identities with Evade Skills",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Pierce Fragility",
-      "Identities with Pierce Power Up",
-      "Identities with Pierce Resist Down",
-      "Identities with Poise",
-      "Identities with Reload",
-      "Identities with Retreat",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Ammo",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Walpurgis Night",
-      "World of the Former Library Guests - Full-Stop Office"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stop_Office_Fixer_Heathcliff"
   },
   {
     "id": "heishou-pack-you-branch-adept-heathcliff",
@@ -4965,39 +2544,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Heathcliff Identities",
-      "Heishou Pack - You Branch Identities",
-      "Heishou Pack Adept Identities",
-      "Heishou Pack Identities",
-      "Identities",
-      "Identities with Bloodflame -血炎-",
-      "Identities with Burn",
-      "Identities with Clash Power Up",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Up",
-      "Identities with HP Healing",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Up",
-      "Identities with Rupture",
-      "Identities with Unbreakable Coin",
-      "Identities with Unfocused Volley",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 6",
-      "World of H Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_You_Branch_Adept_Heathcliff"
   },
   {
     "id": "kurokumo-clan-wakashu-heathcliff",
@@ -5028,37 +2575,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Event Reward Identities and E.G.O",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Attack Power Down",
-      "Identities with Battle Ready",
-      "Identities with Bleed",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Dark Cloud Blade",
-      "Identities with Defense Power Up",
-      "Identities with Offense Level Down",
-      "Identities with Slash DMG Up",
-      "Identities with Slash Fragility",
-      "Identities with Slash Power Up",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Kurokumo Clan Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 5 Event",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Heathcliff"
   },
   {
     "id": "lobotomy-e-g-o-sunshower-heathcliff",
@@ -5088,34 +2605,7 @@
       "Tremor Burst",
       "unique Sanity mechanics"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Blunt DMG Up",
-      "Identities with Counter Skills",
-      "Identities with Fragile",
-      "Identities with Minus Coin Skills",
-      "Identities with Paralyze",
-      "Identities with Protection",
-      "Identities with Rupture",
-      "Identities with SP Loss",
-      "Identities with Sinking",
-      "Identities with Tremor Burst",
-      "Identities with unique Sanity mechanics",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 2",
-      "Sloth Affinity",
-      "Technology Liberation Alliance Identities",
-      "World of K Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Sunshower_Heathcliff"
   },
   {
     "id": "r-corp-4th-pack-rabbit-heathcliff",
@@ -5142,29 +2632,7 @@
       "Haste",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Ammo",
-      "Identities with Attack Power Up",
-      "Identities with Bleed",
-      "Identities with Charge",
-      "Identities with Evade Skills",
-      "Identities with Fragile",
-      "Identities with Haste",
-      "Identities with Rupture",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "R Corp. Identities",
-      "Regular",
-      "World of R Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Rabbit_Heathcliff"
   },
   {
     "id": "the-house-of-spiders-the-thumb-apprentice-heathcliff",
@@ -5198,39 +2666,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Amplitude Conversion",
-      "Identities with Assist Defense",
-      "Identities with Burn",
-      "Identities with Clashable Counter",
-      "Identities with Clashable Guard",
-      "Identities with Counter Skills",
-      "Identities with Guard Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Protection",
-      "Identities with SP Healing",
-      "Identities with Tremor",
-      "Identities with Tremor - Scorch",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 7",
-      "Sloth Affinity",
-      "The Fingers Identities",
-      "The House of Spiders Identities",
-      "The Thumb Identities",
-      "World of the House of Spiders",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Thumb_Apprentice_Heathcliff"
   },
   {
     "id": "the-middle-big-brother-heathcliff",
@@ -5265,38 +2701,7 @@
       "Vendetta Mark",
       "Vengeance Mark"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Attack Power Up",
-      "Identities with Bleed",
-      "Identities with Book of Vengeance",
-      "Identities with Burn",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Up",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Up",
-      "Identities with Paralyze",
-      "Identities with SP Healing",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Stage Interactions",
-      "Identities with Vendetta Mark",
-      "Identities with Vengeance Mark",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 7 Event",
-      "The Fingers Identities",
-      "The Middle Identities",
-      "World of the Middle",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Big_Brother_Heathcliff"
   },
   {
     "id": "the-pequod-harpooneer-heathcliff",
@@ -5320,27 +2725,7 @@
       "Offense Level Up",
       "Poise"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bleed",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Up",
-      "Identities with Offense Level Up",
-      "Identities with Poise",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 3",
-      "The Pequod Identities",
-      "World of U Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_Harpooneer_Heathcliff"
   },
   {
     "id": "w-corp-l4-cleanup-agent-cca-heathcliff",
@@ -5367,30 +2752,7 @@
       "Rupture",
       "Unbreakable Coin"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Charge",
-      "Identities with Charge Barrier",
-      "Identities with Charge Potency",
-      "Identities with Clashable Guard",
-      "Identities with Defense Level Up",
-      "Identities with Guard Skills",
-      "Identities with Rupture",
-      "Identities with Unbreakable Coin",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 6 Event",
-      "W Corp. Identities",
-      "World of W Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L4_Cleanup_Agent_-_CCA_Heathcliff"
   },
   {
     "id": "wild-hunt-heathcliff",
@@ -5422,38 +2784,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with Damage Up",
-      "Identities with Increased Atk Weight",
-      "Identities with Minus Coin Skills",
-      "Identities with Offense Level Up",
-      "Identities with Panic Type Altering Status Effects",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Sinking",
-      "Identities with Unique Stage Interactions",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Season 4",
-      "The Wild Hunt Identities",
-      "World of Wuthering Heights",
-      "Wrath Affinity",
-      "Wuthering Heights Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wild_Hunt_Heathcliff"
   },
   {
     "id": "oufi-assoc-south-section-3-heathcliff",
@@ -5475,43 +2806,7 @@
       "Tremor - Decay",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Heathcliff Identities",
-      "Identities",
-      "Identities with Amplitude Conversion",
-      "Identities with Guard Skills",
-      "Identities with Tremor",
-      "Identities with Tremor - Decay",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "World of the Öufi Association Southern Branch",
-      "Öufi Association Identities"
-    ]
-  },
-  {
-    "id": "cheery-chickies-sinnerling-ishmael",
-    "name": "Cheery Chickies Sinnerling Ishmael",
-    "sinner": "Ishmael",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Cheery Chickies Identities",
-      "Identities",
-      "Ishmael Identities",
-      "Limbus Kindergarten Identities",
-      "Pages using Tabber parser tag"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/%C3%96ufi_Assoc._South_Section_3_Heathcliff"
   },
   {
     "id": "lcb-sinner-ishmael",
@@ -5533,26 +2828,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Blunt Fragility",
-      "Identities with Defense Power Down",
-      "Identities with Guard Skills",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Ishmael Identities",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "World of Limbus Company",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Ishmael"
   },
   {
     "id": "edgar-family-butler-ishmael",
@@ -5578,30 +2854,7 @@
       "Sinking",
       "Slash Fragility"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Edgar Family Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Defense Level Down",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Poise",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identities with Slash Fragility",
-      "Identity ID",
-      "Ishmael Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 4",
-      "Sloth Affinity",
-      "World of Wuthering Heights"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Butler_Ishmael"
   },
   {
     "id": "lccb-assistant-manager-ishmael",
@@ -5628,31 +2881,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Ammo",
-      "Identities with Attack Power Down",
-      "Identities with Fragile",
-      "Identities with Guard Skills",
-      "Identities with Paralyze",
-      "Identities with Rupture",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Ishmael Identities",
-      "LCC Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 1",
-      "World of the LCCB"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Ishmael"
   },
   {
     "id": "lobotomy-e-g-o-sloshing-ishmael",
@@ -5675,27 +2904,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "E.G.O Gear Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Guard Skills",
-      "Identities with Rupture",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Ishmael Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 2",
-      "Technology Liberation Alliance Identities",
-      "World of K Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Sloshing_Ishmael"
   },
   {
     "id": "shi-assoc-south-section-5-ishmael",
@@ -5716,26 +2925,7 @@
       "HP Healing",
       "Poise"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Identities",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with HP Healing",
-      "Identities with Poise",
-      "Identity ID",
-      "Ishmael Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Shi Association Identities",
-      "World of the Shi Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Ishmael"
   },
   {
     "id": "family-hierarch-candidate-ishmael",
@@ -5762,32 +2952,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Family Hierarch Candidate Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Identities",
-      "Identities with Defense Level Down",
-      "Identities with Evade Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Up",
-      "Identities with Poise",
-      "Identities with Retreat",
-      "Identities with Rupture",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Ishmael Identities",
-      "Jia Family Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 6",
-      "World of H Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Family_Hierarch_Candidate_Ishmael"
   },
   {
     "id": "haute-couture-boutique-du-rouge-ishmael",
@@ -5819,37 +2984,7 @@
       "Unbreakable Coin",
       "Unique Charge"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bleed",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Clashable Counter",
-      "Identities with Clashable Guard",
-      "Identities with Counter Skills",
-      "Identities with Damage Up",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Lust Fragility",
-      "Identities with Power Up",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Charge",
-      "Identity ID",
-      "Ishmael Identities",
-      "Le Rouge Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with broken file links",
-      "Season 8",
-      "Sisyphe Identities",
-      "World of the Grand Magasin Sisyphe",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Boutique_du_Rouge_Ishmael"
   },
   {
     "id": "jeong-s-office-rep-ishmael",
@@ -5883,39 +3018,7 @@
       "Unclashable Skills",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Associate Office - Öufi Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Amplitude Conversion",
-      "Identities with Attack Power Up",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Down",
-      "Identities with Discard",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identities with Tremor",
-      "Identities with Tremor - Decay",
-      "Identities with Tremor Burst",
-      "Identities with Unclashable Skills",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Ishmael Identities",
-      "Jeong's Office Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "Walpurgis Night",
-      "World of the Former Library Guests - General Reception I",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Jeong's_Office_Rep_Ishmael"
   },
   {
     "id": "kurokumo-clan-captain-ishmael",
@@ -5944,34 +3047,7 @@
       "Slash Power Up",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Battle Ready",
-      "Identities with Bleed",
-      "Identities with Dark Cloud Blade",
-      "Identities with Defense Power Up",
-      "Identities with Evade Skills",
-      "Identities with Fragile",
-      "Identities with Offense Level Down",
-      "Identities with Protection",
-      "Identities with Slash DMG Up",
-      "Identities with Slash Fragility",
-      "Identities with Slash Power Up",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Ishmael Identities",
-      "Kurokumo Clan Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 5 Event",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Captain_Ishmael"
   },
   {
     "id": "lcd-osir-team-ishmael",
@@ -5999,34 +3075,7 @@
       "Slash Fragility",
       "Unbreakable Coin"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Blade Lineage Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Assist Defense",
-      "Identities with Bleed",
-      "Identities with Clashable Guard",
-      "Identities with Coin Reuse",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Paralyze",
-      "Identities with Poise",
-      "Identities with Slash Fragility",
-      "Identities with Unbreakable Coin",
-      "Identity ID",
-      "Ishmael Identities",
-      "LCD Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 7 Event",
-      "Syndicate Identities",
-      "World of the LCD",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCD_OSIR_Team_Ishmael"
   },
   {
     "id": "liu-assoc-south-section-4-ishmael",
@@ -6046,25 +3095,7 @@
       "Counter Skills",
       "Plus Coin Boost"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Identities",
-      "Identities with Burn",
-      "Identities with Counter Skills",
-      "Identities with Plus Coin Boost",
-      "Identity ID",
-      "Ishmael Identities",
-      "Liu Association Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "World of the Liu Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Ishmael"
   },
   {
     "id": "molar-boatworks-fixer-ishmael",
@@ -6087,27 +3118,7 @@
       "Sinking",
       "Tremor"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Defense Level Down",
-      "Identities with Evade Skills",
-      "Identities with Fragile",
-      "Identities with Sinking",
-      "Identities with Tremor",
-      "Identity ID",
-      "Ishmael Identities",
-      "Molar Office Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 2 Event",
-      "Sloth Affinity",
-      "World of the District 21 Backstreets"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Boatworks_Fixer_Ishmael"
   },
   {
     "id": "r-corp-4th-pack-reindeer-ishmael",
@@ -6129,25 +3140,7 @@
       "SP Loss",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Evade Skills",
-      "Identities with SP Loss",
-      "Identities with Sinking",
-      "Identity ID",
-      "Ishmael Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "R Corp. Identities",
-      "Regular",
-      "World of R Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Ishmael"
   },
   {
     "id": "the-house-of-spiders-the-middle-apprentice-ishmael",
@@ -6174,32 +3167,7 @@
       "Vengeance Mark",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bind",
-      "Identities with Bleed",
-      "Identities with Blunt DMG Up",
-      "Identities with Burn",
-      "Identities with Counter Skills",
-      "Identities with Paralyze",
-      "Identities with Vengeance Mark",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Ishmael Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 7",
-      "The Fingers Identities",
-      "The House of Spiders Identities",
-      "The Middle Identities",
-      "World of the House of Spiders",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Middle_Apprentice_Ishmael"
   },
   {
     "id": "the-pequod-captain-ishmael",
@@ -6234,37 +3202,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Assist Attack",
-      "Identities with Bleed",
-      "Identities with Burn",
-      "Identities with Damage Up",
-      "Identities with Defense Level Up",
-      "Identities with Guard Skills",
-      "Identities with Offense Level Up",
-      "Identities with Pierce Power Up",
-      "Identities with Poise",
-      "Identities with Pride Power Up",
-      "Identities with Protection",
-      "Identities with SP Healing",
-      "Identities with Unique Stage Interactions",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Ishmael Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 3",
-      "The Pequod Identities",
-      "World of U Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_Captain_Ishmael"
   },
   {
     "id": "zwei-assoc-west-section-3-ishmael",
@@ -6290,48 +3228,7 @@
       "Tremor Burst",
       "Unbreakable Coin"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Attack Power Down",
-      "Identities with Clashable Guard",
-      "Identities with Defense Level Up",
-      "Identities with Defensive Stance",
-      "Identities with Guard Skills",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identity ID",
-      "Ishmael Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "World of the Zwei Association Western Branch",
-      "Zwei Association Identities"
-    ]
-  },
-  {
-    "id": "perky-penguins-sinnerling-rodion",
-    "name": "Perky Penguins Sinnerling Rodion",
-    "sinner": "Rodion",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Pages using Tabber parser tag",
-      "Perky Penguins Identities",
-      "Rodion Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._West_Section_3_Ishmael"
   },
   {
     "id": "lcb-sinner-rodion",
@@ -6350,23 +3247,7 @@
       "Bleed",
       "Counter Skills"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Counter Skills",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Rodion Identities",
-      "World of Limbus Company",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Rodion"
   },
   {
     "id": "lccb-assistant-manager-rodion",
@@ -6385,26 +3266,7 @@
       "Guard Skills",
       "Paralyze"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Defense Level Down",
-      "Identities with Defense Power Down",
-      "Identities with Guard Skills",
-      "Identities with Paralyze",
-      "Identity ID",
-      "LCC Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Rodion Identities",
-      "Season 1",
-      "World of the LCCB"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Rodion"
   },
   {
     "id": "n-corp-mittelhammer-rodion",
@@ -6428,29 +3290,7 @@
       "Nails",
       "Paralyze"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Counter Skills",
-      "Identities with Damage Up",
-      "Identities with Fanatic",
-      "Identities with Haste",
-      "Identities with Nails",
-      "Identities with Paralyze",
-      "Identity ID",
-      "Lust Affinity",
-      "N Corp. Fanatic Identities",
-      "N Corp. Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Rodion Identities",
-      "Season 1",
-      "World of N Corp. Fanatics",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Mittelhammer_Rodion"
   },
   {
     "id": "t-corp-class-2-collection-staff-rodion",
@@ -6474,28 +3314,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Borrowed Time",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Time Moratorium",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Rodion Identities",
-      "Sloth Affinity",
-      "T Corp. Identities",
-      "World of T Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_2_Collection_Staff_Rodion"
   },
   {
     "id": "zwei-assoc-south-section-5-rodion",
@@ -6516,26 +3335,7 @@
       "Guard Skills",
       "Poise"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Fragile",
-      "Identities with Guard Skills",
-      "Identities with Poise",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Rodion Identities",
-      "Sloth Affinity",
-      "World of the Zwei Association Southern Branch",
-      "Wrath Affinity",
-      "Zwei Association Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_5_Rodion"
   },
   {
     "id": "devyat-assoc-north-section-3-rodion",
@@ -6561,31 +3361,7 @@
       "Rupture",
       "SP Loss"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Devyat' Association Identities",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Clash Power Up",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Courier Trunk",
-      "Identities with Defense Level Down",
-      "Identities with Haste",
-      "Identities with Retreat",
-      "Identities with Rupture",
-      "Identities with SP Loss",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Rodion Identities",
-      "World of the Devyat' Association Northern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devyat'_Assoc._North_Section_3_Rodion"
   },
   {
     "id": "dieci-assoc-south-section-4-rodion",
@@ -6608,28 +3384,7 @@
       "Insight",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Dieci Association Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Blunt DMG Up",
-      "Identities with Discard",
-      "Identities with Guard Skills",
-      "Identities with Insight",
-      "Identities with Sinking",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Rodion Identities",
-      "Sloth Affinity",
-      "World of the Dieci Association Southern Branch"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Rodion"
   },
   {
     "id": "haute-couture-alteration-shop-rodion",
@@ -6659,33 +3414,7 @@
       "Tremor Burst",
       "Unique Charge"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities missing Uptie Info",
-      "Identities with Attack Power Up",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Duality",
-      "Identities with Offense Level Up",
-      "Identities with Sloth Resist Down",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identities with Unique Charge",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Rodion Identities",
-      "Season 8",
-      "Sloth Affinity",
-      "Upcoming Content"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Alteration_Shop_Rodion"
   },
   {
     "id": "heishou-pack-si-branch-rodion",
@@ -6715,35 +3444,7 @@
       "Unbreakable Coin",
       "Unfocused Volley"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Heishou Pack - Si Branch Identities",
-      "Heishou Pack Identities",
-      "Identities",
-      "Identities with Clashable Guard",
-      "Identities with Coin Reuse",
-      "Identities with Deathrite -Venom-",
-      "Identities with Defense Level Down",
-      "Identities with Guard Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Down",
-      "Identities with Poise",
-      "Identities with Rupture",
-      "Identities with Serpent Arm",
-      "Identities with Unbreakable Coin",
-      "Identities with Unfocused Volley",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Rodion Identities",
-      "Season 6",
-      "World of H Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Si_Branch_Rodion"
   },
   {
     "id": "kurokumo-clan-wakashu-rodion",
@@ -6765,26 +3466,7 @@
       "Poise",
       "Protection"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Counter Skills",
-      "Identities with Poise",
-      "Identities with Protection",
-      "Identity ID",
-      "Kurokumo Clan Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Rodion Identities",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan and Blade Lineage"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Rodion"
   },
   {
     "id": "liu-assoc-south-section-4-director-rodion",
@@ -6805,26 +3487,7 @@
       "Counter Skills",
       "Wrath DMG Up"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Fixer Identities",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Burn",
-      "Identities with Counter Skills",
-      "Identities with Wrath DMG Up",
-      "Identity ID",
-      "Liu Association Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Rodion Identities",
-      "World of the Liu Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Director_Rodion"
   },
   {
     "id": "lobotomy-e-g-o-the-sword-sharpened-with-tears-rodion",
@@ -6860,40 +3523,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Clash Power Up",
-      "Identities with Clashable Counter",
-      "Identities with Clashable Guard",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Damage Up",
-      "Identities with Guard Skills",
-      "Identities with Minus Coin Skills",
-      "Identities with Power Up",
-      "Identities with Protection",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Sinking",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Charge",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lobotomy Corp. Headquarters Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Rodion Identities",
-      "Walpurgis Night",
-      "World of Lobotomy Corporation Headquarters - 1"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::The_Sword_Sharpened_with_Tears_Rodion"
   },
   {
     "id": "r-corp-4th-pack-reindeer-rodion",
@@ -6918,28 +3548,7 @@
       "Sinking",
       "Unfocused Volley"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Blunt Fragility",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Guard Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Sinking",
-      "Identities with Unfocused Volley",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "R Corp. Identities",
-      "Regular",
-      "Rodion Identities",
-      "World of R Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Rodion"
   },
   {
     "id": "rosespanner-workshop-rep-rodion",
@@ -6965,30 +3574,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Blunt DMG Up",
-      "Identities with Charge",
-      "Identities with Coin Reuse",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Rodion Identities",
-      "Rosespanner Workshop Identities",
-      "Season 2",
-      "Sloth Affinity",
-      "World of K Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Rep_Rodion"
   },
   {
     "id": "the-house-of-spiders-the-thumb-nursefather-rodion",
@@ -7027,45 +3613,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Amplitude Conversion",
-      "Identities with Burn",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with Crossed-Out Traits",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Offense Level Up",
-      "Identities with Poise",
-      "Identities with Reload",
-      "Identities with SP Healing",
-      "Identities with Tremor",
-      "Identities with Tremor - Scorch",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Ammo",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Rodion Identities",
-      "Season 7",
-      "Sloth Affinity",
-      "Smoke War Identities",
-      "The Fingers Identities",
-      "The House of Spiders Identities",
-      "The Thumb Identities",
-      "War Hero Identities",
-      "World of the House of Spiders",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Thumb_Nursefather_Rodion"
   },
   {
     "id": "the-princess-of-la-manchaland-rodion",
@@ -7092,32 +3640,7 @@
       "Rupture",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Bloodfiend Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Bleed",
-      "Identities with Bloodfeast",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with HP Healing",
-      "Identities with Increased Atk Weight",
-      "Identities with Rupture",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "La Manchaland Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Rodion Identities",
-      "Season 5",
-      "Second Kindred Identities",
-      "World of La Manchaland"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Princess_of_La_Manchaland_Rodion"
   },
   {
     "id": "the-ring-fauvist-docent-rodion",
@@ -7150,56 +3673,7 @@
       "Unfocused Volley",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Clash Power Up",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Down",
-      "Identities with Defense Level Up",
-      "Identities with Increased Atk Weight",
-      "Identities with Mauled Color",
-      "Identities with Offense Level Up",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identities with Unbreakable Coin",
-      "Identities with Unfocused Volley",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Rodion Identities",
-      "School of Fauvism Identities",
-      "Season 7 Event",
-      "The Fingers Identities",
-      "The Ring Docent Identities",
-      "The Ring Identities",
-      "World of the Ring Fauvists"
-    ]
-  },
-  {
-    "id": "cheery-chickies-sinnerling-sinclair",
-    "name": "Cheery Chickies Sinnerling Sinclair",
-    "sinner": "Sinclair",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Cheery Chickies Identities",
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Pages using Tabber parser tag",
-      "Sinclair Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Fauvist_Docent_Rodion"
   },
   {
     "id": "lcb-sinner-sinclair",
@@ -7219,24 +3693,7 @@
       "Counter Skills",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Counter Skills",
-      "Identities with Rupture",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sinclair Identities",
-      "World of Limbus Company",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Sinclair"
   },
   {
     "id": "lobotomy-e-g-o-red-sheet-sinclair",
@@ -7256,25 +3713,7 @@
       "Rupture",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "E.G.O Gear Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Guard Skills",
-      "Identities with Rupture",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 2",
-      "Sinclair Identities",
-      "Technology Liberation Alliance Identities",
-      "World of K Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Red_Sheet_Sinclair"
   },
   {
     "id": "los-mariachis-jefe-sinclair",
@@ -7295,26 +3734,7 @@
       "Poise",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Evade Skills",
-      "Identities with Poise",
-      "Identities with Sinking",
-      "Identity ID",
-      "Los Mariachis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 1",
-      "Sinclair Identities",
-      "Sloth Affinity",
-      "Syndicate Identities",
-      "The Backstreets Identities",
-      "World of the J Corp. Backstreets"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Los_Mariachis_Jefe_Sinclair"
   },
   {
     "id": "molar-boatworks-fixer-sinclair",
@@ -7334,26 +3754,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Event Reward Identities and E.G.O",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Guard Skills",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Molar Office Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 2 Event",
-      "Sinclair Identities",
-      "World of the District 21 Backstreets"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Boatworks_Fixer_Sinclair"
   },
   {
     "id": "zwei-assoc-south-section-6-sinclair",
@@ -7378,31 +3779,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Blunt Fragility",
-      "Identities with Damage Down",
-      "Identities with Defense Power Up",
-      "Identities with Guard Skills",
-      "Identities with Protection",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Regular",
-      "Sinclair Identities",
-      "Sloth Affinity",
-      "World of the Zwei Association Southern Branch",
-      "Wrath Affinity",
-      "Zwei Association Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_6_Sinclair"
   },
   {
     "id": "zwei-assoc-west-section-3-sinclair",
@@ -7428,32 +3805,7 @@
       "Tremor Burst",
       "Unbreakable Coin"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Clashable Guard",
-      "Identities with Defense Level Up",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Offense Level Up",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Season 5",
-      "Sinclair Identities",
-      "Sloth Affinity",
-      "World of the Zwei Association Western Branch",
-      "Zwei Association Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._West_Section_3_Sinclair"
   },
   {
     "id": "blade-lineage-salsu-sinclair",
@@ -7477,28 +3829,7 @@
       "Paralyze",
       "Poise"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Blade Lineage Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Bleed",
-      "Identities with Counter Skills",
-      "Identities with Damage Up",
-      "Identities with Paralyze",
-      "Identities with Poise",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Sinclair Identities",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan and Blade Lineage",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Sinclair"
   },
   {
     "id": "cinq-assoc-south-section-4-director-sinclair",
@@ -7522,29 +3853,7 @@
       "Poise",
       "Single Combat"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Cinq Association Identities",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Declared Duel",
-      "Identities with Evade Skills",
-      "Identities with Fragile",
-      "Identities with Haste",
-      "Identities with Pierce DMG Up",
-      "Identities with Poise",
-      "Identities with Single Combat",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Sinclair Identities",
-      "World of the Cinq Association Southern Branch"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_4_Director_Sinclair"
   },
   {
     "id": "dawn-office-fixer-sinclair",
@@ -7569,30 +3878,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Dawn Office Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Burn",
-      "Identities with Coin Reuse",
-      "Identities with Guard Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Sinclair Identities",
-      "Walpurgis Night",
-      "World of the Former Library Guests - Dawn Office",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Fixer_Sinclair"
   },
   {
     "id": "devyat-assoc-north-section-3-sinclair",
@@ -7617,30 +3903,7 @@
       "Rupture",
       "SP Loss"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Devyat' Association Identities",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Clash Power Up",
-      "Identities with Counter Skills",
-      "Identities with Courier Trunk",
-      "Identities with Defense Level Down",
-      "Identities with Haste",
-      "Identities with Retreat",
-      "Identities with Rupture",
-      "Identities with SP Loss",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sinclair Identities",
-      "World of the Devyat' Association Northern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devyat'_Assoc._North_Section_3_Sinclair"
   },
   {
     "id": "heishou-pack-you-branch-sinclair",
@@ -7671,37 +3934,7 @@
       "Unfocused Volley",
       "Wrath DMG Up"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Event Reward Identities and E.G.O",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Heishou Pack - You Branch Identities",
-      "Heishou Pack Identities",
-      "Identities",
-      "Identities with Bloodflame -血炎-",
-      "Identities with Burn",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Up",
-      "Identities with Gluttony DMG Up",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Up",
-      "Identities with Rupture",
-      "Identities with Unbreakable Coin",
-      "Identities with Unfocused Volley",
-      "Identities with Wrath DMG Up",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 6 Event",
-      "Sinclair Identities",
-      "World of H Corp.",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_You_Branch_Sinclair"
   },
   {
     "id": "the-house-of-spiders-the-pinky-apprentice-sinclair",
@@ -7733,35 +3966,7 @@
       "Unfocused Volley",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Clashable Guard",
-      "Identities with Coin Reuse",
-      "Identities with Crit DMG Up",
-      "Identities with Evade Skills",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Increased Atk Weight",
-      "Identities with Poise",
-      "Identities with SP Healing",
-      "Identities with Slash Power Up",
-      "Identities with Unbreakable Coin",
-      "Identities with Unfocused Volley",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 7",
-      "Sinclair Identities",
-      "The House of Spiders Identities",
-      "World of the House of Spiders",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Pinky_Apprentice_Sinclair"
   },
   {
     "id": "the-middle-little-brother-sinclair",
@@ -7787,31 +3992,7 @@
       "Vendetta Mark",
       "Vengeance Mark"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bleed",
-      "Identities with Blunt DMG Up",
-      "Identities with Book of Vengeance",
-      "Identities with Counter Skills",
-      "Identities with Defense Level Up",
-      "Identities with Offense Level Up",
-      "Identities with SP Healing",
-      "Identities with Vendetta Mark",
-      "Identities with Vengeance Mark",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sinclair Identities",
-      "The Fingers Identities",
-      "The Middle Identities",
-      "World of the Middle"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Brother_Sinclair"
   },
   {
     "id": "the-one-who-shall-grip-sinclair",
@@ -7839,32 +4020,7 @@
       "SP Loss",
       "Unique Stage Interactions"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Blunt Power Up",
-      "Identities with Burn",
-      "Identities with Fanatic",
-      "Identities with Guard Skills",
-      "Identities with Minus Coin Skills",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Unique Stage Interactions",
-      "Identity ID",
-      "Lust Affinity",
-      "N Corp. Fanatic Identities",
-      "N Corp. Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 1",
-      "Sinclair Identities",
-      "World of N Corp. Fanatics",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_One_Who_Shall_Grip_Sinclair"
   },
   {
     "id": "the-thumb-east-soldato-ii-sinclair",
@@ -7892,50 +4048,7 @@
       "Unbreakable Coin",
       "Unique Ammo"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Identities",
-      "Identities with Ammo",
-      "Identities with Amplitude Conversion",
-      "Identities with Burn",
-      "Identities with Guard Skills",
-      "Identities with Tremor",
-      "Identities with Tremor - Scorch",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with Unique Ammo",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 6",
-      "Sinclair Identities",
-      "Sloth Affinity",
-      "Soldato Identities",
-      "The Fingers Identities",
-      "The Thumb Identities",
-      "World of the Thumb",
-      "Wrath Affinity"
-    ]
-  },
-  {
-    "id": "perky-penguins-class-captain-outis",
-    "name": "Perky Penguins Class Captain Outis",
-    "sinner": "Outis",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Outis Identities",
-      "Pages using Tabber parser tag",
-      "Perky Penguins Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Thumb_East_Soldato_II_Sinclair"
   },
   {
     "id": "lcb-sinner-outis",
@@ -7954,23 +4067,7 @@
       "Evade Skills",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Evade Skills",
-      "Identities with Rupture",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "World of Limbus Company"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Outis"
   },
   {
     "id": "blade-lineage-salsu-outis",
@@ -7990,25 +4087,7 @@
       "Poise",
       "Slash DMG Up"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Blade Lineage Identities",
-      "Identities",
-      "Identities with Evade Skills",
-      "Identities with Poise",
-      "Identities with Slash DMG Up",
-      "Identity ID",
-      "Lust Affinity",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan and Blade Lineage",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Outis"
   },
   {
     "id": "cinq-assoc-south-section-4-outis",
@@ -8031,28 +4110,7 @@
       "Haste",
       "Poise"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Cinq Association Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bind",
-      "Identities with Declared Duel",
-      "Identities with Evade Skills",
-      "Identities with Haste",
-      "Identities with Poise",
-      "Identity ID",
-      "Lust Affinity",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "World of the Cinq Association Southern Branch"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_4_Outis"
   },
   {
     "id": "g-corp-head-manager-outis",
@@ -8077,29 +4135,7 @@
       "Protection",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "G Corp. Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Attack Power Down",
-      "Identities with Attack Power Up",
-      "Identities with Damage Up",
-      "Identities with Defense Power Up",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Protection",
-      "Identities with Sinking",
-      "Identity ID",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 1",
-      "Sloth Affinity",
-      "World of the Former G Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/G_Corp._Head_Manager_Outis"
   },
   {
     "id": "the-ring-pointillist-student-outis",
@@ -8131,35 +4167,7 @@
       "Sinking",
       "Tremor"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Burn",
-      "Identities with Coin Reuse",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Pierce DMG Up",
-      "Identities with Pierce Power Up",
-      "Identities with Rupture",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identities with Tremor",
-      "Identity ID",
-      "Lust Affinity",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "School of Pointillism Identities",
-      "The Fingers Identities",
-      "The Ring Identities",
-      "The Ring Student Identities",
-      "World of the Ring Pointillists",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Pointillist_Student_Outis"
   },
   {
     "id": "heishou-pack-mao-branch-outis",
@@ -8183,31 +4191,7 @@
       "Rupture",
       "Strider -Mao-"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Event Reward Identities and E.G.O",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "H Corp. Identities",
-      "Heishou Pack - Mao Branch Identities",
-      "Heishou Pack Identities",
-      "Identities",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with Deathrite -Haste-",
-      "Identities with Haste",
-      "Identities with Rupture",
-      "Identities with Strider -Mao-",
-      "Identity ID",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 5 Event",
-      "Sloth Affinity",
-      "World of H Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Outis"
   },
   {
     "id": "lca-udjat-vanguard-team-3-leader-outis",
@@ -8237,34 +4221,7 @@
       "Unique Ammo",
       "Unique Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Gloom Fragility",
-      "Identities with Gloom Resist Down",
-      "Identities with Guard Skills",
-      "Identities with Panic Type Altering Status Effects",
-      "Identities with Protection",
-      "Identities with Reload",
-      "Identities with Sinking",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identities with Unique Ammo",
-      "Identities with Unique Sinking",
-      "Identity ID",
-      "LCA Identities",
-      "Limbus Company Identities",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 7",
-      "Sloth Affinity",
-      "World of Raided Limbus Company"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCA_Udjat_Vanguard_Team_3_Leader_Outis"
   },
   {
     "id": "lobotomy-e-g-o-magic-bullet-outis",
@@ -8289,30 +4246,7 @@
       "Poise",
       "SP Loss"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Identities",
-      "Identities with 7 Atk Weight",
-      "Identities with Burn",
-      "Identities with Dark Flame",
-      "Identities with Guard Skills",
-      "Identities with Increased Atk Weight",
-      "Identities with Magic Bullet",
-      "Identities with Poise",
-      "Identities with SP Loss",
-      "Identity ID",
-      "Lobotomy Corp. Headquarters Identities",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Pride Affinity",
-      "Walpurgis Night",
-      "World of Lobotomy Corporation Headquarters - 1",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Magic_Bullet_Outis"
   },
   {
     "id": "molar-office-fixer-outis",
@@ -8334,28 +4268,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Event Reward Identities and E.G.O",
-      "Fixer Identities",
-      "Identities",
-      "Identities with Discard",
-      "Identities with Guard Skills",
-      "Identities with Offense Level Up",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Lust Affinity",
-      "Molar Office Identities",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 2 Event",
-      "Sloth Affinity",
-      "World of Molar Office",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Office_Fixer_Outis"
   },
   {
     "id": "seven-assoc-south-section-6-director-outis",
@@ -8380,30 +4293,7 @@
       "Rupture",
       "Weakness Analyzed"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Fixer Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Defense Level Down",
-      "Identities with Defense Power Up",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Offense Level Down",
-      "Identities with Paralyze",
-      "Identities with Rupture",
-      "Identities with Weakness Analyzed",
-      "Identity ID",
-      "Lust Affinity",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Seven Association Identities",
-      "Sloth Affinity",
-      "World of the Seven Association Southern Branch"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Director_Outis"
   },
   {
     "id": "t-corp-class-3-vdcu-staff-outis",
@@ -8432,33 +4322,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Identities",
-      "Identities with Amplitude Conversion",
-      "Identities with Bind",
-      "Identities with Borrowed Time",
-      "Identities with Clashable Guard",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Time Moratorium",
-      "Identities with Tremor",
-      "Identities with Tremor - Chain",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 6 Event",
-      "Sloth Affinity",
-      "T Corp. Identities",
-      "World of T Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_3_VDCU_Staff_Outis"
   },
   {
     "id": "the-barber-of-la-manchaland-outis",
@@ -8482,30 +4346,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Bloodfiend Identities",
-      "Gluttony Affinity",
-      "Identities",
-      "Identities with Bleed",
-      "Identities with Bloodfeast",
-      "Identities with Counter Skills",
-      "Identities with HP Healing",
-      "Identities with Increased Atk Weight",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "La Manchaland Identities",
-      "Lust Affinity",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 5",
-      "Third Kindred Identities",
-      "World of La Manchaland",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Barber_of_La_Manchaland_Outis"
   },
   {
     "id": "the-house-of-spiders-the-middle-nursefather-outis",
@@ -8543,44 +4384,7 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bind",
-      "Identities with Bleed",
-      "Identities with Blunt DMG Up",
-      "Identities with Book of Vengeance",
-      "Identities with Burn",
-      "Identities with Counter Skills",
-      "Identities with Crossed-Out Traits",
-      "Identities with Damage Up",
-      "Identities with Envy DMG Up",
-      "Identities with Envy Fragility",
-      "Identities with Increased Atk Weight",
-      "Identities with Paralyze",
-      "Identities with Protection",
-      "Identities with SP Healing",
-      "Identities with SP Loss",
-      "Identities with Unbreakable Coin",
-      "Identities with Unclashable Skills",
-      "Identities with Vengeance Mark",
-      "Identities with unique Sanity mechanics",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with broken file links",
-      "Season 7",
-      "The Fingers Identities",
-      "The House of Spiders Identities",
-      "The Middle Identities",
-      "World of the House of Spiders"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Middle_Nursefather_Outis"
   },
   {
     "id": "w-corp-l3-cleanup-captain-outis",
@@ -8606,29 +4410,7 @@
       "Load",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Charge",
-      "Identities with Charge Barrier",
-      "Identities with Charge Potency",
-      "Identities with Clash Power Up",
-      "Identities with Guard Skills",
-      "Identities with Load",
-      "Identities with Rupture",
-      "Identity ID",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Regular",
-      "W Corp. Identities",
-      "World of W Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Captain_Outis"
   },
   {
     "id": "wuthering-heights-chief-butler-outis",
@@ -8651,45 +4433,7 @@
       "Sinking",
       "unique Sanity mechanics"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Identities",
-      "Identities with Echoes of the Manor",
-      "Identities with Evade Skills",
-      "Identities with Offense Level Up",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identities with unique Sanity mechanics",
-      "Identity ID",
-      "Lust Affinity",
-      "Outis Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 4",
-      "World of Wuthering Heights",
-      "Wuthering Heights Identities"
-    ]
-  },
-  {
-    "id": "perky-penguins-sinnerling-gregor",
-    "name": "Perky Penguins Sinnerling Gregor",
-    "sinner": "Gregor",
-    "rarity": null,
-    "affinities": [],
-    "keywords": [],
-    "status_effects": [],
-    "incomplete": true,
-    "categories": [
-      "Gregor Identities",
-      "Identities",
-      "Limbus Kindergarten Identities",
-      "Pages using Tabber parser tag",
-      "Perky Penguins Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wuthering_Heights_Chief_Butler_Outis"
   },
   {
     "id": "lcb-sinner-gregor",
@@ -8710,25 +4454,7 @@
       "Pierce Fragility",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "1-Star Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Pierce Fragility",
-      "Identities with Rupture",
-      "Identity ID",
-      "LCB Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Sloth Affinity",
-      "World of Limbus Company"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Gregor"
   },
   {
     "id": "kurokumo-clan-captain-gregor",
@@ -8750,27 +4476,7 @@
       "Offense Level Down",
       "Plus Coin Drop"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Gloom Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Attack Power Down",
-      "Identities with Bleed",
-      "Identities with Guard Skills",
-      "Identities with Offense Level Down",
-      "Identities with Plus Coin Drop",
-      "Identity ID",
-      "Kurokumo Clan Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 3 Event",
-      "Sloth Affinity",
-      "Syndicate Identities",
-      "World of the Kurokumo Clan and Blade Lineage"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Captain_Gregor"
   },
   {
     "id": "liu-assoc-south-section-6-gregor",
@@ -8790,25 +4496,7 @@
       "Burn",
       "Guard Skills"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Fixer Identities",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Attack Power Up",
-      "Identities with Burn",
-      "Identities with Guard Skills",
-      "Identity ID",
-      "Liu Association Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sloth Affinity",
-      "World of the Liu Association Southern Branch",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_6_Gregor"
   },
   {
     "id": "r-b-sous-chef-gregor",
@@ -8830,29 +4518,7 @@
       "HP Healing",
       "Paralyze"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Event Reward Identities and E.G.O",
-      "Gluttony Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Bind",
-      "Identities with Bleed",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Paralyze",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "R.B. Identities",
-      "Season 1 Event",
-      "Syndicate Identities",
-      "The Backstreets Identities",
-      "World of the District 23 Backstreets"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/R.B._Sous-chef_Gregor"
   },
   {
     "id": "rosespanner-workshop-fixer-gregor",
@@ -8876,27 +4542,7 @@
       "Tremor",
       "Tremor Burst"
     ],
-    "incomplete": false,
-    "categories": [
-      "2-Star Identities",
-      "Envy Affinity",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Charge",
-      "Identities with Guard Skills",
-      "Identities with Rupture",
-      "Identities with Tremor",
-      "Identities with Tremor Burst",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Rosespanner Workshop Identities",
-      "Season 2",
-      "World of K Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Fixer_Gregor"
   },
   {
     "id": "dawn-office-rep-gregor",
@@ -8929,37 +4575,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Dawn Office Identities",
-      "Fixer Identities",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Amplitude Conversion",
-      "Identities with Assist Defense",
-      "Identities with Burn",
-      "Identities with Clashable Counter",
-      "Identities with Coin Reuse",
-      "Identities with Counter Skills",
-      "Identities with HP Healing",
-      "Identities with Increased Atk Weight",
-      "Identities with Protection",
-      "Identities with Retreat",
-      "Identities with Tremor",
-      "Identities with Tremor - Scorch",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "Walpurgis Night",
-      "World of the Former Library Guests - Dawn Office",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Rep_Gregor"
   },
   {
     "id": "edgar-family-heir-gregor",
@@ -8984,29 +4600,7 @@
       "SP Loss",
       "Sinking"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Edgar Family Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Damage Up",
-      "Identities with Evade Skills",
-      "Identities with Fragile",
-      "Identities with Gloom DMG Up",
-      "Identities with Haste",
-      "Identities with Plus Coin Boost",
-      "Identities with SP Loss",
-      "Identities with Sinking",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 4",
-      "World of Wuthering Heights"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Heir_Gregor"
   },
   {
     "id": "firefist-office-survivor-gregor",
@@ -9028,26 +4622,7 @@
       "Counter Skills",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Blunt DMG Up",
-      "Identities with Burn",
-      "Identities with Clashable Counter",
-      "Identities with Counter Skills",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 5",
-      "World of Firefist Office",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Firefist_Office_Survivor_Gregor"
   },
   {
     "id": "g-corp-manager-corporal-gregor",
@@ -9067,24 +4642,7 @@
       "HP Healing",
       "Rupture"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "G Corp. Identities",
-      "Gluttony Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Rupture",
-      "Identity ID",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Season 1",
-      "Sloth Affinity",
-      "World of the Former G Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/G_Corp._Manager_Corporal_Gregor"
   },
   {
     "id": "heishou-pack-si-branch-gregor",
@@ -9111,32 +4669,7 @@
       "Serpent Arm",
       "Unbreakable Coin"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Envy Affinity",
-      "Gluttony Affinity",
-      "Gregor Identities",
-      "H Corp. Identities",
-      "Heishou Pack - Si Branch Identities",
-      "Heishou Pack Identities",
-      "Identities",
-      "Identities with Clashable Guard",
-      "Identities with Coin Reuse",
-      "Identities with Deathrite -Venom-",
-      "Identities with Guard Skills",
-      "Identities with Pierce DMG Up",
-      "Identities with Poise",
-      "Identities with Rupture",
-      "Identities with Serpent Arm",
-      "Identities with Unbreakable Coin",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 6",
-      "World of H Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Si_Branch_Gregor"
   },
   {
     "id": "lce-e-g-o-aedd-gregor",
@@ -9165,35 +4698,7 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Envy Affinity",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Charge",
-      "Identities with Charge Potency",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Increased Atk Weight",
-      "Identities with Offense Level Up",
-      "Identities with Photoelectricity",
-      "Identities with Rupture",
-      "Identities with Unbreakable Coin",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "LCE Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pages with hatnotes",
-      "Season 7 Event",
-      "World of the LCE"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::AEDD_Gregor"
   },
   {
     "id": "lobotomy-e-g-o-lamp-gregor",
@@ -9225,37 +4730,7 @@
       "Sinking",
       "Unbreakable Coin"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "E.G.O Gear Identities",
-      "Gloom Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bind",
-      "Identities with Blunt DMG Up",
-      "Identities with Burn",
-      "Identities with Clash Power Up",
-      "Identities with Clashable Guard",
-      "Identities with Defense Level Up",
-      "Identities with Guard Skills",
-      "Identities with Panic Type Altering Status Effects",
-      "Identities with Pierce DMG Up",
-      "Identities with Plus Coin Boost",
-      "Identities with SP Healing",
-      "Identities with Sinking",
-      "Identities with Unbreakable Coin",
-      "Identity ID",
-      "LCE Identities",
-      "Limbus Company Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 7",
-      "World of Raided Limbus Company",
-      "Wrath Affinity"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Lamp_Gregor"
   },
   {
     "id": "night-awls-capitano-gregor",
@@ -9287,36 +4762,7 @@
       "Unclashable Skills",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Amplitude Conversion",
-      "Identities with Bleed",
-      "Identities with Clashable Guard",
-      "Identities with Defense Level Down",
-      "Identities with Defense Power Down",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identities with Pierce Power Up",
-      "Identities with Tremor",
-      "Identities with Tremor - Hemorrhage",
-      "Identities with Tremor Burst",
-      "Identities with Unbreakable Coin",
-      "Identities with Unclashable Skills",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Lust Affinity",
-      "Night Awls Identities",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Sloth Affinity",
-      "Syndicate Identities",
-      "Walpurgis Night",
-      "World of the Former Library Guests - General Reception I"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Night_Awls_Capitano_Gregor"
   },
   {
     "id": "the-priest-of-la-manchaland-gregor",
@@ -9343,32 +4789,7 @@
       "SP Healing",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Bloodfiend Identities",
-      "Gluttony Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Bleed",
-      "Identities with Bloodfeast",
-      "Identities with Coin Reuse",
-      "Identities with Guard Skills",
-      "Identities with HP Healing",
-      "Identities with Rupture",
-      "Identities with SP Healing",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "La Manchaland Identities",
-      "Lust Affinity",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 5",
-      "Third Kindred Identities",
-      "World of La Manchaland"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Priest_of_La_Manchaland_Gregor"
   },
   {
     "id": "twinhook-pirates-first-mate-gregor",
@@ -9392,28 +4813,7 @@
       "Poise",
       "unique Status Effects"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Gloom Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Ammo",
-      "Identities with Bleed",
-      "Identities with Evade Skills",
-      "Identities with Plus Coin Boost",
-      "Identities with Poise",
-      "Identities with unique Status Effects",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Pride Affinity",
-      "Season 3",
-      "Sloth Affinity",
-      "Syndicate Identities",
-      "Twinhook Pirates Identities",
-      "World of U Corp."
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Twinhook_Pirates_First_Mate_Gregor"
   },
   {
     "id": "zwei-assoc-south-section-4-gregor",
@@ -9433,26 +4833,6 @@
       "Guard Skills",
       "Haste"
     ],
-    "incomplete": false,
-    "categories": [
-      "3-Star Identities",
-      "Fixer Identities",
-      "Gloom Affinity",
-      "Gluttony Affinity",
-      "Gregor Identities",
-      "Identities",
-      "Identities with Aggro",
-      "Identities with Defense Level Up",
-      "Identities with Defense Power Up",
-      "Identities with Guard Skills",
-      "Identities with Haste",
-      "Identity ID",
-      "Pages using DynamicPageList3 parser function",
-      "Pages using Tabber parser tag",
-      "Regular",
-      "Sloth Affinity",
-      "World of the Zwei Association Southern Branch",
-      "Zwei Association Identities"
-    ]
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_4_Gregor"
   }
 ]

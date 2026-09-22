@@ -5,8 +5,7 @@
       "ashes-to-ashes",
       "dust-to-dust",
       "secret-cookbook"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "bloody-mist",
@@ -14,8 +13,7 @@
       "smokes-and-wires",
       "rusted-muzzle",
       "devotion"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "coupled-oscillation",
@@ -23,8 +21,7 @@
       "nixie-divergence",
       "bell-of-truth",
       "interlocked-cogs"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "enrapturing-trance",
@@ -32,8 +29,7 @@
       "talisman-bundle",
       "standard-duty-battery",
       "thorny-rope-cuffs"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "black-sheet-music",
@@ -41,8 +37,7 @@
       "midwinter-nightmare",
       "headless-portrait",
       "tangled-bones"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "lucky-pouch",
@@ -50,8 +45,7 @@
       "four-leaf-clover",
       "ornamental-horseshoe",
       "reminiscence"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "t-1-perpetual-motion-machine",
@@ -59,16 +53,14 @@
       "wrist-guards",
       "material-interference-force-field",
       "t-1b-octagonal-bolt"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "secret-cookbook",
     "ingredients": [
       "melted-paraffin",
       "decamillennial-stewpot"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "purloined-flame",
@@ -76,16 +68,14 @@
       "burning-intellect",
       "decamillennial-hearthflame",
       "charred-disk"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "devotion",
     "ingredients": [
       "arrested-hymn",
       "millarca"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "hemorrhagic-shock",
@@ -93,16 +83,14 @@
       "grimy-iron-stake",
       "ruptured-blood-sac",
       "rusted-cutting-knife"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "epicenter",
     "ingredients": [
       "gemstone-oscillator",
       "wobbling-keg"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "omnivibro-octovecti-bell",
@@ -110,16 +98,14 @@
       "venomous-skin",
       "clockwork-spring",
       "epicenter"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "eerie-effigy",
     "ingredients": [
       "bone-stake",
       "shard-of-apocalypse"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "ruin",
@@ -127,16 +113,14 @@
       "broken-revolver",
       "thunderbranch",
       "eerie-effigy"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "surging-globe",
     "ingredients": [
       "cantabile",
       "faded-overcoat"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "impending-wave",
@@ -144,16 +128,14 @@
       "thorny-path",
       "distant-star",
       "surging-globe"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "reminiscence",
     "ingredients": [
       "pendant-of-nostalgia",
       "recollection-of-a-certain-day"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "cask-spirits",
@@ -161,16 +143,14 @@
       "devil-s-share",
       "angel-s-cut",
       "endorphin-kit"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "insulator",
     "ingredients": [
       "ups-system",
       "miniature-telepole"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "t-5-perpetual-motion-machine",
@@ -178,32 +158,28 @@
       "curriculum-vitae",
       "lightning-rod",
       "insulator"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "hoarfrost-footprint",
     "ingredients": [
       "haunted-shoes",
       "frozen-cries"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "wholeness",
     "ingredients": [
       "nagel-und-hammer-scriptures-md",
       "squalidity"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "unmailed-letter",
     "ingredients": [
       "ragged-umbrella",
       "broken-glasses"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "spicebush-glasses-and-mailed-letter",
@@ -211,32 +187,28 @@
       "spicebush-branch",
       "ragged-umbrella",
       "broken-glasses"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "guiding-gas-lamp",
     "ingredients": [
       "harpoon-prosthetic-leg",
       "nebulizer"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "the-end-of-all-evil",
     "ingredients": [
       "town-protecting-harpoon",
       "cetacean-heart"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "handheld-mirror",
     "ingredients": [
       "chief-butler-s-secret-arts",
       "mirror-tactile-synaesthesia"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "a-small-lovely-violin",
@@ -244,17 +216,7 @@
       "oil-gunked-spanner",
       "twinkling-scrap",
       "broken-violin"
-    ],
-    "unresolved": []
-  },
-  {
-    "result": "miniature-ferris-wheel",
-    "ingredients": [
-      "layered-bandages",
-      "wb-flask-legacy-md7",
-      "mask-of-the-parade-md"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "uniform-liu-assoc",
@@ -262,8 +224,7 @@
       "polarization",
       "lowest-star",
       "red-necktie"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "exquisite-artwork",
@@ -271,104 +232,91 @@
       "average-artwork",
       "homeward",
       "pure-white-canvas"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "sublimity-md",
     "ingredients": [
       "rusted-hilt-md",
       "fractured-blade"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "unbending-md",
     "ingredients": [
       "rusted-hilt-md",
       "broken-blade"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "pocket-watch-type-l",
     "ingredients": [
       "silver-watch-case",
       "etched-clock-hands"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "pocket-watch-type-e",
     "ingredients": [
       "silver-watch-case",
       "rusted-clock-hands"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "pocket-watch-type-y",
     "ingredients": [
       "faded-watch-case",
       "etched-clock-hands"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "pocket-watch-type-p",
     "ingredients": [
       "faded-watch-case",
       "rusted-clock-hands"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "automated-joints",
     "ingredients": [
       "biogenerative-battery",
       "prosthetic-joint-servos"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "overcharged-battery",
     "ingredients": [
       "biogenerative-battery",
       "crystallized-blood"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "perpetual-generator-servos",
     "ingredients": [
       "cardiovascular-reactive-module",
       "prosthetic-joint-servos"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "hearts-powered-jewel",
     "ingredients": [
       "cardiovascular-reactive-module",
       "crystallized-blood"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "shadow-monster",
     "ingredients": [
       "snuffed-lantern",
       "snuffed-candlestick"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "gift",
     "ingredients": [
       "packaging-box",
       "packaging-ribbon"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "jolly-plushie",
@@ -376,48 +324,42 @@
       "pom-pom-hat",
       "huge-gift-sack",
       "sad-plushie"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "high-risk-operational-gear",
     "ingredients": [
       "regular-operational-gear",
       "operation-authorization-card"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "resplendence",
     "ingredients": [
       "worn-hilt",
       "fractured-blade"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "cultivation",
     "ingredients": [
       "worn-hilt",
       "broken-blade"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "everlasting-chains-of-bond",
     "ingredients": [
       "enh-tattoos-the-middle",
       "chains-of-loyalty"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "glyph-of-glass-shards",
     "ingredients": [
       "strange-glyph-talisman",
       "strange-glyph-inscriptions"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "cultivation-cut-file-carve-polish",
@@ -425,8 +367,7 @@
       "virtue-zhi",
       "virtue-yong",
       "virtue-ren"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "cleanup-agent-gear-set-c",
@@ -434,8 +375,7 @@
       "w-corp-standard-issue-cap",
       "e-type-dimensional-dagger",
       "portable-barrier-battery"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "desperado",
@@ -443,8 +383,7 @@
       "staticky-two-way-radio",
       "beak-shaped-necklace",
       "torn-bandolier"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "pink-bouquet",
@@ -452,24 +391,21 @@
       "once-a-blessing",
       "reverberation",
       "pink-petals"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "artwork-evolving-pulsation",
     "ingredients": [
       "universal-skeleton",
       "artwork-pulsation"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "artwork-taxidermied-ferity",
     "ingredients": [
       "universal-instinct",
       "artwork-ferity"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "enter-the-b-b",
@@ -477,8 +413,7 @@
       "respite",
       "sanguine-fragrance-descends",
       "boombox-of-dramatic-entrances"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "shadowlurking",
@@ -486,8 +421,7 @@
       "heishou-bolus-mao",
       "harestride",
       "shadow-bamboo-hat"
-    ],
-    "unresolved": []
+    ]
   },
   {
     "result": "the-book-of-the-homeland-swordplay",
@@ -495,7 +429,6 @@
       "overused-whetstone",
       "red-tassel-md",
       "unadorned-sword-guard"
-    ],
-    "unresolved": []
+    ]
   }
 ]

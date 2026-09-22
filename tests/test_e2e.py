@@ -44,6 +44,13 @@ class FakeWiki(BaseHTTPRequestHandler):
                         "continue": {"cmcontinue": "page2", "continue": "-||"}}
             else:
                 body = {"query": {"categorymembers": [{"title": n} for n in names[2:]]}}
+        elif q.get("prop") == "info":
+            existing = {"The Outcast Theme Pack", "Automated Factory"}
+            titles = q["titles"].split("|")
+            body = {"query": {
+                "normalized": [{"from": "the Unloving Theme Pack", "to": "The Unloving Theme Pack"}],
+                "pages": [{"title": t, **({} if t in existing else {"missing": True})} for t in titles],
+            }}
         elif q.get("prop") == "categories":
             body = {"query": {"pages": [{"title": t, "categories": [{"title": "Category:" + c} for c in IDENTITIES[t]]}
                                         for t in q["titles"].split("|")]}}
@@ -67,8 +74,12 @@ class EndToEnd(unittest.TestCase):
             gifts = json.loads((out / "gifts.json").read_text(encoding="utf-8"))
             ids = json.loads((out / "identities.json").read_text(encoding="utf-8"))
             meta = json.loads((out / "meta.json").read_text(encoding="utf-8"))
-            self.assertEqual(len(gifts), 9)
-            self.assertEqual(meta["counts"]["mirror_dungeon_gifts"], 6)
+            self.assertEqual(len(gifts), 6)  # Mirror Dungeon gifts only
+            self.assertEqual(meta["counts"]["gifts"], 6)
+            packs = {p["name"]: p["wiki_url"] for p in json.loads((out / "theme_packs.json").read_text(encoding="utf-8"))}
+            self.assertEqual(packs["The Outcast"], "https://limbuscompany.wiki.gg/wiki/The_Outcast_Theme_Pack")
+            self.assertEqual(packs["Automated Factory"], "https://limbuscompany.wiki.gg/wiki/Automated_Factory")
+            self.assertIsNone(packs["The Unloving"])
             self.assertEqual([i["sinner"] for i in ids], ["Yi Sang", "Faust"])
             self.assertEqual(meta["counts"]["identities"], 2)
             self.assertIn("Some NPC Page", (out / "report.txt").read_text(encoding="utf-8"))
@@ -78,7 +89,7 @@ class EndToEnd(unittest.TestCase):
             # offline rebuild uses the cache only
             self.assertEqual(main(["--out", str(out), "--api", api, "--offline"]), 0)
             self.assertEqual(len(FakeWiki.calls), n_calls)
-            self.assertEqual(len(json.loads((out / "gifts.json").read_text(encoding="utf-8"))), 9)
+            self.assertEqual(len(json.loads((out / "gifts.json").read_text(encoding="utf-8"))), 6)
 
 
 if __name__ == "__main__":

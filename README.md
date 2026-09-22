@@ -28,45 +28,53 @@ Re-run it after each game patch, once the wiki has caught up.
 
 | Output | Wiki source |
 |---|---|
-| `data/gifts.json` | [Module:EgoGift/data](https://limbuscompany.wiki.gg/wiki/Module:EgoGift/data): name, sin, tier, cost, keyword and effect text for each upgrade level |
-| `data/theme_packs.json`, `data/fusions.json`, gift `pools`/`events` | [Module:EgoGiftList/data](https://limbuscompany.wiki.gg/wiki/Module:EgoGiftList/data): where each gift drops, and fusion recipes |
-| `data/identities.json` | Pages in [Category:Identities](https://limbuscompany.wiki.gg/wiki/Category:Identities) and their categories (sinner, rarity, `X Affinity`, `Identities with X`) |
+| `data/gifts.json` | [Module:EgoGift/data](https://limbuscompany.wiki.gg/wiki/Module:EgoGift/data) for each gift's sin, tier, cost, keyword and effect, plus [Module:EgoGiftList/data](https://limbuscompany.wiki.gg/wiki/Module:EgoGiftList/data) for where it drops |
+| `data/theme_packs.json`, `data/fusions.json` | Module:EgoGiftList/data (theme pack exclusives and fusion recipes) |
+| `data/identities.json` | Pages in [Category:Identities](https://limbuscompany.wiki.gg/wiki/Category:Identities) and their categories |
 | `data/meta.json` | Timestamp, wiki revision IDs and counts for this run |
-| `data/report.txt` | Warnings: names that didn't match, unknown fusion ingredients, etc. |
+| `data/report.txt` | Warnings: names that didn't match, theme packs with no wiki page, etc. |
 
 `data/raw/` caches every API response so `--offline` works. It's git-ignored.
 
-### Gift record (`gifts.json`)
+Only gifts that can drop in a current Mirror Dungeon run are written. Story Dungeon gifts
+and retired "(Legacy)" versions are skipped (pass `--include-unobtainable` to keep them).
+Full details stay on the wiki: every record has a `wiki_url`, and only the base effect
+text is stored, for tooltips and scoring.
+
+### Records
 
 ```jsonc
+// gifts.json
 {
   "id": "hellterfly-s-dream",
   "name": "Hellterfly's Dream",
   "sin": "wrath",               // wrath | lust | sloth | gluttony | gloom | pride | envy
-  "tier": 2, "tier_label": "II",
+  "tier": 2,                    // 1-5 (6 = EX)
   "cost": 198,
   "keyword": "Burn",            // Burn, Bleed, Tremor, Rupture, Sinking, Poise, Charge, Slash, Pierce, Blunt, or null
   "secondary_keyword": null,
   "status_effects": ["Burn"],   // every status the effect text mentions
-  "max_level": 2, "enhanceable": true,
-  "levels": [{ "level": 0, "desc": "...", "desc_markup": "..." }, ...],
-  "mirror_dungeon": true,       // obtainable in a current Mirror Dungeon run (use this to filter)
-  "legacy": false,              // retired version, e.g. "Hellterfly's Dream (Legacy)"
-  "pools": ["main"],            // main | themed | extreme | cursed | unlisted
-  "theme_packs": [],            // packs this gift is exclusive to
-  "events": ["Ardor Blossom Moth"],
-  "fusion_recipe": null,        // or { "ingredients": [ids], "unresolved": [names] }
-  "section": "MD1 / Mirror of the Beginning"
+  "effect": "When applying Burn Potency ...",
+  "max_level": 2,               // number of upgrades (+, ++)
+  "pools": ["main"],            // main | themed | extreme | cursed | fusion
+  "theme_packs": [],            // ids of packs this gift is exclusive to
+  "events": [{ "name": "Ardor Blossom Moth", "wiki_url": "..." }],
+  "fusion_recipe": null,        // or [ingredient gift ids]
+  "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Hellterfly%27s%20Dream"
 }
+// theme_packs.json
+{ "id": "the-outcast", "name": "The Outcast", "pool": "themed", "gifts": ["ebony-brooch-md", ...], "wiki_url": "..." }
+// fusions.json
+{ "result": "soothe-the-dead", "ingredients": ["ashes-to-ashes", "dust-to-dust", "secret-cookbook"] }
+// identities.json
+{ "id": "lcb-sinner-yi-sang", "name": "LCB Sinner Yi Sang", "sinner": "Yi Sang", "rarity": 1,
+  "affinities": ["envy", "gloom", "sloth"], "keywords": ["Sinking"], "status_effects": [...], "wiki_url": "..." }
 ```
 
-The wiki's gift module also includes Story Dungeon gifts and retired "(Legacy)"
-versions. Filter on `mirror_dungeon` to get only what can drop in a current run.
-
-Each identity in `identities.json` has `sinner`, `rarity`, `affinities` (sins),
-`keywords` (just Burn, Bleed, Tremor, Rupture, Sinking, Poise and Charge) and
-`status_effects` (everything else the wiki tags). `incomplete: true` marks event-only
-units that the wiki hasn't given rarity or affinity categories.
+Gifts have no wiki pages of their own, so `wiki_url` links to the gift list page and
+uses a text fragment (`#:~:text=`) to jump to the gift's name. Theme pack links are only
+stored after checking the page exists. Identity `keywords` holds only the seven build
+keywords; event-only units the wiki gives no rarity or affinity are left out.
 
 ## Notes
 

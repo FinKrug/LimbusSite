@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-22T22:27:58+00:00",
+  "generated_at": "2026-09-22T22:47:53+00:00",
   "source": "https://limbuscompany.wiki.gg/api.php",
   "offline": true,
   "pages": {
@@ -12,12 +12,12 @@
       "timestamp": "2026-07-10T19:27:54Z"
     }
   },
+  "include_unobtainable": false,
   "counts": {
-    "gifts": 704,
-    "mirror_dungeon_gifts": 446,
+    "gifts": 446,
     "theme_packs": 72,
-    "fusions": 59,
-    "identities": 200
+    "fusions": 58,
+    "identities": 188
   },
-  "warnings": 12
+  "warnings": 14
 }

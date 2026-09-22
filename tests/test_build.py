@@ -53,7 +53,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(h["keyword"], "Burn")
         self.assertEqual(h["status_effects"], ["Burn"])
         self.assertEqual(h["section"], "MD1 / Mirror of the Beginning")
-        self.assertEqual(h["events"], ["Ardor Blossom Moth"])
+        self.assertEqual(h["events"], [{"name": "Ardor Blossom Moth", "page": "Ardor Blossom Moth"}])
         self.assertEqual(h["pools"], ["main"])
 
     def test_theme_packs_and_md_suffix(self):
@@ -91,6 +91,51 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(old["id"], "hellterfly-s-dream-legacy")
         self.assertFalse(by_key["Coin"]["mirror_dungeon"])  # story-only gift
         self.assertIsNone(by_key["Coin"]["tier"])
+
+    def test_export_for_app(self):
+        gifts, packs, fusions, _ = load()
+        ident = build.parse_identity("LCB Sinner Yi Sang", ["Yi Sang Identities", "1-Star Identities", "Gloom Affinity"])
+        event_only = build.parse_identity("Some Sinnerling Yi Sang", ["Yi Sang Identities"])
+        data, warnings = build.export_for_app(
+            gifts, packs, fusions, [ident, event_only],
+            pack_pages={"The Outcast": "The Outcast Theme Pack"},
+        )
+        ids = {g["id"] for g in data["gifts"]}
+        self.assertIn("hellterfly-s-dream", ids)
+        self.assertNotIn("hellterfly-s-dream-legacy", ids)  # legacy dropped
+        self.assertNotIn("coin", ids)  # story-only dropped
+        h = next(g for g in data["gifts"] if g["id"] == "hellterfly-s-dream")
+        self.assertNotIn("levels", h)
+        self.assertTrue(h["effect"].startswith("When applying Burn Potency"))
+        self.assertEqual(
+            h["wiki_url"],
+            "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Hellterfly%27s%20Dream",
+        )
+        self.assertEqual(h["events"][0]["wiki_url"], "https://limbuscompany.wiki.gg/wiki/Ardor_Blossom_Moth")
+        packs_by_name = {p["name"]: p for p in data["theme_packs"]}
+        self.assertEqual(packs_by_name["The Outcast"]["wiki_url"],
+                         "https://limbuscompany.wiki.gg/wiki/The_Outcast_Theme_Pack")
+        self.assertIsNone(packs_by_name["Automated Factory"]["wiki_url"])
+        self.assertNotIn("Bearers of Weight", packs_by_name)  # no obtainable gifts in fixture
+        brooch = next(g for g in data["gifts"] if g["id"] == "ebony-brooch-md")
+        self.assertEqual(brooch["theme_packs"], [packs_by_name["The Outcast"]["id"]])
+        self.assertEqual([i["name"] for i in data["identities"]], ["LCB Sinner Yi Sang"])
+        self.assertEqual(data["identities"][0]["wiki_url"],
+                         "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Yi_Sang")
+        self.assertIn({"result": "hoarfrost-footprint", "ingredients": ["haunted-shoes", "frozen-cries"]},
+                      data["fusions"])
+        self.assertTrue(any("Automated Factory" in w for w in warnings))
+
+    def test_export_include_unobtainable(self):
+        gifts, packs, fusions, _ = load()
+        data, _ = build.export_for_app(gifts, packs, fusions, [], None, include_unobtainable=True)
+        coin = next(g for g in data["gifts"] if g["id"] == "coin")
+        self.assertFalse(coin["mirror_dungeon"])
+        self.assertTrue(all(p["wiki_url"] is None for p in data["theme_packs"]))
+
+    def test_gift_list_url_escapes_fragment(self):
+        self.assertTrue(build.gift_list_url("T-1 Perpetual, Motion & Co").endswith(
+            "#:~:text=T%2D1%20Perpetual%2C%20Motion%20%26%20Co"))
 
     def test_warnings_for_missing(self):
         *_, warnings = load()
