@@ -1,0 +1,790 @@
+[
+  {
+    "id": "audio-logs-of-that-day",
+    "name": "Audio Logs of That Day",
+    "pool": "cursed",
+    "gifts": [
+      "record-logs-of-that-day",
+      "potentialities"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "t-corp-time-prepayment-apparatus",
+    "name": "T Corp. Time Prepayment Apparatus",
+    "pool": "cursed",
+    "gifts": [
+      "tarnished-gauntlet",
+      "golden-hour"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "yield-my-flesh",
+    "name": "Yield My Flesh",
+    "pool": "cursed",
+    "gifts": [
+      "baleful-hwando",
+      "one-with-the-blade"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "a-midspring-night-s-dream-2",
+    "name": "A Midspring Night's Dream 2",
+    "pool": "extreme",
+    "gifts": [
+      "kkomi-s-mini-gift"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "bearers-of-weight",
+    "name": "Bearers of Weight",
+    "pool": "extreme",
+    "gifts": [
+      "burning-fate"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "blessed-carnival",
+    "name": "Blessed Carnival",
+    "pool": "extreme",
+    "gifts": [
+      "carousel-figurine"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "bloodtinged-ichthyic-odor",
+    "name": "Bloodtinged Ichthyic Odor",
+    "pool": "extreme",
+    "gifts": [
+      "clappity-clap"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "chachihu",
+    "name": "Chachihu",
+    "pool": "extreme",
+    "gifts": [
+      "for-the-capo"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "code-purple",
+    "name": "Code Purple",
+    "pool": "extreme",
+    "gifts": [
+      "mid-range-k-corp-ampule"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "complete-total-extermination",
+    "name": "Complete & Total Extermination",
+    "pool": "extreme",
+    "gifts": [
+      "rules-of-the-middle"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "fairy-tale",
+    "name": "Fairy Tale",
+    "pool": "extreme",
+    "gifts": [
+      "another-round"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "line-1-madness",
+    "name": "Line 1 : MADNESS",
+    "pool": "extreme",
+    "gifts": [
+      "nail-and-hammer"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-master-of-la-manchaland",
+    "name": "The Master of La Manchaland",
+    "pool": "extreme",
+    "gifts": [
+      "the-family-s-resentment"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "a-certain-world",
+    "name": "A Certain World",
+    "pool": "themed",
+    "gifts": [
+      "chief-butler-s-secret-arts"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "automated-factory",
+    "name": "Automated Factory",
+    "pool": "themed",
+    "gifts": [
+      "made-to-order",
+      "haunted-shoes"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "blade-and-artwork",
+    "name": "Blade and Artwork",
+    "pool": "themed",
+    "gifts": [
+      "pure-white-canvas",
+      "average-artwork",
+      "the-spider-s-thread",
+      "someone-s-azure-blade",
+      "spiderweb-entangled-in-red"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "bridle-of-infinity",
+    "name": "Bridle of Infinity",
+    "pool": "themed",
+    "gifts": [
+      "for-you-who-love-the-city"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "charm-wander-doubt",
+    "name": "Charm, Wander, Doubt",
+    "pool": "themed",
+    "gifts": [
+      "stolen-fixer-magazine",
+      "thermal-weapon",
+      "spiderweb-entangled-in-red"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "crawling-abyss",
+    "name": "Crawling Abyss",
+    "pool": "themed",
+    "gifts": [
+      "town-protecting-harpoon",
+      "cetacean-heart"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "dregs-of-the-manor",
+    "name": "Dregs of the Manor",
+    "pool": "themed",
+    "gifts": [
+      "broken-violin",
+      "manor-shaped-music-box"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "excessive-gluttony",
+    "name": "Excessive Gluttony",
+    "pool": "themed",
+    "gifts": [
+      "entangled-fate"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "faith-erosion",
+    "name": "Faith & Erosion",
+    "pool": "themed",
+    "gifts": [
+      "nagel-und-hammer-scriptures-md",
+      "blood-red-mane-md"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "falling-flowers",
+    "name": "Falling Flowers",
+    "pool": "themed",
+    "gifts": [
+      "spicebush-branch",
+      "kaleidoscope"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "four-houses-and-greed",
+    "name": "Four Houses and Greed",
+    "pool": "themed",
+    "gifts": [
+      "tenacity-bolus-md",
+      "lightning-axe-md"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "full-stopped-by-a-bullet",
+    "name": "Full-Stopped by a Bullet",
+    "pool": "themed",
+    "gifts": [
+      "implicit-contract-renewal",
+      "darkflame-smoking-pipe",
+      "equalizer",
+      "swift-command",
+      "gear-shrapnel",
+      "cqc-manual"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "hatred-and-despair",
+    "name": "Hatred and Despair",
+    "pool": "themed",
+    "gifts": [
+      "ashen-constellation-s-blessing",
+      "the-unchosen",
+      "sword-sharpened-with-tears",
+      "magical-girl-s-lovely-gift",
+      "spent-use-forming-hate",
+      "trauma-shield",
+      "value-disposal"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "hell-s-chicken",
+    "name": "Hell's Chicken",
+    "pool": "themed",
+    "gifts": [
+      "hot-n-juicy-drumstick-md",
+      "dry-to-the-bone-breast-md",
+      "tango-marinade-md",
+      "contaminated-needle-thread-md",
+      "sharp-needle-thread-md"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "inert-sloth",
+    "name": "Inert Sloth",
+    "pool": "themed",
+    "gifts": [
+      "entangled-fate"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "la-manchaland-re-opening",
+    "name": "La Manchaland Re-opening",
+    "pool": "themed",
+    "gifts": [
+      "la-manchaland-all-day-pass-md",
+      "token-of-victory-md",
+      "devouring-cube-md",
+      "mask-of-the-parade-md",
+      "a-drop"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "lcb-regular-check-up",
+    "name": "LCB Regular Check-Up",
+    "pool": "themed",
+    "gifts": [
+      "combustion-gloves",
+      "spiked-combat-boots",
+      "re-ignition-plug",
+      "enhancer-mk-4",
+      "embers",
+      "twigs",
+      "regular-operational-gear",
+      "operation-authorization-card"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "lcb-regular-check-up-bokgak",
+    "name": "LCB Regular Check-Up BokGak",
+    "pool": "themed",
+    "gifts": [
+      "trial-extraction-a-b-s",
+      "trial-extraction-lantern",
+      "modified-extraction-aedd",
+      "someone-s-dropped-employee-card"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "line-1",
+    "name": "Line 1",
+    "pool": "themed",
+    "gifts": [
+      "snake-slough",
+      "false-halo"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "line-2",
+    "name": "Line 2",
+    "pool": "themed",
+    "gifts": [
+      "metronome",
+      "bridle"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "line-3",
+    "name": "Line 3",
+    "pool": "themed",
+    "gifts": [
+      "contempt-of-the-gaze-of-contempt",
+      "unhatched-embers"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "line-4",
+    "name": "Line 4",
+    "pool": "themed",
+    "gifts": [
+      "anti-ovine-grounding-plug",
+      "vestiges-of-the-king"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "line-5",
+    "name": "Line 5",
+    "pool": "themed",
+    "gifts": [
+      "sorrowful-exhale",
+      "shatterbound-cannon",
+      "coveting-thorn"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "miracle-in-district-20",
+    "name": "Miracle in District 20",
+    "pool": "themed",
+    "gifts": [
+      "pom-pom-hat",
+      "huge-gift-sack",
+      "sad-plushie"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "miracle-in-district-20-bokgak",
+    "name": "Miracle in District 20 BokGak",
+    "pool": "themed",
+    "gifts": [
+      "snuffed-lantern",
+      "snuffed-candlestick",
+      "packaging-box",
+      "packaging-ribbon"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "mnestic-experience",
+    "name": "Mnestic Experience",
+    "pool": "themed",
+    "gifts": [
+      "ohra-bond",
+      "n-corp-service-des-clous-briefcase",
+      "baekja-water-dropper",
+      "flagroot-cane-sword",
+      "crushed-wooden-manacle",
+      "unadorned-sword-guard"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "murder-on-the-warp-express",
+    "name": "Murder on the WARP Express",
+    "pool": "themed",
+    "gifts": [
+      "economy-class-discount-voucher",
+      "canned-ice-cream",
+      "e-type-dimensional-dagger",
+      "portable-barrier-battery",
+      "biogenerative-battery",
+      "cardiovascular-reactive-module",
+      "prosthetic-joint-servos",
+      "crystallized-blood"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "murder-on-the-warp-express-bokgak",
+    "name": "Murder on the WARP Express BokGak",
+    "pool": "themed",
+    "gifts": [
+      "bloody-flesh-fleshy-blood",
+      "hardblood-glaive",
+      "w-corp-standard-issue-cap",
+      "discarded-dimensional-gauntlet"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "nocturnal-sweeping",
+    "name": "Nocturnal Sweeping",
+    "pool": "themed",
+    "gifts": [
+      "enh-tattoos-the-middle",
+      "strange-glyph-talisman",
+      "harestride",
+      "chains-of-loyalty",
+      "strange-glyph-inscriptions",
+      "shadow-bamboo-hat",
+      "swishing-fuel-tank"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "nocturnal-sweeping-bokgak",
+    "name": "Nocturnal Sweeping BokGak",
+    "pool": "themed",
+    "gifts": [
+      "boombox-of-dramatic-entrances",
+      "heishou-bolus-mao"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "pitiful-envy",
+    "name": "Pitiful Envy",
+    "pool": "themed",
+    "gifts": [
+      "entangled-fate"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "s-e-a",
+    "name": "S.E.A.",
+    "pool": "themed",
+    "gifts": [
+      "oil-gunked-spanner",
+      "twinkling-scrap",
+      "trash-crab-brain-wine"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "season-of-the-flame",
+    "name": "Season of the Flame",
+    "pool": "themed",
+    "gifts": [
+      "searing-brass",
+      "wing-shaped-waxen-candle"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "sinking-deluge",
+    "name": "Sinking Deluge",
+    "pool": "themed",
+    "gifts": [
+      "raincloud"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "spring-cultivation",
+    "name": "Spring Cultivation",
+    "pool": "themed",
+    "gifts": [
+      "blackiron-barding",
+      "bloodflame-sword",
+      "red-cloth-that-closes-the-heart",
+      "shaoxing-wine",
+      "virtue-zhi",
+      "virtue-yong",
+      "virtue-ren"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "sunk-gloom",
+    "name": "Sunk Gloom",
+    "pool": "themed",
+    "gifts": [
+      "entangled-fate",
+      "raincloud"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "tangling-lust",
+    "name": "Tangling Lust",
+    "pool": "themed",
+    "gifts": [
+      "entangled-fate"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "textbook",
+    "name": "Textbook",
+    "pool": "themed",
+    "gifts": [
+      "searing-hammer",
+      "red-necktie",
+      "spiderweb-entangled-in-red",
+      "tributary-cigar"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-b-e",
+    "name": "The B.E.",
+    "pool": "themed",
+    "gifts": [
+      "bongy-plush"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-dream-ending",
+    "name": "The Dream Ending",
+    "pool": "themed",
+    "gifts": [
+      "la-manchaland-all-day-pass-md",
+      "token-of-victory-md",
+      "devouring-cube-md",
+      "mask-of-the-parade-md",
+      "a-drop"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-dusk-of-amber",
+    "name": "The Dusk of Amber",
+    "pool": "themed",
+    "gifts": [
+      "staticky-two-way-radio",
+      "beak-shaped-necklace",
+      "harmonics",
+      "walking-bass",
+      "pink-petals",
+      "royal-jelly-perfume",
+      "still-warm-coffee"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-evil-defining",
+    "name": "The Evil Defining",
+    "pool": "themed",
+    "gifts": [
+      "harpoon-prosthetic-leg"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-heartbreaking",
+    "name": "The Heartbreaking",
+    "pool": "themed",
+    "gifts": [
+      "butler-style-binding-arts",
+      "refraction-glass-pod"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-infinite-procession",
+    "name": "The Infinite Procession",
+    "pool": "themed",
+    "gifts": [
+      "la-manchaland-all-day-pass-md",
+      "token-of-victory-md",
+      "devouring-cube-md",
+      "mask-of-the-parade-md",
+      "a-drop"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-noon-of-violet",
+    "name": "The Noon of Violet",
+    "pool": "themed",
+    "gifts": [
+      "filial-love",
+      "misaligned-transistor",
+      "mental-corruption-boosting-gas",
+      "leaked-enkephalin",
+      "hardship",
+      "crown-of-thorns",
+      "rest"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-outcast",
+    "name": "The Outcast",
+    "pool": "themed",
+    "gifts": [
+      "ebony-brooch-md",
+      "contained-maggots"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-surrendered-witnessing",
+    "name": "The Surrendered Witnessing",
+    "pool": "themed",
+    "gifts": [
+      "flower-in-the-mirror-md",
+      "moon-in-the-water-md"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-unchanging",
+    "name": "The Unchanging",
+    "pool": "themed",
+    "gifts": [
+      "broken-glasses"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-unconfronting",
+    "name": "The Unconfronting",
+    "pool": "themed",
+    "gifts": [
+      "squalidity"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-unloving",
+    "name": "The Unloving",
+    "pool": "themed",
+    "gifts": [
+      "frozen-cries"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "the-unsevering",
+    "name": "The Unsevering",
+    "pool": "themed",
+    "gifts": [
+      "someone-s-device",
+      "providence-of-the-prescript",
+      "omni-tool",
+      "spiderweb-entangled-in-red"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "timekilling-time",
+    "name": "Timekilling Time",
+    "pool": "themed",
+    "gifts": [
+      "silver-watch-case",
+      "faded-watch-case",
+      "warning-notice",
+      "etched-clock-hands",
+      "rusted-clock-hands",
+      "chalice-of-trickle-down",
+      "prepaid-time-receipt"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "timekilling-time-bokgak",
+    "name": "Timekilling Time BokGak",
+    "pool": "themed",
+    "gifts": [
+      "interlinked-time",
+      "emergency-investigator-badge",
+      "entanglement-override-sequencer",
+      "microprecision-time-accelerator"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "twining-threads",
+    "name": "Twining Threads",
+    "pool": "themed",
+    "gifts": [
+      "unoccupied-birdcage",
+      "universal-skeleton",
+      "universal-instinct",
+      "artwork-ferity",
+      "artwork-pulsation",
+      "the-middle-styled-knuckle-dusters"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "tyrannical-pride",
+    "name": "Tyrannical Pride",
+    "pool": "themed",
+    "gifts": [
+      "entangled-fate"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "unbound-wrath",
+    "name": "Unbound Wrath",
+    "pool": "themed",
+    "gifts": [
+      "entangled-fate",
+      "searing-brass",
+      "wing-shaped-waxen-candle"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "vain-pride",
+    "name": "Vain Pride",
+    "pool": "themed",
+    "gifts": [
+      "for-you-who-love-the-city"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "yield-my-flesh-to-claim-their-bones",
+    "name": "Yield My Flesh to Claim Their Bones",
+    "pool": "themed",
+    "gifts": [
+      "black-ledger",
+      "rusted-hilt-md",
+      "fractured-blade",
+      "broken-blade",
+      "red-tassel-md",
+      "ragged-bamboo-hat-md",
+      "old-dopo-robe-md"
+    ],
+    "unknown_gifts": []
+  },
+  {
+    "id": "yield-my-flesh-to-claim-their-bones-bokgak",
+    "name": "Yield My Flesh to Claim Their Bones BokGak",
+    "pool": "themed",
+    "gifts": [
+      "hardwood-liquor-cup",
+      "worn-hilt",
+      "swarmcloud"
+    ],
+    "unknown_gifts": []
+  }
+]

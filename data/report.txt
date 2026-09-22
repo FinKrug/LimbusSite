@@ -1,0 +1,12 @@
+identity 'Cheery Chickies Class Captain Yi Sang': missing rarity or affinity categories
+identity 'Cheery Chickies Sinnerling Heathcliff': missing rarity or affinity categories
+identity 'Cheery Chickies Sinnerling Ishmael': missing rarity or affinity categories
+identity 'Cheery Chickies Sinnerling Sinclair': missing rarity or affinity categories
+identity 'Early Elephants Class Captain Faust': missing rarity or affinity categories
+identity 'Early Elephants Sinnerling Don Quixote': missing rarity or affinity categories
+identity 'Early Elephants Sinnerling Hong Lu': missing rarity or affinity categories
+identity 'Early Elephants Sinnerling Ryōshū': missing rarity or affinity categories
+identity 'Perky Penguins Class Captain Outis': missing rarity or affinity categories
+identity 'Perky Penguins Sinnerling Gregor': missing rarity or affinity categories
+identity 'Perky Penguins Sinnerling Meursault': missing rarity or affinity categories
+identity 'Perky Penguins Sinnerling Rodion': missing rarity or affinity categories

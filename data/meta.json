@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-09-22T22:27:58+00:00",
+  "source": "https://limbuscompany.wiki.gg/api.php",
+  "offline": true,
+  "pages": {
+    "Module:EgoGift/data": {
+      "revid": 191860,
+      "timestamp": "2026-09-20T23:30:54Z"
+    },
+    "Module:EgoGiftList/data": {
+      "revid": 177480,
+      "timestamp": "2026-07-10T19:27:54Z"
+    }
+  },
+  "counts": {
+    "gifts": 704,
+    "mirror_dungeon_gifts": 446,
+    "theme_packs": 72,
+    "fusions": 59,
+    "identities": 200
+  },
+  "warnings": 12
+}
