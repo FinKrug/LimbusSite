@@ -107,6 +107,7 @@ class EndToEnd(unittest.TestCase):
             self.assertIn("coin", {g["id"] for g in json.loads((out / "gifts.json").read_text(encoding="utf-8"))})
             self.assertEqual([i["sinner"] for i in ids], ["Yi Sang", "Faust"])
             self.assertEqual([i["attack_types"] for i in ids], [["Slash", "Pierce"], ["Blunt", "Pierce"]])
+            self.assertTrue(all(sum(i["attack_counts"].values()) >= len(i["attack_types"]) for i in ids))
             self.assertEqual(meta["counts"]["identities"], 2)
             self.assertIn("Some NPC Page", (out / "report.txt").read_text(encoding="utf-8"))
             n_calls = len(FakeWiki.calls)

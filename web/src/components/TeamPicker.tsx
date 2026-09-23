@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
+import { identityTier, isTier, TIERS, tierList, type Tier, type TierOverrides } from '../lib/strength'
 import { type Focus, focusKey, parseFocus, traitOptions } from '../lib/teambuilder'
 import { CORE_KEYWORDS, SINNERS, type Identity, type Sinner } from '../lib/types'
 import { KeywordChip } from './bits'
+import { LineupList } from './LineupList'
 
 export type TeamSelection = Partial<Record<Sinner, string | null>>
 
@@ -18,10 +20,14 @@ interface Props {
   notes: Partial<Record<Sinner, string>>
   onSuggestOrder: () => void
   onBuild: (focus: Focus) => void
+  /** Your own identity ratings (they win over the bundled tier list). */
+  tiers: TierOverrides
+  onTiersChange: (tiers: TierOverrides) => void
 }
 
 export function TeamPicker({
   identities, team, onChange, order, onOrderChange, deployed, onDeployedChange, notes, onSuggestOrder, onBuild,
+  tiers, onTiersChange,
 }: Props) {
   const bySinner = useMemo(() => {
     const map = new Map<Sinner, Identity[]>()
@@ -32,6 +38,12 @@ export function TeamPicker({
     }
     return map
   }, [identities])
+  const setTier = (id: string, tier: Tier | null) => {
+    const next = { ...tiers }
+    if (tier) next[id] = tier
+    else delete next[id]
+    onTiersChange(next)
+  }
   const byId = useMemo(() => new Map(identities.map((i) => [i.id, i])), [identities])
   const traits = useMemo(() => traitOptions(identities), [identities])
   const count = order.length
@@ -40,19 +52,13 @@ export function TeamPicker({
   const [building, setBuilding] = useState(false)
   const [focus, setFocus] = useState('')
 
-  const move = (from: number, to: number) => {
-    if (to < 0 || to >= order.length) return
-    const next = [...order]
-    const [s] = next.splice(from, 1)
-    next.splice(to, 0, s)
-    onOrderChange(next)
-  }
 
   const builder = building && (
     <div className="builder">
       <p className="hint small">
-        Picks the best identity for each sinner and a deployment order. It doesn't know which
-        identities you own, so swap in what you have afterwards.
+        Picks the best identity for each sinner and a deployment order, preferring stronger
+        units and giving the best ones the buffed slots. It doesn't know which identities you
+        own, so swap in what you have afterwards.
       </p>
       <select aria-label="Build around" value={focus} onChange={(e) => setFocus(e.target.value)}>
         <option value="">Build around…</option>
@@ -101,32 +107,30 @@ export function TeamPicker({
             Suggest order
           </button>
         </div>
-        <ol className="lineup">
-          {order.map((s, k) => {
+        <LineupList
+          order={order} deployed={deployed} minDeployed={5} maxDeployed={7}
+          onOrderChange={onOrderChange} onDeployedChange={onDeployedChange}
+          renderRow={(s, k) => {
             const i = byId.get(team[s]!)
             if (!i) return null
             return (
-              <li key={s} className={k < deployed ? 'deployed' : 'backup'}>
-                {k === deployed && <div className="lineup-divider">Backups</div>}
-                <div className="lineup-row">
-                  <span className="slot">#{k + 1}</span>
-                  <span className="lineup-name">
+              <>
+                <span className="slot">#{k + 1}</span>
+                <span className="lineup-name">
+                  <span className="lineup-title">
                     <a href={i.wiki_url} target="_blank" rel="noreferrer" title={i.name}>{s}</a>
-                    {notes[s] && <span className="lineup-note">{notes[s]}</span>}
+                    <TierTag tier={identityTier(i, tiers)} />
                   </span>
-                  <span className="team-kws">
-                    {i.attack_types?.length ? <span className="team-atk">{i.attack_types.join(' / ')}</span> : null}
-                    {i.keywords.map((kw) => <KeywordChip key={kw} keyword={kw} />)}
-                  </span>
-                  <span className="move">
-                    <button className="icon-btn" aria-label={`Move ${s} up`} disabled={k === 0} onClick={() => move(k, k - 1)}>↑</button>
-                    <button className="icon-btn" aria-label={`Move ${s} down`} disabled={k === order.length - 1} onClick={() => move(k, k + 1)}>↓</button>
-                  </span>
-                </div>
-              </li>
+                  {notes[s] && <span className="lineup-note">{notes[s]}</span>}
+                </span>
+                <span className="team-kws">
+                  {i.attack_types?.length ? <span className="team-atk">{i.attack_types.join(' / ')}</span> : null}
+                  {i.keywords.map((kw) => <KeywordChip key={kw} keyword={kw} />)}
+                </span>
+              </>
             )
-          })}
-        </ol>
+          }}
+        />
       </section>
     )
   }
@@ -155,12 +159,19 @@ export function TeamPicker({
                 onChange={(e) => onChange({ ...team, [sinner]: e.target.value || null })}
               >
                 <option value="">Not in team</option>
-                {options.map((i) => (
-                  <option key={i.id} value={i.id}>
-                    {'★'.repeat(i.rarity ?? 0)} {shortName(i)}
-                  </option>
-                ))}
+                {options.map((i) => {
+                  const t = identityTier(i, tiers).tier
+                  return (
+                    <option key={i.id} value={i.id}>
+                      {'★'.repeat(i.rarity ?? 0)} {shortName(i)}{t ? ` · ${t}` : ''}
+                    </option>
+                  )
+                })}
               </select>
+              {selected && (
+                <TierSelect rating={identityTier(selected, tiers)} listed={tierList.tiers[selected.id] ?? null}
+                  sinner={sinner} onChange={(t) => setTier(selected.id, t)} />
+              )}
               {selected && selected.keywords.length > 0 && (
                 <div className="team-kws">
                   {selected.keywords.map((k) => <KeywordChip key={k} keyword={k} />)}
@@ -171,6 +182,30 @@ export function TeamPicker({
         })}
       </ol>
     </section>
+  )
+}
+
+function TierTag({ tier }: { tier: ReturnType<typeof identityTier> }) {
+  if (!tier.tier) return null
+  const cls = `tier-tag tier-${tier.tier.replace('+', 'p').toLowerCase()}`
+  return (
+    <span className={cls} title={tier.from === 'you' ? 'Your rating' : `Tier list (${tierList.updated})`}>
+      {tier.tier}{tier.from === 'you' ? '*' : ''}
+    </span>
+  )
+}
+
+/** Rate an identity yourself; "List" goes back to the bundled tier list. */
+function TierSelect({ rating, listed, sinner, onChange }: {
+  rating: ReturnType<typeof identityTier>; listed: Tier | null; sinner: Sinner; onChange: (t: Tier | null) => void
+}) {
+  return (
+    <select className="tier-select" aria-label={`${sinner} tier`} title="How strong this identity is"
+      value={rating.from === 'you' ? rating.tier! : ''}
+      onChange={(e) => onChange(isTier(e.target.value) ? e.target.value : null)}>
+      <option value="">{listed ? `Tier: ${listed}` : 'Tier: unrated'}</option>
+      {TIERS.map((t) => <option key={t} value={t}>{t}{t === listed ? '' : ' (mine)'}</option>)}
+    </select>
   )
 }
 

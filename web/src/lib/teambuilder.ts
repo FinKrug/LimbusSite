@@ -4,11 +4,16 @@
  * order so slot-limited gifts (e.g. "#1, #2 Deployed") land on sinners who can
  * use them.
  *
+ * Identity strength (src/lib/strength.ts) matters too: the best units are
+ * preferred when building and get the most-buffed slots in the order.
+ *
  * The builder doesn't know which identities you own, so treat it as a starting
  * point and swap in what you have.
  */
+import { holderFactor } from './holder'
 import { giftSlots, slotText } from './lineup'
 import { intrinsicScore, makeContext, teamProfile } from './scoring'
+import { identityTier, strength, type TierOverrides } from './strength'
 import {
   CORE_KEYWORDS, SINNERS, isCoreKeyword,
   type CoreKeyword, type GameData, type Gift, type Identity, type Sinner,
@@ -38,8 +43,10 @@ export function traitOptions(identities: Identity[]): { name: string; count: num
     .sort((a, b) => b.sinners - a.sinners || b.count - a.count || a.name.localeCompare(b.name))
 }
 
-/** How well an identity fits a focus; 0 = not at all. */
-export function focusScore(i: Identity, focus: Focus, partner?: CoreKeyword | null): number {
+/** How well an identity fits a focus; 0 = not at all. Stronger units score higher. */
+export function focusScore(
+  i: Identity, focus: Focus, partner?: CoreKeyword | null, tiers: TierOverrides = {},
+): number {
   let s = 0
   if (focus.kind === 'keyword') {
     if (i.keywords.includes(focus.value)) s += 3
@@ -49,7 +56,8 @@ export function focusScore(i: Identity, focus: Focus, partner?: CoreKeyword | nu
     else if (i.traits?.some((t) => t.startsWith(focus.value + ' ') || focus.value.startsWith(t + ' '))) s += 1.5
     if (partner && i.keywords.includes(partner)) s += 1
   }
-  if (s > 0) s += 0.3 * ((i.rarity ?? 1) - 1)
+  // Strength counts for less than fit: a strong unit that doesn't fit the focus scores 0.
+  if (s > 0) s += 2 * strength(i, tiers)
   return s
 }
 
@@ -60,7 +68,9 @@ export interface BuiltTeam {
 }
 
 /** Best identity for each sinner. With `owned`, only those identities are used. */
-export function buildTeam(data: GameData, focus: Focus, owned?: Set<string>): BuiltTeam {
+export function buildTeam(
+  data: GameData, focus: Focus, owned?: Set<string>, tiers: TierOverrides = {},
+): BuiltTeam {
   const pool = owned?.size ? data.identities.filter((i) => owned.has(i.id)) : data.identities
   // For an affiliation, the keyword most of its members share helps pick the rest.
   let partner: CoreKeyword | null = null
@@ -76,8 +86,9 @@ export function buildTeam(data: GameData, focus: Focus, owned?: Set<string>): Bu
     const options = pool.filter((i) => i.sinner === sinner)
     if (!options.length) continue
     const scored = options
-      .map((i) => ({ i, s: focusScore(i, focus, partner) }))
-      .sort((a, b) => b.s - a.s || (b.i.rarity ?? 0) - (a.i.rarity ?? 0) || a.i.name.localeCompare(b.i.name))
+      .map((i) => ({ i, s: focusScore(i, focus, partner, tiers) }))
+      // With no fit, the strongest unit fills the spot.
+      .sort((a, b) => b.s - a.s || strength(b.i, tiers) - strength(a.i, tiers) || a.i.name.localeCompare(b.i.name))
     const best = scored[0]
     if (best.s === 0) unmatched.push(sinner)
     team[sinner] = best.i.id
@@ -92,7 +103,18 @@ export interface OrderSuggestion {
 }
 
 /** How well one identity fits a gift on its own (for slot-limited gifts). */
-function identityGiftFit(g: Gift, i: Identity): { fit: number; why: string } {
+function identityGiftFit(g: Gift, i: Identity, identities: Identity[]): { fit: number; why: string } {
+  const base = baseGiftFit(g, i)
+  // Conditions on the unit in the slot: a Family Hierarch Candidate for Cultivation.
+  const h = holderFactor(g, i, identities)
+  const cond = h.met.filter((c) => c.share >= 0.25).sort((a, b) => b.share - a.share)[0]
+  const fit = base.fit * h.factor
+  return { fit, why: cond ? cond.pred.replace(/^is /, '').replace(/^(has|uses) /, '') : base.why }
+}
+
+function baseGiftFit(g: Gift, i: Identity): { fit: number; why: string } {
+  const trait = g.traits?.find((t) => i.traits?.includes(t))
+  if (trait) return { fit: 1, why: trait }
   const attack = g.attack_types?.find((t) => i.attack_types?.includes(t))
   if (attack) return { fit: 1, why: `${attack} skills` }
   if (isCoreKeyword(g.keyword) && i.keywords.includes(g.keyword)) return { fit: 1, why: g.keyword }
@@ -103,40 +125,50 @@ function identityGiftFit(g: Gift, i: Identity): { fit: number; why: string } {
 }
 
 /**
- * Deployment order for a team. The strongest fits for the team's main keywords
- * and affiliations are deployed first. Within the deployed slots, sinners are
- * placed to suit slot-limited gifts: ones you own count double, then the best
- * ones you could still pick up.
+ * Deployment order for a team.
+ *
+ * 1. Who's deployed: the identities most central to the team (its keywords and
+ *    affiliations), then the strongest, nudged by slot-limited gift value.
+ * 2. Who goes where: the best assignment of deployed identities to slots,
+ *    maximising
+ *      - slot-limited gifts they can use (owned count double, then the best ones
+ *        you could still pick up), scaled up for stronger units so the buffs go
+ *        to the carries, plus
+ *      - strength × how buffed the slot is in general (#1–#2 get the most
+ *        slot-limited gifts), so top units sit there even before you own any.
  */
 export function suggestOrder(
-  data: GameData, team: Identity[], deployed: number, owned: Iterable<string> = [],
+  data: GameData, team: Identity[], deployed: number, owned: Iterable<string> = [], tiers: TierOverrides = {},
 ): OrderSuggestion {
   if (!team.length) return { order: [], notes: {} }
   const ownedSet = new Set(owned)
-  const ctx = makeContext(data, team, ownedSet)
-  ctx.lineup = [] // score gifts for the whole team here, not per slot
+  // Score gifts for the whole team, not per slot or for whoever happens to be listed first.
+  const ctx = makeContext(data, team, ownedSet, [], [], team.length, tiers)
+  ctx.lineup = []
   const profile = teamProfile(team)
+  const str = new Map(team.map((i) => [i.id, strength(i, tiers)]))
+  const power = (i: Identity) => str.get(i.id)!
 
   // How central each identity is to the team: shares its keywords and affiliations.
   const core = (i: Identity) =>
     i.keywords.reduce((s, k) => s + profile.keywordCounts[k] / profile.size, 0)
     + (i.traits ?? []).reduce((s, t) => s + Math.max(0, (profile.traitCounts.get(t) ?? 0) - 1) / profile.size, 0)
-    + 0.2 * (i.rarity ?? 1)
 
   const slotGifts = data.gifts
     .map((g) => ({ g, slots: giftSlots(g) }))
-    .filter((x) => x.slots?.whole)
-    .map((x) => ({ ...x, weight: intrinsicScore(x.g, ctx).score * (ownedSet.has(x.g.id) ? 2 : 1) }))
+    .filter((x) => x.slots)
+    // A gift only partly limited to a slot ("[#1 Deployed Identity Exclusive Effect]") counts half.
+    .map((x) => ({ ...x, weight: intrinsicScore(x.g, ctx).score * (ownedSet.has(x.g.id) ? 2 : 1) * (x.slots!.whole ? 1 : 0.5) }))
     .sort((a, b) => b.weight - a.weight)
   const relevant = [...slotGifts.filter((x) => ownedSet.has(x.g.id)), ...slotGifts.filter((x) => !ownedSet.has(x.g.id)).slice(0, 12)]
 
-  const slotValue = (i: Identity, slot: number) => {
+  const giftValue = (i: Identity, slot: number) => {
     let v = 0
     let why = ''
     let bestPart = 0
     for (const { g, slots, weight } of relevant) {
       if (!slots!.slots.includes(slot)) continue
-      const f = identityGiftFit(g, i)
+      const f = identityGiftFit(g, i, data.identities)
       const part = f.fit * weight
       v += part
       if (f.why && part > bestPart) {
@@ -147,32 +179,54 @@ export function suggestOrder(
     return { v, why }
   }
 
-  // 1. Who's deployed: the most central identities, nudged by slot-gift value.
+  // How buffed each slot is across every slot-limited gift (higher tiers count more).
   const maxSlot = Math.max(deployed, 1)
-  const reach = (i: Identity) => Math.max(0, ...Array.from({ length: maxSlot }, (_, k) => slotValue(i, k + 1).v))
+  const buff = Array.from({ length: maxSlot }, (_, k) => data.gifts.reduce((sum, g) => {
+    const gs = giftSlots(g)
+    return gs?.slots.includes(k + 1) ? sum + (gs.whole ? 1 : 0.5) * (g.tier ?? 1) ** 2 : sum
+  }, 0))
+  const maxBuff = Math.max(1e-9, ...buff)
+  const priority = buff.map((b) => b / maxBuff)
+  const topWeight = Math.max(1, ...relevant.map((x) => x.weight))
+
+  // 1. Who's deployed.
+  const reach = (i: Identity) => Math.max(0, ...Array.from({ length: maxSlot }, (_, k) => giftValue(i, k + 1).v))
   const maxReach = Math.max(1e-9, ...team.map(reach))
-  const ranked = [...team].sort((a, b) => core(b) + 0.5 * reach(b) / maxReach - (core(a) + 0.5 * reach(a) / maxReach))
+  const deployScore = (i: Identity) => core(i) + 0.6 * power(i) + 0.5 * reach(i) / maxReach
+  const ranked = [...team].sort((a, b) => deployScore(b) - deployScore(a))
   const deployedSet = ranked.slice(0, deployed)
   const bench = ranked.slice(deployed)
 
-  // 2. Fill slots #1..#N greedily, most constrained slot first.
-  const notes: OrderSuggestion['notes'] = {}
-  const slots: (Identity | null)[] = Array(deployedSet.length).fill(null)
-  const free = new Set(deployedSet)
-  const slotOrder = [...slots.keys()].sort((a, b) =>
-    Math.max(0, ...deployedSet.map((i) => slotValue(i, b + 1).v)) - Math.max(0, ...deployedSet.map((i) => slotValue(i, a + 1).v)))
-  for (const k of slotOrder) {
-    let best: Identity | null = null
-    let bestV = -1
-    for (const i of free) {
-      const v = slotValue(i, k + 1).v + 0.01 * core(i)
-      if (v > bestV) { bestV = v; best = i }
+  // 2. Best assignment of deployed identities to slots (exact: at most 7 slots).
+  const n = deployedSet.length
+  const value = deployedSet.map((i) => Array.from({ length: n }, (_, k) =>
+    giftValue(i, k + 1).v * (0.5 + power(i)) + topWeight * priority[k] * power(i) ** 2 + 0.001 * core(i) * (n - k)))
+  // best[mask] = max value placing the identities in `mask` into slots 0..popcount-1.
+  const size = 1 << n
+  const best = new Float64Array(size).fill(-Infinity)
+  const pick = new Int8Array(size).fill(-1)
+  best[0] = 0
+  for (let mask = 0; mask < size; mask++) {
+    if (best[mask] === -Infinity) continue
+    let slot = 0
+    for (let m = mask; m; m &= m - 1) slot++
+    if (slot >= n) continue
+    for (let i = 0; i < n; i++) {
+      if (mask & (1 << i)) continue
+      const next = mask | (1 << i)
+      const v = best[mask] + value[i][slot]
+      if (v > best[next]) { best[next] = v; pick[next] = i }
     }
-    if (!best) continue
-    slots[k] = best
-    free.delete(best)
-    const why = slotValue(best, k + 1).why
-    if (why) notes[best.sinner] = why
   }
-  return { order: [...(slots.filter(Boolean) as Identity[]), ...bench].map((i) => i.sinner), notes }
+  const slots: Identity[] = []
+  for (let mask = size - 1; mask; mask &= ~(1 << pick[mask])) slots.unshift(deployedSet[pick[mask]])
+
+  const notes: OrderSuggestion['notes'] = {}
+  slots.forEach((i, k) => {
+    const why = giftValue(i, k + 1).why
+    const { tier } = identityTier(i, tiers)
+    if (why) notes[i.sinner] = why
+    else if (tier && power(i) >= 0.65 && priority[k] >= 0.5) notes[i.sinner] = `${tier} unit in a buffed slot`
+  })
+  return { order: [...slots, ...bench].map((i) => i.sinner), notes }
 }

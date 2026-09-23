@@ -13,6 +13,11 @@
  *    team's affiliations or signature statuses (Heishou Bolus - Mao for a Mao
  *    Branch team, Tremor - Scorch gifts for The Thumb). Flat, so a low-tier
  *    gift that's made for your team can outrank a generic high-tier one.
+ *  - Affiliation gifts are split in two (src/lib/traitparts.ts): the part of
+ *    the effect anyone can use is scored on the usual fit, the part only that
+ *    affiliation's identities get is scored on how many of them you deploy,
+ *    weighted by how strong they are. Bloodflame Sword is mostly a You Branch
+ *    gift with a small Burn part, so a plain Burn team gets little from it.
  *  - Fusion ingredients get extra value when you're collecting that recipe.
  *  - Theme packs are worth the best gifts in their gift pool, and much more
  *    when they contain gifts you've marked as targets.
@@ -33,6 +38,9 @@ import {
   isCoreKeyword,
 } from './types'
 import { DEFAULT_DEPLOYED, giftSlots, slotText } from './lineup'
+import { strength, type TierOverrides } from './strength'
+import { traitShare } from './traitparts'
+import { holderConditions, holderFactor, meets } from './holder'
 
 export const WEIGHTS = {
   /** Value of each tier before fit is applied. */
@@ -57,8 +65,10 @@ export const WEIGHTS = {
   statusFullAt: 2,
   /** A status is "signature" if at most this many identities in the game have it. */
   signatureMaxIdentities: 8,
-  /** Score multiplier for a gift built for an affiliation your team doesn't have. */
-  offTrait: 0.7,
+  /** Each deployed member counts this much + traitStrength x its strength (0-1)
+   *  toward traitFullAt, so a strong carry counts more than a filler unit. */
+  traitMember: 0.6,
+  traitStrength: 0.8,
   /** Fit of a gift that works on its own (applies its status itself, no team condition). */
   standalone: 0.5,
   /** Fit of a gift whose needs are met by gifts you own (not by your team). */
@@ -190,6 +200,10 @@ export interface RunContext {
   lineup: Identity[]
   /** How many of the lineup actually fight. */
   deployed: number
+  /** The identities that fight (the profile is built from these). */
+  members: Identity[]
+  /** Your identity ratings (see strength.ts). */
+  tiers: TierOverrides
 }
 
 /** Does your team (not your gifts) put this status on enemies? */
@@ -218,6 +232,7 @@ export function makeContext(
   data: GameData, team: Identity[], owned: Iterable<string>, targets: Iterable<string> = [],
   customCombos: Combo[] = [],
   deployed: number = DEFAULT_DEPLOYED,
+  tiers: TierOverrides = {},
 ): RunContext {
   const giftsById = new Map(data.gifts.map((g) => [g.id, g]))
   const ownedSet = new Set([...owned].filter((id) => giftsById.has(id)))
@@ -236,7 +251,8 @@ export function makeContext(
     if (isCoreKeyword(k ?? null)) ownedKeywordCounts.set(k!, (ownedKeywordCounts.get(k!) ?? 0) + 1)
   }
   // Only deployed sinners fight, so they decide what the team needs.
-  const profile = teamProfile(team.length > deployed ? team.slice(0, deployed) : team)
+  const members = team.length > deployed ? team.slice(0, deployed) : team
+  const profile = teamProfile(members)
 
   const giftSupply = new Map<string, Gift[]>()
   for (const id of ownedSet) {
@@ -275,7 +291,7 @@ export function makeContext(
   return {
     data, profile, owned: ownedSet, targets: targetSet, giftsById,
     fusionsByIngredient, ownedKeywordCounts, signature: signatureStatuses(data.identities),
-    giftSupply, unmetOwned, enablers, combos, combosByGift, lineup: team, deployed,
+    giftSupply, unmetOwned, enablers, combos, combosByGift, lineup: team, deployed, members, tiers,
   }
 }
 
@@ -308,15 +324,48 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
   const reasons: Reason[] = []
   const tierValue = WEIGHTS.tier[gift.tier ?? 1] ?? 1
 
+  // How well does it fit? Take the best of several routes, so a Tremor gift
+  // that's really about Blunt skills (Oil-gunked Spanner) or one that applies
+  // its own status (Downpour) isn't written off for a team without Tremor.
+  // Gifts limited to deployment slots ("#1, #2 Deployed") are judged on the
+  // sinners in those slots, not the whole team.
+  let fp = profile
+  let who = 'your team'
+  let slotCap: number | null = null
+  let affected = ctx.members
+  const slotInfo = giftSlots(gift)
+  const slotReasons: Reason[] = []
+  if (profile.size && slotInfo?.whole && ctx.lineup.length) {
+    const label = slotText(slotInfo.slots)
+    const inSlots = slotInfo.slots.filter((n) => n <= ctx.deployed).map((n) => ctx.lineup[n - 1]).filter(Boolean)
+    affected = inSlots
+    if (inSlots.length) {
+      fp = teamProfile(inSlots)
+      who = `your ${label}`
+      slotReasons.push({ kind: 'info', text: `Only affects ${label}: ${inSlots.map((i) => i.sinner).join(', ')}` })
+    } else {
+      slotCap = 0
+      slotReasons.push({ kind: 'bad', text: `Only affects ${label}, and you don't deploy that many sinners` })
+    }
+  }
+
   // Team synergy first: it's the most specific reason, so it's listed first.
+  // For an affiliation gift, only the affiliation's part of the effect depends
+  // on its members; `share` is how much of the gift that is.
   let synergyBonus = 0
-  let offTrait = false
+  let share = 0
+  let traitFit = 0
   const traits = gift.traits ?? []
   if (profile.size && traits.length) {
+    share = traitShare(gift)
     const matched = traits
-      .map((t) => ({ t, n: profile.traitCounts.get(t) ?? 0 }))
-      .filter((x) => x.n > 0)
-      .sort((a, b) => b.n - a.n)
+      .map((t) => {
+        const who = affected.filter((i) => i.traits?.includes(t))
+        const weight = who.reduce((sum, i) => sum + WEIGHTS.traitMember + WEIGHTS.traitStrength * strength(i, ctx.tiers), 0)
+        return { t, who, weight }
+      })
+      .filter((x) => x.who.length > 0)
+      .sort((a, b) => b.weight - a.weight)
     // "Heishou Pack - You Branch" belongs to the "Heishou Pack" family.
     const family = traits
       .map((t) => {
@@ -324,15 +373,19 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
         return parent ? { t, parent, n: profile.traitCounts.get(parent)! } : null
       })
       .find((x) => x !== null)
+    const most = share >= 0.5 ? 'Most of it' : 'Part of it'
     if (matched.length) {
-      const { t, n } = matched[0]
-      synergyBonus += WEIGHTS.traitSynergy * Math.min(n, WEIGHTS.traitFullAt) / WEIGHTS.traitFullAt
-      reasons.push({ kind: 'good', text: `Built for ${t} identities (${n} on your team)` })
+      const { t, who, weight } = matched[0]
+      traitFit = Math.min(1, weight / WEIGHTS.traitFullAt)
+      synergyBonus += WEIGHTS.traitSynergy * traitFit
+      const names = who.map((i) => i.sinner).join(', ')
+      reasons.push({ kind: 'good', text: `Built for ${t} identities (${who.length} on your team: ${names})` })
     } else if (family) {
       synergyBonus += WEIGHTS.traitSynergy * WEIGHTS.familySynergy
       reasons.push({ kind: 'info', text: `Built for ${family.t}; your team has ${family.n} ${family.parent} identities` })
+      reasons.push({ kind: 'bad', text: `${most} only works for ${family.t} identities` })
     } else {
-      offTrait = true
+      reasons.push({ kind: 'bad', text: `${most} only works for ${traits.join(' / ')} identities, which your team doesn't have` })
     }
   }
   const signatureHits = profile.size
@@ -347,27 +400,7 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
     reasons.push({ kind: 'good', text: `Works with ${s} (${n === 1 ? '1 of your team applies' : `${n} of your team apply`} it)` })
   }
 
-  // How well does it fit? Take the best of several routes, so a Tremor gift
-  // that's really about Blunt skills (Oil-gunked Spanner) or one that applies
-  // its own status (Downpour) isn't written off for a team without Tremor.
-  // Gifts limited to deployment slots ("#1, #2 Deployed") are judged on the
-  // sinners in those slots, not the whole team.
-  let fp = profile
-  let who = 'your team'
-  let slotCap: number | null = null
-  const slotInfo = giftSlots(gift)
-  if (profile.size && slotInfo?.whole && ctx.lineup.length) {
-    const label = slotText(slotInfo.slots)
-    const inSlots = slotInfo.slots.filter((n) => n <= ctx.deployed).map((n) => ctx.lineup[n - 1]).filter(Boolean)
-    if (inSlots.length) {
-      fp = teamProfile(inSlots)
-      who = `your ${label}`
-      reasons.push({ kind: 'info', text: `Only affects ${label}: ${inSlots.map((i) => i.sinner).join(', ')}` })
-    } else {
-      slotCap = 0
-      reasons.push({ kind: 'bad', text: `Only affects ${label}, and you don't deploy that many sinners` })
-    }
-  }
+  reasons.push(...slotReasons)
 
   const routes: { fit: number; reason?: Reason }[] = []
   let keywordReason: Reason | undefined
@@ -435,6 +468,32 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
   let fit = slotCap === null ? best.fit : Math.min(best.fit, slotCap)
   if (best.reason) reasons.push(best.reason)
   else if (keywordReason && fit === 0) reasons.push(keywordReason)
+
+  // Conditions on the unit in the slot: "If this unit is a Family Hierarch
+  // Candidate", "2+ Pierce Attack Skills", "a Skill that spends Ammo".
+  const conds = profile.size && slotInfo?.whole ? holderConditions(gift, ctx.data.identities) : []
+  if (conds.length && ctx.lineup.length && affected.length) {
+    const factors = affected.map((i) => holderFactor(gift, i, ctx.data.identities).factor)
+    fit *= factors.reduce((a, b) => a + b, 0) / factors.length
+    const where = slotText(slotInfo!.slots)
+    const named = (i: Identity) => `${i.sinner} (#${ctx.lineup.indexOf(i) + 1})`
+    for (const c of conds.slice(0, 2)) {
+      const ok = affected.filter((i) => meets(i, c) >= 0.99)
+      if (ok.length) {
+        const pred = ok.length > 1 ? c.pred.replace(/^is /, 'are ').replace(/^has /, 'have ').replace(/^uses /, 'use ') : c.pred
+        reasons.push({ kind: 'good', text: `${ok.map(named).join(' and ')} ${pred}, which it wants` })
+        continue
+      }
+      const how = c.share >= 0.95 ? 'It needs' : c.share >= 0.5 ? 'Most of it needs' : 'Part of it needs'
+      const other = ctx.lineup.find((i) => !affected.includes(i) && meets(i, c) >= 0.99)
+      reasons.push(other
+        ? { kind: 'info', text: `${how} ${c.noun} in ${where}: move ${other.sinner} there` }
+        : { kind: 'bad', text: `${how} ${c.noun} in ${where}` })
+    }
+  } else if (conds.length && ctx.members.length) {
+    // No lineup (e.g. while planning the order): assume the best unit takes the slot.
+    fit *= Math.max(...ctx.members.map((i) => holderFactor(gift, i, ctx.data.identities).factor))
+  }
   if (profile.size && unmet.length) {
     fit = Math.min(fit, WEIGHTS.unmetCap)
     const helper = ctx.enablers.get(unmet[0])?.find((g) => g.id !== gift.id)
@@ -482,11 +541,10 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
     }
   }
 
-  let score = tierValue * (WEIGHTS.base + fit + bonus) + synergyBonus + enablerBonus
-  if (offTrait) {
-    score *= WEIGHTS.offTrait
-    reasons.push({ kind: 'bad', text: `Built for ${traits.join(' / ')} identities, which your team doesn't have` })
-  }
+  // The general part uses the usual fit; the affiliation part uses how many
+  // (and how strong) of its members you deploy.
+  if (share) fit = (1 - share) * fit + share * traitFit
+  const score = tierValue * (WEIGHTS.base + fit + bonus) + synergyBonus + enablerBonus
   return { gift, score, fit, synergy: synergyBonus > 0 || enablerBonus > 0, reasons }
 }
 

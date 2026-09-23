@@ -4,6 +4,7 @@ import {
   signatureStatuses, teamFocus, teamProfile,
 } from './scoring'
 import { gameData } from './data'
+import { traitShare } from './traitparts'
 import type { GameData, Gift, Identity, ThemePack } from './types'
 
 function gift(id: string, over: Partial<Gift> = {}): Gift {
@@ -138,7 +139,7 @@ describe('team synergy', () => {
     expect(pos('mao-bolus')).toBeLessThan(pos('rupture-4'))
     const bolus = ranked[pos('mao-bolus')]
     expect(bolus.synergy).toBe(true)
-    expect(bolus.reasons[0].text).toBe('Built for Heishou Pack - Mao Branch identities (3 on your team)')
+    expect(bolus.reasons[0].text).toMatch(/^Built for Heishou Pack - Mao Branch identities \(3 on your team: /)
   })
 
   it('marks down affiliation gifts your team can\'t use', () => {
@@ -335,5 +336,44 @@ describe('real scraped data', () => {
     const burners = gameData.identities.filter((i) => i.keywords.includes('Burn')).slice(0, 6)
     const top = rankGifts(makeContext(gameData, burners, [])).slice(0, 10)
     expect(top.filter((g) => g.gift.keyword === 'Burn').length).toBeGreaterThanOrEqual(7)
+  })
+})
+
+describe('affiliation-only effects', () => {
+  const real = gameData
+  const byId = (id: string) => real.identities.find((i) => i.id === id)!
+  const burnTeam = real.identities.filter((i) => i.keywords.includes('Burn') && !i.traits?.includes('Heishou Pack - You Branch'))
+    .filter((i, k, all) => all.findIndex((x) => x.sinner === i.sinner) === k).slice(0, 6)
+  const youTeam = [
+    byId('heishou-pack-you-branch-adept-heathcliff'), byId('heishou-pack-you-branch-sinclair'),
+    ...burnTeam.filter((i) => i.sinner !== 'Heathcliff' && i.sinner !== 'Sinclair').slice(0, 4),
+  ]
+  const bloodflame = real.gifts.find((g) => g.id === 'bloodflame-sword')!
+
+  it('splits Bloodflame Sword into a small Burn part and a big You Branch part', () => {
+    expect(traitShare(bloodflame)).toBeGreaterThan(0.5)
+    expect(traitShare(real.gifts.find((g) => g.id === 'uniform-liu-assoc')!)).toBeLessThan(0.3)
+  })
+
+  it('is worth much more with You Branch identities deployed than on a plain Burn team', () => {
+    const plain = intrinsicScore(bloodflame, makeContext(real, burnTeam, []))
+    const withYou = intrinsicScore(bloodflame, makeContext(real, youTeam, []))
+    expect(withYou.score).toBeGreaterThan(2 * plain.score)
+    expect(plain.reasons.map((r) => r.text)).toContain(
+      "Most of it only works for Heishou Pack - You Branch identities, which your team doesn't have")
+    expect(withYou.reasons[0].text).toBe('Built for Heishou Pack - You Branch identities (2 on your team: Heathcliff, Sinclair)')
+  })
+
+  it('counts strong members for more', () => {
+    const rated = (tier: 'SSS' | 'D') => intrinsicScore(bloodflame, makeContext(real, youTeam, [], [], [], 6, {
+      'heishou-pack-you-branch-adept-heathcliff': tier, 'heishou-pack-you-branch-sinclair': tier,
+    })).score
+    expect(rated('SSS')).toBeGreaterThan(rated('D'))
+  })
+
+  it('only counts members that are deployed', () => {
+    const benched = [...youTeam.slice(2), ...youTeam.slice(0, 2)]
+    const ctx = makeContext(real, benched, [], [], [], 4)
+    expect(intrinsicScore(bloodflame, ctx).reasons.some((r) => r.text.startsWith('Built for'))).toBe(false)
   })
 })

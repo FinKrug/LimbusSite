@@ -12,6 +12,7 @@ import {
 } from './lib/scoring'
 import { DEFAULT_DEPLOYED } from './lib/lineup'
 import { usePersistentState } from './lib/storage'
+import type { TierOverrides } from './lib/strength'
 import { buildTeam, suggestOrder, type OrderSuggestion } from './lib/teambuilder'
 import { SINNERS, type Combo, type Identity, type Sinner } from './lib/types'
 
@@ -27,8 +28,9 @@ export default function App() {
   const [tab, setTab] = usePersistentState<Tab>('limbussite.tab.v1', 'gifts')
   const [customCombos, setCustomCombos] = usePersistentState<Combo[]>('limbussite.combos.v1', [])
   const [savedOrder, setSavedOrder] = usePersistentState<Sinner[]>('limbussite.order.v1', [])
-  const [deployed, setDeployed] = usePersistentState<number>('limbussite.deployed.v1', DEFAULT_DEPLOYED)
+  const [deployed, setDeployed] = usePersistentState<number>('limbussite.deployed.v3', DEFAULT_DEPLOYED)
   const [orderNotes, setOrderNotes] = usePersistentState<OrderSuggestion['notes']>('limbussite.ordernotes.v1', {})
+  const [tiers, setTiers] = usePersistentState<TierOverrides>('limbussite.tiers.v1', {})
 
   const identitiesById = useMemo(() => new Map(gameData.identities.map((i) => [i.id, i])), [])
   const packsById = useMemo(() => new Map(gameData.themePacks.map((p) => [p.id, p])), [])
@@ -43,11 +45,11 @@ export default function App() {
     [order, team, identitiesById],
   )
   const ctx = useMemo(
-    () => makeContext(gameData, teamIdentities, owned, targets, customCombos, deployed),
-    [teamIdentities, owned, targets, customCombos, deployed],
+    () => makeContext(gameData, teamIdentities, owned, targets, customCombos, deployed, tiers),
+    [teamIdentities, owned, targets, customCombos, deployed, tiers],
   )
   const applyOrder = (ids: Identity[]) => {
-    const s = suggestOrder(gameData, ids, deployed, owned)
+    const s = suggestOrder(gameData, ids, deployed, owned, tiers)
     setSavedOrder(s.order)
     setOrderNotes(s.notes)
   }
@@ -92,9 +94,10 @@ export default function App() {
             identities={gameData.identities} team={team} onChange={setTeam}
             order={order} onOrderChange={(o) => { setSavedOrder(o); setOrderNotes({}) }}
             deployed={deployed} onDeployedChange={setDeployed} notes={orderNotes}
+            tiers={tiers} onTiersChange={setTiers}
             onSuggestOrder={() => applyOrder(teamIdentities)}
             onBuild={(focus) => {
-              const built = buildTeam(gameData, focus)
+              const built = buildTeam(gameData, focus, undefined, tiers)
               setTeam(built.team)
               applyOrder(Object.values(built.team).map((id) => identitiesById.get(id!)!).filter(Boolean))
             }}

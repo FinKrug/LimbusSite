@@ -93,6 +93,7 @@ def main(argv: list[str] | None = None) -> int:
             for i in identities:
                 counts = build.identity_attack_types(sources.get(i["name"], {}).get("content", ""))
                 i["attack_types"] = sorted(counts, key=lambda t: -counts[t])
+                i["attack_counts"] = counts
             missing = [i["name"] for i in identities if not i["attack_types"] and not i["incomplete"]]
             if missing:
                 warnings.append(f"no attack types found for {len(missing)} identities, e.g. {missing[:5]}")

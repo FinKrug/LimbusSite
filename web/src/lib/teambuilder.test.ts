@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { giftSlots, slotText } from './lineup'
-import { makeContext, rankGifts, rankThemePacks } from './scoring'
+import { holderConditions, holderFactor } from './holder'
+import { intrinsicScore, makeContext, rankGifts, rankThemePacks } from './scoring'
+import { identityTier, strength } from './strength'
 import { buildTeam, suggestOrder, traitOptions } from './teambuilder'
 import type { GameData, Gift, Identity } from './types'
 
@@ -80,8 +82,8 @@ describe('team builder', () => {
     const byId = new Map(gameData.identities.map((i) => [i.id, i]))
     const team = Object.values(built.team).map((id) => byId.get(id!)!)
     expect(team.filter((i) => i.traits.includes('Heishou Pack')).length).toBe(9)
-    const { order } = suggestOrder(gameData, team, 6)
-    const deployed = order.slice(0, 6).map((s) => team.find((i) => i.sinner === s)!)
+    const { order } = suggestOrder(gameData, team, 7)
+    const deployed = order.slice(0, 7).map((s) => team.find((i) => i.sinner === s)!)
     expect(deployed.every((i) => i.traits.includes('Heishou Pack'))).toBe(true)
   })
 
@@ -103,5 +105,116 @@ describe('team builder', () => {
     const { order, notes } = suggestOrder(d, team, 4, ['crushed'])
     expect(order.slice(0, 2).sort()).toEqual(['Don Quixote', 'Ryōshū'])
     expect(notes['Don Quixote']).toMatch(/Blunt skills for crushed/)
+  })
+})
+
+describe('identity strength', () => {
+  const heishouFaust = gameData.identities.find((i) => i.id === 'heishou-pack-mao-branch-adept-faust')!
+
+  it('rates from the tier list, falls back to rarity, and lets you override', () => {
+    expect(identityTier(heishouFaust)).toEqual({ tier: 'SSS', from: 'list' })
+    expect(strength(heishouFaust)).toBe(1)
+    const plain = ident('x', 'Yi Sang', { rarity: 1 })
+    expect(identityTier(plain).tier).toBeNull()
+    expect(strength(plain)).toBeLessThan(strength(ident('y', 'Yi Sang', { rarity: 3 })))
+    expect(identityTier(heishouFaust, { [heishouFaust.id]: 'B' })).toEqual({ tier: 'B', from: 'you' })
+    expect(strength(heishouFaust, { [heishouFaust.id]: 'B' })).toBeLessThan(0.5)
+  })
+
+  it('puts Heishou Mao Faust in a buffed slot on a Heishou team', () => {
+    const built = buildTeam(gameData, { kind: 'trait', value: 'Heishou Pack' })
+    expect(built.team.Faust).toBe(heishouFaust.id)
+    const byId = new Map(gameData.identities.map((i) => [i.id, i]))
+    const team = Object.values(built.team).map((id) => byId.get(id!)!)
+    const { order, notes } = suggestOrder(gameData, team, 7)
+    expect(order.slice(0, 2)).toContain('Faust')
+    expect(notes.Faust).toBeTruthy()
+  })
+
+  it('gives the strongest unit the most-buffed slot, even with no gifts owned', () => {
+    const slotGift = gift('buff', { tier: 4, effect: '[Effects apply only to #1, #2 Deployed Identities] Damage +10%' })
+    const d: GameData = { gifts: [slotGift], themePacks: [], fusions: [], identities: [], generatedAt: null }
+    const team = (['Yi Sang', 'Faust', 'Don Quixote', 'Ryōshū', 'Meursault'] as const).map((s) => ident(s, s))
+    const before = suggestOrder(d, team, 5).order
+    const star = before.at(-1)!
+    const after = suggestOrder(d, team, 5, [], { [star]: 'SSS' })
+    expect(after.order.slice(0, 2)).toContain(star)
+    expect(after.notes[star]).toBe('SSS unit in a buffed slot')
+  })
+
+  it('builds with the stronger identity when two fit equally', () => {
+    const weak = ident('weak', 'Yi Sang', { keywords: ['Burn'], rarity: 3 })
+    const strong = ident('zz-strong', 'Yi Sang', { keywords: ['Burn'], rarity: 3 })
+    const d: GameData = { gifts: [], themePacks: [], fusions: [], identities: [weak, strong], generatedAt: null }
+    expect(buildTeam(d, { kind: 'keyword', value: 'Burn' }).team['Yi Sang']).toBe('weak') // tie: by name
+    expect(buildTeam(d, { kind: 'keyword', value: 'Burn' }, undefined, { 'zz-strong': 'S' }).team['Yi Sang']).toBe('zz-strong')
+    // Strength never beats fit.
+    const offFocus = ident('off', 'Yi Sang', { keywords: ['Bleed'] })
+    const d2 = { ...d, identities: [weak, offFocus] }
+    expect(buildTeam(d2, { kind: 'keyword', value: 'Burn' }, undefined, { off: 'SSS' }).team['Yi Sang']).toBe('weak')
+  })
+})
+
+describe('conditions on the unit in a slot', () => {
+  const real = gameData
+  const byName = (n: string) => real.gifts.find((g) => g.name === n)!
+  const ident2 = (id: string) => real.identities.find((i) => i.id === id)!
+  const hierarch = ident2('family-hierarch-candidate-ishmael')
+
+  it('reads them from effect text', () => {
+    const cult = holderConditions(byName('Cultivation: Cut, File, Carve, Polish'), real.identities)
+    expect(cult).toHaveLength(1)
+    expect(cult[0]).toMatchObject({ kind: 'trait', traits: ['Family Hierarch Candidate'], noun: 'a Family Hierarch Candidate' })
+    expect(cult[0].share).toBeGreaterThan(0.25)
+    expect(cult[0].share).toBeLessThan(0.6)
+    expect(holderConditions(byName("Carpenter's Nail"), real.identities)[0]).toMatchObject({ kind: 'attackCount', attack: 'Pierce', min: 2, share: 1 })
+    const capo = holderConditions(byName('For the Capo'), real.identities).find((c) => c.kind === 'status')!
+    expect(capo).toMatchObject({ status: 'Ammo' })
+    expect(capo.share).toBeGreaterThan(0.5)
+    const capoMeursault = ident2('the-thumb-east-capo-iiii-meursault') // has "Unique Ammo"
+    expect(holderFactor(byName('For the Capo'), capoMeursault, real.identities).met.map((c) => c.kind)).toContain('status')
+    // Statuses on the target aren't conditions on the unit.
+    expect(holderConditions(byName('Emergency Investigator Badge'), real.identities).map((c) => c.kind)).toEqual(['trait'])
+  })
+
+  it('reads more ways of naming a slot', () => {
+    expect(giftSlots(byName('Brilliant Lamplight'))).toEqual({ slots: [1], whole: true })
+    expect(giftSlots(byName('Bloody Mist'))).toEqual({ slots: [1], whole: false })
+    expect(giftSlots(byName('Sorrowful Exhale'))).toEqual({ slots: [5], whole: false })
+    expect(giftSlots(byName('The End of all Evil'))).toBeNull() // "earliest Deployment order" among Pequod units, not a slot
+  })
+
+  it('counts skills for "2+ Pierce Attack Skills"', () => {
+    const nail = byName("Carpenter's Nail")
+    const one = ident('one', 'Yi Sang', { attack_types: ['Pierce', 'Slash'], attack_counts: { Pierce: 1, Slash: 2 } })
+    const three = ident('three', 'Yi Sang', { attack_types: ['Pierce'], attack_counts: { Pierce: 3 } })
+    expect(holderFactor(nail, one, real.identities).factor).toBeCloseTo(0.3)
+    expect(holderFactor(nail, three, real.identities).factor).toBe(1)
+  })
+
+  it('scores a slot gift higher when the unit in that slot meets its condition', () => {
+    const cult = byName('Cultivation: Cut, File, Carve, Polish')
+    const rupture = real.identities.filter((i) => i.keywords.includes('Rupture') && i.sinner !== 'Ishmael')
+      .filter((i, k, all) => all.findIndex((x) => x.sinner === i.sinner) === k).slice(0, 5)
+    const withHierarch = [...rupture, hierarch]
+    const other = real.identities.find((i) => i.sinner === 'Ishmael' && i.keywords.includes('Rupture') && i.id !== hierarch.id)!
+    const without = [...rupture, other]
+    const good = intrinsicScore(cult, makeContext(real, withHierarch, []))
+    const bad = intrinsicScore(cult, makeContext(real, without, []))
+    expect(good.score).toBeGreaterThan(bad.score)
+    expect(good.reasons.map((r) => r.text)).toContain('Ishmael (#6) is a Family Hierarch Candidate, which it wants')
+    expect(bad.reasons.map((r) => r.text)).toContain('Part of it needs a Family Hierarch Candidate in #6')
+    // On the team but in the wrong slot: say where to move them.
+    const misplaced = intrinsicScore(cult, makeContext(real, [hierarch, ...rupture], []))
+    expect(misplaced.reasons.map((r) => r.text)).toContain('Part of it needs a Family Hierarch Candidate in #6: move Ishmael there')
+  })
+
+  it('suggests the order so the unit meeting the condition gets the slot', () => {
+    const rupture = real.identities.filter((i) => i.keywords.includes('Rupture') && i.sinner !== 'Ishmael')
+      .filter((i, k, all) => all.findIndex((x) => x.sinner === i.sinner) === k).slice(0, 5)
+    const cult = byName('Cultivation: Cut, File, Carve, Polish')
+    const { order, notes } = suggestOrder(real, [hierarch, ...rupture], 7, [cult.id])
+    expect(order[5]).toBe('Ishmael')
+    expect(notes.Ishmael).toMatch(/Family Hierarch Candidate for Cultivation/)
   })
 })

@@ -99,6 +99,8 @@ export interface Identity {
   traits: string[]
   /** Attack types of its skills, most used first (empty if unknown). */
   attack_types?: AttackType[]
+  /** Skills per attack type, e.g. { Slash: 2, Pierce: 1 } (defense skills included). */
+  attack_counts?: Partial<Record<AttackType, number>>
   wiki_url: string
 }
 

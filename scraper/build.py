@@ -368,7 +368,7 @@ def find_trait_mentions(text: str, traits: list[str]) -> list[str]:
     """
     pairs = sorted(
         {(alias, t) for t in traits for alias in trait_aliases(t)},
-        key=lambda p: len(p[0]), reverse=True,
+        key=lambda p: (-len(p[0]), p[0], p[1]),  # ties by name, so runs are repeatable
     )
     found: list[str] = []
     buf = text
@@ -559,6 +559,9 @@ def export_for_app(
             "status_effects": i["status_effects"],
             "traits": i["traits"],
             "attack_types": i.get("attack_types", []),
+            # Skills per attack type (all skills on the page, defense included);
+            # for gifts like "If this unit has 2+ Pierce Attack Skills".
+            "attack_counts": i.get("attack_counts", {}),
             "wiki_url": wiki_url(i["name"]),
         }
         for i in identities

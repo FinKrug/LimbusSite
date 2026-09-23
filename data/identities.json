@@ -26,6 +26,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Yi_Sang"
   },
   {
@@ -56,6 +60,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 1,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Yi_Sang"
   },
   {
@@ -90,6 +98,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 3,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Lantern_Yi_Sang"
   },
   {
@@ -120,6 +132,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 1,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Office_Fixer_Yi_Sang"
   },
   {
@@ -150,6 +166,10 @@
       "Pierce",
       "Blunt"
     ],
+    "attack_counts": {
+      "Pierce": 2,
+      "Blunt": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Yi_Sang"
   },
   {
@@ -179,6 +199,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_First_Mate_Yi_Sang"
   },
   {
@@ -205,6 +228,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Yi_Sang"
   },
   {
@@ -236,6 +262,10 @@
       "Pierce",
       "Blunt"
     ],
+    "attack_counts": {
+      "Pierce": 2,
+      "Blunt": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Effloresced_E.G.O::Spicebush_Yi_Sang"
   },
   {
@@ -277,6 +307,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Wu_Branch_Adept_Yi_Sang"
   },
   {
@@ -314,6 +347,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Dimension_Shredder_Yi_Sang"
   },
   {
@@ -341,6 +377,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_3_Yi_Sang"
   },
   {
@@ -374,6 +413,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Solemn_Lament_Yi_Sang"
   },
   {
@@ -411,6 +453,10 @@
       "Pierce",
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 1,
+      "Pierce": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._E.G.O::Fell_Bullet_Yi_Sang"
   },
   {
@@ -463,6 +509,11 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 1,
+      "Pierce": 1,
+      "Slash": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Index_Nursefather_Yi_Sang"
   },
   {
@@ -502,6 +553,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Pointillist_Student_Yi_Sang"
   },
   {
@@ -534,6 +588,10 @@
       "Pierce",
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 1,
+      "Pierce": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Yi_Sang"
   },
   {
@@ -560,6 +618,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Faust"
   },
   {
@@ -590,6 +652,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_Corp._Remnant_Faust"
   },
   {
@@ -618,6 +684,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Faust"
   },
   {
@@ -647,6 +716,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Blunt": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wuthering_Heights_Butler_Faust"
   },
   {
@@ -675,6 +748,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 1,
+      "Slash": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_4_Faust"
   },
   {
@@ -706,6 +783,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Faust"
   },
   {
@@ -748,6 +829,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 7
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Fixer_Faust"
   },
   {
@@ -791,6 +875,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Adept_Faust"
   },
   {
@@ -821,6 +908,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Ardor_Blossom_Star_Faust"
   },
   {
@@ -856,6 +946,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Regret_Faust"
   },
   {
@@ -886,6 +979,10 @@
       "Blunt",
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 1,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/MultiCrack_Office_Rep_Faust"
   },
   {
@@ -918,6 +1015,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_4_Faust"
   },
   {
@@ -952,6 +1052,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 3,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._East_Section_3_Faust"
   },
   {
@@ -1002,6 +1106,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 7
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Ring_Apprentice_Faust"
   },
   {
@@ -1034,6 +1141,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Index_Proselyte:%E3%80%90Paper_Slip%E3%80%91Faust"
   },
   {
@@ -1069,6 +1179,10 @@
       "Pierce",
       "Blunt"
     ],
+    "attack_counts": {
+      "Pierce": 2,
+      "Blunt": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_One_Who_Grips_Faust"
   },
   {
@@ -1097,6 +1211,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Don_Quixote"
   },
   {
@@ -1125,6 +1242,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 1,
+      "Slash": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Don_Quixote"
   },
   {
@@ -1155,6 +1276,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Lantern_Don_Quixote"
   },
   {
@@ -1187,6 +1312,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 1,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Mittelhammer_Don_Quixote"
   },
   {
@@ -1214,6 +1343,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Director_Don_Quixote"
   },
   {
@@ -1245,6 +1377,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._East_Section_3_Don_Quixote"
   },
   {
@@ -1273,6 +1408,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_5_Director_Don_Quixote"
   },
   {
@@ -1306,6 +1444,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Wei_Branch_Don_Quixote"
   },
   {
@@ -1346,6 +1487,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 6
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::In_the_Name_of_Love_and_Hate_Don_Quixote"
   },
   {
@@ -1380,6 +1524,10 @@
       "Blunt",
       "Slash"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Slash": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_3_Collection_Staff_Don_Quixote"
   },
   {
@@ -1419,6 +1567,10 @@
       "Blunt",
       "Slash"
     ],
+    "attack_counts": {
+      "Blunt": 4,
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Index_Proxy_-_Effloresced_E.G.O::Procuration_Don_Quixote"
   },
   {
@@ -1455,6 +1607,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 8
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Manager_of_La_Manchaland_Don_Quixote"
   },
   {
@@ -1486,6 +1641,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Sister_Don_Quixote"
   },
   {
@@ -1515,6 +1673,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Don_Quixote"
   },
   {
@@ -1542,6 +1704,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1570,6 +1735,10 @@
       "Pierce",
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 1,
+      "Pierce": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/District_20_Yurodivy_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1605,6 +1774,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1632,6 +1805,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1662,6 +1839,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Slash": 5,
+      "Blunt": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1704,6 +1885,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 7
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_of_the_House_of_Spiders_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1736,6 +1920,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Drifting_Blade_of_Hongyuan_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1768,6 +1955,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Chief_Butler_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1801,6 +1991,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Le_Noir_Footwear_Hall_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1833,6 +2026,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1862,6 +2058,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1903,6 +2102,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Faint_Aroma_%26_Solitude_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1939,6 +2141,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Red_Eyes_%26_Penitence_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1976,6 +2181,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._E.G.O::Contempt,_Awe_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -2009,6 +2217,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R.B._Chef_de_Cuisine_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -2037,6 +2249,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -2065,6 +2280,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Meursault"
   },
   {
@@ -2093,6 +2311,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 3,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dead_Rabbits_Boss_Meursault"
   },
   {
@@ -2120,6 +2342,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_6_Meursault"
   },
   {
@@ -2151,6 +2377,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Fixer_Meursault"
   },
   {
@@ -2183,6 +2412,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Brother_Meursault"
   },
   {
@@ -2219,6 +2451,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Mentor_Meursault"
   },
   {
@@ -2250,6 +2485,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._West_Section_3_Meursault"
   },
   {
@@ -2283,6 +2521,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Director_Meursault"
   },
   {
@@ -2322,6 +2564,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Hornet%E3%80%90Alteration%E3%80%91Meursault"
   },
   {
@@ -2355,6 +2600,10 @@
       "Pierce",
       "Blunt"
     ],
+    "attack_counts": {
+      "Pierce": 3,
+      "Blunt": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Gro%C3%9Fhammer_Meursault"
   },
   {
@@ -2384,6 +2633,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 1,
+      "Slash": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Rhino_Meursault"
   },
   {
@@ -2423,6 +2676,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Prince_of_La_Manchaland_Meursault"
   },
   {
@@ -2461,6 +2717,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Fauvist_Student_Meursault"
   },
   {
@@ -2499,6 +2758,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Slash": 3,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Thumb_East_Capo_IIII_Meursault"
   },
   {
@@ -2529,6 +2792,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Meursault"
   },
   {
@@ -2559,6 +2825,10 @@
       "Blunt",
       "Slash"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Slash": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Hong_Lu"
   },
   {
@@ -2588,6 +2858,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Fanghunt_Office_Fixer_Hong_Lu"
   },
   {
@@ -2618,6 +2891,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hook_Office_Fixer_Hong_Lu"
   },
   {
@@ -2646,6 +2922,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Hong_Lu"
   },
   {
@@ -2673,6 +2952,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_5_Hong_Lu"
   },
   {
@@ -2703,6 +2985,10 @@
       "Pierce",
       "Slash"
     ],
+    "attack_counts": {
+      "Pierce": 2,
+      "Slash": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Hong_Lu"
   },
   {
@@ -2736,6 +3022,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._East_Section_3_Hong_Lu"
   },
   {
@@ -2768,6 +3057,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Blunt": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Hong_Lu"
   },
   {
@@ -2799,6 +3092,10 @@
       "Pierce",
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 1,
+      "Pierce": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/District_20_Yurodivy_Hong_Lu"
   },
   {
@@ -2837,6 +3134,10 @@
       "Pierce",
       "Slash"
     ],
+    "attack_counts": {
+      "Pierce": 5,
+      "Slash": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stop_Office_Rep_Hong_Lu"
   },
   {
@@ -2867,6 +3168,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Blunt": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/K_Corp._Class_3_Excision_Staff_Hong_Lu"
   },
   {
@@ -2897,6 +3202,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Hong_Lu"
   },
   {
@@ -2932,6 +3240,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/S_Corp._Ch'unokkun_Hong_Lu"
   },
   {
@@ -2990,6 +3301,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 6,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Ring_Nursefather_Hong_Lu"
   },
   {
@@ -3040,6 +3355,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 6
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Lord_of_Hongyuan_Hong_Lu"
   },
   {
@@ -3071,6 +3389,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tingtang_Gang_Gangleader_Hong_Lu"
   },
   {
@@ -3099,6 +3421,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Heathcliff"
   },
   {
@@ -3134,6 +3459,10 @@
       "Blunt",
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 1,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/MultiCrack_Office_Fixer_Heathcliff"
   },
   {
@@ -3165,6 +3494,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 1,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Kleinhammer_Heathcliff"
   },
   {
@@ -3193,6 +3526,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_4_Heathcliff"
   },
   {
@@ -3221,6 +3558,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 3,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Heathcliff"
   },
   {
@@ -3261,6 +3602,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stop_Office_Fixer_Heathcliff"
   },
   {
@@ -3303,6 +3647,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_You_Branch_Adept_Heathcliff"
   },
   {
@@ -3341,6 +3688,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Heathcliff"
   },
   {
@@ -3379,6 +3729,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Pierce": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Sunshower_Heathcliff"
   },
   {
@@ -3412,6 +3766,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Rabbit_Heathcliff"
   },
   {
@@ -3454,6 +3811,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Thumb_Apprentice_Heathcliff"
   },
   {
@@ -3496,6 +3856,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Big_Brother_Heathcliff"
   },
   {
@@ -3526,6 +3889,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_Harpooneer_Heathcliff"
   },
   {
@@ -3559,6 +3925,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L4_Cleanup_Agent_-_CCA_Heathcliff"
   },
   {
@@ -3599,6 +3968,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Slash": 3,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wild_Hunt_Heathcliff"
   },
   {
@@ -3628,6 +4001,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/%C3%96ufi_Assoc._South_Section_3_Heathcliff"
   },
   {
@@ -3656,6 +4033,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Ishmael"
   },
   {
@@ -3690,6 +4070,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 1,
+      "Slash": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Butler_Ishmael"
   },
   {
@@ -3723,6 +4107,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Ishmael"
   },
   {
@@ -3753,6 +4140,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Sloshing_Ishmael"
   },
   {
@@ -3782,6 +4172,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 1,
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Ishmael"
   },
   {
@@ -3818,6 +4212,10 @@
       "Blunt",
       "Slash"
     ],
+    "attack_counts": {
+      "Blunt": 3,
+      "Slash": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Family_Hierarch_Candidate_Ishmael"
   },
   {
@@ -3857,6 +4255,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Boutique_du_Rouge_Ishmael"
   },
   {
@@ -3899,6 +4300,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Jeong's_Office_Rep_Ishmael"
   },
   {
@@ -3935,6 +4339,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Captain_Ishmael"
   },
   {
@@ -3971,6 +4378,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCD_OSIR_Team_Ishmael"
   },
   {
@@ -3998,6 +4408,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Ishmael"
   },
   {
@@ -4028,6 +4441,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Boatworks_Fixer_Ishmael"
   },
   {
@@ -4056,6 +4472,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Ishmael"
   },
   {
@@ -4091,6 +4510,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Middle_Apprentice_Ishmael"
   },
   {
@@ -4132,6 +4554,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_Captain_Ishmael"
   },
   {
@@ -4165,6 +4590,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._West_Section_3_Ishmael"
   },
   {
@@ -4190,6 +4618,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Rodion"
   },
   {
@@ -4215,6 +4646,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Rodion"
   },
   {
@@ -4247,6 +4681,10 @@
       "Pierce",
       "Blunt"
     ],
+    "attack_counts": {
+      "Pierce": 2,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Mittelhammer_Rodion"
   },
   {
@@ -4277,6 +4715,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_2_Collection_Staff_Rodion"
   },
   {
@@ -4305,6 +4746,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_5_Rodion"
   },
   {
@@ -4338,6 +4782,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devyat'_Assoc._North_Section_3_Rodion"
   },
   {
@@ -4368,6 +4815,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Rodion"
   },
   {
@@ -4402,6 +4852,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 6
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Alteration_Shop_Rodion"
   },
   {
@@ -4441,6 +4894,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Si_Branch_Rodion"
   },
   {
@@ -4470,6 +4927,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Rodion"
   },
   {
@@ -4499,6 +4959,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Pierce": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Director_Rodion"
   },
   {
@@ -4542,6 +5006,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 7
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::The_Sword_Sharpened_with_Tears_Rodion"
   },
   {
@@ -4573,6 +5040,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Rodion"
   },
   {
@@ -4607,6 +5077,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Rep_Rodion"
   },
   {
@@ -4656,6 +5130,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 7
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Thumb_Nursefather_Rodion"
   },
   {
@@ -4691,6 +5168,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Princess_of_La_Manchaland_Rodion"
   },
   {
@@ -4733,6 +5213,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 6
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Fauvist_Docent_Rodion"
   },
   {
@@ -4759,6 +5242,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Sinclair"
   },
   {
@@ -4787,6 +5273,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Red_Sheet_Sinclair"
   },
   {
@@ -4816,6 +5306,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Los_Mariachis_Jefe_Sinclair"
   },
   {
@@ -4844,6 +5337,10 @@
       "Pierce",
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 1,
+      "Pierce": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Boatworks_Fixer_Sinclair"
   },
   {
@@ -4876,6 +5373,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_6_Sinclair"
   },
   {
@@ -4910,6 +5410,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Blunt": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._West_Section_3_Sinclair"
   },
   {
@@ -4942,6 +5446,10 @@
       "Pierce",
       "Slash"
     ],
+    "attack_counts": {
+      "Pierce": 2,
+      "Slash": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Sinclair"
   },
   {
@@ -4973,6 +5481,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_4_Director_Sinclair"
   },
   {
@@ -5006,6 +5517,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 3,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Fixer_Sinclair"
   },
   {
@@ -5038,6 +5553,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devyat'_Assoc._North_Section_3_Sinclair"
   },
   {
@@ -5077,6 +5595,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_You_Branch_Sinclair"
   },
   {
@@ -5115,6 +5636,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Pinky_Apprentice_Sinclair"
   },
   {
@@ -5148,6 +5672,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Brother_Sinclair"
   },
   {
@@ -5183,6 +5710,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_One_Who_Shall_Grip_Sinclair"
   },
   {
@@ -5220,6 +5750,10 @@
       "Pierce",
       "Slash"
     ],
+    "attack_counts": {
+      "Pierce": 2,
+      "Slash": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Thumb_East_Soldato_II_Sinclair"
   },
   {
@@ -5246,6 +5780,10 @@
       "Pierce",
       "Slash"
     ],
+    "attack_counts": {
+      "Pierce": 2,
+      "Slash": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Outis"
   },
   {
@@ -5274,6 +5812,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Outis"
   },
   {
@@ -5304,6 +5846,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_4_Outis"
   },
   {
@@ -5336,6 +5881,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 1,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/G_Corp._Head_Manager_Outis"
   },
   {
@@ -5377,6 +5926,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Pointillist_Student_Outis"
   },
   {
@@ -5409,6 +5961,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Outis"
   },
   {
@@ -5446,6 +6001,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCA_Udjat_Vanguard_Team_3_Leader_Outis"
   },
   {
@@ -5479,6 +6038,10 @@
       "Blunt",
       "Pierce"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Magic_Bullet_Outis"
   },
   {
@@ -5509,6 +6072,10 @@
       "Blunt",
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 1,
+      "Blunt": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Office_Fixer_Outis"
   },
   {
@@ -5542,6 +6109,10 @@
       "Blunt",
       "Slash"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Slash": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Director_Outis"
   },
   {
@@ -5577,6 +6148,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_3_VDCU_Staff_Outis"
   },
   {
@@ -5609,6 +6183,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Barber_of_La_Manchaland_Outis"
   },
   {
@@ -5655,6 +6232,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 9
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Middle_Nursefather_Outis"
   },
   {
@@ -5688,6 +6268,10 @@
       "Blunt",
       "Slash"
     ],
+    "attack_counts": {
+      "Blunt": 2,
+      "Slash": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Captain_Outis"
   },
   {
@@ -5718,6 +6302,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wuthering_Heights_Chief_Butler_Outis"
   },
   {
@@ -5746,6 +6333,10 @@
       "Pierce",
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 1,
+      "Pierce": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Gregor"
   },
   {
@@ -5776,6 +6367,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Blunt": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Captain_Gregor"
   },
   {
@@ -5803,6 +6398,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_6_Gregor"
   },
   {
@@ -5834,6 +6432,10 @@
       "Slash",
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 1,
+      "Slash": 2
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R.B._Sous-chef_Gregor"
   },
   {
@@ -5866,6 +6468,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Fixer_Gregor"
   },
   {
@@ -5906,6 +6512,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 6
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Rep_Gregor"
   },
   {
@@ -5937,6 +6546,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Heir_Gregor"
   },
   {
@@ -5965,6 +6577,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Firefist_Office_Survivor_Gregor"
   },
   {
@@ -5992,6 +6607,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/G_Corp._Manager_Corporal_Gregor"
   },
   {
@@ -6028,6 +6647,10 @@
       "Slash",
       "Pierce"
     ],
+    "attack_counts": {
+      "Slash": 2,
+      "Pierce": 1
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Si_Branch_Gregor"
   },
   {
@@ -6064,6 +6687,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 4
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::AEDD_Gregor"
   },
   {
@@ -6103,6 +6729,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Lamp_Gregor"
   },
   {
@@ -6142,6 +6771,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 5
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Night_Awls_Capitano_Gregor"
   },
   {
@@ -6177,6 +6809,9 @@
     "attack_types": [
       "Blunt"
     ],
+    "attack_counts": {
+      "Blunt": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Priest_of_La_Manchaland_Gregor"
   },
   {
@@ -6208,6 +6843,9 @@
     "attack_types": [
       "Pierce"
     ],
+    "attack_counts": {
+      "Pierce": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Twinhook_Pirates_First_Mate_Gregor"
   },
   {
@@ -6235,6 +6873,9 @@
     "attack_types": [
       "Slash"
     ],
+    "attack_counts": {
+      "Slash": 3
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_4_Gregor"
   }
 ]
