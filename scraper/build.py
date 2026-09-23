@@ -10,7 +10,7 @@ import unicodedata
 import urllib.parse
 from typing import Any
 
-from . import wikitext
+from . import effects, wikitext
 
 TIERS = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "EX": 6}
 SINS = ["wrath", "lust", "sloth", "gluttony", "gloom", "pride", "envy"]
@@ -264,6 +264,7 @@ def parse_identity(title: str, categories: list[str]) -> dict:
     sinner = rarity = None
     affinities: list[str] = []
     statuses: list[str] = []
+    traits: list[str] = []
     for c in categories:
         m = re.fullmatch(r"(.+?) Identities", c)
         if m and fold(m.group(1)) in _SINNER_BY_FOLD:
@@ -272,6 +273,11 @@ def parse_identity(title: str, categories: list[str]) -> dict:
         m = re.fullmatch(r"(\d)-Star Identities", c)
         if m:
             rarity = int(m.group(1))
+            continue
+        # Affiliations ("traits"), e.g. "The Thumb Identities", "Heishou Pack - Mao Branch Identities"
+        m = re.fullmatch(r"(.+) Identities", c)
+        if m and not c.startswith("Identities") and m.group(1) not in NOT_TRAITS:
+            traits.append(m.group(1))
             continue
         m = re.fullmatch(r"(\w+) Affinity", c)
         if m and m.group(1).lower() in SINS:
@@ -288,10 +294,34 @@ def parse_identity(title: str, categories: list[str]) -> dict:
         "affinities": affinities,
         "keywords": [k for k in CORE_KEYWORDS if k in statuses],
         "status_effects": statuses,
+        "traits": traits,
         # Some event-only units have no rarity/affinity categories on the wiki.
         "incomplete": rarity is None or not affinities,
         "categories": categories,
     }
+
+
+_ATK_PARAM = re.compile(r"\|\s*([^=|{}\n]{1,40}?)\s*=\s*(Slash|Pierce|Blunt)\s*(?=\||\n|}})", re.IGNORECASE)
+_ATK_ICON = re.compile(r"\b(Slash|Pierce|Blunt)\.png|\{\{\s*(Slash|Pierce|Blunt)\s*[|}]", re.IGNORECASE)
+_RESIST_NAME = re.compile(r"res|weak|fatal|ineff|endur|normal|resist", re.IGNORECASE)
+
+
+def identity_attack_types(wikitext: str) -> dict[str, int]:
+    """How many of an identity's skills use each attack type, from its page source.
+
+    Tries template parameters first (``|s1type = Slash``), skipping resistance
+    parameters, then falls back to Slash/Pierce/Blunt icons in the page.
+    """
+    counts: dict[str, int] = {}
+    for name, value in _ATK_PARAM.findall(wikitext or ""):
+        if _RESIST_NAME.search(name):
+            continue
+        counts[value.capitalize()] = counts.get(value.capitalize(), 0) + 1
+    if not counts:
+        for a, b in _ATK_ICON.findall(wikitext or ""):
+            t = (a or b).capitalize()
+            counts[t] = counts.get(t, 0) + 1
+    return counts
 
 
 def build_identities(page_cats: dict[str, list[str]]) -> tuple[list[dict], list[str]]:
@@ -309,6 +339,65 @@ def build_identities(page_cats: dict[str, list[str]]) -> tuple[list[dict], list[
     order = {s: i for i, s in enumerate(SINNERS)}
     out.sort(key=lambda i: (order[i["sinner"]], i["rarity"] or 0, i["name"]))
     return out, warnings
+
+
+# -- traits (affiliations) in gift effects ------------------------------------------
+# "<X> Identities" categories that are bookkeeping rather than affiliations.
+NOT_TRAITS = {"Event Reward Identities and E.G.O", "Limbus Company"}
+
+# A trait only counts as mentioned when a word like "Identities" follows soon
+# after, e.g. '"The Thumb" Identities gain ...' or 'prioritizes Heishou - Wu Identities'.
+_TRAIT_CONTEXT = re.compile(r"^[\s\"'’”)\]]*(?:[\w.’'-]+\s+){0,3}?(?:Identit|units?\b|allies\b)", re.IGNORECASE)
+
+
+def trait_aliases(trait: str) -> list[str]:
+    """Ways gift text refers to a trait: "Heishou Pack - Mao Branch" is also
+    written "Heishou Pack - Mao" and "Heishou - Mao"."""
+    out = [trait]
+    m = re.fullmatch(r"(.+?) Pack - (.+?) Branch", trait)
+    if m:
+        out += [f"{m.group(1)} Pack - {m.group(2)}", f"{m.group(1)} - {m.group(2)}"]
+    return out
+
+
+def find_trait_mentions(text: str, traits: list[str]) -> list[str]:
+    """Traits a gift's effect text refers to, most specific first.
+
+    Longer names are matched first and blanked out, so "Heishou Pack - Mao
+    Branch Identities" counts for the Mao Branch but not also for "Heishou Pack".
+    """
+    pairs = sorted(
+        {(alias, t) for t in traits for alias in trait_aliases(t)},
+        key=lambda p: len(p[0]), reverse=True,
+    )
+    found: list[str] = []
+    buf = text
+    for alias, trait in pairs:
+        for m in re.finditer(r"(?<![\w-])" + re.escape(alias) + r"(?![\w])", buf):
+            if _TRAIT_CONTEXT.match(buf[m.end():m.end() + 60]):
+                if trait not in found:
+                    found.append(trait)
+                buf = buf[:m.start()] + " " * len(alias) + buf[m.end():]
+    return found
+
+
+def gift_effects(g: dict) -> dict:
+    """What the gift needs/provides (see effects.py). Base level decides
+    needs/applies; attack types and sins referenced at any level count."""
+    levels = g.get("levels") or []
+    base = effects.analyze(levels[0]["desc_markup"] if levels else "")
+    attack_types, sins = list(base["attack_types"]), list(base["sins"])
+    for lvl in levels[1:]:
+        more = effects.analyze(lvl["desc_markup"])
+        attack_types += [a for a in more["attack_types"] if a not in attack_types]
+        sins += [x for x in more["sins"] if x not in sins]
+    return {
+        "needs": base["needs"],
+        "applies": base["applies"],
+        "attack_types": attack_types,
+        "affinities": [x.lower() for x in sins],
+        "team_gate": base["team_gate"],
+    }
 
 
 # -- app export -------------------------------------------------------------------
@@ -337,7 +426,7 @@ def export_for_app(
     packs: list[dict],
     fusions: list[dict],
     identities: list[dict],
-    pack_pages: dict[str, str | None] | None = None,
+    pack_info: dict[str, dict] | None = None,
     include_unobtainable: bool = False,
 ) -> tuple[dict[str, list[dict]], list[str]]:
     """Slim the full build down to what the web app needs.
@@ -346,8 +435,10 @@ def export_for_app(
     descriptions are left on the wiki (we keep the base effect text for
     tooltips and scoring) and every record gets a wiki link instead.
 
-    pack_pages maps a pack name to its verified wiki page title (or None if it
-    has none). If it's None altogether, pack pages weren't checked.
+    pack_info maps a theme pack name to what its wiki page says:
+    {"title", "group", "floors", "gift_pool", "unique"} (title None = no page).
+    Packs found only there (no exclusive gifts) are added too. If pack_info is
+    None, pack pages weren't fetched and packs only list their exclusives.
     """
     warnings: list[str] = []
     keep = {g["id"] for g in gifts if include_unobtainable or g["mirror_dungeon"]}
@@ -365,6 +456,8 @@ def export_for_app(
     for (name, _pool), pid in pack_id.items():
         pack_by_name.setdefault(name, []).append(pid)
 
+    all_traits = sorted({t for i in identities if not i["incomplete"] for t in i.get("traits", [])})
+
     out_gifts = []
     for g in gifts:
         if g["id"] not in keep:
@@ -377,13 +470,16 @@ def export_for_app(
                 warnings.append(f"fusion {g['name']!r}: some ingredients can't drop in Mirror Dungeon")
         out = {
             "id": g["id"],
-            "name": g["name"],
+            "name": wikitext.to_plain(g["name"]),
             "sin": g["sin"],
             "tier": g["tier"],
             "cost": g["cost"],
             "keyword": g["keyword"],
             "secondary_keyword": g["secondary_keyword"],
             "status_effects": g["status_effects"],
+            # Affiliations the effect is built around (e.g. "The Thumb").
+            "traits": find_trait_mentions(" ".join(l["desc"] for l in g["levels"]), all_traits),
+            **gift_effects(g),
             "effect": g["levels"][0]["desc"] if g["levels"] else "",
             "max_level": g["max_level"],
             "pools": [p for p in g["pools"] if p in MD_POOLS] or g["pools"],
@@ -400,25 +496,51 @@ def export_for_app(
             out["legacy"] = g["legacy"]
         out_gifts.append(out)
 
+    info_by_fold = {fold(n): (n, i) for n, i in (pack_info or {}).items()}
+    used_info: set[str] = set()
     out_packs = []
+
+    def pack_record(pid, name, pool, exclusives, info):
+        pool_ids = [gid for gid in (info or {}).get("gift_pool", []) if gid in keep]
+        for gid in exclusives:
+            if gid not in pool_ids:
+                pool_ids.append(gid)
+        title = (info or {}).get("title")
+        return {
+            "id": pid,
+            "name": name,
+            "pool": pool,
+            "group": (info or {}).get("group"),
+            "floors": (info or {}).get("floors"),
+            "gifts": exclusives,        # exclusive to this pack
+            "gift_pool": pool_ids,      # everything it can give, exclusives included
+            "wiki_url": wiki_url(title) if title else None,
+        }
+
     for p in packs:
         members = [gid for gid in p["gifts"] if gid in keep]
         if not members and not include_unobtainable:
             continue
-        if pack_pages is None:
-            url = None
-        else:
-            page = pack_pages.get(p["name"])
-            url = wiki_url(page) if page else None
-            if page is None:
-                warnings.append(f"theme pack {p['name']!r}: no wiki page found")
-        out_packs.append({
-            "id": pack_id[(p["name"], p["pool"])],
-            "name": p["name"],
-            "pool": p["pool"],
-            "gifts": members,
-            "wiki_url": url,
-        })
+        key = fold(p["name"])
+        info = info_by_fold[key][1] if key in info_by_fold else None
+        if info is not None:
+            used_info.add(key)
+        if pack_info is not None and not (info and info.get("title")):
+            warnings.append(f"theme pack {p['name']!r}: no wiki page found")
+        out_packs.append(pack_record(pack_id[(p["name"], p["pool"])], p["name"], p["pool"], members, info))
+
+    # Packs with no exclusive gifts only show up on the wiki's list of floor themes.
+    for key, (name, info) in sorted(info_by_fold.items()):
+        if key in used_info:
+            continue
+        pool = "extreme" if "EXTREME" in (info.get("group") or "").upper() else "themed"
+        rec = pack_record(slugify(name), name, pool, [g for g in info.get("unique", []) if g in keep], info)
+        while rec["id"] in used:
+            rec["id"] += "-x"
+        used.add(rec["id"])
+        if rec["gift_pool"]:
+            out_packs.append(rec)
+    out_packs.sort(key=lambda p: (p["pool"] != "themed", p["name"].lower()))
 
     out_fusions = [
         {"result": f["result"], "ingredients": f["ingredients"]}
@@ -435,6 +557,8 @@ def export_for_app(
             "affinities": i["affinities"],
             "keywords": i["keywords"],
             "status_effects": i["status_effects"],
+            "traits": i["traits"],
+            "attack_types": i.get("attack_types", []),
             "wiki_url": wiki_url(i["name"]),
         }
         for i in identities

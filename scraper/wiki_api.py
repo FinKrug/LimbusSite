@@ -7,6 +7,7 @@ offline (`--offline`) without touching the wiki, e.g. when tweaking parsing.
 from __future__ import annotations
 
 import hashlib
+import http.client
 import json
 import os
 import time
@@ -32,11 +33,13 @@ class WikiClient:
         offline: bool = False,
         min_interval: float = 1.0,
         user_agent: str | None = None,
+        timeout: float = 60,
     ):
         self.api_url = api_url
         self.cache_dir = cache_dir
         self.offline = offline
         self.min_interval = min_interval
+        self.timeout = timeout
         self.user_agent = user_agent or os.environ.get("LIMBUS_SCRAPER_UA", DEFAULT_UA)
         self._last = 0.0
         self.requests_made = 0
@@ -51,9 +54,13 @@ class WikiClient:
         digest = hashlib.sha1(key.encode()).hexdigest()[:16]
         return self.cache_dir / f"{digest}.json"
 
-    def get(self, **params: Any) -> dict:
+    def get(self, max_age: float | None = None, **params: Any) -> dict:
+        """One API request. With max_age (seconds), a cached response younger
+        than that is reused instead of asking the wiki again."""
         params = {"format": "json", "formatversion": "2", **params}
         cache = self._cache_path(params)
+        if max_age is not None and cache and cache.exists() and time.time() - cache.stat().st_mtime < max_age:
+            return json.loads(cache.read_text(encoding="utf-8"))["response"]
         if self.offline:
             if cache and cache.exists():
                 return json.loads(cache.read_text(encoding="utf-8"))["response"]
@@ -70,7 +77,7 @@ class WikiClient:
                 time.sleep(wait)
             self._last = time.monotonic()
             try:
-                with urllib.request.urlopen(req, timeout=30) as resp:
+                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                     body = resp.read().decode("utf-8")
                     retry_after = resp.headers.get("Retry-After")
             except urllib.error.HTTPError as e:
@@ -78,11 +85,14 @@ class WikiClient:
                     time.sleep(float(e.headers.get("Retry-After") or 2 ** (attempt + 1)))
                     continue
                 raise WikiError(f"HTTP {e.code} for {url}") from e
-            except urllib.error.URLError as e:
+            except (urllib.error.URLError, http.client.HTTPException, OSError) as e:
+                # URLError: couldn't connect. TimeoutError / ConnectionResetError /
+                # IncompleteRead: the connection dropped while reading the body.
                 if attempt < 4:
                     time.sleep(2 ** (attempt + 1))
                     continue
-                raise WikiError(f"network error for {url}: {e.reason}") from e
+                reason = getattr(e, "reason", None) or e.__class__.__name__
+                raise WikiError(f"network error for {url}: {reason}") from e
             self.requests_made += 1
             data = json.loads(body)
             if "error" in data:

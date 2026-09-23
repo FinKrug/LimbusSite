@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-22T22:47:53+00:00",
+  "generated_at": "2026-09-23T00:12:16+00:00",
   "source": "https://limbuscompany.wiki.gg/api.php",
-  "offline": true,
+  "offline": false,
   "pages": {
     "Module:EgoGift/data": {
       "revid": 191860,
@@ -14,10 +14,10 @@
   },
   "include_unobtainable": false,
   "counts": {
-    "gifts": 446,
-    "theme_packs": 72,
+    "gifts": 456,
+    "theme_packs": 121,
     "fusions": 58,
     "identities": 188
   },
-  "warnings": 14
+  "warnings": 19
 }

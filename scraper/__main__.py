@@ -15,13 +15,17 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import build
+from . import build, packs as packmod
 from .lua_table import LuaParseError, parse_module
 from .wiki_api import DEFAULT_API, WikiClient, WikiError
 
 GIFT_DATA = "Module:EgoGift/data"
 GIFT_LIST = "Module:EgoGiftList/data"
 IDENTITY_CATEGORY = "Category:Identities"
+FLOOR_THEMES = "List of Floor Themes"
+# Theme pack pages rarely change; reuse ones fetched in the last day, so a run
+# that fails partway can simply be started again.
+PACK_CACHE_AGE = 24 * 3600
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -32,6 +36,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--skip-identities", action="store_true", help="only scrape E.G.O gifts")
     ap.add_argument("--include-unobtainable", action="store_true",
                     help="also keep Story Dungeon and Legacy gifts (default: Mirror Dungeon only)")
+    ap.add_argument("--skip-packs", action="store_true",
+                    help="don't fetch theme pack pages (gift pools, floors)")
     ap.add_argument("--api", default=DEFAULT_API, help="MediaWiki api.php URL")
     ap.add_argument("--delay", type=float, default=1.0, help="seconds between requests (default 1)")
     args = ap.parse_args(argv)
@@ -80,24 +86,26 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         identities, w = build.build_identities(cats)
         warnings += w
+        # Attack types (Slash/Pierce/Blunt) are only on each identity's own page.
+        print(f"Fetching {len(identities)} identity pages (50 per request) ...")
+        try:
+            sources = client.page_sources([i["name"] for i in identities])
+            for i in identities:
+                counts = build.identity_attack_types(sources.get(i["name"], {}).get("content", ""))
+                i["attack_types"] = sorted(counts, key=lambda t: -counts[t])
+            missing = [i["name"] for i in identities if not i["attack_types"] and not i["incomplete"]]
+            if missing:
+                warnings.append(f"no attack types found for {len(missing)} identities, e.g. {missing[:5]}")
+        except WikiError as e:
+            warnings.append(f"identity pages not fetched, so no attack types ({_why(e, client)})")
 
-    # -- theme pack wiki pages ---------------------------------------------------
-    print("Checking which theme packs have wiki pages ...")
-    pack_pages: dict[str, str | None] | None
-    try:
-        candidates = {p["name"]: build.pack_page_candidates(p["name"]) for p in packs}
-        found = client.existing_titles([t for ts in candidates.values() for t in ts])
-        pack_pages = {
-            name: next((found[t] for t in ts if found.get(t)), None)
-            for name, ts in candidates.items()
-        }
-    except WikiError as e:
-        warnings.append(f"theme pack pages not checked, so they have no links ({e})")
-        pack_pages = None
+    # -- theme pack pages -------------------------------------------------------
+    pack_info, w = fetch_pack_info(client, gifts, packs, skip=args.skip_packs)
+    warnings += w
 
     # -- write -------------------------------------------------------------------
     data, w = build.export_for_app(
-        gifts, packs, fusions, identities, pack_pages,
+        gifts, packs, fusions, identities, pack_info,
         include_unobtainable=args.include_unobtainable,
     )
     warnings += w
@@ -125,6 +133,101 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Done in {time.monotonic() - started:.1f}s "
           f"({client.requests_made} requests). {len(warnings)} warnings -> {out / 'report.txt'}")
     return 0
+
+
+def fetch_pack_info(client: WikiClient, gifts: list[dict], packs: list[dict], skip: bool):
+    """Theme pack name -> {title, group, floors, gift_pool, unique}; None if not fetched."""
+    if skip:
+        return None, []
+    warnings: list[str] = []
+    print(f"Fetching {FLOOR_THEMES} ...")
+    try:
+        listed = packmod.parse_floor_theme_list(_parse_html(client, FLOOR_THEMES))
+    except WikiError as e:
+        warnings.append(f"{FLOOR_THEMES}: {_why(e, client)}; only packs with exclusive gifts are included")
+        listed = []
+    if not listed and client.offline is False:
+        warnings.append(f"{FLOOR_THEMES}: no theme pack links found")
+    titles = {packmod.pack_name(t): (t, group) for t, group in listed}
+    # The gift list and the pack list don't always agree on capitalisation
+    # ("LCB Regular Check-Up" vs "Check-up"); use the gift list's spelling.
+    by_fold = {build.fold(n): n for n in titles}
+    for p in packs:
+        listed_name = by_fold.get(build.fold(p["name"]))
+        if listed_name and listed_name != p["name"]:
+            titles[p["name"]] = titles.pop(listed_name)
+            by_fold[build.fold(p["name"])] = p["name"]
+
+    # Packs from the gift list that the floor-theme list didn't link to.
+    missing = [p["name"] for p in packs if p["name"] not in titles]
+    if missing:
+        try:
+            found = client.existing_titles([t for n in missing for t in build.pack_page_candidates(n)])
+            for n in missing:
+                page = next((found[t] for t in build.pack_page_candidates(n) if found.get(t)), None)
+                titles[n] = (page, None)
+        except WikiError as e:
+            warnings.append(f"theme pack pages not checked ({_why(e, client)})")
+            if not listed:
+                return None, warnings
+
+    # Match against every current gift, not only the ones the gift list places in
+    # Mirror Dungeon: a pack page listing a gift is proof it can drop there.
+    current = sorted((g for g in gifts if not g["legacy"]), key=lambda g: not g["mirror_dungeon"])
+    by_id = {g["id"]: g for g in current}
+    names = {}
+    for g in current:
+        names.setdefault(build.wikitext.to_plain(g["name"]), g["id"])
+    for g in current:  # icons may use the data key ("Ebony Brooch (MD)") or the image name
+        for alt in (g["key"], g.get("image")):
+            if alt:
+                names.setdefault(alt, g["id"])
+    finder = packmod.NameFinder(names)
+    unresolved: set[str] = set()
+    with_pages = [(n, t, grp) for n, (t, grp) in titles.items() if t]
+    print(f"Fetching {len(with_pages)} theme pack pages ...")
+    info: dict[str, dict] = {}
+    for i, (name, title, group) in enumerate(sorted(with_pages), 1):
+        entry: dict = {"title": title, "group": group, "floors": None, "gift_pool": [], "unique": []}
+        try:
+            page = packmod.parse_pack_page(title, _parse_html(client, title, PACK_CACHE_AGE), finder)
+            entry.update(floors=page.floors, gift_pool=page.gift_pool, unique=page.unique)
+            warnings += page.warnings
+            unresolved.update(page.unresolved)
+        except WikiError as e:
+            warnings.append(f"{title}: {_why(e, client)}")
+            if "missingtitle" in str(e):
+                entry["title"] = None  # linked from the list, but the page doesn't exist
+        info[name] = entry
+        if i % 20 == 0:
+            print(f"  {i}/{len(with_pages)}")
+    if unresolved:
+        warnings.append(f"gifts in theme pack pools with no entry in {GIFT_DATA}: {sorted(unresolved)}")
+    promoted = sorted({by_id[gid]["name"] for e in info.values() for gid in e["gift_pool"]
+                       if not by_id[gid]["mirror_dungeon"]})
+    for e in info.values():
+        for gid in e["gift_pool"]:
+            g = by_id[gid]
+            if not g["mirror_dungeon"]:
+                g["mirror_dungeon"] = True
+                g["pools"] = [p for p in g["pools"] if p != "unlisted"] + ["themed"]
+    if promoted:
+        warnings.append(f"added {len(promoted)} gifts that only pack pages list as Mirror Dungeon drops: {promoted}")
+    for name, (title, group) in titles.items():
+        if not title:
+            info.setdefault(name, {"title": None, "group": group, "floors": None, "gift_pool": [], "unique": []})
+    return info, warnings
+
+
+def _parse_html(client: WikiClient, title: str, max_age: float | None = None) -> str:
+    data = client.get(max_age=max_age, action="parse", page=title, prop="text", redirects=1,
+                      disableeditsection=1, disablelimitreport=1)
+    text = data.get("parse", {}).get("text", "")
+    return text["*"] if isinstance(text, dict) else text
+
+
+def _why(e: WikiError, client: WikiClient) -> str:
+    return "not cached; run once without --offline" if client.offline else str(e)
 
 
 def _write(path: Path, data) -> None:

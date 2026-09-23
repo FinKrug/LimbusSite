@@ -1,0 +1,16 @@
+[
+  {
+    "id": "tremor-burst-debuffs",
+    "name": "Turn-start Tremor Burst debuffs",
+    "gifts": ["downpour", "melted-eyeball", "bell-of-truth"],
+    "why": "Downpour inflicts Tremor and triggers Tremor Burst on every enemy each turn. That sets off Melted Eyeball (Offense and Defense Level Down) and Bell of Truth (Fragile) without needing a Tremor team.",
+    "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378"
+  },
+  {
+    "id": "sinking-sp-drain",
+    "name": "Sinking SP drain",
+    "gifts": ["midwinter-nightmare", "broken-compass"],
+    "why": "Broken Compass spreads Sinking Count across every enemy at the start of each wave, and Midwinter Nightmare adds Sinking Potency on every hit, so enemies lose SP even if your team doesn't inflict Sinking.",
+    "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378"
+  }
+]

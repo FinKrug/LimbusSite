@@ -19,6 +19,13 @@
       "SP Healing",
       "Sinking"
     ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Yi_Sang"
   },
   {
@@ -40,6 +47,14 @@
       "Guard Skills",
       "Insight",
       "Sinking"
+    ],
+    "traits": [
+      "Dieci Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Yi_Sang"
   },
@@ -67,6 +82,14 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "LCE"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Lantern_Yi_Sang"
   },
   {
@@ -89,6 +112,14 @@
       "Tremor",
       "Tremor Burst"
     ],
+    "traits": [
+      "Fixer",
+      "Molar Office"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Office_Fixer_Yi_Sang"
   },
   {
@@ -110,6 +141,14 @@
       "Paralyze",
       "Pierce Fragility",
       "Rupture"
+    ],
+    "traits": [
+      "Fixer",
+      "Seven Association"
+    ],
+    "attack_types": [
+      "Pierce",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Yi_Sang"
   },
@@ -134,6 +173,12 @@
       "Evade Skills",
       "Poise"
     ],
+    "traits": [
+      "The Pequod"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_First_Mate_Yi_Sang"
   },
   {
@@ -152,6 +197,13 @@
     "status_effects": [
       "Counter Skills",
       "Poise"
+    ],
+    "traits": [
+      "Blade Lineage",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Yi_Sang"
   },
@@ -176,6 +228,13 @@
       "Sinking",
       "Sinking Deluge",
       "Tremor"
+    ],
+    "traits": [
+      "Technology Liberation Alliance"
+    ],
+    "attack_types": [
+      "Pierce",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Effloresced_E.G.O::Spicebush_Yi_Sang"
   },
@@ -208,6 +267,16 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
+    "traits": [
+      "H Corp.",
+      "Heishou Pack - Wu Branch",
+      "Heishou Pack Adept",
+      "Heishou Pack",
+      "Jia Family"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Wu_Branch_Adept_Yi_Sang"
   },
   {
@@ -238,6 +307,13 @@
       "Unfocused Volley",
       "Unique Stage Interactions"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "LCE"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Dimension_Shredder_Yi_Sang"
   },
   {
@@ -257,6 +333,13 @@
       "Burn",
       "Counter Skills",
       "SP Healing"
+    ],
+    "traits": [
+      "Fixer",
+      "Liu Association"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_3_Yi_Sang"
   },
@@ -283,6 +366,13 @@
       "Sinking",
       "The Living & The Departed",
       "Unique Ammo"
+    ],
+    "traits": [
+      "E.G.O Gear",
+      "Lobotomy Corp. Headquarters"
+    ],
+    "attack_types": [
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Solemn_Lament_Yi_Sang"
   },
@@ -312,6 +402,14 @@
       "Torn Memory",
       "Unbreakable Coin",
       "unique Status Effects"
+    ],
+    "traits": [
+      "E.G.O Gear",
+      "N Corp."
+    ],
+    "attack_types": [
+      "Pierce",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._E.G.O::Fell_Bullet_Yi_Sang"
   },
@@ -354,6 +452,17 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "The Fingers",
+      "The House of Spiders",
+      "The Index",
+      "The Oracle's Proxy"
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Index_Nursefather_Yi_Sang"
   },
   {
@@ -384,6 +493,15 @@
       "Sinking",
       "Tremor"
     ],
+    "traits": [
+      "School of Pointillism",
+      "The Fingers",
+      "The Ring",
+      "The Ring Student"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Pointillist_Student_Yi_Sang"
   },
   {
@@ -409,6 +527,13 @@
       "Haste",
       "Rupture"
     ],
+    "traits": [
+      "W Corp."
+    ],
+    "attack_types": [
+      "Pierce",
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Yi_Sang"
   },
   {
@@ -427,6 +552,13 @@
       "Evade Skills",
       "Offense Level Down",
       "Paralyze"
+    ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Faust"
   },
@@ -450,6 +582,14 @@
       "Poise",
       "Rupture"
     ],
+    "traits": [
+      "Fixer",
+      "Lobotomy Corp. Branch"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_Corp._Remnant_Faust"
   },
   {
@@ -472,6 +612,12 @@
       "Guard Skills",
       "Paralyze"
     ],
+    "traits": [
+      "W Corp."
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Faust"
   },
   {
@@ -493,6 +639,14 @@
       "SP Healing",
       "Sinking"
     ],
+    "traits": [
+      "Fixer",
+      "Wuthering Heights"
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wuthering_Heights_Butler_Faust"
   },
   {
@@ -512,6 +666,14 @@
       "Guard Skills",
       "HP Healing",
       "Haste"
+    ],
+    "traits": [
+      "Fixer",
+      "Zwei Association"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_4_Faust"
   },
@@ -535,6 +697,14 @@
       "Poise",
       "Slash Fragility",
       "Unique Bleed"
+    ],
+    "traits": [
+      "Blade Lineage",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Faust"
   },
@@ -571,6 +741,13 @@
       "Unfocused Volley",
       "unique Status Effects"
     ],
+    "traits": [
+      "Dawn Office",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Fixer_Faust"
   },
   {
@@ -605,6 +782,15 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
+    "traits": [
+      "H Corp.",
+      "Heishou Pack - Mao Branch",
+      "Heishou Pack Adept",
+      "Heishou Pack"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Adept_Faust"
   },
   {
@@ -627,6 +813,13 @@
       "Offense Level Up",
       "Unbreakable Coin",
       "unique Sanity mechanics"
+    ],
+    "traits": [
+      "E.G.O Gear",
+      "LCE"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Ardor_Blossom_Star_Faust"
   },
@@ -656,6 +849,13 @@
       "Tremor",
       "Tremor Burst"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "Lobotomy Corp. Headquarters"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Regret_Faust"
   },
   {
@@ -676,6 +876,15 @@
       "Charge Potency",
       "Envy Fragility",
       "Guard Skills"
+    ],
+    "traits": [
+      "Fixer",
+      "Mechanical Amalgam",
+      "MultiCrack Office"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/MultiCrack_Office_Rep_Faust"
   },
@@ -702,6 +911,13 @@
       "Slash Power Up",
       "Weakness Analyzed"
     ],
+    "traits": [
+      "Fixer",
+      "Seven Association"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_4_Faust"
   },
   {
@@ -727,6 +943,14 @@
       "Poise",
       "Slash DMG Up",
       "Unclashable Skills"
+    ],
+    "traits": [
+      "Fixer",
+      "Shi Association"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._East_Section_3_Faust"
   },
@@ -768,6 +992,16 @@
       "Unique Charge",
       "unique Status Effects"
     ],
+    "traits": [
+      "Mechanical Amalgam",
+      "School of Corporism",
+      "The Fingers",
+      "The House of Spiders",
+      "The Ring"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Ring_Apprentice_Faust"
   },
   {
@@ -792,6 +1026,13 @@
       "Sinking",
       "The Prescript's Target",
       "Unbreakable Coin"
+    ],
+    "traits": [
+      "The Fingers",
+      "The Index"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Index_Proselyte:%E3%80%90Paper_Slip%E3%80%91Faust"
   },
@@ -820,6 +1061,14 @@
       "SP Healing",
       "unique Status Effects"
     ],
+    "traits": [
+      "N Corp. Fanatic",
+      "N Corp."
+    ],
+    "attack_types": [
+      "Pierce",
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_One_Who_Grips_Faust"
   },
   {
@@ -842,6 +1091,12 @@
       "Haste",
       "Unique Stage Interactions"
     ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Don_Quixote"
   },
   {
@@ -861,6 +1116,14 @@
       "Evade Skills",
       "Poise",
       "Slash DMG Up"
+    ],
+    "traits": [
+      "Blade Lineage",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Don_Quixote"
   },
@@ -883,6 +1146,14 @@
       "Guard Skills",
       "HP Healing",
       "Rupture"
+    ],
+    "traits": [
+      "E.G.O Gear",
+      "Lobotomy Corp. Headquarters"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Lantern_Don_Quixote"
   },
@@ -908,6 +1179,14 @@
       "Tremor",
       "Tremor Burst"
     ],
+    "traits": [
+      "N Corp. Fanatic",
+      "N Corp."
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Mittelhammer_Don_Quixote"
   },
   {
@@ -927,6 +1206,13 @@
       "Evade Skills",
       "Haste",
       "Poise"
+    ],
+    "traits": [
+      "Fixer",
+      "Shi Association"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Director_Don_Quixote"
   },
@@ -952,6 +1238,13 @@
       "Nerve Strike",
       "Poise"
     ],
+    "traits": [
+      "Cinq Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._East_Section_3_Don_Quixote"
   },
   {
@@ -972,6 +1265,13 @@
       "Haste",
       "SP Damage",
       "SP Healing"
+    ],
+    "traits": [
+      "Cinq Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_5_Director_Don_Quixote"
   },
@@ -997,6 +1297,14 @@
       "Rupture",
       "Sinking",
       "Unbreakable Coin"
+    ],
+    "traits": [
+      "H Corp.",
+      "Heishou Pack - Wei Branch",
+      "Heishou Pack"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Wei_Branch_Don_Quixote"
   },
@@ -1031,6 +1339,13 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "Lobotomy Corp. Headquarters"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::In_the_Name_of_Love_and_Hate_Don_Quixote"
   },
   {
@@ -1057,6 +1372,13 @@
       "Tremor",
       "Tremor - Chain",
       "Tremor Burst"
+    ],
+    "traits": [
+      "T Corp."
+    ],
+    "attack_types": [
+      "Blunt",
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_3_Collection_Staff_Don_Quixote"
   },
@@ -1088,6 +1410,15 @@
       "Unlock",
       "unique Status Effects"
     ],
+    "traits": [
+      "The Fingers",
+      "The House of Spiders",
+      "The Index"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Index_Proxy_-_Effloresced_E.G.O::Procuration_Don_Quixote"
   },
   {
@@ -1116,6 +1447,14 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "Bloodfiend",
+      "La Manchaland",
+      "Second Kindred"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Manager_of_La_Manchaland_Don_Quixote"
   },
   {
@@ -1140,6 +1479,13 @@
       "SP Healing",
       "Vengeance Mark"
     ],
+    "traits": [
+      "The Fingers",
+      "The Middle"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Sister_Don_Quixote"
   },
   {
@@ -1162,6 +1508,13 @@
       "Fragile",
       "Rupture"
     ],
+    "traits": [
+      "W Corp."
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Don_Quixote"
   },
   {
@@ -1182,6 +1535,13 @@
       "Poise",
       "Slash DMG Up"
     ],
+    "traits": [
+      "LCB",
+      "Tiansha Star"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1201,6 +1561,14 @@
       "Guard Skills",
       "Tremor",
       "Tremor Burst"
+    ],
+    "traits": [
+      "Syndicate",
+      "Yurodiviye"
+    ],
+    "attack_types": [
+      "Pierce",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/District_20_Yurodivy_Ry%C5%8Dsh%C5%AB"
   },
@@ -1230,6 +1598,13 @@
       "Tremor",
       "Tremor Burst"
     ],
+    "traits": [
+      "LCC"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1248,6 +1623,14 @@
     "status_effects": [
       "Burn",
       "Guard Skills"
+    ],
+    "traits": [
+      "Fixer",
+      "Liu Association"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Ry%C5%8Dsh%C5%AB"
   },
@@ -1270,6 +1653,14 @@
       "Defense Level Down",
       "Rupture",
       "Slash Fragility"
+    ],
+    "traits": [
+      "Fixer",
+      "Seven Association"
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Ry%C5%8Dsh%C5%AB"
   },
@@ -1303,6 +1694,16 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "Dihui Star",
+      "The Fingers",
+      "The House of Spiders",
+      "The Pinky",
+      "Tiansha Star"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_of_the_House_of_Spiders_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1329,6 +1730,12 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
+    "traits": [
+      "H Corp."
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Drifting_Blade_of_Hongyuan_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1353,6 +1760,13 @@
       "Skill Reuse",
       "Unique Stage Interactions",
       "unique Status Effects"
+    ],
+    "traits": [
+      "Edgar Family",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Chief_Butler_Ry%C5%8Dsh%C5%AB"
   },
@@ -1380,6 +1794,13 @@
       "Unbreakable Coin",
       "Unique Charge"
     ],
+    "traits": [
+      "Le Noir",
+      "Sisyphe"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Le_Noir_Footwear_Hall_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1404,6 +1825,14 @@
       "Rupture",
       "Strider -Mao-"
     ],
+    "traits": [
+      "H Corp.",
+      "Heishou Pack - Mao Branch",
+      "Heishou Pack"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1425,6 +1854,13 @@
       "Guard Skills",
       "Offense Level Down",
       "Paralyze"
+    ],
+    "traits": [
+      "Kurokumo Clan",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Ry%C5%8Dsh%C5%AB"
   },
@@ -1460,6 +1896,13 @@
       "Unique Ammo",
       "unique Status Effects"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "Lobotomy Corp. Headquarters"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Faint_Aroma_%26_Solitude_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1488,6 +1931,13 @@
       "SP Loss",
       "Unique Charge",
       "unique Status Effects"
+    ],
+    "traits": [
+      "E.G.O Gear",
+      "Lobotomy Corp. Headquarters"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Red_Eyes_%26_Penitence_Ry%C5%8Dsh%C5%AB"
   },
@@ -1519,6 +1969,13 @@
       "Tremor Burst",
       "Unbreakable Coin"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "N Corp."
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._E.G.O::Contempt,_Awe_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1543,6 +2000,15 @@
       "Haste",
       "unique Status Effects"
     ],
+    "traits": [
+      "R.B.",
+      "Syndicate",
+      "The Backstreets"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R.B._Chef_de_Cuisine_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -1564,6 +2030,12 @@
       "Evade Skills",
       "Haste",
       "Slash Fragility"
+    ],
+    "traits": [
+      "W Corp."
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Ry%C5%8Dsh%C5%AB"
   },
@@ -1587,6 +2059,12 @@
       "Tremor",
       "Tremor Burst"
     ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Meursault"
   },
   {
@@ -1607,6 +2085,14 @@
       "Offense Level Down",
       "Rupture"
     ],
+    "traits": [
+      "Syndicate",
+      "The Dead Rabbits"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dead_Rabbits_Boss_Meursault"
   },
   {
@@ -1625,6 +2111,14 @@
     "status_effects": [
       "Burn",
       "Guard Skills"
+    ],
+    "traits": [
+      "Fixer",
+      "Liu Association"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_6_Meursault"
   },
@@ -1650,6 +2144,13 @@
       "Tremor",
       "Tremor Burst"
     ],
+    "traits": [
+      "Fixer",
+      "Rosespanner Workshop"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Fixer_Meursault"
   },
   {
@@ -1674,6 +2175,13 @@
       "Plus Coin Drop",
       "SP Healing",
       "Vengeance Mark"
+    ],
+    "traits": [
+      "The Fingers",
+      "The Middle"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Brother_Meursault"
   },
@@ -1704,6 +2212,13 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "Blade Lineage",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Mentor_Meursault"
   },
   {
@@ -1727,6 +2242,13 @@
       "Poise",
       "Rupture",
       "Skill Reuse"
+    ],
+    "traits": [
+      "Cinq Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._West_Section_3_Meursault"
   },
@@ -1752,6 +2274,14 @@
       "Insight",
       "Pierce DMG Up",
       "Sinking"
+    ],
+    "traits": [
+      "Dieci Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Director_Meursault"
   },
@@ -1785,6 +2315,13 @@
       "Unique Ammo",
       "unique Status Effects"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "Lobotomy Corp. Headquarters"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Hornet%E3%80%90Alteration%E3%80%91Meursault"
   },
   {
@@ -1810,6 +2347,14 @@
       "Nails",
       "Protection"
     ],
+    "traits": [
+      "N Corp. Fanatic",
+      "N Corp."
+    ],
+    "attack_types": [
+      "Pierce",
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Gro%C3%9Fhammer_Meursault"
   },
   {
@@ -1831,6 +2376,13 @@
       "Bleed",
       "Charge",
       "Guard Skills"
+    ],
+    "traits": [
+      "R Corp."
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Rhino_Meursault"
   },
@@ -1863,6 +2415,14 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
+    "traits": [
+      "Bloodfiend",
+      "La Manchaland",
+      "Third Kindred"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Prince_of_La_Manchaland_Meursault"
   },
   {
@@ -1891,6 +2451,15 @@
       "Sinking",
       "Unbreakable Coin",
       "unique Status Effects"
+    ],
+    "traits": [
+      "School of Fauvism",
+      "The Fingers",
+      "The Ring",
+      "The Ring Student"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Fauvist_Student_Meursault"
   },
@@ -1921,6 +2490,15 @@
       "Unique Ammo",
       "unique Status Effects"
     ],
+    "traits": [
+      "Capo",
+      "The Fingers",
+      "The Thumb"
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Thumb_East_Capo_IIII_Meursault"
   },
   {
@@ -1945,6 +2523,12 @@
       "Slash Fragility",
       "Slash Protection"
     ],
+    "traits": [
+      "W Corp."
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Meursault"
   },
   {
@@ -1968,6 +2552,13 @@
       "SP Healing",
       "Sinking"
     ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Hong_Lu"
   },
   {
@@ -1989,6 +2580,13 @@
       "Guard Skills",
       "HP Healing Down",
       "Rupture"
+    ],
+    "traits": [
+      "Fanghunt Office",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Fanghunt_Office_Fixer_Hong_Lu"
   },
@@ -2012,6 +2610,14 @@
       "Haste",
       "SP Healing"
     ],
+    "traits": [
+      "Fixer",
+      "Hook Office",
+      "The Backstreets"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hook_Office_Fixer_Hong_Lu"
   },
   {
@@ -2033,6 +2639,13 @@
       "Guard Skills",
       "Paralyze"
     ],
+    "traits": [
+      "Kurokumo Clan",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Hong_Lu"
   },
   {
@@ -2052,6 +2665,13 @@
       "Burn",
       "Guard Skills",
       "SP Healing"
+    ],
+    "traits": [
+      "Fixer",
+      "Liu Association"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_5_Hong_Lu"
   },
@@ -2075,6 +2695,13 @@
       "Guard Skills",
       "Haste",
       "Rupture"
+    ],
+    "traits": [
+      "W Corp."
+    ],
+    "attack_types": [
+      "Pierce",
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Hong_Lu"
   },
@@ -2102,6 +2729,13 @@
       "Poise",
       "unique Status Effects"
     ],
+    "traits": [
+      "Cinq Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._East_Section_3_Hong_Lu"
   },
   {
@@ -2126,6 +2760,14 @@
       "SP Healing",
       "Sinking"
     ],
+    "traits": [
+      "Dieci Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Hong_Lu"
   },
   {
@@ -2148,6 +2790,14 @@
       "Tremor",
       "Tremor - Reverb",
       "Tremor Burst"
+    ],
+    "traits": [
+      "Syndicate",
+      "Yurodiviye"
+    ],
+    "attack_types": [
+      "Pierce",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/District_20_Yurodivy_Hong_Lu"
   },
@@ -2179,6 +2829,14 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "Fixer",
+      "Full-Stop Office"
+    ],
+    "attack_types": [
+      "Pierce",
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stop_Office_Rep_Hong_Lu"
   },
   {
@@ -2201,6 +2859,13 @@
       "HP Healing",
       "Rupture",
       "unique Status Effects"
+    ],
+    "traits": [
+      "K Corp."
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/K_Corp._Class_3_Excision_Staff_Hong_Lu"
   },
@@ -2225,6 +2890,12 @@
       "Increased Atk Weight",
       "Sinking",
       "Unfocused Volley"
+    ],
+    "traits": [
+      "R Corp."
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Hong_Lu"
   },
@@ -2253,6 +2924,13 @@
       "Poise",
       "Pride Fragility",
       "Unbreakable Coin"
+    ],
+    "traits": [
+      "Fixer",
+      "S Corp."
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/S_Corp._Ch'unokkun_Hong_Lu"
   },
@@ -2301,6 +2979,17 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "Mechanical Amalgam",
+      "School of Corporism",
+      "The Fingers",
+      "The House of Spiders",
+      "The Ring"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Ring_Nursefather_Hong_Lu"
   },
   {
@@ -2345,6 +3034,12 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "H Corp."
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Lord_of_Hongyuan_Hong_Lu"
   },
   {
@@ -2367,6 +3062,15 @@
       "SP Healing",
       "Skill Reuse"
     ],
+    "traits": [
+      "Syndicate",
+      "The Backstreets",
+      "Tingtang Gang"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tingtang_Gang_Gangleader_Hong_Lu"
   },
   {
@@ -2388,6 +3092,12 @@
       "Damage Up",
       "Tremor",
       "Tremor Burst"
+    ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Heathcliff"
   },
@@ -2415,6 +3125,15 @@
       "Haste",
       "Photoelectricity"
     ],
+    "traits": [
+      "Fixer",
+      "Mechanical Amalgam",
+      "MultiCrack Office"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/MultiCrack_Office_Fixer_Heathcliff"
   },
   {
@@ -2438,6 +3157,14 @@
       "Plus Coin Drop",
       "SP Healing"
     ],
+    "traits": [
+      "N Corp. Fanatic",
+      "N Corp."
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Kleinhammer_Heathcliff"
   },
   {
@@ -2458,6 +3185,14 @@
       "Guard Skills",
       "Rupture"
     ],
+    "traits": [
+      "Fixer",
+      "Seven Association"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_4_Heathcliff"
   },
   {
@@ -2477,6 +3212,14 @@
       "Counter Skills",
       "Increased Atk Weight",
       "Poise"
+    ],
+    "traits": [
+      "Fixer",
+      "Shi Association"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Heathcliff"
   },
@@ -2511,6 +3254,13 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "Fixer",
+      "Full-Stop Office"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stop_Office_Fixer_Heathcliff"
   },
   {
@@ -2544,6 +3294,15 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "H Corp.",
+      "Heishou Pack - You Branch",
+      "Heishou Pack Adept",
+      "Heishou Pack"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_You_Branch_Adept_Heathcliff"
   },
   {
@@ -2575,6 +3334,13 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
+    "traits": [
+      "Kurokumo Clan",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Heathcliff"
   },
   {
@@ -2605,6 +3371,14 @@
       "Tremor Burst",
       "unique Sanity mechanics"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "Technology Liberation Alliance"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Sunshower_Heathcliff"
   },
   {
@@ -2631,6 +3405,12 @@
       "Fragile",
       "Haste",
       "Rupture"
+    ],
+    "traits": [
+      "R Corp."
+    ],
+    "attack_types": [
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Rabbit_Heathcliff"
   },
@@ -2665,6 +3445,14 @@
       "Tremor Burst",
       "Unbreakable Coin",
       "unique Status Effects"
+    ],
+    "traits": [
+      "The Fingers",
+      "The House of Spiders",
+      "The Thumb"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Thumb_Apprentice_Heathcliff"
   },
@@ -2701,6 +3489,13 @@
       "Vendetta Mark",
       "Vengeance Mark"
     ],
+    "traits": [
+      "The Fingers",
+      "The Middle"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Big_Brother_Heathcliff"
   },
   {
@@ -2724,6 +3519,12 @@
       "Defense Level Up",
       "Offense Level Up",
       "Poise"
+    ],
+    "traits": [
+      "The Pequod"
+    ],
+    "attack_types": [
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_Harpooneer_Heathcliff"
   },
@@ -2751,6 +3552,12 @@
       "Guard Skills",
       "Rupture",
       "Unbreakable Coin"
+    ],
+    "traits": [
+      "W Corp."
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L4_Cleanup_Agent_-_CCA_Heathcliff"
   },
@@ -2784,6 +3591,14 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "The Wild Hunt",
+      "Wuthering Heights"
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wild_Hunt_Heathcliff"
   },
   {
@@ -2806,6 +3621,13 @@
       "Tremor - Decay",
       "Tremor Burst"
     ],
+    "traits": [
+      "Öufi Association"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/%C3%96ufi_Assoc._South_Section_3_Heathcliff"
   },
   {
@@ -2827,6 +3649,12 @@
       "Guard Skills",
       "Tremor",
       "Tremor Burst"
+    ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Ishmael"
   },
@@ -2853,6 +3681,14 @@
       "SP Healing",
       "Sinking",
       "Slash Fragility"
+    ],
+    "traits": [
+      "Edgar Family",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Butler_Ishmael"
   },
@@ -2881,6 +3717,12 @@
       "Tremor",
       "Tremor Burst"
     ],
+    "traits": [
+      "LCC"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Ishmael"
   },
   {
@@ -2904,6 +3746,13 @@
       "Tremor",
       "Tremor Burst"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "Technology Liberation Alliance"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Sloshing_Ishmael"
   },
   {
@@ -2924,6 +3773,14 @@
       "Counter Skills",
       "HP Healing",
       "Poise"
+    ],
+    "traits": [
+      "Fixer",
+      "Shi Association"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Ishmael"
   },
@@ -2951,6 +3808,15 @@
       "Rupture",
       "Unbreakable Coin",
       "unique Status Effects"
+    ],
+    "traits": [
+      "Family Hierarch Candidate",
+      "H Corp.",
+      "Jia Family"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Family_Hierarch_Candidate_Ishmael"
   },
@@ -2983,6 +3849,13 @@
       "Power Up",
       "Unbreakable Coin",
       "Unique Charge"
+    ],
+    "traits": [
+      "Le Rouge",
+      "Sisyphe"
+    ],
+    "attack_types": [
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Boutique_du_Rouge_Ishmael"
   },
@@ -3018,6 +3891,14 @@
       "Unclashable Skills",
       "unique Status Effects"
     ],
+    "traits": [
+      "Associate Office - Öufi",
+      "Fixer",
+      "Jeong's Office"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Jeong's_Office_Rep_Ishmael"
   },
   {
@@ -3047,6 +3928,13 @@
       "Slash Power Up",
       "unique Status Effects"
     ],
+    "traits": [
+      "Kurokumo Clan",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Captain_Ishmael"
   },
   {
@@ -3075,6 +3963,14 @@
       "Slash Fragility",
       "Unbreakable Coin"
     ],
+    "traits": [
+      "Blade Lineage",
+      "LCD",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCD_OSIR_Team_Ishmael"
   },
   {
@@ -3094,6 +3990,13 @@
       "Burn",
       "Counter Skills",
       "Plus Coin Boost"
+    ],
+    "traits": [
+      "Fixer",
+      "Liu Association"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Ishmael"
   },
@@ -3118,6 +4021,13 @@
       "Sinking",
       "Tremor"
     ],
+    "traits": [
+      "Fixer",
+      "Molar Office"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Boatworks_Fixer_Ishmael"
   },
   {
@@ -3139,6 +4049,12 @@
       "Evade Skills",
       "SP Loss",
       "Sinking"
+    ],
+    "traits": [
+      "R Corp."
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Ishmael"
   },
@@ -3166,6 +4082,14 @@
       "Paralyze",
       "Vengeance Mark",
       "unique Status Effects"
+    ],
+    "traits": [
+      "The Fingers",
+      "The House of Spiders",
+      "The Middle"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Middle_Apprentice_Ishmael"
   },
@@ -3202,6 +4126,12 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "The Pequod"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_Captain_Ishmael"
   },
   {
@@ -3228,6 +4158,13 @@
       "Tremor Burst",
       "Unbreakable Coin"
     ],
+    "traits": [
+      "Fixer",
+      "Zwei Association"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._West_Section_3_Ishmael"
   },
   {
@@ -3247,6 +4184,12 @@
       "Bleed",
       "Counter Skills"
     ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Rodion"
   },
   {
@@ -3265,6 +4208,12 @@
       "Defense Power Down",
       "Guard Skills",
       "Paralyze"
+    ],
+    "traits": [
+      "LCC"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Rodion"
   },
@@ -3290,6 +4239,14 @@
       "Nails",
       "Paralyze"
     ],
+    "traits": [
+      "N Corp. Fanatic",
+      "N Corp."
+    ],
+    "attack_types": [
+      "Pierce",
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Mittelhammer_Rodion"
   },
   {
@@ -3314,6 +4271,12 @@
       "Tremor",
       "Tremor Burst"
     ],
+    "traits": [
+      "T Corp."
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_2_Collection_Staff_Rodion"
   },
   {
@@ -3334,6 +4297,13 @@
       "Fragile",
       "Guard Skills",
       "Poise"
+    ],
+    "traits": [
+      "Fixer",
+      "Zwei Association"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_5_Rodion"
   },
@@ -3361,6 +4331,13 @@
       "Rupture",
       "SP Loss"
     ],
+    "traits": [
+      "Devyat' Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devyat'_Assoc._North_Section_3_Rodion"
   },
   {
@@ -3383,6 +4360,13 @@
       "Guard Skills",
       "Insight",
       "Sinking"
+    ],
+    "traits": [
+      "Dieci Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Rodion"
   },
@@ -3414,6 +4398,10 @@
       "Tremor Burst",
       "Unique Charge"
     ],
+    "traits": [],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Alteration_Shop_Rodion"
   },
   {
@@ -3444,6 +4432,15 @@
       "Unbreakable Coin",
       "Unfocused Volley"
     ],
+    "traits": [
+      "H Corp.",
+      "Heishou Pack - Si Branch",
+      "Heishou Pack"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Si_Branch_Rodion"
   },
   {
@@ -3466,6 +4463,13 @@
       "Poise",
       "Protection"
     ],
+    "traits": [
+      "Kurokumo Clan",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Rodion"
   },
   {
@@ -3486,6 +4490,14 @@
       "Burn",
       "Counter Skills",
       "Wrath DMG Up"
+    ],
+    "traits": [
+      "Fixer",
+      "Liu Association"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Director_Rodion"
   },
@@ -3523,6 +4535,13 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "Lobotomy Corp. Headquarters"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::The_Sword_Sharpened_with_Tears_Rodion"
   },
   {
@@ -3547,6 +4566,12 @@
       "Increased Atk Weight",
       "Sinking",
       "Unfocused Volley"
+    ],
+    "traits": [
+      "R Corp."
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Rodion"
   },
@@ -3573,6 +4598,14 @@
       "Haste",
       "Tremor",
       "Tremor Burst"
+    ],
+    "traits": [
+      "Fixer",
+      "Rosespanner Workshop"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Rep_Rodion"
   },
@@ -3613,6 +4646,16 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "Smoke War",
+      "The Fingers",
+      "The House of Spiders",
+      "The Thumb",
+      "War Hero"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Thumb_Nursefather_Rodion"
   },
   {
@@ -3639,6 +4682,14 @@
       "Increased Atk Weight",
       "Rupture",
       "unique Status Effects"
+    ],
+    "traits": [
+      "Bloodfiend",
+      "La Manchaland",
+      "Second Kindred"
+    ],
+    "attack_types": [
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Princess_of_La_Manchaland_Rodion"
   },
@@ -3673,6 +4724,15 @@
       "Unfocused Volley",
       "unique Status Effects"
     ],
+    "traits": [
+      "School of Fauvism",
+      "The Fingers",
+      "The Ring Docent",
+      "The Ring"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Fauvist_Docent_Rodion"
   },
   {
@@ -3693,6 +4753,12 @@
       "Counter Skills",
       "Rupture"
     ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Sinclair"
   },
   {
@@ -3712,6 +4778,14 @@
       "Guard Skills",
       "Rupture",
       "unique Status Effects"
+    ],
+    "traits": [
+      "E.G.O Gear",
+      "Technology Liberation Alliance"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Red_Sheet_Sinclair"
   },
@@ -3734,6 +4808,14 @@
       "Poise",
       "Sinking"
     ],
+    "traits": [
+      "Los Mariachis",
+      "Syndicate",
+      "The Backstreets"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Los_Mariachis_Jefe_Sinclair"
   },
   {
@@ -3753,6 +4835,14 @@
       "Guard Skills",
       "Tremor",
       "Tremor Burst"
+    ],
+    "traits": [
+      "Fixer",
+      "Molar Office"
+    ],
+    "attack_types": [
+      "Pierce",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Boatworks_Fixer_Sinclair"
   },
@@ -3778,6 +4868,13 @@
       "Protection",
       "Tremor",
       "Tremor Burst"
+    ],
+    "traits": [
+      "Fixer",
+      "Zwei Association"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_6_Sinclair"
   },
@@ -3805,6 +4902,14 @@
       "Tremor Burst",
       "Unbreakable Coin"
     ],
+    "traits": [
+      "Fixer",
+      "Zwei Association"
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._West_Section_3_Sinclair"
   },
   {
@@ -3829,6 +4934,14 @@
       "Paralyze",
       "Poise"
     ],
+    "traits": [
+      "Blade Lineage",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Pierce",
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Sinclair"
   },
   {
@@ -3852,6 +4965,13 @@
       "Pierce DMG Up",
       "Poise",
       "Single Combat"
+    ],
+    "traits": [
+      "Cinq Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_4_Director_Sinclair"
   },
@@ -3878,6 +4998,14 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "Dawn Office",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Fixer_Sinclair"
   },
   {
@@ -3902,6 +5030,13 @@
       "Retreat",
       "Rupture",
       "SP Loss"
+    ],
+    "traits": [
+      "Devyat' Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devyat'_Assoc._North_Section_3_Sinclair"
   },
@@ -3933,6 +5068,14 @@
       "Unbreakable Coin",
       "Unfocused Volley",
       "Wrath DMG Up"
+    ],
+    "traits": [
+      "H Corp.",
+      "Heishou Pack - You Branch",
+      "Heishou Pack"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_You_Branch_Sinclair"
   },
@@ -3966,6 +5109,12 @@
       "Unfocused Volley",
       "unique Status Effects"
     ],
+    "traits": [
+      "The House of Spiders"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Pinky_Apprentice_Sinclair"
   },
   {
@@ -3991,6 +5140,13 @@
       "SP Healing",
       "Vendetta Mark",
       "Vengeance Mark"
+    ],
+    "traits": [
+      "The Fingers",
+      "The Middle"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Brother_Sinclair"
   },
@@ -4020,6 +5176,13 @@
       "SP Loss",
       "Unique Stage Interactions"
     ],
+    "traits": [
+      "N Corp. Fanatic",
+      "N Corp."
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_One_Who_Shall_Grip_Sinclair"
   },
   {
@@ -4048,6 +5211,15 @@
       "Unbreakable Coin",
       "Unique Ammo"
     ],
+    "traits": [
+      "Soldato",
+      "The Fingers",
+      "The Thumb"
+    ],
+    "attack_types": [
+      "Pierce",
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Thumb_East_Soldato_II_Sinclair"
   },
   {
@@ -4066,6 +5238,13 @@
     "status_effects": [
       "Evade Skills",
       "Rupture"
+    ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Pierce",
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Outis"
   },
@@ -4086,6 +5265,14 @@
       "Evade Skills",
       "Poise",
       "Slash DMG Up"
+    ],
+    "traits": [
+      "Blade Lineage",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Outis"
   },
@@ -4109,6 +5296,13 @@
       "Evade Skills",
       "Haste",
       "Poise"
+    ],
+    "traits": [
+      "Cinq Association",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_4_Outis"
   },
@@ -4134,6 +5328,13 @@
       "Haste",
       "Protection",
       "Sinking"
+    ],
+    "traits": [
+      "G Corp."
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/G_Corp._Head_Manager_Outis"
   },
@@ -4167,6 +5368,15 @@
       "Sinking",
       "Tremor"
     ],
+    "traits": [
+      "School of Pointillism",
+      "The Fingers",
+      "The Ring",
+      "The Ring Student"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Pointillist_Student_Outis"
   },
   {
@@ -4190,6 +5400,14 @@
       "Haste",
       "Rupture",
       "Strider -Mao-"
+    ],
+    "traits": [
+      "H Corp.",
+      "Heishou Pack - Mao Branch",
+      "Heishou Pack"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Outis"
   },
@@ -4221,6 +5439,13 @@
       "Unique Ammo",
       "Unique Sinking"
     ],
+    "traits": [
+      "LCA"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCA_Udjat_Vanguard_Team_3_Leader_Outis"
   },
   {
@@ -4246,6 +5471,14 @@
       "Poise",
       "SP Loss"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "Lobotomy Corp. Headquarters"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Magic_Bullet_Outis"
   },
   {
@@ -4267,6 +5500,14 @@
       "Offense Level Up",
       "Tremor",
       "Tremor Burst"
+    ],
+    "traits": [
+      "Fixer",
+      "Molar Office"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Office_Fixer_Outis"
   },
@@ -4292,6 +5533,14 @@
       "Paralyze",
       "Rupture",
       "Weakness Analyzed"
+    ],
+    "traits": [
+      "Fixer",
+      "Seven Association"
+    ],
+    "attack_types": [
+      "Blunt",
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Director_Outis"
   },
@@ -4322,6 +5571,12 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
+    "traits": [
+      "T Corp."
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_3_VDCU_Staff_Outis"
   },
   {
@@ -4345,6 +5600,14 @@
       "Increased Atk Weight",
       "unique Sanity mechanics",
       "unique Status Effects"
+    ],
+    "traits": [
+      "Bloodfiend",
+      "La Manchaland",
+      "Third Kindred"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Barber_of_La_Manchaland_Outis"
   },
@@ -4384,6 +5647,14 @@
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
+    "traits": [
+      "The Fingers",
+      "The House of Spiders",
+      "The Middle"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Middle_Nursefather_Outis"
   },
   {
@@ -4410,6 +5681,13 @@
       "Load",
       "Rupture"
     ],
+    "traits": [
+      "W Corp."
+    ],
+    "attack_types": [
+      "Blunt",
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Captain_Outis"
   },
   {
@@ -4433,6 +5711,13 @@
       "Sinking",
       "unique Sanity mechanics"
     ],
+    "traits": [
+      "Fixer",
+      "Wuthering Heights"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wuthering_Heights_Chief_Butler_Outis"
   },
   {
@@ -4453,6 +5738,13 @@
       "HP Healing",
       "Pierce Fragility",
       "Rupture"
+    ],
+    "traits": [
+      "LCB"
+    ],
+    "attack_types": [
+      "Pierce",
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Gregor"
   },
@@ -4476,6 +5768,14 @@
       "Offense Level Down",
       "Plus Coin Drop"
     ],
+    "traits": [
+      "Kurokumo Clan",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Captain_Gregor"
   },
   {
@@ -4495,6 +5795,13 @@
       "Attack Power Up",
       "Burn",
       "Guard Skills"
+    ],
+    "traits": [
+      "Fixer",
+      "Liu Association"
+    ],
+    "attack_types": [
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_6_Gregor"
   },
@@ -4517,6 +5824,15 @@
       "Guard Skills",
       "HP Healing",
       "Paralyze"
+    ],
+    "traits": [
+      "R.B.",
+      "Syndicate",
+      "The Backstreets"
+    ],
+    "attack_types": [
+      "Slash",
+      "Blunt"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R.B._Sous-chef_Gregor"
   },
@@ -4541,6 +5857,14 @@
       "Rupture",
       "Tremor",
       "Tremor Burst"
+    ],
+    "traits": [
+      "Fixer",
+      "Rosespanner Workshop"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Fixer_Gregor"
   },
@@ -4575,6 +5899,13 @@
       "Unbreakable Coin",
       "unique Status Effects"
     ],
+    "traits": [
+      "Dawn Office",
+      "Fixer"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Rep_Gregor"
   },
   {
@@ -4600,6 +5931,12 @@
       "SP Loss",
       "Sinking"
     ],
+    "traits": [
+      "Edgar Family"
+    ],
+    "attack_types": [
+      "Slash"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Heir_Gregor"
   },
   {
@@ -4622,6 +5959,12 @@
       "Counter Skills",
       "unique Status Effects"
     ],
+    "traits": [
+      "Fixer"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Firefist_Office_Survivor_Gregor"
   },
   {
@@ -4641,6 +5984,13 @@
       "Guard Skills",
       "HP Healing",
       "Rupture"
+    ],
+    "traits": [
+      "G Corp."
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/G_Corp._Manager_Corporal_Gregor"
   },
@@ -4668,6 +6018,15 @@
       "Rupture",
       "Serpent Arm",
       "Unbreakable Coin"
+    ],
+    "traits": [
+      "H Corp.",
+      "Heishou Pack - Si Branch",
+      "Heishou Pack"
+    ],
+    "attack_types": [
+      "Slash",
+      "Pierce"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Si_Branch_Gregor"
   },
@@ -4697,6 +6056,13 @@
       "Rupture",
       "Unbreakable Coin",
       "unique Status Effects"
+    ],
+    "traits": [
+      "E.G.O Gear",
+      "LCE"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::AEDD_Gregor"
   },
@@ -4730,6 +6096,13 @@
       "Sinking",
       "Unbreakable Coin"
     ],
+    "traits": [
+      "E.G.O Gear",
+      "LCE"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Lamp_Gregor"
   },
   {
@@ -4762,6 +6135,13 @@
       "Unclashable Skills",
       "unique Status Effects"
     ],
+    "traits": [
+      "Night Awls",
+      "Syndicate"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Night_Awls_Capitano_Gregor"
   },
   {
@@ -4789,6 +6169,14 @@
       "SP Healing",
       "unique Status Effects"
     ],
+    "traits": [
+      "Bloodfiend",
+      "La Manchaland",
+      "Third Kindred"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Priest_of_La_Manchaland_Gregor"
   },
   {
@@ -4813,6 +6201,13 @@
       "Poise",
       "unique Status Effects"
     ],
+    "traits": [
+      "Syndicate",
+      "Twinhook Pirates"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Twinhook_Pirates_First_Mate_Gregor"
   },
   {
@@ -4832,6 +6227,13 @@
       "Defense Power Up",
       "Guard Skills",
       "Haste"
+    ],
+    "traits": [
+      "Fixer",
+      "Zwei Association"
+    ],
+    "attack_types": [
+      "Slash"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_4_Gregor"
   }

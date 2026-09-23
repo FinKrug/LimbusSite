@@ -98,7 +98,16 @@ class BuildTests(unittest.TestCase):
         event_only = build.parse_identity("Some Sinnerling Yi Sang", ["Yi Sang Identities"])
         data, warnings = build.export_for_app(
             gifts, packs, fusions, [ident, event_only],
-            pack_pages={"The Outcast": "The Outcast Theme Pack"},
+            pack_info={
+                "The Outcast": {"title": "The Outcast Theme Pack", "group": "Canto Themes",
+                                "floors": {"normal": [1, 1], "hard": [1, 1]},
+                                "gift_pool": ["hellterfly-s-dream", "coin"], "unique": []},
+                "Automated Factory": {"title": None, "group": None, "floors": None, "gift_pool": [], "unique": []},
+                "Season of the Flame": {"title": "Season of the Flame Theme Pack", "group": "Status Keyword Themes",
+                                        "floors": None, "gift_pool": ["hellterfly-s-dream"], "unique": []},
+                "Empty Pack": {"title": "Empty Pack Theme Pack", "group": None, "floors": None,
+                               "gift_pool": ["coin"], "unique": []},
+            },
         )
         ids = {g["id"] for g in data["gifts"]}
         self.assertIn("hellterfly-s-dream", ids)
@@ -116,6 +125,15 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(packs_by_name["The Outcast"]["wiki_url"],
                          "https://limbuscompany.wiki.gg/wiki/The_Outcast_Theme_Pack")
         self.assertIsNone(packs_by_name["Automated Factory"]["wiki_url"])
+        outcast = packs_by_name["The Outcast"]
+        self.assertEqual(outcast["group"], "Canto Themes")
+        self.assertEqual(outcast["floors"], {"normal": [1, 1], "hard": [1, 1]})
+        # pool keeps only obtainable gifts and always includes the exclusives
+        self.assertEqual(outcast["gift_pool"], ["hellterfly-s-dream", "ebony-brooch-md"])
+        # a pack with no exclusive gifts comes from the floor-theme list
+        flame = packs_by_name["Season of the Flame"]
+        self.assertEqual((flame["gifts"], flame["gift_pool"]), ([], ["hellterfly-s-dream"]))
+        self.assertNotIn("Empty Pack", packs_by_name)  # nothing obtainable in its pool
         self.assertNotIn("Bearers of Weight", packs_by_name)  # no obtainable gifts in fixture
         brooch = next(g for g in data["gifts"] if g["id"] == "ebony-brooch-md")
         self.assertEqual(brooch["theme_packs"], [packs_by_name["The Outcast"]["id"]])
@@ -136,6 +154,23 @@ class BuildTests(unittest.TestCase):
     def test_gift_list_url_escapes_fragment(self):
         self.assertTrue(build.gift_list_url("T-1 Perpetual, Motion & Co").endswith(
             "#:~:text=T%2D1%20Perpetual%2C%20Motion%20%26%20Co"))
+
+    def test_identity_attack_types(self):
+        self.assertEqual(build.identity_attack_types(
+            "{{ID\n|slash_res = Fatal\n|skill1type = Slash\n|skill2type=Blunt|skill3type = Slash\n}}"),
+            {"Slash": 2, "Blunt": 1})
+        self.assertEqual(build.identity_attack_types("[[File:Pierce.png|25px]] {{Blunt}}"), {"Pierce": 1, "Blunt": 1})
+        self.assertEqual(build.identity_attack_types(""), {})
+
+    def test_gift_effects_in_export(self):
+        gifts, packs, fusions, _ = load()
+        data, _ = build.export_for_app(gifts, packs, fusions, [])
+        h = next(g for g in data["gifts"] if g["id"] == "hellterfly-s-dream")
+        self.assertIn("Burn", h["needs"])
+        # "When applying Burn ..." -> needs a Burn team; "When activating Wrath Resonance ..." -> Wrath
+        self.assertEqual(h["applies"], [{"status": "Burn", "when": "keyword:Burn"}, {"status": "Burn", "when": "sin:Wrath"}])
+        self.assertIn("wrath", h["affinities"])
+        self.assertFalse(h["team_gate"])
 
     def test_warnings_for_missing(self):
         *_, warnings = load()
