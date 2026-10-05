@@ -11,6 +11,7 @@ import urllib.parse
 from typing import Any
 
 from . import effects, wikitext
+from .removed import REMOVED_GIFTS, REMOVED_PACKS
 
 TIERS = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "EX": 6}
 SINS = ["wrath", "lust", "sloth", "gluttony", "gloom", "pride", "envy"]
@@ -421,6 +422,34 @@ def pack_page_candidates(name: str) -> list[str]:
     return [f"{name} Theme Pack", name]
 
 
+# Fusion recipes the gift list module doesn't have. Lunar Memory is the only
+# recipe with more than 3 ingredients, so it can only be fused in a Super Shop
+# (5 slots): the three Memories plus any 2 of the 7 Sin Fragments.
+# Source: wiki "E.G.O Gift Fusion Recipes" > Super Shop Recipes (2026-09-23).
+SIN_FRAGMENTS = [
+    "fragment-of-hellfire", "fragment-of-allurement", "fragment-of-inertia", "fragment-of-desire",
+    "fragment-of-decay", "fragment-of-conceit", "fragment-of-friction",
+]
+SPECIAL_FUSIONS = [
+    {
+        "result": "lunar-memory",
+        "ingredients": ["sundered-memory", "punctured-memory", "crushed-memory"],
+        "any_of": {"count": 2, "from": SIN_FRAGMENTS},
+        "super_shop": True,
+    },
+]
+
+
+def gift_icon_file(image: str) -> str:
+    """The wiki file name of a gift's icon: "<imgname> Gift.png", without a " (MD)" suffix.
+
+    e.g. "Ebony Brooch (MD)" -> "Ebony Brooch Gift.png". Checked against the wiki
+    (2026-09-23): all Mirror Dungeon gifts resolve; two are file redirects
+    (curly -> straight apostrophe), which the web app's fallback URL follows.
+    """
+    return re.sub(r"\s*\(MD\)$", "", image.strip()) + " Gift.png"
+
+
 def export_for_app(
     gifts: list[dict],
     packs: list[dict],
@@ -441,7 +470,10 @@ def export_for_app(
     None, pack pages weren't fetched and packs only list their exclusives.
     """
     warnings: list[str] = []
-    keep = {g["id"] for g in gifts if include_unobtainable or g["mirror_dungeon"]}
+    keep = {
+        g["id"] for g in gifts
+        if include_unobtainable or (g["mirror_dungeon"] and wikitext.to_plain(g["name"]).strip() not in REMOVED_GIFTS)
+    }
 
     # Theme pack ids: unique per (name, pool).
     pack_id: dict[tuple[str, str], str] = {}
@@ -482,6 +514,8 @@ def export_for_app(
             **gift_effects(g),
             "effect": g["levels"][0]["desc"] if g["levels"] else "",
             "max_level": g["max_level"],
+            # Effect text at + and ++ (enhanced in shops), when the wiki lists them.
+            "upgrades": [l["desc"] for l in g["levels"][1:]],
             "pools": [p for p in g["pools"] if p in MD_POOLS] or g["pools"],
             "theme_packs": [pid for n in g["theme_packs"] for pid in pack_by_name.get(n, [])],
             "events": [
@@ -489,7 +523,11 @@ def export_for_app(
                 for e in g["events"]
             ],
             "fusion_recipe": ingredients,
+            # Other plain-text sources on the gift list (not a theme pack or event page).
+            "other_sources": g.get("other_sources", []),
             "wiki_url": gift_list_url(g["name"]),
+            # Icon file on the wiki: "<image> Gift.png" (see gift_icon_file).
+            "icon": gift_icon_file(g.get("image") or g["key"]),
         }
         if include_unobtainable:
             out["mirror_dungeon"] = g["mirror_dungeon"]
@@ -518,6 +556,8 @@ def export_for_app(
         }
 
     for p in packs:
+        if p["name"] in REMOVED_PACKS and not include_unobtainable:
+            continue
         members = [gid for gid in p["gifts"] if gid in keep]
         if not members and not include_unobtainable:
             continue
@@ -531,7 +571,7 @@ def export_for_app(
 
     # Packs with no exclusive gifts only show up on the wiki's list of floor themes.
     for key, (name, info) in sorted(info_by_fold.items()):
-        if key in used_info:
+        if key in used_info or (name in REMOVED_PACKS and not include_unobtainable):
             continue
         pool = "extreme" if "EXTREME" in (info.get("group") or "").upper() else "themed"
         rec = pack_record(slugify(name), name, pool, [g for g in info.get("unique", []) if g in keep], info)
@@ -547,6 +587,12 @@ def export_for_app(
         for f in fusions
         if f["result"] in keep and all(i in keep for i in f["ingredients"]) and not f["unresolved"]
     ]
+    for f in SPECIAL_FUSIONS:
+        ids = [f["result"], *f["ingredients"], *f["any_of"]["from"]]
+        if all(i in keep for i in ids) and not any(o["result"] == f["result"] for o in out_fusions):
+            out_fusions.append(f)
+        elif f["result"] in keep:
+            warnings.append(f"special fusion for {f['result']!r}: some gifts are missing, skipped")
 
     out_ids = [
         {
@@ -562,6 +608,10 @@ def export_for_app(
             # Skills per attack type (all skills on the page, defense included);
             # for gifts like "If this unit has 2+ Pierce Attack Skills".
             "attack_counts": i.get("attack_counts", {}),
+            # Lines from skills/passives about lineup position (see order.py).
+            "order_notes": i.get("order_notes", []),
+            # Skills 1-3 with sin, power and copies in the deck (see skills.py).
+            "skills": i.get("skills", []),
             "wiki_url": wiki_url(i["name"]),
         }
         for i in identities

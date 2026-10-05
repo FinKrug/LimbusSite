@@ -1,0 +1,190 @@
+# Great Limbus Library identity tier list (https://gll-fun.com/limbus/en/tierlist/identities/)
+# Copied 2026-09-23. Rated at max uptie, general strength; the site says Mirror Dungeon is NOT a criterion.
+# Format: tier|identity|sinner
+SSS|The House of Spiders: The Thumb Nursefather|Rodion
+SSS|The House of Spiders: The Middle Nursefather|Outis
+SSS|Blade of the House of Spiders|Ryōshū
+SSS|The House of Spiders: The Index Nursefather|Yi Sang
+SSS|The Lord of Hongyuan|Hong Lu
+SSS|Lobotomy E.G.O:: The Sword Sharpened with Tears|Rodion
+SSS|Heishou Pack - Mao Branch Adept|Faust
+SS|Dawn Office Fixer|Faust
+SS|Dawn Office Rep|Gregor
+SS|The Middle Big Brother|Heathcliff
+SS|The House of Spiders: The Ring Apprentice|Faust
+SS|The House of Spiders: The Ring Nursefather|Hong Lu
+SS|Lobotomy E.G.O::Faint Aroma & Solitude|Ryōshū
+SS|Jeong's Office Rep|Ishmael
+SS|The Thumb East Capo IIII|Meursault
+SS|Kurokumo Clan Captain|Ishmael
+SS|Kurokumo Clan Wakashu|Heathcliff
+SS|Lobotomy E.G.O::Solemn Lament|Yi Sang
+SS|Dawn Office Fixer|Sinclair
+S|The House of Spiders: The Thumb Apprentice|Heathcliff
+S|LCD OSIR Team|Ishmael
+S|The Ring Fauvist Docent|Rodion
+S|Lobotomy E.G.O::Lamp|Gregor
+S|The House of Spiders: The Middle Apprentice|Ishmael
+S|The Index Proxy - Effloresced E.G.O::Procuration|Don Quixote
+S|LCA Udjat Vanguard Team 3 Leader|Outis
+S|Drifting Blade of Hongyuan|Ryōshū
+S|Heishou Pack - You Branch Adept|Heathcliff
+S|The Middle Little Brother|Sinclair
+S|Heishou Pack - Mao Branch|Ryōshū
+S|Heishou Pack - Mao Branch|Outis
+S|LCE E.G.O::Ardor Blossom Star|Faust
+S|The Manager of La Manchaland|Don Quixote
+S|Wild Hunt|Heathcliff
+S|Blade Lineage Mentor|Meursault
+S|Effloresced E.G.O::Spicebush|Yi Sang
+A|Haute Couture::Boutique du Rouge|Ishmael
+A|S Corp. Ch'unokkun|Hong Lu
+A|The Ring Fauvist Student|Meursault
+A|Lobotomy E.G.O:: Hornet【Alteration】|Meursault
+A|The House of Spiders: The Pinky Apprentice|Sinclair
+A|Heishou Pack - Wei Branch|Don Quixote
+A|Night Awl Capitano|Gregor
+A|The Prince of La Manchaland|Meursault
+A|N Corp. E.G.O:: Contempt, Awe|Ryōshū
+A|Heishou Pack - Wu Branch Adept|Yi Sang
+A|Heishou Pack - You Branch|Sinclair
+A|T Corp. Class 3 VDCU Staff|Outis
+A|Lobotomy E.G.O::In the Name of Love and Hate|Don Quixote
+A|Heishou Pack - Si Branch|Gregor
+A|Heishou Pack - Si Branch|Rodion
+A|Full-Stop Office Fixer|Heathcliff
+A|Full-Stop Office Rep|Hong Lu
+A|T Corp. Class 3 Collection Staff|Don Quixote
+A|The Ring Pointillist Student|Yi Sang
+A|Edgar Family Heir|Gregor
+A|Wuthering Heights Chief Butler|Outis
+A|Lobotomy E.G.O::Magic Bullet|Outis
+A|The Middle Little Sister|Don Quixote
+A|W Corp. L3 Cleanup Agent|Yi Sang
+A|Molar Boatworks Fixer|Ishmael
+A|LCE E.G.O::Lantern|Yi Sang
+A|T Corp. Class 2 Collection Staff|Rodion
+A|Wuthering Heights Butler|Faust
+A|LCCB Assistant Manager|Ishmael
+B|Haute Couture::Le Noir Footwear Hall|Ryōshū
+B|Cinq Assoc. East Section 3|Hong Lu
+B|LCE E.G.O::Dimension Shredder|Yi Sang
+B|LCE E.G.O::AEDD|Gregor
+B|The Index Proselyte:【Paper Slip】|Faust
+B|N Corp. E.G.O::Fell Bullet|Yi Sang
+B|The Thumb East Soldato II|Sinclair
+B|Family Hierarch Candidate|Ishmael
+B|R Corp. 4th Pack Reindeer|Hong Lu
+B|Cinq East Section 3|Don Quixote
+B|Firefist Office Survivor|Gregor
+B|Liu Assoc. South Section 3|Yi Sang
+B|Devyat' Assoc. North Section 3|Sinclair
+B|The Princess of La Manchaland|Rodion
+B|The Barber of La Manchaland|Outis
+B|Cinq Assoc. West Section 3|Meursault
+B|Zwei Assoc. West Section 3|Ishmael
+B|Devyat' Assoc. North Section 3|Rodion
+B|MultiCrack Office Rep|Faust
+B|District 20 Yurodivy|Hong Lu
+B|Liu Assoc. South Section 4 Director|Rodion
+B|Blade Lineage Salsu|Faust
+B|Dieci Assoc. South Section 4|Hong Lu
+B|Molar Office Fixer|Outis
+B|Dieci Assoc. South Section 4|Rodion
+B|Seven Assoc. South Section 4|Faust
+B|R Corp. 4th Pack Rabbit|Heathcliff
+B|Blade Lineage Salsu|Sinclair
+B|Blade Lineage Salsu|Yi Sang
+B|Lobotomy E.G.O::Lantern|Don Quixote
+B|The Middle Little Brother|Meursault
+B|Kurokumo Clan Wakashu|Hong Lu
+C|R Corp. 4th Pack Reindeer|Rodion
+C|W Corp. L4 Cleanup Agent - CCA|Heathcliff
+C|Shi East Section 3|Faust
+C|The Priest of La Manchaland|Gregor
+C|Lobotomy E.G.O:: Red Eyes & Penitence|Ryōshū
+C|W Corp. L3 Cleanup Captain|Outis
+C|Dieci Assoc. South Section 4 Director|Meursault
+C|Edgar Family Chief Butler|Ryōshū
+C|Öufi South Section 3|Heathcliff
+C|The Pequod Captain|Ishmael
+C|Cinq Assoc.South Section 4 Director|Sinclair
+C|The Pequod Harpooneer|Heathcliff
+C|Twinhook Pirates First Mate|Gregor
+C|Lobotomy E.G.O::Regret|Faust
+C|W Corp. L3 Cleanup Agent|Ryōshū
+C|Zwei Assoc. South Section 4|Gregor
+C|R Corp. 4th Pack Rhino|Meursault
+C|Liu Assoc. South Section 4|Ishmael
+C|K Corp. Class 3 Excision Staff|Hong Lu
+C|Rosespanner Workshop Rep|Rodion
+C|The One Who Shall Grip|Sinclair
+C|R.B. Chef de Cuisine|Ryōshū
+C|The One Who Grips|Faust
+C|Tingtang Gang Gangleader|Hong Lu
+C|Kurokumo Clan Wakashu|Ryōshū
+C|R Corp. 4th Pack Reindeer|Ishmael
+C|W Corp. L3 Cleanup Agent|Don Quixote
+C|Fanghunt Office Fixer|Hong Lu
+C|Zwei Assoc. West Section 3|Sinclair
+C|MultiCrack Office Fixer|Heathcliff
+C|District 20 Yurodivy|Ryōshū
+C|The Ring Pointillist Student|Outis
+C|Liu Assoc. South Section 4|Ryōshū
+C|Blade Lineage Salsu|Don Quixote
+C|Dieci Assoc. South Section 4|Yi Sang
+C|The Pequod First Mate|Yi Sang
+C|Hook Office Fixer|Hong Lu
+C|Molar Office Fixer|Yi Sang
+C|Seven Assoc. South Section 4|Heathcliff
+C|Blade Lineage Salsu|Outis
+C|Seven Assoc. South Section 6|Ryōshū
+D|Cinq Assoc. South Section 5 Director|Don Quixote
+D|Lobotomy E.G.O::Sunshower|Heathcliff
+D|Seven Assoc. South Section 6 Director|Outis
+D|N Corp. Großhammer|Meursault
+D|Kurokumo Clan Wakashu|Rodion
+D|W Corp. L2 Cleanup Agent|Meursault
+D|G Corp. Manager Corporal|Gregor
+D|Edgar Family Butler|Ishmael
+D|Dead Rabbits Boss|Meursault
+D|Kurokumo Clan Captain|Gregor
+D|Cinq Assoc.South Section 4|Outis
+D|LCCB Assistant Manager|Ryōshū
+D|W Corp. L2 Cleanup Agent|Hong Lu
+D|Zwei Assoc. South Section 4|Faust
+D|Molar Boatworks Fixer|Sinclair
+D|Zwei Assoc. South Section 5|Rodion
+D|Lobotomy E.G.O::Red Sheet|Sinclair
+D|Lobotomy E.G.O::Sloshing|Ishmael
+D|Rosespanner Workshop Fixer|Gregor
+D|Rosespanner Workshop Fixer|Meursault
+D|N Corp. Mittelhammer|Don Quixote
+D|R.B. Sous-chef|Gregor
+D|Liu Assoc. South Section 5|Hong Lu
+D|N Corp. Kleinhammer|Heathcliff
+D|N Corp. Mittelhammer|Rodion
+D|Shi Assoc. South Section 5|Ishmael
+D|Liu Assoc. South Section 6|Meursault
+D|Shi Assoc. South Section 5|Heathcliff
+D|Lobotomy Corp. Remnant|Faust
+D|G Corp. Head Manager|Outis
+D|Seven Assoc. South Section 6|Yi Sang
+D|W Corp. L2 Cleanup Agent|Faust
+D|Shi Assoc. South Section 5 Director|Don Quixote
+D|Liu Assoc. South Section 6|Gregor
+D|LCCB Assistant Manager|Rodion
+D|Zwei Assoc. South Section 6|Sinclair
+D|Los Mariachis Jefe|Sinclair
+D|LCB Sinner|Hong Lu
+D|LCB Sinner|Heathcliff
+D|LCB Sinner|Ryōshū
+D|LCB Sinner|Don Quixote
+D|LCB Sinner|Ishmael
+D|LCB Sinner|Outis
+D|LCB Sinner|Yi Sang
+D|LCB Sinner|Meursault
+D|LCB Sinner|Rodion
+D|LCB Sinner|Faust
+D|LCB Sinner|Sinclair
+D|LCB Sinner|Gregor

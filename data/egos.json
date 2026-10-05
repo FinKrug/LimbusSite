@@ -1,0 +1,4006 @@
+[
+  {
+    "id": "bygone-days-yi-sang",
+    "name": "Bygone Days",
+    "sinner": "Yi Sang",
+    "grade": "ZAYIN",
+    "sin": "gloom",
+    "cost": {
+      "sloth": 3,
+      "gloom": 3
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 15,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Sinking",
+        "Bind"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Sinking"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Bygone_Days_Yi_Sang"
+  },
+  {
+    "id": "crow-s-eye-view-yi-sang",
+    "name": "Crow's Eye View",
+    "sinner": "Yi Sang",
+    "grade": "ZAYIN",
+    "sin": "sloth",
+    "cost": {
+      "wrath": 1,
+      "sloth": 3
+    },
+    "sanity": 10,
+    "base": true,
+    "skill": {
+      "type": "Pierce",
+      "base": 18,
+      "coin_power": 6,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Attack Power Down",
+        "Haste",
+        "Bind"
+      ]
+    },
+    "statuses": [
+      "Attack Power Down",
+      "Bind",
+      "Haste"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Crow's_Eye_View_Yi_Sang"
+  },
+  {
+    "id": "4th-match-flame-yi-sang",
+    "name": "4th Match Flame",
+    "sinner": "Yi Sang",
+    "grade": "TETH",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 5,
+      "sloth": 1,
+      "gluttony": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 14,
+      "coin_power": 12,
+      "coins": 1,
+      "weight": 5,
+      "statuses": [
+        "Burn"
+      ]
+    },
+    "statuses": [
+      "Burn",
+      "Threadspin Tier V",
+      "Unbreakable Coin",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/4th_Match_Flame_Yi_Sang"
+  },
+  {
+    "id": "wishing-cairn-yi-sang",
+    "name": "Wishing Cairn",
+    "sinner": "Yi Sang",
+    "grade": "TETH",
+    "sin": "sloth",
+    "cost": {
+      "sloth": 4,
+      "gloom": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 22,
+      "coin_power": 4,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Sloth Fragility",
+        "Paralyze"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Blunt Protection",
+      "Paralyze",
+      "Sloth Fragility",
+      "Sloth Protection"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wishing_Cairn_Yi_Sang"
+  },
+  {
+    "id": "dimension-shredder-yi-sang",
+    "name": "Dimension Shredder",
+    "sinner": "Yi Sang",
+    "grade": "HE",
+    "sin": "pride",
+    "cost": {
+      "sloth": 3,
+      "gluttony": 3
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 20,
+      "coin_power": 18,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Charge",
+        "Dimensional Rift",
+        "Rupture"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Dimensional Rift",
+      "Rupture"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dimension_Shredder_Yi_Sang"
+  },
+  {
+    "id": "fell-bullet-yi-sang",
+    "name": "Fell Bullet",
+    "sinner": "Yi Sang",
+    "grade": "HE",
+    "sin": "pride",
+    "cost": {
+      "wrath": 2,
+      "pride": 6
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 18,
+      "coin_power": 6,
+      "coins": 2,
+      "weight": 7,
+      "statuses": [
+        "Torn Memory",
+        "Poise",
+        "Bleed"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Bleed",
+      "Poise",
+      "Torn Memory"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Fell_Bullet_Yi_Sang"
+  },
+  {
+    "id": "solemn-lament-yi-sang",
+    "name": "Solemn Lament",
+    "sinner": "Yi Sang",
+    "grade": "HE",
+    "sin": "gloom",
+    "cost": {
+      "sloth": 1,
+      "gloom": 4,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 6,
+      "coin_power": 3,
+      "coins": 5,
+      "weight": 3,
+      "statuses": [
+        "Unfocused Volley",
+        "Butterfly",
+        "Sinking",
+        "The Living & The Departed",
+        "Reload (Solemn Lament)",
+        "Unbreakable Coin",
+        "Gloom Fragility",
+        "Gloom Resist Down",
+        "Tremor",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Butterfly",
+      "Discard",
+      "Gloom Fragility",
+      "Gloom Resist Down",
+      "Reload",
+      "Reload (Solemn Lament)",
+      "SP Healing",
+      "Sinking",
+      "The Living & The Departed",
+      "Tremor",
+      "Tremor Burst",
+      "Unbreakable Coin",
+      "Unfocused Volley",
+      "Unique Ammo"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Solemn_Lament_Yi_Sang"
+  },
+  {
+    "id": "great-trichiliocosm-yi-sang",
+    "name": "Great Trichiliocosm 三千大世界",
+    "sinner": "Yi Sang",
+    "grade": "WAW",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 4,
+      "gloom": 2,
+      "pride": 2,
+      "envy": 4
+    },
+    "sanity": 30,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 4,
+      "coin_power": 3,
+      "coins": 4,
+      "weight": 7,
+      "statuses": [
+        "Burn",
+        "Sinking",
+        "Poise",
+        "Unbreakable Coin",
+        "Shattered World"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Blunt DMG Up",
+      "Burn",
+      "Pierce DMG Up",
+      "Poise",
+      "Shattered World",
+      "Sinking",
+      "Slash DMG Up",
+      "Unbreakable Coin",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Great_Trichiliocosm_%E4%B8%89%E5%8D%83%E5%A4%A7%E4%B8%96%E7%95%8C_Yi_Sang"
+  },
+  {
+    "id": "sunshower-yi-sang",
+    "name": "Sunshower",
+    "sinner": "Yi Sang",
+    "grade": "WAW",
+    "sin": "sloth",
+    "cost": {
+      "sloth": 4,
+      "gluttony": 2,
+      "gloom": 2,
+      "pride": 2
+    },
+    "sanity": 35,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 17,
+      "coin_power": 15,
+      "coins": 1,
+      "weight": 7,
+      "statuses": [
+        "Sloth Power Up",
+        "Sloth DMG Up",
+        "Protection"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Pierce Fragility",
+      "Protection",
+      "SP Healing",
+      "Sloth DMG Up",
+      "Sloth Fragility",
+      "Sloth Power Up"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Sunshower_Yi_Sang"
+  },
+  {
+    "id": "representation-emitter-faust",
+    "name": "Representation Emitter",
+    "sinner": "Faust",
+    "grade": "ZAYIN",
+    "sin": "pride",
+    "cost": {
+      "gluttony": 2,
+      "pride": 4
+    },
+    "sanity": 20,
+    "base": true,
+    "skill": {
+      "type": "Blunt",
+      "base": 19,
+      "coin_power": 4,
+      "coins": 1,
+      "weight": 3,
+      "statuses": []
+    },
+    "statuses": [
+      "SP Heal Efficiency",
+      "SP Healing"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Representation_Emitter_Faust"
+  },
+  {
+    "id": "9-2-faust",
+    "name": "9:2",
+    "sinner": "Faust",
+    "grade": "TETH",
+    "sin": "lust",
+    "cost": {
+      "lust": 1,
+      "gluttony": 3,
+      "pride": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 18,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Burn",
+        "Defense Level Down"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Burn",
+      "Defense Level Down",
+      "Threadspin Tier V"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/9:2_Faust"
+  },
+  {
+    "id": "hex-nail-faust",
+    "name": "Hex Nail",
+    "sinner": "Faust",
+    "grade": "TETH",
+    "sin": "envy",
+    "cost": {
+      "envy": 6
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 16,
+      "coin_power": 10,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Pierce Fragility",
+        "Envy Fragility",
+        "Curse",
+        "Nails"
+      ]
+    },
+    "statuses": [
+      "Curse",
+      "Envy Fragility",
+      "Nails",
+      "Pierce Fragility"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hex_Nail_Faust"
+  },
+  {
+    "id": "lasso-faust",
+    "name": "Lasso",
+    "sinner": "Faust",
+    "grade": "TETH",
+    "sin": "gluttony",
+    "cost": {
+      "lust": 1,
+      "gluttony": 3,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 4,
+      "coin_power": 3,
+      "coins": 3,
+      "weight": 1,
+      "statuses": [
+        "Rupture",
+        "Haste"
+      ]
+    },
+    "statuses": [
+      "Gluttony Power Up",
+      "Haste",
+      "Lasso",
+      "Rupture"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lasso_Faust"
+  },
+  {
+    "id": "ardor-blossom-star-faust",
+    "name": "Ardor Blossom Star",
+    "sinner": "Faust",
+    "grade": "HE",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 3,
+      "sloth": 2,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 10,
+      "coin_power": 5,
+      "coins": 2,
+      "weight": 3,
+      "statuses": [
+        "Burn",
+        "Wrath DMG Up",
+        "Embers"
+      ]
+    },
+    "statuses": [
+      "Blunt DMG Up",
+      "Burn",
+      "Embers",
+      "HP Healing",
+      "SP Healing",
+      "Wrath DMG Up",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Ardor_Blossom_Star_Faust"
+  },
+  {
+    "id": "command-meltdown-faust",
+    "name": "Command : Meltdown",
+    "sinner": "Faust",
+    "grade": "HE",
+    "sin": "gluttony",
+    "cost": {
+      "sloth": 1,
+      "gluttony": 5,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 17,
+      "coin_power": 13,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Burn",
+        "Rupture",
+        "Hardened Shell-Barrier"
+      ]
+    },
+    "statuses": [
+      "Burn",
+      "Damage Up",
+      "HP Healing",
+      "Hardened Shell-Barrier",
+      "Rupture",
+      "SP Healing",
+      "Unbreakable Coin",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Command_:_Meltdown_Faust"
+  },
+  {
+    "id": "fluid-sac-faust",
+    "name": "Fluid Sac",
+    "sinner": "Faust",
+    "grade": "HE",
+    "sin": "gloom",
+    "cost": {
+      "lust": 2,
+      "gloom": 4,
+      "envy": 3
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 16,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 5,
+      "statuses": []
+    },
+    "statuses": [
+      "Attack Power Down",
+      "HP Healing",
+      "Protection",
+      "SP Damage",
+      "SP Healing"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Fluid_Sac_Faust"
+  },
+  {
+    "id": "telepole-faust",
+    "name": "Telepole",
+    "sinner": "Faust",
+    "grade": "HE",
+    "sin": "envy",
+    "cost": {
+      "wrath": 1,
+      "lust": 3,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 22,
+      "coin_power": 6,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Paralyze",
+        "Charge",
+        "Envy Power Up",
+        "Haste"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Charge",
+      "Envy Power Up",
+      "Haste",
+      "Paralyze"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Telepole_Faust"
+  },
+  {
+    "id": "thoracalgia-faust",
+    "name": "Thoracalgia",
+    "sinner": "Faust",
+    "grade": "HE",
+    "sin": "pride",
+    "cost": {
+      "sloth": 1,
+      "gloom": 1,
+      "pride": 5
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 8,
+      "coin_power": 5,
+      "coins": 2,
+      "weight": 3,
+      "statuses": [
+        "Poise",
+        "Shallow Exhale"
+      ]
+    },
+    "statuses": [
+      "HP Healing",
+      "Poise",
+      "Pride DMG Up",
+      "Shallow Exhale",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Thoracalgia_Faust"
+  },
+  {
+    "id": "everlasting-faust",
+    "name": "Everlasting",
+    "sinner": "Faust",
+    "grade": "WAW",
+    "sin": "sloth",
+    "cost": {
+      "lust": 2,
+      "sloth": 4,
+      "gloom": 2,
+      "pride": 3
+    },
+    "sanity": 10,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 4,
+      "coin_power": 5,
+      "coins": 4,
+      "weight": 1,
+      "statuses": [
+        "Tremor",
+        "Amplitude Entanglement",
+        "Tremor - Everlasting",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Amplitude Entanglement",
+      "Haste",
+      "SP Loss",
+      "Tremor",
+      "Tremor - Everlasting",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Everlasting_Faust"
+  },
+  {
+    "id": "i-ll-go-fer-scissors-how-bout-you-don-quixote",
+    "name": "I'll Go fer Scissors. How 'Bout You?",
+    "sinner": "Don Quixote",
+    "grade": "ZAYIN",
+    "sin": "envy",
+    "cost": {
+      "envy": 5
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 12,
+      "coin_power": 12,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Unbreakable Coin",
+        "Power Down",
+        "Bleed"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "HP Healing",
+      "Needle",
+      "Offense Level Up",
+      "Power Down",
+      "SP Healing",
+      "Unbreakable Coin"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/I'll_Go_fer_Scissors._How_'Bout_You%3F_Don_Quixote"
+  },
+  {
+    "id": "la-sangre-de-sancho-don-quixote",
+    "name": "La Sangre de Sancho",
+    "sinner": "Don Quixote",
+    "grade": "ZAYIN",
+    "sin": "lust",
+    "cost": {
+      "lust": 2,
+      "pride": 2
+    },
+    "sanity": 10,
+    "base": true,
+    "skill": {
+      "type": "Pierce",
+      "base": 12,
+      "coin_power": 14,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Bleed"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "HP Healing"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/La_Sangre_de_Sancho_Don_Quixote"
+  },
+  {
+    "id": "electric-screaming-don-quixote",
+    "name": "Electric Screaming",
+    "sinner": "Don Quixote",
+    "grade": "TETH",
+    "sin": "envy",
+    "cost": {
+      "pride": 2,
+      "envy": 4
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 19,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 2,
+      "statuses": [
+        "Charge"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Charge"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Electric_Screaming_Don_Quixote"
+  },
+  {
+    "id": "lifetime-stew-don-quixote",
+    "name": "Lifetime Stew",
+    "sinner": "Don Quixote",
+    "grade": "TETH",
+    "sin": "lust",
+    "cost": {
+      "lust": 5
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 21,
+      "coin_power": 4,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Burn",
+        "Bleed",
+        "Lust Power Up"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Burn",
+      "Lust DMG Up",
+      "Lust Power Up",
+      "Threadspin Tier V",
+      "Unbreakable Coin"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lifetime_Stew_Don_Quixote"
+  },
+  {
+    "id": "wishing-cairn-don-quixote",
+    "name": "Wishing Cairn",
+    "sinner": "Don Quixote",
+    "grade": "TETH",
+    "sin": "sloth",
+    "cost": {
+      "wrath": 2,
+      "sloth": 2,
+      "pride": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 18,
+      "coin_power": 9,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Bleed",
+        "Tremor",
+        "Paralyze"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Paralyze",
+      "Poise",
+      "Tremor",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wishing_Cairn_Don_Quixote"
+  },
+  {
+    "id": "fluid-sac-don-quixote",
+    "name": "Fluid Sac",
+    "sinner": "Don Quixote",
+    "grade": "HE",
+    "sin": "gloom",
+    "cost": {
+      "lust": 1,
+      "gloom": 4,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 20,
+      "coin_power": 18,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Tremor Burst",
+        "Sinking"
+      ]
+    },
+    "statuses": [
+      "SP Damage",
+      "Sinking",
+      "Tremor",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Fluid_Sac_Don_Quixote"
+  },
+  {
+    "id": "red-sheet-don-quixote",
+    "name": "Red Sheet",
+    "sinner": "Don Quixote",
+    "grade": "HE",
+    "sin": "gluttony",
+    "cost": {
+      "lust": 1,
+      "gluttony": 5,
+      "gloom": 2,
+      "pride": 1
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 16,
+      "coin_power": 4,
+      "coins": 2,
+      "weight": 3,
+      "statuses": [
+        "Twisted Curse Talisman",
+        "Rupture"
+      ]
+    },
+    "statuses": [
+      "Defense Level Down",
+      "Rupture",
+      "Twisted Curse Talisman",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Red_Sheet_Don_Quixote"
+  },
+  {
+    "id": "telepole-don-quixote",
+    "name": "Telepole",
+    "sinner": "Don Quixote",
+    "grade": "HE",
+    "sin": "envy",
+    "cost": {
+      "wrath": 1,
+      "gloom": 2,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 18,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Charge"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Fragile",
+      "Rupture"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Telepole_Don_Quixote"
+  },
+  {
+    "id": "in-the-name-of-love-and-hate-don-quixote",
+    "name": "In the Name of Love and Hate",
+    "sinner": "Don Quixote",
+    "grade": "WAW",
+    "sin": "envy",
+    "cost": {
+      "wrath": 2,
+      "gloom": 2,
+      "pride": 2,
+      "envy": 6
+    },
+    "sanity": 30,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 16,
+      "coin_power": 5,
+      "coins": 2,
+      "weight": 5,
+      "statuses": [
+        "Magical Girl's Chant",
+        "Here Comes Magical Girl!",
+        "Charge",
+        "Magical Arcana",
+        "Unbreakable Coin",
+        "Mark of Villainy",
+        "Rupture"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Charge",
+      "Charge Potency",
+      "HP Healing",
+      "Here Comes Magical Girl!",
+      "Magical Arcana",
+      "Magical Girl's Chant",
+      "Mark of Villainy",
+      "Rupture",
+      "Sinking",
+      "Unbreakable Coin",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/In_the_Name_of_Love_and_Hate_Don_Quixote"
+  },
+  {
+    "id": "yearning-mircalla-don-quixote",
+    "name": "Yearning-Mircalla",
+    "sinner": "Don Quixote",
+    "grade": "WAW",
+    "sin": "lust",
+    "cost": {
+      "lust": 5,
+      "gluttony": 3,
+      "pride": 2,
+      "envy": 2
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 3,
+      "coin_power": 3,
+      "coins": 4,
+      "weight": 7,
+      "statuses": [
+        "Bleed",
+        "Bloodfeast Consumed",
+        "Bloodfeast",
+        "Unbreakable Coin",
+        "Bloodfeast Consumed (shared)",
+        "Polydipsic Rose"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Bleed",
+      "Bloodfeast",
+      "Bloodfeast Consumed",
+      "Bloodfeast Consumed (shared)",
+      "HP Healing",
+      "Polydipsic Rose",
+      "SP Healing",
+      "SP Loss",
+      "Unbreakable Coin",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Yearning-Mircalla_Don_Quixote"
+  },
+  {
+    "id": "forest-for-the-flames-ryoshu",
+    "name": "Forest for the Flames",
+    "sinner": "Ryōshū",
+    "grade": "ZAYIN",
+    "sin": "lust",
+    "cost": {
+      "wrath": 2,
+      "lust": 2
+    },
+    "sanity": 10,
+    "base": true,
+    "skill": {
+      "type": "Slash",
+      "base": 18,
+      "coin_power": 10,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Burn",
+        "Fragile"
+      ]
+    },
+    "statuses": [
+      "Burn",
+      "Fragile"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Forest_for_the_Flames_Ry%C5%8Dsh%C5%AB"
+  },
+  {
+    "id": "soda-ryoshu",
+    "name": "Soda",
+    "sinner": "Ryōshū",
+    "grade": "ZAYIN",
+    "sin": "gloom",
+    "cost": {
+      "gluttony": 2,
+      "pride": 2,
+      "envy": 2
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 15,
+      "coin_power": 10,
+      "coins": 1,
+      "weight": 2,
+      "statuses": [
+        "E.G.O Resource Amp",
+        "Tremor",
+        "Sinking"
+      ]
+    },
+    "statuses": [
+      "Defense Power Down",
+      "E.G.O Resource Amp",
+      "Haste",
+      "Offense Level Up",
+      "SP Healing",
+      "Sinking",
+      "Threadspin Tier V",
+      "Tremor"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Soda_Ry%C5%8Dsh%C5%AB"
+  },
+  {
+    "id": "blind-obsession-ryoshu",
+    "name": "Blind Obsession",
+    "sinner": "Ryōshū",
+    "grade": "TETH",
+    "sin": "pride",
+    "cost": {
+      "gloom": 2,
+      "pride": 2,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 18,
+      "coin_power": 6,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Poise",
+        "Charge"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Poise"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blind_Obsession_Ry%C5%8Dsh%C5%AB"
+  },
+  {
+    "id": "red-eyes-ryoshu",
+    "name": "Red Eyes",
+    "sinner": "Ryōshū",
+    "grade": "TETH",
+    "sin": "lust",
+    "cost": {
+      "lust": 2,
+      "gluttony": 2,
+      "envy": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 18,
+      "coin_power": 6,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Bind",
+        "Plus Coin Drop",
+        "Slash Fragility"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Plus Coin Drop",
+      "Slash Fragility"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Red_Eyes_Ry%C5%8Dsh%C5%AB"
+  },
+  {
+    "id": "4th-match-flame-ryoshu",
+    "name": "4th Match Flame",
+    "sinner": "Ryōshū",
+    "grade": "HE",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 4,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 21,
+      "coin_power": 16,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Burn",
+        "Attack Power Up"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Burn",
+      "SP Healing",
+      "Threadspin Tier V",
+      "Unbreakable Coin"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/4th_Match_Flame_Ry%C5%8Dsh%C5%AB"
+  },
+  {
+    "id": "red-eyes-open-ryoshu",
+    "name": "Red Eyes (Open)",
+    "sinner": "Ryōshū",
+    "grade": "HE",
+    "sin": "envy",
+    "cost": {
+      "wrath": 2,
+      "lust": 2,
+      "envy": 3
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 22,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Bind"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Bind",
+      "HP Healing"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Red_Eyes_(Open)_Ry%C5%8Dsh%C5%AB"
+  },
+  {
+    "id": "thoracalgia-ryoshu",
+    "name": "Thoracalgia",
+    "sinner": "Ryōshū",
+    "grade": "HE",
+    "sin": "pride",
+    "cost": {
+      "wrath": 1,
+      "lust": 1,
+      "pride": 5
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 8,
+      "coin_power": 5,
+      "coins": 2,
+      "weight": 3,
+      "statuses": [
+        "Poise",
+        "Deep Inhale"
+      ]
+    },
+    "statuses": [
+      "Deep Inhale",
+      "Poise",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Thoracalgia_Ry%C5%8Dsh%C5%AB"
+  },
+  {
+    "id": "contempt-awe-ryoshu",
+    "name": "Contempt, Awe",
+    "sinner": "Ryōshū",
+    "grade": "WAW",
+    "sin": "lust",
+    "cost": {
+      "wrath": 3,
+      "lust": 4,
+      "pride": 4,
+      "envy": 3
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 10,
+      "coin_power": 7,
+      "coins": 2,
+      "weight": 1,
+      "statuses": [
+        "Gaze of Contempt",
+        "Bleed"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Bleed",
+      "Gaze of Contempt",
+      "SP Loss"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Contempt,_Awe_Ry%C5%8Dsh%C5%AB"
+  },
+  {
+    "id": "great-trichiliocosm-ryoshu",
+    "name": "Great Trichiliocosm 三千大世界",
+    "sinner": "Ryōshū",
+    "grade": "WAW",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 4,
+      "lust": 4,
+      "pride": 4
+    },
+    "sanity": 10,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 6,
+      "coin_power": 5,
+      "coins": 3,
+      "weight": 7,
+      "statuses": [
+        "Poise",
+        "Entangled Life -羅生-",
+        "Unbreakable Coin",
+        "Burn",
+        "Bind",
+        "Bleed"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Bind",
+      "Bleed",
+      "Burn",
+      "Crit DMG Up",
+      "Entangled Life -羅生-",
+      "HP Healing",
+      "Poise",
+      "SP Loss",
+      "Unbreakable Coin"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Great_Trichiliocosm_%E4%B8%89%E5%8D%83%E5%A4%A7%E4%B8%96%E7%95%8C_Ry%C5%8Dsh%C5%AB"
+  },
+  {
+    "id": "chains-of-others-meursault",
+    "name": "Chains of Others",
+    "sinner": "Meursault",
+    "grade": "ZAYIN",
+    "sin": "pride",
+    "cost": {
+      "sloth": 1,
+      "gloom": 1,
+      "envy": 2
+    },
+    "sanity": 10,
+    "base": true,
+    "skill": {
+      "type": "Blunt",
+      "base": 19,
+      "coin_power": 3,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Bind",
+        "Attack Power Down",
+        "Protection"
+      ]
+    },
+    "statuses": [
+      "Attack Power Down",
+      "Bind",
+      "Protection"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Chains_of_Others_Meursault"
+  },
+  {
+    "id": "electric-screaming-meursault",
+    "name": "Electric Screaming",
+    "sinner": "Meursault",
+    "grade": "TETH",
+    "sin": "envy",
+    "cost": {
+      "wrath": 1,
+      "envy": 4
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 22,
+      "coin_power": 4,
+      "coins": 1,
+      "weight": 2,
+      "statuses": [
+        "Charge",
+        "Envy DMG Up",
+        "Rupture"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Defense Level Up",
+      "Envy DMG Up",
+      "Offense Level Up",
+      "Paralyze",
+      "Rupture"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Electric_Screaming_Meursault"
+  },
+  {
+    "id": "regret-meursault",
+    "name": "Regret",
+    "sinner": "Meursault",
+    "grade": "TETH",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 3,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 20,
+      "coin_power": 10,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Tremor",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Blunt Power Up",
+      "Tremor",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Regret_Meursault"
+  },
+  {
+    "id": "screwloose-wallop-meursault",
+    "name": "Screwloose Wallop",
+    "sinner": "Meursault",
+    "grade": "TETH",
+    "sin": "envy",
+    "cost": {
+      "sloth": 2,
+      "pride": 1,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 23,
+      "coin_power": 4,
+      "coins": 1,
+      "weight": 2,
+      "statuses": [
+        "Protection",
+        "Surgery",
+        "Paralyze"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Defense Power Up",
+      "Haste",
+      "Paralyze",
+      "Protection",
+      "Surgery",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Screwloose_Wallop_Meursault"
+  },
+  {
+    "id": "capote-meursault",
+    "name": "Capote",
+    "sinner": "Meursault",
+    "grade": "HE",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 2,
+      "lust": 1,
+      "sloth": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 20,
+      "coin_power": 25,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Haste",
+        "Wrath Power Up",
+        "Blunt Power Up",
+        "Burn",
+        "Tremor",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Blunt Power Up",
+      "Burn",
+      "Haste",
+      "Tremor",
+      "Tremor Burst",
+      "Wrath Power Up"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Capote_Meursault"
+  },
+  {
+    "id": "pursuance-meursault",
+    "name": "Pursuance",
+    "sinner": "Meursault",
+    "grade": "HE",
+    "sin": "sloth",
+    "cost": {
+      "sloth": 4,
+      "gloom": 1,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 26,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Protection",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Damage Up",
+      "Defense Power Up",
+      "Fragile",
+      "HP Healing",
+      "Protection",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Pursuance_Meursault"
+  },
+  {
+    "id": "shadow-vested-bladesinger-meursault",
+    "name": "Shadow-vested Bladesinger 着影揮刀",
+    "sinner": "Meursault",
+    "grade": "HE",
+    "sin": "pride",
+    "cost": {
+      "wrath": 1,
+      "pride": 4,
+      "envy": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 12,
+      "coin_power": 4,
+      "coins": 2,
+      "weight": 1,
+      "statuses": [
+        "Poise",
+        "Drink to the Fallen",
+        "Bleed"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Drink to the Fallen",
+      "Poise",
+      "Slash DMG Up",
+      "Slash Fragility",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shadow-vested_Bladesinger_%E7%9D%80%E5%BD%B1%E6%8F%AE%E5%88%80_Meursault"
+  },
+  {
+    "id": "crushbound-past-meursault",
+    "name": "Crushbound Past",
+    "sinner": "Meursault",
+    "grade": "WAW",
+    "sin": "sloth",
+    "cost": {
+      "wrath": 2,
+      "lust": 2,
+      "sloth": 6,
+      "envy": 1
+    },
+    "sanity": 10,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 4,
+      "coin_power": 4,
+      "coins": 4,
+      "weight": 6,
+      "statuses": [
+        "Tremor",
+        "Accumulated Past (E.G.O)",
+        "Amplitude Entanglement",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Accumulated Past (E.G.O)",
+      "Amplitude Entanglement",
+      "Damage Up",
+      "HP Healing",
+      "Protection",
+      "SP Healing",
+      "SP Loss",
+      "Tremor",
+      "Tremor Burst",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Crushbound_Past_Meursault"
+  },
+  {
+    "id": "yearning-mircalla-meursault",
+    "name": "Yearning-Mircalla",
+    "sinner": "Meursault",
+    "grade": "WAW",
+    "sin": "lust",
+    "cost": {
+      "lust": 4,
+      "pride": 3,
+      "envy": 4
+    },
+    "sanity": 10,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 4,
+      "weight": 1,
+      "statuses": [
+        "Bleed",
+        "Unbreakable Coin",
+        "Rose Wedge"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Bloodfeast",
+      "HP Healing",
+      "Rose Wedge",
+      "SP Loss",
+      "Unbreakable Coin",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Yearning-Mircalla_Meursault"
+  },
+  {
+    "id": "land-of-illusion-hong-lu",
+    "name": "Land of Illusion",
+    "sinner": "Hong Lu",
+    "grade": "ZAYIN",
+    "sin": "gloom",
+    "cost": {
+      "lust": 1,
+      "gloom": 5
+    },
+    "sanity": 15,
+    "base": true,
+    "skill": {
+      "type": "Blunt",
+      "base": 15,
+      "coin_power": 10,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Sinking",
+        "SP Loss Efficiency"
+      ]
+    },
+    "statuses": [
+      "SP Healing",
+      "SP Loss Efficiency",
+      "Sinking"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Land_of_Illusion_Hong_Lu"
+  },
+  {
+    "id": "repudiation-hong-lu",
+    "name": "Repudiation",
+    "sinner": "Hong Lu",
+    "grade": "ZAYIN",
+    "sin": "envy",
+    "cost": {
+      "lust": 2,
+      "pride": 1,
+      "envy": 2
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 10,
+      "coin_power": 6,
+      "coins": 2,
+      "weight": 3,
+      "statuses": [
+        "Charge",
+        "Charge Barrier",
+        "Photoelectricity"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Charge Barrier",
+      "Charge Potency",
+      "Photoelectricity",
+      "Unbreakable Coin"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Repudiation_Hong_Lu"
+  },
+  {
+    "id": "cavernous-wailing-hong-lu",
+    "name": "Cavernous Wailing",
+    "sinner": "Hong Lu",
+    "grade": "TETH",
+    "sin": "sloth",
+    "cost": {
+      "sloth": 3,
+      "gloom": 3,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 18,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Tremor",
+        "Amplitude Conversion",
+        "Tremor - Reverb",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Amplitude Conversion",
+      "Defense Level Down",
+      "Offense Level Down",
+      "Tremor",
+      "Tremor - Reverb",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cavernous_Wailing_Hong_Lu"
+  },
+  {
+    "id": "lasso-hong-lu",
+    "name": "Lasso",
+    "sinner": "Hong Lu",
+    "grade": "TETH",
+    "sin": "gluttony",
+    "cost": {
+      "lust": 1,
+      "gluttony": 4,
+      "pride": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 4,
+      "coin_power": 2,
+      "coins": 4,
+      "weight": 2,
+      "statuses": [
+        "Rupture",
+        "Haste",
+        "Lasso",
+        "HP Healing Down",
+        "Bleed"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "HP Healing Down",
+      "Haste",
+      "Lasso",
+      "Rupture"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lasso_Hong_Lu"
+  },
+  {
+    "id": "roseate-desire-hong-lu",
+    "name": "Roseate Desire",
+    "sinner": "Hong Lu",
+    "grade": "TETH",
+    "sin": "lust",
+    "cost": {
+      "lust": 4,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 19,
+      "coin_power": 9,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Defense Power Down",
+        "Defense Level Down"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Defense Level Down",
+      "Defense Power Down",
+      "Lust Fragility"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Roseate_Desire_Hong_Lu"
+  },
+  {
+    "id": "soda-hong-lu",
+    "name": "Soda",
+    "sinner": "Hong Lu",
+    "grade": "TETH",
+    "sin": "envy",
+    "cost": {
+      "gluttony": 3,
+      "gloom": 2,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 20,
+      "coin_power": 7,
+      "coins": 1,
+      "weight": 3,
+      "statuses": []
+    },
+    "statuses": [
+      "Bind",
+      "HP Healing",
+      "SP Healing",
+      "Tremor"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Soda_Hong_Lu"
+  },
+  {
+    "id": "dimension-shredder-hong-lu",
+    "name": "Dimension Shredder",
+    "sinner": "Hong Lu",
+    "grade": "HE",
+    "sin": "pride",
+    "cost": {
+      "gluttony": 3,
+      "pride": 3
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 22,
+      "coin_power": 6,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Charge",
+        "Haste",
+        "Fragile",
+        "Dimensional Rift"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Dimensional Rift",
+      "Fragile",
+      "HP Healing",
+      "Haste"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dimension_Shredder_Hong_Lu"
+  },
+  {
+    "id": "effervescent-corrosion-hong-lu",
+    "name": "Effervescent Corrosion",
+    "sinner": "Hong Lu",
+    "grade": "HE",
+    "sin": "gluttony",
+    "cost": {
+      "gluttony": 6,
+      "gloom": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 17,
+      "coin_power": 15,
+      "coins": 1,
+      "weight": 2,
+      "statuses": [
+        "Rupture",
+        "Gluttony Fragility",
+        "Bind"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Gluttony Fragility",
+      "HP Healing",
+      "Rupture"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Effervescent_Corrosion_Hong_Lu"
+  },
+  {
+    "id": "to-remain-oneself-hong-lu",
+    "name": "To Remain Oneself 宁作吾",
+    "sinner": "Hong Lu",
+    "grade": "HE",
+    "sin": "pride",
+    "cost": {
+      "sloth": 1,
+      "gloom": 2,
+      "pride": 4
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 10,
+      "coin_power": 6,
+      "coins": 2,
+      "weight": 4,
+      "statuses": [
+        "Poise",
+        "Thunderer",
+        "Higher Thunderer",
+        "Sinking"
+      ]
+    },
+    "statuses": [
+      "Higher Thunderer",
+      "Poise",
+      "Sinking",
+      "Thunderer",
+      "Unbreakable Coin",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/To_Remain_Oneself_%E5%AE%81%E4%BD%9C%E5%90%BE_Hong_Lu"
+  },
+  {
+    "id": "tears-of-the-tarnished-blood-hong-lu",
+    "name": "Tears of the Tarnished Blood 汚血泣淚",
+    "sinner": "Hong Lu",
+    "grade": "WAW",
+    "sin": "gluttony",
+    "cost": {
+      "gluttony": 5,
+      "gloom": 1,
+      "envy": 1
+    },
+    "sanity": 10,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 20,
+      "coin_power": -10,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Flower-burying Wedge -埋花櫼-"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Attack Power Down",
+      "Blunt DMG Up",
+      "Envy DMG Up",
+      "Flower-burying Wedge -埋花櫼-",
+      "Gloom DMG Up",
+      "Gluttony DMG Up",
+      "Haste",
+      "Lust DMG Up",
+      "Pierce DMG Up",
+      "Pride DMG Up",
+      "Rupture",
+      "Slash DMG Up",
+      "Sloth DMG Up",
+      "Tarnished Blood",
+      "Unbreakable Coin",
+      "Unclashable Skills",
+      "Wrath DMG Up",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tears_of_the_Tarnished_Blood_%E6%B1%9A%E8%A1%80%E6%B3%A3%E6%B7%9A_Hong_Lu"
+  },
+  {
+    "id": "bodysack-heathcliff",
+    "name": "Bodysack",
+    "sinner": "Heathcliff",
+    "grade": "ZAYIN",
+    "sin": "envy",
+    "cost": {
+      "lust": 2,
+      "envy": 2
+    },
+    "sanity": 10,
+    "base": true,
+    "skill": {
+      "type": "Blunt",
+      "base": 15,
+      "coin_power": 9,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Attack Power Up",
+        "Haste"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Haste"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Bodysack_Heathcliff"
+  },
+  {
+    "id": "holiday-heathcliff",
+    "name": "Holiday",
+    "sinner": "Heathcliff",
+    "grade": "ZAYIN",
+    "sin": "gluttony",
+    "cost": {
+      "gluttony": 3,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 17,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 2,
+      "statuses": [
+        "Burn",
+        "Bleed",
+        "Tremor",
+        "Rupture",
+        "Sinking",
+        "Poise",
+        "Charge",
+        "Haste",
+        "Offense Level Up",
+        "Defense Level Up"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Burn",
+      "Charge",
+      "Defense Level Up",
+      "Haste",
+      "Offense Level Up",
+      "Poise",
+      "Rupture",
+      "SP Damage",
+      "Sinking",
+      "Tremor"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Holiday_Heathcliff"
+  },
+  {
+    "id": "aedd-heathcliff",
+    "name": "AEDD",
+    "sinner": "Heathcliff",
+    "grade": "TETH",
+    "sin": "gloom",
+    "cost": {
+      "gloom": 3,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 22,
+      "coin_power": 7,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Charge",
+        "Haste",
+        "Paralyze",
+        "Gloom Fragility"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Gloom Fragility",
+      "HP Healing",
+      "Haste",
+      "Paralyze"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/AEDD_Heathcliff"
+  },
+  {
+    "id": "fell-bullet-heathcliff",
+    "name": "Fell Bullet",
+    "sinner": "Heathcliff",
+    "grade": "TETH",
+    "sin": "pride",
+    "cost": {
+      "wrath": 1,
+      "pride": 3,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 7,
+      "coin_power": 7,
+      "coins": 2,
+      "weight": 1,
+      "statuses": [
+        "Torn Memory",
+        "Poise",
+        "Bleed",
+        "Sinking",
+        "Ammo"
+      ]
+    },
+    "statuses": [
+      "Ammo",
+      "Bleed",
+      "Poise",
+      "Sinking",
+      "Torn Memory"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Fell_Bullet_Heathcliff"
+  },
+  {
+    "id": "move-in-reg-heathcliff",
+    "name": "Move-in Reg.",
+    "sinner": "Heathcliff",
+    "grade": "TETH",
+    "sin": "envy",
+    "cost": {
+      "wrath": 2,
+      "gluttony": 1,
+      "envy": 3
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 4,
+      "coin_power": 3,
+      "coins": 3,
+      "weight": 3,
+      "statuses": [
+        "Burn",
+        "Charge",
+        "Bind",
+        "Resident Reg. Microchip"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Burn",
+      "Charge",
+      "Resident Reg. Microchip"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Move-in_Reg._Heathcliff"
+  },
+  {
+    "id": "asymmetrical-inertia-heathcliff",
+    "name": "Asymmetrical Inertia",
+    "sinner": "Heathcliff",
+    "grade": "HE",
+    "sin": "sloth",
+    "cost": {
+      "sloth": 2,
+      "gloom": 1,
+      "pride": 2,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 2,
+      "weight": 3,
+      "statuses": [
+        "Tremor",
+        "Amplitude Conversion",
+        "Tremor - Clockwinding",
+        "Tremor Burst",
+        "Sloth Fragility"
+      ]
+    },
+    "statuses": [
+      "Amplitude Conversion",
+      "Fragile",
+      "Sloth Fragility",
+      "Tremor",
+      "Tremor - Clockwinding",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Asymmetrical_Inertia_Heathcliff"
+  },
+  {
+    "id": "telepole-heathcliff",
+    "name": "Telepole",
+    "sinner": "Heathcliff",
+    "grade": "HE",
+    "sin": "envy",
+    "cost": {
+      "wrath": 3,
+      "lust": 2,
+      "envy": 3
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 33,
+      "coin_power": -12,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Charge"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Fragile"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Telepole_Heathcliff"
+  },
+  {
+    "id": "ya-sunyata-tad-rupam-heathcliff",
+    "name": "Ya Śūnyatā Tad Rūpam",
+    "sinner": "Heathcliff",
+    "grade": "HE",
+    "sin": "lust",
+    "cost": {
+      "wrath": 2,
+      "lust": 2,
+      "sloth": 2,
+      "gloom": 2
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 18,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Attack Power Down"
+      ]
+    },
+    "statuses": [
+      "Attack Power Down",
+      "Damage Up",
+      "Defense Level Down",
+      "Defense Level Up",
+      "Fragile",
+      "HP Healing",
+      "SP Healing"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Ya_%C5%9A%C5%ABnyat%C4%81_Tad_R%C5%ABpam_Heathcliff"
+  },
+  {
+    "id": "binds-heathcliff",
+    "name": "Binds",
+    "sinner": "Heathcliff",
+    "grade": "WAW",
+    "sin": "gloom",
+    "cost": {
+      "lust": 2,
+      "gloom": 4,
+      "pride": 2,
+      "envy": 3
+    },
+    "sanity": 10,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 18,
+      "coin_power": 15,
+      "coins": 1,
+      "weight": 7,
+      "statuses": [
+        "Bind",
+        "Before the King in Binds",
+        "Attack Power Up",
+        "Sinking",
+        "Tremor",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Attack Power Up",
+      "Before the King in Binds",
+      "Bind",
+      "Defense Level Up",
+      "Gloom DMG Up",
+      "Offense Level Up",
+      "SP Loss",
+      "Sinking",
+      "Tremor",
+      "Tremor Burst",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Binds_Heathcliff"
+  },
+  {
+    "id": "hundred-footed-death-maggot-ishmael",
+    "name": "Hundred-Footed Death Maggot 蝍蛆殺",
+    "sinner": "Ishmael",
+    "grade": "ZAYIN",
+    "sin": "gloom",
+    "cost": {
+      "sloth": 2,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 10,
+      "coin_power": 5,
+      "coins": 2,
+      "weight": 3,
+      "statuses": [
+        "Centipede Venom",
+        "Sinking",
+        "Rupture"
+      ]
+    },
+    "statuses": [
+      "Centipede Venom",
+      "Offense Level Up",
+      "Rupture",
+      "Sinking",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hundred-Footed_Death_Maggot_%E8%9D%8D%E8%9B%86%E6%AE%BA_Ishmael"
+  },
+  {
+    "id": "snagharpoon-ishmael",
+    "name": "Snagharpoon",
+    "sinner": "Ishmael",
+    "grade": "ZAYIN",
+    "sin": "gloom",
+    "cost": {
+      "wrath": 2,
+      "gloom": 2
+    },
+    "sanity": 10,
+    "base": true,
+    "skill": {
+      "type": "Blunt",
+      "base": 19,
+      "coin_power": 4,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Bind",
+        "Tremor",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Tremor",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Snagharpoon_Ishmael"
+  },
+  {
+    "id": "bygone-days-ishmael",
+    "name": "Bygone Days",
+    "sinner": "Ishmael",
+    "grade": "TETH",
+    "sin": "gloom",
+    "cost": {
+      "lust": 2,
+      "sloth": 1,
+      "gloom": 3
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 17,
+      "coin_power": 9,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Sinking",
+        "Curse",
+        "Gloom Fragility",
+        "The Uninvited"
+      ]
+    },
+    "statuses": [
+      "Curse",
+      "Echoes of the Manor",
+      "Gloom Fragility",
+      "HP Healing",
+      "SP Healing",
+      "Sinking",
+      "The Uninvited",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Bygone_Days_Ishmael"
+  },
+  {
+    "id": "capote-ishmael",
+    "name": "Capote",
+    "sinner": "Ishmael",
+    "grade": "TETH",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 2,
+      "lust": 2,
+      "sloth": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 20,
+      "coin_power": 7,
+      "coins": 1,
+      "weight": 2,
+      "statuses": [
+        "Wrath DMG Up",
+        "Burn"
+      ]
+    },
+    "statuses": [
+      "Burn",
+      "SP Damage",
+      "Tremor Burst",
+      "Wrath DMG Up",
+      "Wrath Fragility"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Capote_Ishmael"
+  },
+  {
+    "id": "roseate-desire-ishmael",
+    "name": "Roseate Desire",
+    "sinner": "Ishmael",
+    "grade": "TETH",
+    "sin": "lust",
+    "cost": {
+      "wrath": 1,
+      "lust": 4
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 29,
+      "coin_power": -13,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Offense Level Down",
+        "Paralyze",
+        "Bind"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Offense Level Down",
+      "Paralyze",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Roseate_Desire_Ishmael"
+  },
+  {
+    "id": "ardor-blossom-star-ishmael",
+    "name": "Ardor Blossom Star",
+    "sinner": "Ishmael",
+    "grade": "HE",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 4,
+      "lust": 2,
+      "envy": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 19,
+      "coin_power": 22,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Burn"
+      ]
+    },
+    "statuses": [
+      "Burn"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Ardor_Blossom_Star_Ishmael"
+  },
+  {
+    "id": "christmas-nightmare-ishmael",
+    "name": "Christmas Nightmare",
+    "sinner": "Ishmael",
+    "grade": "HE",
+    "sin": "sloth",
+    "cost": {
+      "sloth": 4,
+      "gluttony": 1,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 12,
+      "coin_power": 5,
+      "coins": 2,
+      "weight": 3,
+      "statuses": [
+        "Tremor",
+        "Sinking",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "HP Healing",
+      "SP Healing",
+      "Sinking",
+      "Tremor",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Christmas_Nightmare_Ishmael"
+  },
+  {
+    "id": "tidal-elegy-ishmael",
+    "name": "Tidal Elegy",
+    "sinner": "Ishmael",
+    "grade": "HE",
+    "sin": "gloom",
+    "cost": {
+      "gloom": 4,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 8,
+      "coin_power": 4,
+      "coins": 3,
+      "weight": 3,
+      "statuses": [
+        "Sinking",
+        "Unbreakable Coin",
+        "Tremor",
+        "Bind",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Blunt DMG Up",
+      "Gloom DMG Up",
+      "Gloom Fragility",
+      "Sinking",
+      "Tremor",
+      "Tremor Burst",
+      "Unbreakable Coin"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tidal_Elegy_Ishmael"
+  },
+  {
+    "id": "wingbeat-ishmael",
+    "name": "Wingbeat",
+    "sinner": "Ishmael",
+    "grade": "HE",
+    "sin": "gluttony",
+    "cost": {
+      "lust": 1,
+      "gluttony": 3,
+      "pride": 2
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 3,
+      "coin_power": 7,
+      "coins": 2,
+      "weight": 1,
+      "statuses": [
+        "Gluttony Fragility",
+        "Bleed"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Bleed",
+      "Coin Reuse",
+      "Gluttony Fragility",
+      "HP Healing",
+      "Haste",
+      "Offense Level Up",
+      "SP Loss"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wingbeat_Ishmael"
+  },
+  {
+    "id": "blind-obsession-ishmael",
+    "name": "Blind Obsession",
+    "sinner": "Ishmael",
+    "grade": "WAW",
+    "sin": "pride",
+    "cost": {
+      "wrath": 2,
+      "gloom": 3,
+      "pride": 3,
+      "envy": 3
+    },
+    "sanity": 35,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 20,
+      "coin_power": 15,
+      "coins": 1,
+      "weight": 7,
+      "statuses": [
+        "Charge",
+        "Poise",
+        "Pierce Power Up",
+        "Damage Up"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Charge",
+      "Damage Up",
+      "HP Healing",
+      "Haste",
+      "Offense Level Up",
+      "Pierce Power Up",
+      "Poise",
+      "Pride Fragility",
+      "SP Healing",
+      "Sinking"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blind_Obsession_Ishmael"
+  },
+  {
+    "id": "into-the-sunset-rodion",
+    "name": "Into the Sunset",
+    "sinner": "Rodion",
+    "grade": "ZAYIN",
+    "sin": "lust",
+    "cost": {
+      "wrath": 2,
+      "lust": 3
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 16,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Burn",
+        "Bleed",
+        "Scarlet Moth",
+        "Wrath Fragility",
+        "Lust Fragility"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Burn",
+      "HP Healing",
+      "Lust Fragility",
+      "SP Healing",
+      "Scarlet Moth",
+      "Unbreakable Coin",
+      "Wrath Fragility"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Into_the_Sunset_Rodion"
+  },
+  {
+    "id": "what-is-cast-rodion",
+    "name": "What is Cast",
+    "sinner": "Rodion",
+    "grade": "ZAYIN",
+    "sin": "pride",
+    "cost": {
+      "gloom": 1,
+      "pride": 3
+    },
+    "sanity": 10,
+    "base": true,
+    "skill": {
+      "type": "Slash",
+      "base": 15,
+      "coin_power": 13,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Bleed",
+        "SP Heal Efficiency",
+        "SP Loss Efficiency"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "SP Heal Efficiency",
+      "SP Loss Efficiency"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/What_is_Cast_Rodion"
+  },
+  {
+    "id": "effervescent-corrosion-rodion",
+    "name": "Effervescent Corrosion",
+    "sinner": "Rodion",
+    "grade": "TETH",
+    "sin": "gluttony",
+    "cost": {
+      "sloth": 2,
+      "gloom": 2,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 20,
+      "coin_power": 5,
+      "coins": 1,
+      "weight": 2,
+      "statuses": [
+        "Tremor",
+        "Bind",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Defense Level Down",
+      "HP Healing",
+      "Tremor",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Effervescent_Corrosion_Rodion"
+  },
+  {
+    "id": "mirror-touch-rodion",
+    "name": "Mirror-touch",
+    "sinner": "Rodion",
+    "grade": "TETH",
+    "sin": "sloth",
+    "cost": {
+      "wrath": 2,
+      "sloth": 2,
+      "gloom": 1,
+      "pride": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 11,
+      "coin_power": 4,
+      "coins": 3,
+      "weight": 3,
+      "statuses": [
+        "Poise",
+        "Tremor",
+        "Fracturing of the Senses",
+        "Offense Level Down",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Fracturing of the Senses",
+      "Offense Level Down",
+      "Poise",
+      "Tremor",
+      "Tremor Burst",
+      "Unbreakable Coin"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Mirror-touch_Rodion"
+  },
+  {
+    "id": "rime-shank-rodion",
+    "name": "Rime Shank",
+    "sinner": "Rodion",
+    "grade": "TETH",
+    "sin": "gloom",
+    "cost": {
+      "gloom": 5,
+      "envy": 3
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 15,
+      "coin_power": 15,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Tremor Burst",
+        "Sinking"
+      ]
+    },
+    "statuses": [
+      "Attack Power Down",
+      "Bind",
+      "Sinking",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rime_Shank_Rodion"
+  },
+  {
+    "id": "4th-match-flame-rodion",
+    "name": "4th Match Flame",
+    "sinner": "Rodion",
+    "grade": "HE",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 3,
+      "pride": 2,
+      "envy": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 38,
+      "coin_power": -13,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Wrath Power Up",
+        "Wrath DMG Up",
+        "Unbreakable Coin",
+        "Burn",
+        "Wrath Fragility"
+      ]
+    },
+    "statuses": [
+      "Burn",
+      "HP Healing",
+      "Threadspin Tier V",
+      "Unbreakable Coin",
+      "Wrath DMG Up",
+      "Wrath Fragility",
+      "Wrath Power Up"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/4th_Match_Flame_Rodion"
+  },
+  {
+    "id": "hex-nail-rodion",
+    "name": "Hex Nail",
+    "sinner": "Rodion",
+    "grade": "HE",
+    "sin": "envy",
+    "cost": {
+      "lust": 2,
+      "pride": 1,
+      "envy": 4
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 2,
+      "weight": 3,
+      "statuses": [
+        "Bleed",
+        "Curse",
+        "Nails"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Curse",
+      "Defense Level Down",
+      "HP Healing",
+      "Nails",
+      "Offense Level Up"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hex_Nail_Rodion"
+  },
+  {
+    "id": "pursuance-rodion",
+    "name": "Pursuance",
+    "sinner": "Rodion",
+    "grade": "HE",
+    "sin": "sloth",
+    "cost": {
+      "sloth": 4,
+      "pride": 3
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 26,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Sloth Fragility"
+      ]
+    },
+    "statuses": [
+      "HP Healing",
+      "SP Damage",
+      "SP Healing",
+      "Sloth Fragility",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Pursuance_Rodion"
+  },
+  {
+    "id": "indicant-s-trial-rodion",
+    "name": "Indicant's Trial",
+    "sinner": "Rodion",
+    "grade": "WAW",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 7,
+      "pride": 3
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 2,
+      "weight": 4,
+      "statuses": [
+        "Burn",
+        "Searing Birdcage"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Burn",
+      "HP Healing",
+      "SP Healing",
+      "SP Loss",
+      "Searing Birdcage",
+      "Unbreakable Coin",
+      "Wrath DMG Up",
+      "Wrath Power Up",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Indicant's_Trial_Rodion"
+  },
+  {
+    "id": "sanguine-desire-rodion",
+    "name": "Sanguine Desire",
+    "sinner": "Rodion",
+    "grade": "WAW",
+    "sin": "lust",
+    "cost": {
+      "wrath": 1,
+      "lust": 3,
+      "pride": 3,
+      "envy": 3
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 21,
+      "coin_power": 12,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Bleed"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Bleed",
+      "SP Loss"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Sanguine_Desire_Rodion"
+  },
+  {
+    "id": "branch-of-knowledge-sinclair",
+    "name": "Branch of Knowledge",
+    "sinner": "Sinclair",
+    "grade": "ZAYIN",
+    "sin": "gluttony",
+    "cost": {
+      "wrath": 1,
+      "gluttony": 3
+    },
+    "sanity": 10,
+    "base": true,
+    "skill": {
+      "type": "Slash",
+      "base": 14,
+      "coin_power": 15,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Rupture",
+        "Attack Power Up",
+        "Protection"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Damage Up",
+      "Protection",
+      "Rupture",
+      "SP Healing",
+      "SP Loss"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Branch_of_Knowledge_Sinclair"
+  },
+  {
+    "id": "cavernous-wailing-sinclair",
+    "name": "Cavernous Wailing",
+    "sinner": "Sinclair",
+    "grade": "ZAYIN",
+    "sin": "gloom",
+    "cost": {
+      "lust": 1,
+      "sloth": 2,
+      "gloom": 3
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 16,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Blubberbubble"
+      ]
+    },
+    "statuses": [
+      "Aggro",
+      "Blubberbubble",
+      "Protection",
+      "Sinking",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cavernous_Wailing_Sinclair"
+  },
+  {
+    "id": "hex-nail-sinclair",
+    "name": "Hex Nail",
+    "sinner": "Sinclair",
+    "grade": "TETH",
+    "sin": "envy",
+    "cost": {
+      "lust": 2,
+      "pride": 2,
+      "envy": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 9,
+      "coin_power": 6,
+      "coins": 2,
+      "weight": 1,
+      "statuses": [
+        "Curse",
+        "Bleed",
+        "Nails",
+        "Clash Power Down",
+        "Bind"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Bleed",
+      "Clash Power Down",
+      "Clash Power Up",
+      "Curse",
+      "Defense Level Down",
+      "Defense Power Up",
+      "Nails",
+      "Protection"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hex_Nail_Sinclair"
+  },
+  {
+    "id": "impending-day-sinclair",
+    "name": "Impending Day",
+    "sinner": "Sinclair",
+    "grade": "TETH",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 3,
+      "lust": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 28,
+      "coin_power": -8,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Attack Power Up"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Bleed",
+      "HP Healing"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Impending_Day_Sinclair"
+  },
+  {
+    "id": "lifetime-stew-sinclair",
+    "name": "Lifetime Stew",
+    "sinner": "Sinclair",
+    "grade": "TETH",
+    "sin": "lust",
+    "cost": {
+      "wrath": 3,
+      "lust": 2,
+      "gluttony": 1
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 24,
+      "coin_power": -8,
+      "coins": 1,
+      "weight": 7,
+      "statuses": [
+        "E.G.O Resource Amp",
+        "Haste",
+        "Unbreakable Coin",
+        "Burn"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Burn",
+      "E.G.O Resource Amp",
+      "HP Healing",
+      "Haste",
+      "SP Healing",
+      "SP Loss",
+      "Threadspin Tier V",
+      "Unbreakable Coin"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lifetime_Stew_Sinclair"
+  },
+  {
+    "id": "9-2-sinclair",
+    "name": "9:2",
+    "sinner": "Sinclair",
+    "grade": "HE",
+    "sin": "lust",
+    "cost": {
+      "wrath": 2,
+      "lust": 5,
+      "envy": 1
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 26,
+      "coin_power": -10,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Burn",
+        "Attack Power Down",
+        "Defense Power Down"
+      ]
+    },
+    "statuses": [
+      "Attack Power Down",
+      "Burn",
+      "Defense Power Down",
+      "Lust Fragility",
+      "SP Damage",
+      "SP Loss"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/9:2_Sinclair"
+  },
+  {
+    "id": "harmony-sinclair",
+    "name": "Harmony",
+    "sinner": "Sinclair",
+    "grade": "HE",
+    "sin": "wrath",
+    "cost": {
+      "wrath": 3,
+      "lust": 2,
+      "sloth": 1,
+      "pride": 1,
+      "envy": 1
+    },
+    "sanity": 10,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 6,
+      "coin_power": 2,
+      "coins": 3,
+      "weight": 3,
+      "statuses": [
+        "Bleed",
+        "Burn",
+        "Rhythm"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Burn",
+      "Coin Reuse",
+      "Envy DMG Up",
+      "Fragile",
+      "HP Healing",
+      "Lust DMG Up",
+      "Rhythm",
+      "SP Healing",
+      "SP Loss",
+      "Unbreakable Coin",
+      "Wrath DMG Up",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Harmony_Sinclair"
+  },
+  {
+    "id": "lantern-sinclair",
+    "name": "Lantern",
+    "sinner": "Sinclair",
+    "grade": "HE",
+    "sin": "gluttony",
+    "cost": {
+      "lust": 1,
+      "gluttony": 4,
+      "pride": 2
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 18,
+      "coin_power": 6,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Rupture"
+      ]
+    },
+    "statuses": [
+      "Defense Level Down",
+      "HP Healing",
+      "Rupture"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lantern_Sinclair"
+  },
+  {
+    "id": "tears-of-the-tarnished-blood-sinclair",
+    "name": "Tears of the Tarnished Blood 汚血泣淚",
+    "sinner": "Sinclair",
+    "grade": "WAW",
+    "sin": "gluttony",
+    "cost": {
+      "lust": 2,
+      "gluttony": 6,
+      "pride": 2
+    },
+    "sanity": 10,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 8,
+      "coin_power": 6,
+      "coins": 2,
+      "weight": 5,
+      "statuses": [
+        "Flower-burying Pin -埋花針-",
+        "Denial -不許-",
+        "Rupture"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Coin Reuse",
+      "Denial -不許-",
+      "Flower-burying Pin -埋花針-",
+      "Fragile",
+      "Rupture",
+      "SP Healing",
+      "SP Loss",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tears_of_the_Tarnished_Blood_%E6%B1%9A%E8%A1%80%E6%B3%A3%E6%B7%9A_Sinclair"
+  },
+  {
+    "id": "i-ll-go-fer-scissors-how-bout-you-outis",
+    "name": "I'll Go fer Scissors. How 'Bout You?",
+    "sinner": "Outis",
+    "grade": "ZAYIN",
+    "sin": "envy",
+    "cost": {
+      "lust": 1,
+      "envy": 3
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 12,
+      "coin_power": 12,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Unbreakable Coin",
+        "Needle",
+        "Curse",
+        "Nails"
+      ]
+    },
+    "statuses": [
+      "Curse",
+      "HP Healing",
+      "Nails",
+      "Needle",
+      "Power Down",
+      "Unbreakable Coin"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/I'll_Go_fer_Scissors._How_'Bout_You%3F_Outis"
+  },
+  {
+    "id": "to-pathos-mathos-outis",
+    "name": "To Páthos Máthos",
+    "sinner": "Outis",
+    "grade": "ZAYIN",
+    "sin": "pride",
+    "cost": {
+      "sloth": 2,
+      "pride": 2
+    },
+    "sanity": 10,
+    "base": true,
+    "skill": {
+      "type": "Pierce",
+      "base": 20,
+      "coin_power": 3,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Rupture",
+        "Damage Up"
+      ]
+    },
+    "statuses": [
+      "Damage Up",
+      "Rupture"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/To_P%C3%A1thos_M%C3%A1thos_Outis"
+  },
+  {
+    "id": "sunshower-outis",
+    "name": "Sunshower",
+    "sinner": "Outis",
+    "grade": "TETH",
+    "sin": "gluttony",
+    "cost": {
+      "sloth": 2,
+      "gluttony": 2,
+      "gloom": 1
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 26,
+      "coin_power": 7,
+      "coins": 1,
+      "weight": 2,
+      "statuses": [
+        "Poise",
+        "Sinking",
+        "Bind",
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Poise",
+      "Protection",
+      "Rupture",
+      "Sinking",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Sunshower_Outis"
+  },
+  {
+    "id": "ya-sunyata-tad-rupam-outis",
+    "name": "Ya Śūnyatā Tad Rūpam",
+    "sinner": "Outis",
+    "grade": "TETH",
+    "sin": "lust",
+    "cost": {
+      "lust": 2,
+      "sloth": 2,
+      "pride": 2
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 19,
+      "coin_power": 4,
+      "coins": 1,
+      "weight": 2,
+      "statuses": [
+        "Attack Power Up",
+        "Lust Fragility"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Fragile",
+      "Lust DMG Up",
+      "Lust Fragility",
+      "SP Healing"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Ya_%C5%9A%C5%ABnyat%C4%81_Tad_R%C5%ABpam_Outis"
+  },
+  {
+    "id": "dimension-shredder-outis",
+    "name": "Dimension Shredder",
+    "sinner": "Outis",
+    "grade": "HE",
+    "sin": "envy",
+    "cost": {
+      "wrath": 1,
+      "gloom": 3,
+      "pride": 1,
+      "envy": 4
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 21,
+      "coin_power": 9,
+      "coins": 1,
+      "weight": 4,
+      "statuses": [
+        "Charge",
+        "Dimensional Rift",
+        "Haste",
+        "Load"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Charge Potency",
+      "Dimensional Rift",
+      "Haste",
+      "Load"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dimension_Shredder_Outis"
+  },
+  {
+    "id": "ebony-stem-outis",
+    "name": "Ebony Stem",
+    "sinner": "Outis",
+    "grade": "HE",
+    "sin": "gluttony",
+    "cost": {
+      "lust": 2,
+      "gluttony": 3,
+      "gloom": 1,
+      "pride": 4
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 22,
+      "coin_power": 7,
+      "coins": 1,
+      "weight": 7,
+      "statuses": [
+        "Rupture",
+        "Bleed",
+        "Gluttony Fragility"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Bind",
+      "Bleed",
+      "Gluttony Fragility",
+      "Pierce DMG Up",
+      "Rupture"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Ebony_Stem_Outis"
+  },
+  {
+    "id": "holiday-outis",
+    "name": "Holiday",
+    "sinner": "Outis",
+    "grade": "HE",
+    "sin": "wrath",
+    "cost": {
+      "lust": 2,
+      "sloth": 1,
+      "pride": 3,
+      "envy": 2
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 20,
+      "coin_power": 11,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Tremor Burst"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Burn",
+      "Envy DMG Up",
+      "Envy Fragility",
+      "Gloom DMG Up",
+      "Gloom Fragility",
+      "Gluttony DMG Up",
+      "Gluttony Fragility",
+      "Lust DMG Up",
+      "Lust Fragility",
+      "Pride DMG Up",
+      "Pride Fragility",
+      "Rupture",
+      "SP Damage",
+      "SP Healing",
+      "Sinking",
+      "Sloth DMG Up",
+      "Sloth Fragility",
+      "Tremor",
+      "Tremor Burst",
+      "Wrath DMG Up",
+      "Wrath Fragility"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Holiday_Outis"
+  },
+  {
+    "id": "magic-bullet-outis",
+    "name": "Magic Bullet",
+    "sinner": "Outis",
+    "grade": "HE",
+    "sin": "pride",
+    "cost": {
+      "wrath": 2,
+      "lust": 2,
+      "pride": 4
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 22,
+      "coin_power": 14,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Burn",
+        "Magic Bullet",
+        "The First Magic Bullet",
+        "The Second Magic Bullet",
+        "The Third Magic Bullet",
+        "The Fourth Magic Bullet",
+        "The Fifth Magic Bullet",
+        "The Sixth Magic Bullet",
+        "The Seventh Magic Bullet",
+        "Dark Flame"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Burn",
+      "Coin Reuse",
+      "Dark Flame",
+      "Magic Bullet",
+      "The Fifth Magic Bullet",
+      "The First Magic Bullet",
+      "The Fourth Magic Bullet",
+      "The Second Magic Bullet",
+      "The Seventh Magic Bullet",
+      "The Sixth Magic Bullet",
+      "The Third Magic Bullet",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Magic_Bullet_Outis"
+  },
+  {
+    "id": "binds-outis",
+    "name": "Binds",
+    "sinner": "Outis",
+    "grade": "WAW",
+    "sin": "pride",
+    "cost": {
+      "wrath": 1,
+      "lust": 1,
+      "sloth": 4,
+      "pride": 4
+    },
+    "sanity": 10,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 20,
+      "coin_power": 10,
+      "coins": 1,
+      "weight": 5,
+      "statuses": [
+        "Tremor Burst",
+        "Tremor",
+        "Amplitude Conversion",
+        "Tremor - Fracture"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Amplitude Conversion",
+      "SP Loss",
+      "Tremor",
+      "Tremor - Fracture",
+      "Tremor Burst"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Binds_Outis"
+  },
+  {
+    "id": "legerdemain-gregor",
+    "name": "Legerdemain",
+    "sinner": "Gregor",
+    "grade": "ZAYIN",
+    "sin": "gluttony",
+    "cost": {
+      "sloth": 1,
+      "gluttony": 3
+    },
+    "sanity": 10,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 18,
+      "coin_power": 5,
+      "coins": 1,
+      "weight": 3,
+      "statuses": [
+        "Tremor Burst",
+        "Tremor",
+        "Paralyze"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Paralyze",
+      "Tremor",
+      "Tremor Burst",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Legerdemain_Gregor"
+  },
+  {
+    "id": "suddenly-one-day-gregor",
+    "name": "Suddenly, One Day",
+    "sinner": "Gregor",
+    "grade": "ZAYIN",
+    "sin": "sloth",
+    "cost": {
+      "lust": 3,
+      "gloom": 1
+    },
+    "sanity": 10,
+    "base": true,
+    "skill": {
+      "type": "Blunt",
+      "base": 14,
+      "coin_power": 14,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Burn",
+        "Bleed",
+        "Tremor",
+        "Rupture",
+        "Sinking"
+      ]
+    },
+    "statuses": [
+      "Bleed",
+      "Burn",
+      "HP Healing",
+      "Protection",
+      "Rupture",
+      "SP Loss Efficiency",
+      "Sinking",
+      "Tremor"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Suddenly,_One_Day_Gregor"
+  },
+  {
+    "id": "bygone-days-gregor",
+    "name": "Bygone Days",
+    "sinner": "Gregor",
+    "grade": "TETH",
+    "sin": "gloom",
+    "cost": {
+      "lust": 2,
+      "gloom": 4
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 20,
+      "coin_power": 4,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Sinking",
+        "Curse"
+      ]
+    },
+    "statuses": [
+      "Curse",
+      "Gloom Fragility",
+      "SP Healing",
+      "Sinking"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Bygone_Days_Gregor"
+  },
+  {
+    "id": "lantern-gregor",
+    "name": "Lantern",
+    "sinner": "Gregor",
+    "grade": "TETH",
+    "sin": "gluttony",
+    "cost": {
+      "sloth": 1,
+      "gluttony": 4
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 16,
+      "coin_power": 8,
+      "coins": 1,
+      "weight": 3,
+      "statuses": []
+    },
+    "statuses": [
+      "HP Healing",
+      "Rupture"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lantern_Gregor"
+  },
+  {
+    "id": "move-in-reg-gregor",
+    "name": "Move-in Reg.",
+    "sinner": "Gregor",
+    "grade": "TETH",
+    "sin": "envy",
+    "cost": {
+      "wrath": 1,
+      "envy": 5
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 9,
+      "coin_power": 6,
+      "coins": 2,
+      "weight": 3,
+      "statuses": [
+        "Burn",
+        "Charge",
+        "Resident Reg. Microchip",
+        "Bind"
+      ]
+    },
+    "statuses": [
+      "Bind",
+      "Burn",
+      "Charge",
+      "Charge Potency",
+      "Damage Up",
+      "Resident Reg. Microchip"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Move-in_Reg._Gregor"
+  },
+  {
+    "id": "aedd-gregor",
+    "name": "AEDD",
+    "sinner": "Gregor",
+    "grade": "HE",
+    "sin": "gloom",
+    "cost": {
+      "gloom": 3,
+      "envy": 3
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 22,
+      "coin_power": 5,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Charge",
+        "Spark Discharge"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Spark Discharge",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/AEDD_Gregor"
+  },
+  {
+    "id": "christmas-nightmare-gregor",
+    "name": "Christmas Nightmare",
+    "sinner": "Gregor",
+    "grade": "HE",
+    "sin": "sloth",
+    "cost": {
+      "sloth": 2,
+      "gluttony": 2,
+      "gloom": 2,
+      "pride": 2
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 12,
+      "coin_power": 4,
+      "coins": 2,
+      "weight": 5,
+      "statuses": [
+        "Attack Power Up",
+        "Tremor",
+        "Tremor Burst",
+        "Sinking",
+        "Attack Power Down"
+      ]
+    },
+    "statuses": [
+      "Attack Power Down",
+      "Attack Power Up",
+      "Defense Level Down",
+      "Envy Fragility",
+      "Gloom Fragility",
+      "Gluttony Fragility",
+      "HP Healing",
+      "Lust Fragility",
+      "Offense Level Down",
+      "Pride Fragility",
+      "SP Healing",
+      "Sinking",
+      "Sloth Fragility",
+      "Tremor",
+      "Tremor Burst",
+      "Wrath Fragility"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Christmas_Nightmare_Gregor"
+  },
+  {
+    "id": "solemn-lament-gregor",
+    "name": "Solemn Lament",
+    "sinner": "Gregor",
+    "grade": "HE",
+    "sin": "gloom",
+    "cost": {
+      "lust": 1,
+      "sloth": 2,
+      "gloom": 2,
+      "envy": 2
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Blunt",
+      "base": 8,
+      "coin_power": 2,
+      "coins": 3,
+      "weight": 3,
+      "statuses": [
+        "Butterfly"
+      ]
+    },
+    "statuses": [
+      "Attack Power Up",
+      "Butterfly",
+      "Coin Reuse",
+      "SP Healing",
+      "SP Loss",
+      "Sinking"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Solemn_Lament_Gregor"
+  },
+  {
+    "id": "garden-of-thorns-gregor",
+    "name": "Garden of Thorns",
+    "sinner": "Gregor",
+    "grade": "WAW",
+    "sin": "lust",
+    "cost": {
+      "wrath": 2,
+      "lust": 2,
+      "sloth": 2,
+      "gluttony": 2,
+      "gloom": 2,
+      "pride": 2,
+      "envy": 2
+    },
+    "sanity": 30,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 20,
+      "coin_power": 10,
+      "coins": 1,
+      "weight": 4,
+      "statuses": []
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Bind",
+      "Damage Down",
+      "Envy DMG Up",
+      "Envy Fragility",
+      "Envy Power Down",
+      "Envy Power Up",
+      "Gloom DMG Up",
+      "Gloom Fragility",
+      "Gloom Power Down",
+      "Gloom Power Up",
+      "Gluttony DMG Up",
+      "Gluttony Fragility",
+      "Gluttony Power Down",
+      "Gluttony Power Up",
+      "HP Healing",
+      "Lust DMG Up",
+      "Lust Fragility",
+      "Lust Power Down",
+      "Lust Power Up",
+      "Pride DMG Up",
+      "Pride Fragility",
+      "Pride Power Down",
+      "Pride Power Up",
+      "Rupture",
+      "Sloth DMG Up",
+      "Sloth Fragility",
+      "Sloth Power Down",
+      "Sloth Power Up",
+      "Wrath DMG Up",
+      "Wrath Fragility",
+      "Wrath Power Down",
+      "Wrath Power Up"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Garden_of_Thorns_Gregor"
+  },
+  {
+    "id": "unbrilliant-glory-gregor",
+    "name": "Unbrilliant Glory",
+    "sinner": "Gregor",
+    "grade": "WAW",
+    "sin": "sloth",
+    "cost": {
+      "wrath": 2,
+      "sloth": 3,
+      "pride": 2
+    },
+    "sanity": 30,
+    "base": false,
+    "skill": {
+      "type": "Slash",
+      "base": 5,
+      "coin_power": 5,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Man in Scabbard",
+        "Offense Level Up",
+        "Damage Up"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Aggro",
+      "Burn",
+      "Coin Reuse",
+      "Damage Up",
+      "Defense Level Up",
+      "Man in Scabbard",
+      "Offense Level Up",
+      "Protection",
+      "SP Healing",
+      "Tremor",
+      "Tremor Burst",
+      "Unbreakable Coin",
+      "Unclashable Skills",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Unbrilliant_Glory_Gregor"
+  }
+]

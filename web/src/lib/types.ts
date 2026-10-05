@@ -58,10 +58,16 @@ export interface Gift {
   team_gate?: boolean
   effect: string
   max_level: number
+  /** Effect text at + and ++ (enhanced in a shop), when the wiki lists them. */
+  upgrades?: string[]
   pools: Pool[]
   theme_packs: string[]
   events: { name: string; wiki_url: string | null }[]
   fusion_recipe: string[] | null
+  /** Other plain-text sources on the wiki's gift list ("Obtain a duplicate of a Tier I E.G.O Gift"). */
+  other_sources?: string[]
+  /** Icon file on the wiki, e.g. "Ebony Brooch Gift.png" (from the scraper). */
+  icon?: string
   wiki_url: string
 }
 
@@ -84,7 +90,27 @@ export interface ThemePack {
 
 export interface Fusion {
   result: string
+  /** Fixed ingredients. */
   ingredients: string[]
+  /** Plus `count` more from this list (Lunar Memory: any 2 Sin Fragments). */
+  any_of?: { count: number; from: string[] }
+  /** Needs more than 3 slots, so only a Super Shop (Hard floors) can fuse it. */
+  super_shop?: boolean
+}
+
+/** One of an identity's attack skills (skill 1-3), from its wiki page. */
+export interface Skill {
+  slot: 1 | 2 | 3
+  name: string
+  sin: Sin | null
+  type: string | null
+  base: number | null
+  coin_power: number | null
+  coins: number | null
+  /** Copies in the identity's deck (usually 3 / 2 / 1). */
+  copies: number | null
+  weight: number | null
+  statuses: string[]
 }
 
 export interface Identity {
@@ -101,7 +127,22 @@ export interface Identity {
   attack_types?: AttackType[]
   /** Skills per attack type, e.g. { Slash: 2, Pierce: 1 } (defense skills included). */
   attack_counts?: Partial<Record<AttackType, number>>
+  /** Lines from its skills and passives about lineup position (scraper/order.py). */
+  order_notes?: OrderNote[]
+  skills?: Skill[]
   wiki_url: string
+}
+
+export interface OrderNote {
+  /** first: #1 / earliest deployed; last: deployed last; before_self: allies earlier than it;
+   *  in_order: allies in deployment order; sub_self: it gains something when substituting in;
+   *  sub_ally: allies that substitute in gain something. */
+  kind: 'first' | 'last' | 'before_self' | 'in_order' | 'sub_self' | 'sub_ally'
+  /** How many from the front (e.g. 2 for "#1 and #2 Deployed allies"). */
+  n?: number
+  text: string
+  /** The skill or passive it comes from. */
+  source: string
 }
 
 export interface GameData {
@@ -110,6 +151,8 @@ export interface GameData {
   fusions: Fusion[]
   identities: Identity[]
   combos?: Combo[]
+  /** The sinners' E.G.O (data/egos.json; empty until the scraper has fetched them). */
+  egos?: import('./ego').Ego[]
   generatedAt: string | null
 }
 

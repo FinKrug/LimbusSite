@@ -1,0 +1,190 @@
+# Prydwen.gg Limbus Company tier list (https://www.prydwen.gg/limbus-company/tier-list)
+# "Generic - Endgame" view, last updated 2026-09-23. Focuses on Refraction Railway, plus ease of use.
+# Format: tier|role|identity|sinner
+SSS|DAMAGE DEALER|Blade of the House of Spiders|Ryoshu
+SSS|DAMAGE DEALER|Heishou Pack - Mao Branch Adept|Faust
+SSS|DAMAGE DEALER|The House of Spiders: The Index Nursefather|Yi Sang
+SSS|DAMAGE DEALER|The House of Spiders: The Middle Nursefather|Outis
+SSS|DAMAGE DEALER|The House of Spiders: The Thumb Nursefather|Rodion
+SSS|SUPPORT|The Lord of Hongyuan|Hong Lu
+SS|DAMAGE DEALER|Dawn Office Fixer|Faust
+SS|DAMAGE DEALER|Dawn Office Fixer|Sinclair
+SS|DAMAGE DEALER|Jeong's Office Rep|Ishmael
+SS|DAMAGE DEALER|LCD OSIR Team|Ishmael
+SS|DAMAGE DEALER|The Thumb East Capo IIII|Meursault
+SS|STATUS SPECIALIST|Dawn Office Rep|Gregor
+SS|STATUS SPECIALIST|LCE E.G.O::Lantern|Yi Sang
+SS|STATUS SPECIALIST|Lobotomy E.G.O::Faint Aroma & Solitude|Ryoshu
+SS|STATUS SPECIALIST|Lobotomy E.G.O::Solemn Lament|Yi Sang
+SS|STATUS SPECIALIST|Lobotomy E.G.O::The Sword Sharpened with Tears|Rodion
+SS|SUPPORT|The House of Spiders: The Ring Nursefather|Hong Lu
+SS|SUPPORT|The Middle Big Brother|Heathcliff
+S+|DAMAGE DEALER|Blade Lineage Mentor|Meursault
+S+|DAMAGE DEALER|Heishou Pack - Wei Branch|Don Quixote
+S+|DAMAGE DEALER|Heishou Pack - You Branch Adept|Heathcliff
+S+|DAMAGE DEALER|LCE E.G.O::Ardor Blossom Star|Faust
+S+|DAMAGE DEALER|Lobotomy E.G.O::In the Name of Love and Hate|Don Quixote
+S+|DAMAGE DEALER|The House of Spiders: The Middle Apprentice|Ishmael
+S+|DAMAGE DEALER|The House of Spiders: The Pinky Apprentice|Sinclair
+S+|DAMAGE DEALER|The House of Spiders: The Ring Apprentice|Faust
+S+|DAMAGE DEALER|The House of Spiders: The Thumb Apprentice|Heathcliff
+S+|DAMAGE DEALER|The Index Proxy - Effloresced E.G.O::Procuration|Don Quixote
+S+|DAMAGE DEALER|The Manager of La Manchaland|Don Quixote
+S+|DAMAGE DEALER|The Middle Little Brother|Sinclair
+S+|DAMAGE DEALER|The Ring Fauvist Docent|Rodion
+S+|DAMAGE DEALER|Wild Hunt|Heathcliff
+S+|STATUS SPECIALIST|Effloresced E.G.O::Spicebush|Yi Sang
+S+|STATUS SPECIALIST|Heishou Pack - Mao Branch|Outis
+S+|STATUS SPECIALIST|Heishou Pack - Mao Branch|Ryoshu
+S+|STATUS SPECIALIST|Kurokumo Clan Captain|Ishmael
+S+|STATUS SPECIALIST|Kurokumo Clan Wakashu|Heathcliff
+S+|STATUS SPECIALIST|LCCB Assistant Manager|Ishmael
+S+|STATUS SPECIALIST|T Corp. Class 2 Collection Staff|Rodion
+S+|STATUS SPECIALIST|T Corp. Class 3 Collection Staff|Don Quixote
+S+|STATUS SPECIALIST|T Corp. Class 3 VDCU Staff|Outis
+S+|STATUS SPECIALIST|The Thumb East Soldato II|Sinclair
+S+|STATUS SPECIALIST|Wuthering Heights Butler|Faust
+S+|STATUS SPECIALIST|Wuthering Heights Chief Butler|Outis
+S+|SUPPORT|Drifting Blade of Hongyuan|Ryōshū
+S+|SUPPORT|LCA Udjat Vanguard Team 3 Leader|Outis
+S|DAMAGE DEALER|Full-Stop Office Fixer|Heathcliff
+S|DAMAGE DEALER|Full-Stop Office Rep|Hong Lu
+S|DAMAGE DEALER|Haute Couture::Boutique du Rouge|Ishmael
+S|DAMAGE DEALER|Heishou Pack - Si Branch|Gregor
+S|DAMAGE DEALER|Heishou Pack - Si Branch|Rodion
+S|DAMAGE DEALER|Lobotomy E.G.O::Hornet (Alteration)|Meursault
+S|DAMAGE DEALER|N Corp. E.G.O::Contempt, Awe|Ryōshū
+S|DAMAGE DEALER|Night Awls Capitano|Gregor
+S|DAMAGE DEALER|The Middle Little Sister|Don Quixote
+S|DAMAGE DEALER|The Ring Fauvist Student|Meursault
+S|STATUS SPECIALIST|Molar Office Fixer|Outis
+S|STATUS SPECIALIST|S Corp. Ch'unokkun|Hong Lu
+S|STATUS SPECIALIST|The Ring Pointillist Student|Yi Sang
+S|SUPPORT|Lobotomy E.G.O::Lamp|Gregor
+S|SUPPORT|The Middle Little Brother|Meursault
+S|SUPPORT|The Prince of La Manchaland|Meursault
+A|DAMAGE DEALER|Cinq Assoc. East Section 3|Don Quixote
+A|DAMAGE DEALER|Cinq Assoc. East Section 3|Hong Lu
+A|DAMAGE DEALER|Cinq Assoc. West Section 3|Meursault
+A|DAMAGE DEALER|Devyat' Assoc. North Section 3|Rodion
+A|DAMAGE DEALER|Devyat Assoc. North Section 3|Sinclair
+A|DAMAGE DEALER|Firefist Office Survivor|Gregor
+A|DAMAGE DEALER|Heishou Pack - You Branch|Sinclair
+A|DAMAGE DEALER|MultiCrack Office Rep|Faust
+A|DAMAGE DEALER|N Corp. E.G.O:: Fell Bullet|Yi Sang
+A|DAMAGE DEALER|R.B. Chef de Cuisine|Ryoshu
+A|DAMAGE DEALER|The One Who Shall Grip|Sinclair
+A|DAMAGE DEALER|Tingtang Gang Gangleader|Hong Lu
+A|DAMAGE DEALER|W Corp. L3 Cleanup Agent|Don Quixote
+A|DAMAGE DEALER|W Corp. L3 Cleanup Agent|Ryoshu
+A|STATUS SPECIALIST|District 20 Yurodivy|Hong Lu
+A|STATUS SPECIALIST|Lobotomy E.G.O::Lantern|Don Quixote
+A|STATUS SPECIALIST|Lobotomy E.G.O::Magic Bullet|Outis
+A|STATUS SPECIALIST|Molar Boatworks Fixer|Ishmael
+A|STATUS SPECIALIST|W Corp. L3 Cleanup Agent|Yi Sang
+A|SUPPORT|Heishou Pack - Wu Branch Adept|Yi Sang
+A|SUPPORT|LCE E.G.O::AEDD|Gregor
+A|SUPPORT|R Corp. 4th Pack Rabbit|Heathcliff
+A|SUPPORT|The Princess of La Manchaland|Rodion
+A|TANK|Zwei. Assoc. West Section 3|Ishmael
+B|DAMAGE DEALER|Blade Lineage Salsu|Sinclair
+B|DAMAGE DEALER|Blade Lineage Salsu|Yi Sang
+B|DAMAGE DEALER|Cinq South Section 4 Director|Sinclair
+B|DAMAGE DEALER|Dieci Assoc. South Section 4|Hong Lu
+B|DAMAGE DEALER|Edgar Family Chief Butler|Ryoshu
+B|DAMAGE DEALER|Family Hierarch Candidate|Ishmael
+B|DAMAGE DEALER|LCE E.G.O::Dimension Shredder|Yi Sang
+B|DAMAGE DEALER|R Corp. 4th Pack Reindeer|Hong Lu
+B|DAMAGE DEALER|R Corp. 4th Pack Reindeer|Rodion
+B|DAMAGE DEALER|The Barber of La Manchaland|Outis
+B|DAMAGE DEALER|The Index Proselyte: Paper Slip|Faust
+B|DAMAGE DEALER|The Pequod First Mate|Yi Sang
+B|DAMAGE DEALER|The Pequod Harpooner|Heathcliff
+B|DAMAGE DEALER|Twinhook Pirates First Mate|Gregor
+B|DAMAGE DEALER|W Corp. L4 Cleanup Agent - CCA|Heathcliff
+B|STATUS SPECIALIST|District 20 Yurodivy|Ryoshu
+B|STATUS SPECIALIST|Edgar Family Heir|Gregor
+B|STATUS SPECIALIST|Fanghunt Office Fixer|Hong Lu
+B|STATUS SPECIALIST|Kurokumo Clan Wakashu|Hong Lu
+B|STATUS SPECIALIST|Liu Assoc. South Section 4 Director|Rodion
+B|STATUS SPECIALIST|Liu Assoc. South Section 4|Ishmael
+B|STATUS SPECIALIST|Rosespanner Workshop Rep.|Rodion
+B|STATUS SPECIALIST|Seven Assoc. South Section 4|Faust
+B|STATUS SPECIALIST|Seven Assoc. South Section 4|Heathcliff
+B|STATUS SPECIALIST|The Ring Pointillist Student|Outis
+B|SUPPORT|Blade Lineage Salsu|Don Quixote
+B|SUPPORT|Blade Lineage Salsu|Faust
+B|SUPPORT|Liu Association South Section 3|Yi Sang
+B|SUPPORT|The One Who Grips|Faust
+B|SUPPORT|The Pequod Captain|Ishmael
+B|TANK|Dieci Assoc. South Section 4|Rodion
+B|TANK|Haute Couture::Le Noir Footwear Hall|Ryoshu
+B|TANK|LCB Sinner|Meursault
+B|TANK|Los Mariachis Jefe|Sinclair
+C|DAMAGE DEALER|Blade Lineage Salsu|Outis
+C|DAMAGE DEALER|Dead Rabbits Boss|Meursault
+C|DAMAGE DEALER|Hook Office Fixer|Hong Lu
+C|DAMAGE DEALER|Kurokumo Clan Wakashu|Rodion
+C|DAMAGE DEALER|Lobotomy Corp. Remnant|Faust
+C|DAMAGE DEALER|R Corp. 4th Pack Reindeer|Ishmael
+C|DAMAGE DEALER|Shi Assoc. East Section 3|Faust
+C|STATUS SPECIALIST|Dieci Assoc. South Section 4 Director|Meursault
+C|STATUS SPECIALIST|Kurokumo Clan Wakashu|Ryoshu
+C|STATUS SPECIALIST|Liu Assoc. South Section 4|Ryoshu
+C|STATUS SPECIALIST|Lobotomy E.G.O::Regret|Faust
+C|STATUS SPECIALIST|Molar Office Fixer|Yi Sang
+C|STATUS SPECIALIST|Öufi Assoc. South Section 3|Heathcliff
+C|STATUS SPECIALIST|R Corp. 4th Pack Rhino|Meursault
+C|STATUS SPECIALIST|Rosespanner Workshop Fixer|Gregor
+C|SUPPORT|Kurokumo Clan Captain|Gregor
+C|SUPPORT|LCCB Assistant Manager|Ryoshu
+C|SUPPORT|MultiCrack Office Fixer|Heathcliff
+C|SUPPORT|Seven Association South Section 6|Ryoshu
+C|SUPPORT|The Priest of La Manchaland|Gregor
+C|SUPPORT|W Corp. L2 Cleanup Agent|Meursault
+C|SUPPORT|W Corp. L3 Cleanup Captain|Outis
+C|TANK|K Corp. Class 3 Excision Staff|Hong Lu
+C|TANK|Lobotomy E.G.O::Red Eyes & Penitence|Ryoshu
+C|TANK|Zwei Assoc. West Section 3|Sinclair
+C|TANK|Zwei Association South Section 4|Gregor
+D|DAMAGE DEALER|Cinq Association South Section 5 Director|Don Quixote
+D|DAMAGE DEALER|G Corp. Manager Corporal|Gregor
+D|DAMAGE DEALER|LCB Sinner|Don Quixote
+D|DAMAGE DEALER|LCB Sinner|Heathcliff
+D|DAMAGE DEALER|LCB Sinner|Hong Lu
+D|DAMAGE DEALER|LCB Sinner|Outis
+D|DAMAGE DEALER|LCB Sinner|Rodion
+D|DAMAGE DEALER|LCB Sinner|Ryoshu
+D|DAMAGE DEALER|LCB Sinner|Sinclair
+D|DAMAGE DEALER|Lobotomy E.G.O::Sunshower|Heathcliff
+D|DAMAGE DEALER|Shi Association South Section 5 Director|Don Quixote
+D|DAMAGE DEALER|Shi Association South Section 5|Heathcliff
+D|DAMAGE DEALER|Shi Association South Section 5|Ishmael
+D|STATUS SPECIALIST|Molar Boatworks Fixer|Sinclair
+D|STATUS SPECIALIST|Edgar Family Butler|Ishmael
+D|STATUS SPECIALIST|LCB Sinner|Yi Sang
+D|STATUS SPECIALIST|Liu Association South Section 5|Hong Lu
+D|STATUS SPECIALIST|Liu Assoc. South Section 6|Gregor
+D|STATUS SPECIALIST|Liu Association South Section 6|Meursault
+D|STATUS SPECIALIST|Lobotomy E.G.O::Red Sheet|Sinclair
+D|STATUS SPECIALIST|N Corp. Mittelhammer|Don Quixote
+D|STATUS SPECIALIST|N Corp. Mittelhammer|Rodion
+D|STATUS SPECIALIST|Rosespanner Workshop Fixer|Meursault
+D|SUPPORT|G Corp. Head Manager|Outis
+D|SUPPORT|LCB Sinner|Faust
+D|SUPPORT|LCCB Assistant Manager|Rodion
+D|SUPPORT|N Corp. Kleinhammer|Heathcliff
+D|SUPPORT|R.B. Sous-chef|Gregor
+D|SUPPORT|Seven Assoc. South Section 6 Director|Outis
+D|SUPPORT|Seven Association South Section 6|Yi Sang
+D|SUPPORT|W Corp. L2 Cleanup Agent|Faust
+D|SUPPORT|W Corp. L2 Cleanup Agent|Hong Lu
+D|TANK|Cinq South Section 4|Outis
+D|TANK|Dieci Assoc. South Section 4|Yi Sang
+D|TANK|LCB Sinner|Gregor
+D|TANK|LCB Sinner|Ishmael
+D|TANK|Lobotomy E.G.O::Sloshing|Ishmael
+D|TANK|N Corp. Groẞhammer|Meursault
+D|TANK|Zwei Association South Section 4|Faust
+D|TANK|Zwei Association South Section 6|Sinclair
+D|TANK|Zwei Assoc. South Section 5|Rodion

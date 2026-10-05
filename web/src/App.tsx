@@ -1,78 +1,128 @@
-import { useMemo } from 'react'
-import { ComboList } from './components/ComboList'
-import { FusionList } from './components/FusionList'
+import { useMemo, useState } from 'react'
+import { EvaluateTab } from './components/EvaluateTab'
+import { FusionTab } from './components/FusionTab'
 import { GiftList } from './components/GiftList'
 import { OwnedGifts } from './components/OwnedGifts'
-import { type FloorFilter, PackList } from './components/PackList'
-import { TeamPicker, type TeamSelection } from './components/TeamPicker'
+import { PlanPanel } from './components/PlanPanel'
+import { availability } from './lib/plan'
+import { PackList } from './components/PackList'
+import { FormationBar } from './components/FormationBar'
+import { RunPanel } from './components/RunPanel'
+import { SkillsTab } from './components/SkillsTab'
+import { TeamTab } from './components/TeamTab'
 import { KeywordChip } from './components/bits'
 import { gameData } from './lib/data'
 import {
-  makeContext, packOnFloor, packsByGift, planCombos, planFusions, rankGifts, rankThemePacks, teamFocus,
+  DEFAULT_RUN, defaultFloors, makeContext, packInDifficulty, packOnFloor, packsByGift, rankGifts, rankThemePacks, teamFocus,
+  type Difficulty, type RunSettings,
 } from './lib/scoring'
 import { DEFAULT_DEPLOYED } from './lib/lineup'
 import { usePersistentState } from './lib/storage'
 import type { TierOverrides } from './lib/strength'
-import { buildTeam, suggestOrder, type OrderSuggestion } from './lib/teambuilder'
-import { SINNERS, type Combo, type Identity, type Sinner } from './lib/types'
+import type { ArtVariant } from './lib/images'
+import { lineupSuggestions, moveTo } from './lib/ordering'
+import type { SwapState } from './lib/skillswap'
+import type { EgoLoadout } from './lib/ego'
+import { buildTeam, suggestOrder } from './lib/teambuilder'
+import { addGift } from './lib/vestiges'
+import { SINNERS, type Combo, type Gift, type Identity, type Sinner } from './lib/types'
 
-type Tab = 'gifts' | 'packs' | 'fusions'
+type Tab = 'team' | 'gifts' | 'packs' | 'fusion' | 'evaluate' | 'skills'
+const TABS: Tab[] = ['team', 'gifts', 'packs', 'fusion', 'evaluate', 'skills']
+/** Each sinner's equipped identity id (every sinner always has one, like in game). */
+type Equipped = Partial<Record<Sinner, string | null>>
+
+/** Lineups saved before the Team tab (team + order) become the selection. */
+function legacySelection(): Sinner[] {
+  try {
+    const team = JSON.parse(localStorage.getItem('limbussite.team.v1') ?? '{}') as Equipped
+    const order = JSON.parse(localStorage.getItem('limbussite.order.v1') ?? '[]') as Sinner[]
+    const picked = SINNERS.filter((s) => team[s])
+    return [...order.filter((s) => picked.includes(s)), ...picked.filter((s) => !order.includes(s))]
+  } catch {
+    return []
+  }
+}
+
+/** The run starts from the old Theme packs floor filter, if there was one. */
+function legacyRun(): RunSettings {
+  try {
+    const old = JSON.parse(localStorage.getItem('limbussite.floor.v1') ?? 'null') as { difficulty?: Difficulty } | null
+    const difficulty = old?.difficulty ?? 'normal'
+    return { ...DEFAULT_RUN, difficulty, floors: defaultFloors(difficulty) }
+  } catch {
+    return DEFAULT_RUN
+  }
+}
 
 export default function App() {
-  const [team, setTeam] = usePersistentState<TeamSelection>('limbussite.team.v1', {})
+  const [team, setTeam] = usePersistentState<Equipped>('limbussite.team.v1', {})
+  const [firstSelection] = useState(legacySelection)
+  const [selection, setSelection] = usePersistentState<Sinner[]>('limbussite.selection.v1', firstSelection)
   const [owned, setOwned] = usePersistentState<string[]>('limbussite.owned.v1', [])
-  const [targets, setTargets] = usePersistentState<string[]>('limbussite.targets.v1', [])
   const [offered, setOffered] = usePersistentState<string[]>('limbussite.offered.v1', [])
-  const [floorFilter, setFloorFilter] = usePersistentState<FloorFilter>(
-    'limbussite.floor.v1', { difficulty: 'normal', floor: null })
-  const [tab, setTab] = usePersistentState<Tab>('limbussite.tab.v1', 'gifts')
+  const [firstRun] = useState(legacyRun)
+  const [run, setRun] = usePersistentState<RunSettings>('limbussite.run.v1', firstRun)
+  const [storedTab, setTab] = usePersistentState<string>('limbussite.tab.v1', 'team')
+  const tab: Tab = storedTab === 'fusions' ? 'fusion' : (TABS as string[]).includes(storedTab) ? storedTab as Tab : 'team'
+  // Your own gift sets (Best gifts > Your plan > Add a gift set); they count in scores like combos.
   const [customCombos, setCustomCombos] = usePersistentState<Combo[]>('limbussite.combos.v1', [])
-  const [savedOrder, setSavedOrder] = usePersistentState<Sinner[]>('limbussite.order.v1', [])
+  const [swaps, setSwaps] = usePersistentState<SwapState>('limbussite.swaps.v1', {})
   const [deployed, setDeployed] = usePersistentState<number>('limbussite.deployed.v3', DEFAULT_DEPLOYED)
-  const [orderNotes, setOrderNotes] = usePersistentState<OrderSuggestion['notes']>('limbussite.ordernotes.v1', {})
-  const [tiers, setTiers] = usePersistentState<TierOverrides>('limbussite.tiers.v1', {})
+  // Ratings set in an earlier version still count; there's no UI for them now that tiers aren't shown.
+  const [tiers] = usePersistentState<TierOverrides>('limbussite.tiers.v1', {})
+  // v2: threadspun became the default (v1 defaulted to base).
+  const [art, setArt] = usePersistentState<ArtVariant>('limbussite.art.v2', 'uptie')
+  const [dismissed, setDismissed] = usePersistentState<string[]>('limbussite.dismissed.v1', [])
+  // Equipped E.G.O per sinner and grade (Team tab).
+  const [loadout, setLoadout] = usePersistentState<EgoLoadout>('limbussite.egos.v1', {})
 
   const identitiesById = useMemo(() => new Map(gameData.identities.map((i) => [i.id, i])), [])
   const packsById = useMemo(() => new Map(gameData.themePacks.map((p) => [p.id, p])), [])
   const packsForGift = useMemo(() => packsByGift(gameData.themePacks), [])
-  // Picked sinners in deployment order: the saved order first, then anyone added since.
-  const order = useMemo(() => {
-    const picked = SINNERS.filter((s) => team[s] && identitiesById.has(team[s]!))
-    return [...savedOrder.filter((s) => picked.includes(s)), ...picked.filter((s) => !savedOrder.includes(s))]
-  }, [team, savedOrder, identitiesById])
-  const teamIdentities = useMemo(
-    () => order.map((s) => identitiesById.get(team[s]!)).filter((i): i is Identity => !!i),
-    [order, team, identitiesById],
-  )
+  // Every sinner shows an identity: the one you picked, or their base LCB Sinner.
+  const equipped = useMemo(() => {
+    const out = {} as Record<Sinner, Identity>
+    for (const s of SINNERS) {
+      const own = team[s] ? identitiesById.get(team[s]!) : undefined
+      const mine = gameData.identities.filter((i) => i.sinner === s)
+      out[s] = own ?? mine.find((i) => i.name.startsWith('LCB Sinner')) ?? mine[0]
+    }
+    return out
+  }, [team, identitiesById])
+  const order = useMemo(() => selection.filter((s, k) => SINNERS.includes(s) && selection.indexOf(s) === k), [selection])
+  const teamIdentities = useMemo(() => order.map((s) => equipped[s]).filter(Boolean), [order, equipped])
   const ctx = useMemo(
-    () => makeContext(gameData, teamIdentities, owned, targets, customCombos, deployed, tiers),
-    [teamIdentities, owned, targets, customCombos, deployed, tiers],
+    () => makeContext(gameData, teamIdentities, owned, { combos: customCombos, deployed, tiers, run, loadout, swaps }),
+    [teamIdentities, owned, customCombos, deployed, tiers, run, loadout, swaps],
   )
-  const applyOrder = (ids: Identity[]) => {
-    const s = suggestOrder(gameData, ids, deployed, owned, tiers)
-    setSavedOrder(s.order)
-    setOrderNotes(s.notes)
-  }
+  // Suggestions update live as gifts and identities change; nothing moves until you press Move.
+  const lineup = useMemo(
+    () => lineupSuggestions(gameData, teamIdentities, deployed, owned, tiers),
+    [teamIdentities, deployed, owned, tiers],
+  )
+  const suggestions = lineup.suggestions.filter((s) => !dismissed.includes(s.id))
+  const suggestedTo = Object.fromEntries(suggestions.map((s) => [s.sinner, s.to])) as Partial<Record<Sinner, number>>
   const focus = teamFocus(ctx.profile)
   const traitsOnTeam = [...ctx.profile.traitCounts].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1])
   const rankedGifts = useMemo(() => rankGifts(ctx), [ctx])
   const rankedPacks = useMemo(() => {
     const offeredPacks = offered.map((id) => packsById.get(id)).filter((p) => !!p)
     const inView = offeredPacks.length ? offeredPacks
-      : floorFilter.floor !== null
-        ? gameData.themePacks.filter((p) => packOnFloor(p, floorFilter.difficulty, floorFilter.floor!))
-        : gameData.themePacks
+      : run.floor !== null
+        ? gameData.themePacks.filter((p) => packOnFloor(p, run.difficulty, run.floor!))
+        : gameData.themePacks.filter((p) => packInDifficulty(p, run.difficulty))
     return rankThemePacks(ctx, inView)
-  }, [ctx, offered, packsById, floorFilter])
-  const fusions = useMemo(() => planFusions(ctx), [ctx])
-  const readyFusions = fusions.filter((f) => f.status === 'ready').length
-  const combos = useMemo(() => planCombos(ctx), [ctx])
+  }, [ctx, offered, packsById, run.difficulty, run.floor])
+  const currentPack = run.pack ? packsById.get(run.pack) ?? null : null
+  // Gifts you can get on the floor you're on (shops, rewards, this floor's packs).
+  const availableNow = useMemo(
+    () => new Set(gameData.gifts.filter((g) => availability(g, ctx, packsForGift).where === 'now').map((g) => g.id)),
+    [ctx, packsForGift],
+  )
+  const ownedGifts = useMemo(() => [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g), [ctx])
 
-  const own = (id: string) => {
-    setOwned((o) => (o.includes(id) ? o : [...o, id]))
-    setTargets((t) => t.filter((x) => x !== id))
-  }
-  const toggleTarget = (id: string) => setTargets((t) => (t.includes(id) ? t.filter((x) => x !== id) : [...t, id]))
+  const own = (id: string) => setOwned((o) => addGift(o, id, ctx.giftsById.get(id)?.tier ?? null))
 
   return (
     <div className="app">
@@ -88,39 +138,62 @@ export default function App() {
         </p>
       </header>
 
-      <div className="layout">
-        <aside className="side">
-          <TeamPicker
-            identities={gameData.identities} team={team} onChange={setTeam}
-            order={order} onOrderChange={(o) => { setSavedOrder(o); setOrderNotes({}) }}
-            deployed={deployed} onDeployedChange={setDeployed} notes={orderNotes}
-            tiers={tiers} onTiersChange={setTiers}
-            onSuggestOrder={() => applyOrder(teamIdentities)}
+      <nav className="tabs main-tabs" role="tablist">
+        <TabButton id="team" tab={tab} setTab={setTab}>
+          Team <span className="badge">{order.length}/12</span>
+        </TabButton>
+        <TabButton id="gifts" tab={tab} setTab={setTab}>Best gifts</TabButton>
+        <TabButton id="packs" tab={tab} setTab={setTab}>
+          Theme packs {run.floor !== null && <span className="badge">F{run.floor}</span>}
+        </TabButton>
+        <TabButton id="fusion" tab={tab} setTab={setTab}>Fusion</TabButton>
+        <TabButton id="evaluate" tab={tab} setTab={setTab}>Evaluate</TabButton>
+        <TabButton id="skills" tab={tab} setTab={setTab}>Skill swaps</TabButton>
+      </nav>
+
+      <FormationBar selection={order} equipped={equipped} deployed={deployed} minDeployed={5} maxDeployed={7}
+        suggested={suggestedTo} suggestionCount={suggestions.length} art={art}
+        onSelectionChange={setSelection}
+        onDeployedChange={setDeployed} onOpenTeam={() => setTab('team')} />
+
+      {tab === 'team' ? (
+        <div role="tabpanel">
+          <TeamTab
+            identities={gameData.identities} equipped={equipped} selection={order} deployed={deployed}
+            art={art} onArtChange={setArt}
+            egos={gameData.egos ?? []} loadout={loadout} onLoadoutChange={setLoadout} battle={ctx.battle}
+            suggestions={suggestions} info={lineup.info}
+            dismissedCount={lineup.suggestions.length - suggestions.length}
+            onApply={(sug) => setSelection(moveTo(order, sug.sinner, sug.to))}
+            onDismiss={(sug) => setDismissed((d) => [...d, sug.id])}
+            onRestoreDismissed={() => setDismissed([])}
+            onToggle={(s) => setSelection(order.includes(s) ? order.filter((x) => x !== s) : [...order, s])}
+            onEquip={(s, id) => setTeam({ ...team, [s]: id })}
+            onClear={() => setSelection([])}
+            onSelectAll={() => setSelection([...order, ...SINNERS.filter((s) => !order.includes(s))])}
+            onDeployedChange={setDeployed}
             onBuild={(focus) => {
+              // A new team needs a starting order; after that, only suggestions.
               const built = buildTeam(gameData, focus, undefined, tiers)
               setTeam(built.team)
-              applyOrder(Object.values(built.team).map((id) => identitiesById.get(id!)!).filter(Boolean))
+              const ids = SINNERS.map((s) => identitiesById.get(built.team[s] ?? '') ?? equipped[s])
+              setSelection(suggestOrder(gameData, ids, deployed, owned, tiers).order)
             }}
           />
-          <OwnedGifts gifts={gameData.gifts} owned={owned}
-            onChange={(o) => { setOwned(o); setTargets((t) => t.filter((x) => !o.includes(x))) }} />
-          <OwnedGifts
-            gifts={gameData.gifts} owned={targets} onChange={setTargets} exclude={owned}
-            title="Targets" placeholder="Target a gift…"
-            emptyHint="Gifts you want. The Theme packs tab ranks packs by how many of these they give."
-            meta={(g) => {
-              const n = packsForGift.get(g.id)?.length ?? 0
-              return n ? `${n} pack${n > 1 ? 's' : ''}` : 'no pack'
-            }}
-          />
+        </div>
+      ) : (
+      <div className="layout">
+        <aside className="side">
+          <RunPanel run={run} onChange={setRun} packs={gameData.themePacks} ranked={rankedGifts} ctx={ctx} />
+          <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={setOwned} />
         </aside>
 
         <main className="main">
-          <section className="focus panel">
+          {(tab === 'gifts' || tab === 'packs') && <section className="focus panel">
             {focus.length === 0 && traitsOnTeam.length === 0 ? (
               <p className="hint">
-                Pick identities for your team on the left. Recommendations are based on the status
-                keywords (Burn, Bleed, Tremor…) your team uses and on gifts built for its
+                Pick your team on the Team tab. Recommendations are based on the status keywords
+                (Burn, Bleed, Tremor…) your deployed sinners use and on gifts built for their
                 affiliations, like The Thumb or Heishou Pack.
               </p>
             ) : (
@@ -143,41 +216,37 @@ export default function App() {
                 )}
               </>
             )}
-          </section>
-
-          <nav className="tabs" role="tablist">
-            <TabButton id="gifts" tab={tab} setTab={setTab}>Best gifts</TabButton>
-            <TabButton id="packs" tab={tab} setTab={setTab}>
-              Theme packs {targets.length > 0 && <span className="badge">★{ctx.targets.size}</span>}
-            </TabButton>
-            <TabButton id="fusions" tab={tab} setTab={setTab}>
-              Fusions & combos {readyFusions > 0 && <span className="badge">{readyFusions}</span>}
-            </TabButton>
-          </nav>
+          </section>}
 
           <div role="tabpanel">
+            {tab === 'gifts' && <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={own}
+              gifts={gameData.gifts} customSets={customCombos}
+              onAddSet={(c) => setCustomCombos((l) => [...l.filter((x) => x.id !== c.id), c])}
+              onRemoveSet={(id) => setCustomCombos((l) => l.filter((x) => x.id !== id))} />}
             {tab === 'gifts' && (
-              <GiftList ranked={rankedGifts} packsForGift={packsForGift}
-                teamKeywords={focus.map((f) => f.keyword)} targets={ctx.targets}
-                onOwn={own} onToggleTarget={toggleTarget} />
+              <GiftList ranked={rankedGifts} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
+                teamKeywords={focus.map((f) => f.keyword)}
+                onOwn={own} giftsById={ctx.giftsById} owned={ctx.owned} />
             )}
             {tab === 'packs' && (
               <PackList allPacks={gameData.themePacks} ranked={rankedPacks}
                 offered={offered.filter((id) => packsById.has(id))} onOfferedChange={setOffered}
-                targetCount={ctx.targets.size} floorFilter={floorFilter} onFloorFilterChange={setFloorFilter} />
+                run={run} onPickPack={(id) => setRun({ ...run, pack: id })}
+                packsForGift={packsForGift} giftsById={ctx.giftsById} owned={ctx.owned} />
             )}
-            {tab === 'fusions' && (
-              <>
-                <ComboList plans={combos} gifts={gameData.gifts} packsForGift={packsForGift}
-                  onSave={(c) => setCustomCombos((cs) => [...cs, c])}
-                  onDelete={(id) => setCustomCombos((cs) => cs.filter((c) => c.id !== id))}
-                  onTarget={(ids) => setTargets((t) => [...t, ...ids.filter((id) => !t.includes(id) && !owned.includes(id))])} />
-                <section className="group"><h3>Fusions</h3><FusionList plans={fusions} /></section>
-              </>
+            {tab === 'fusion' && (
+              <FusionTab ctx={ctx} owned={owned} onOwnedChange={setOwned} run={run} pack={currentPack}
+                teamKeywords={focus.map((f) => f.keyword)} packsForGift={packsForGift} />
+            )}
+            {tab === 'evaluate' && <EvaluateTab ctx={ctx} packsForGift={packsForGift} />}
+            {tab === 'skills' && (
+              <SkillsTab team={teamIdentities.slice(0, deployed)} swaps={swaps} onSwapsChange={setSwaps} owned={ownedGifts} art={art}
+                egos={gameData.egos ?? []} loadout={loadout} run={run} battle={ctx.battle} onOpenTeam={() => setTab('team')} />
             )}
           </div>
         </main>
       </div>
+      )}
     </div>
   )
 }

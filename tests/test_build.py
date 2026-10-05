@@ -27,6 +27,12 @@ class WikitextTests(unittest.TestCase):
             ["Burn", "Bleed"],
         )
 
+    def test_gift_icon_file(self):
+        self.assertEqual(build.gift_icon_file("Ebony Brooch (MD)"), "Ebony Brooch Gift.png")
+        self.assertEqual(build.gift_icon_file("Tailor's Scissors"), "Tailor's Scissors Gift.png")
+        self.assertEqual(build.gift_icon_file("Hellterfly\u2019s Dream"), "Hellterfly\u2019s Dream Gift.png")
+        self.assertEqual(build.gift_icon_file("Nagel und Hammer Scriptures 2"), "Nagel und Hammer Scriptures 2 Gift.png")
+
     def test_split_ingredients_with_commas_in_names(self):
         known = ["Blood, Sweat, and Tears", "Green Spirit", "Lithograph"]
         self.assertEqual(
@@ -116,6 +122,8 @@ class BuildTests(unittest.TestCase):
         h = next(g for g in data["gifts"] if g["id"] == "hellterfly-s-dream")
         self.assertNotIn("levels", h)
         self.assertTrue(h["effect"].startswith("When applying Burn Potency"))
+        self.assertEqual(len(h["upgrades"]), 2)  # + and ++ effect text
+        self.assertNotEqual(h["upgrades"][1], h["effect"])
         self.assertEqual(
             h["wiki_url"],
             "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Hellterfly%27s%20Dream",
@@ -150,6 +158,19 @@ class BuildTests(unittest.TestCase):
         coin = next(g for g in data["gifts"] if g["id"] == "coin")
         self.assertFalse(coin["mirror_dungeon"])
         self.assertTrue(all(p["wiki_url"] is None for p in data["theme_packs"]))
+
+    def test_removed_content_is_dropped(self):
+        from unittest import mock
+        gifts, packs, fusions, _ = load()
+        name = next(g for g in gifts if g["id"] == "hellterfly-s-dream")["name"]
+        with mock.patch.object(build, "REMOVED_GIFTS", {name}), \
+                mock.patch.object(build, "REMOVED_PACKS", {"Season of the Flame"}):
+            data, _ = build.export_for_app(gifts, packs, fusions, [], pack_info={
+                "Season of the Flame": {"title": "Season of the Flame Theme Pack", "group": None,
+                                        "floors": None, "gift_pool": ["ashes-to-ashes"], "unique": []},
+            })
+        self.assertNotIn("hellterfly-s-dream", {g["id"] for g in data["gifts"]})
+        self.assertNotIn("Season of the Flame", {p["name"] for p in data["theme_packs"]})
 
     def test_gift_list_url_escapes_fragment(self):
         self.assertTrue(build.gift_list_url("T-1 Perpetual, Motion & Co").endswith(

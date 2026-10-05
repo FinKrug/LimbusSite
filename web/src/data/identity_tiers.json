@@ -1,33 +1,1319 @@
 {
-  "source": "https://mmoculture.com/tips-guides/limbus-company-tier-list/",
-  "updated": "2026-09",
-  "note": "General endgame tier list, not Mirror Dungeon specific. Only the top of the list is here; unlisted identities are rated by rarity. Edit freely, or rate identities in the app (your ratings win).",
+  "about": "Mirror Dungeon ranking: the average of Prydwen.gg (endgame) and Great Limbus Library tiers, +0.5 for Status Specialists because MD keyword gifts multiply status damage. Built by scraper/tiers.py from data/tiers/*.txt. Your ratings in the app override it.",
+  "sources": [
+    "https://www.prydwen.gg/limbus-company/tier-list",
+    "https://gll-fun.com/limbus/en/tierlist/identities/"
+  ],
+  "updated": "2026-09-23",
   "tiers": {
-    "heishou-pack-mao-branch-adept-faust": "SSS",
-    "blade-of-the-house-of-spiders-ryoshu": "SSS",
-    "the-house-of-spiders-the-index-nursefather-yi-sang": "SSS",
-    "the-house-of-spiders-the-middle-nursefather-outis": "SSS",
-    "the-lord-of-hongyuan-hong-lu": "SSS",
-    "the-manager-of-la-manchaland-don-quixote": "SS",
-    "the-thumb-east-capo-iiii-meursault": "SS",
-    "heishou-pack-you-branch-adept-heathcliff": "SS",
-    "the-house-of-spiders-the-thumb-nursefather-rodion": "SS",
-    "jeong-s-office-rep-ishmael": "SS",
-    "dawn-office-rep-gregor": "SS",
-    "lobotomy-e-g-o-in-the-name-of-love-and-hate-don-quixote": "S+",
-    "blade-lineage-mentor-meursault": "S+",
-    "wild-hunt-heathcliff": "S+",
-    "molar-boatworks-fixer-ishmael": "S+",
-    "dawn-office-fixer-faust": "S+",
-    "lobotomy-e-g-o-magic-bullet-outis": "S+",
-    "lobotomy-e-g-o-solemn-lament-yi-sang": "S+",
-    "lobotomy-e-g-o-faint-aroma-solitude-ryoshu": "S",
-    "lobotomy-e-g-o-regret-faust": "S",
-    "the-princess-of-la-manchaland-rodion": "S",
-    "the-ring-fauvist-docent-rodion": "S",
-    "the-pequod-captain-ishmael": "S",
-    "the-pequod-harpooneer-heathcliff": "S",
-    "tingtang-gang-gangleader-hong-lu": "S",
-    "edgar-family-heir-gregor": "S"
+    "blade-of-the-house-of-spiders-ryoshu": {
+      "tier": "SSS",
+      "score": 10.0,
+      "role": "Damage",
+      "prydwen": "SSS",
+      "gll": "SSS"
+    },
+    "heishou-pack-mao-branch-adept-faust": {
+      "tier": "SSS",
+      "score": 10.0,
+      "role": "Damage",
+      "prydwen": "SSS",
+      "gll": "SSS"
+    },
+    "lobotomy-e-g-o-the-sword-sharpened-with-tears-rodion": {
+      "tier": "SSS",
+      "score": 10.0,
+      "role": "Status",
+      "prydwen": "SS",
+      "gll": "SSS"
+    },
+    "the-house-of-spiders-the-index-nursefather-yi-sang": {
+      "tier": "SSS",
+      "score": 10.0,
+      "role": "Damage",
+      "prydwen": "SSS",
+      "gll": "SSS"
+    },
+    "the-house-of-spiders-the-middle-nursefather-outis": {
+      "tier": "SSS",
+      "score": 10.0,
+      "role": "Damage",
+      "prydwen": "SSS",
+      "gll": "SSS"
+    },
+    "the-house-of-spiders-the-thumb-nursefather-rodion": {
+      "tier": "SSS",
+      "score": 10.0,
+      "role": "Damage",
+      "prydwen": "SSS",
+      "gll": "SSS"
+    },
+    "the-lord-of-hongyuan-hong-lu": {
+      "tier": "SSS",
+      "score": 10.0,
+      "role": "Support",
+      "prydwen": "SSS",
+      "gll": "SSS"
+    },
+    "dawn-office-rep-gregor": {
+      "tier": "SSS",
+      "score": 9.5,
+      "role": "Status",
+      "prydwen": "SS",
+      "gll": "SS"
+    },
+    "lobotomy-e-g-o-faint-aroma-solitude-ryoshu": {
+      "tier": "SSS",
+      "score": 9.5,
+      "role": "Status",
+      "prydwen": "SS",
+      "gll": "SS"
+    },
+    "lobotomy-e-g-o-solemn-lament-yi-sang": {
+      "tier": "SSS",
+      "score": 9.5,
+      "role": "Status",
+      "prydwen": "SS",
+      "gll": "SS"
+    },
+    "kurokumo-clan-captain-ishmael": {
+      "tier": "SS",
+      "score": 9.25,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "SS"
+    },
+    "kurokumo-clan-wakashu-heathcliff": {
+      "tier": "SS",
+      "score": 9.25,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "SS"
+    },
+    "dawn-office-fixer-faust": {
+      "tier": "SS",
+      "score": 9.0,
+      "role": "Damage",
+      "prydwen": "SS",
+      "gll": "SS"
+    },
+    "dawn-office-fixer-sinclair": {
+      "tier": "SS",
+      "score": 9.0,
+      "role": "Damage",
+      "prydwen": "SS",
+      "gll": "SS"
+    },
+    "jeong-s-office-rep-ishmael": {
+      "tier": "SS",
+      "score": 9.0,
+      "role": "Damage",
+      "prydwen": "SS",
+      "gll": "SS"
+    },
+    "the-house-of-spiders-the-ring-nursefather-hong-lu": {
+      "tier": "SS",
+      "score": 9.0,
+      "role": "Support",
+      "prydwen": "SS",
+      "gll": "SS"
+    },
+    "the-middle-big-brother-heathcliff": {
+      "tier": "SS",
+      "score": 9.0,
+      "role": "Support",
+      "prydwen": "SS",
+      "gll": "SS"
+    },
+    "the-thumb-east-capo-iiii-meursault": {
+      "tier": "SS",
+      "score": 9.0,
+      "role": "Damage",
+      "prydwen": "SS",
+      "gll": "SS"
+    },
+    "effloresced-e-g-o-spicebush-yi-sang": {
+      "tier": "SS",
+      "score": 8.75,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "heishou-pack-mao-branch-outis": {
+      "tier": "SS",
+      "score": 8.75,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "heishou-pack-mao-branch-ryoshu": {
+      "tier": "SS",
+      "score": 8.75,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "the-house-of-spiders-the-ring-apprentice-faust": {
+      "tier": "SS",
+      "score": 8.75,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "SS"
+    },
+    "lcd-osir-team-ishmael": {
+      "tier": "S+",
+      "score": 8.5,
+      "role": "Damage",
+      "prydwen": "SS",
+      "gll": "S"
+    },
+    "lce-e-g-o-lantern-yi-sang": {
+      "tier": "S+",
+      "score": 8.5,
+      "role": "Status",
+      "prydwen": "SS",
+      "gll": "A"
+    },
+    "blade-lineage-mentor-meursault": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "drifting-blade-of-hongyuan-ryoshu": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Support",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "heishou-pack-you-branch-adept-heathcliff": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "lca-udjat-vanguard-team-3-leader-outis": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Support",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "lccb-assistant-manager-ishmael": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "A"
+    },
+    "lce-e-g-o-ardor-blossom-star-faust": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "t-corp-class-2-collection-staff-rodion": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "A"
+    },
+    "t-corp-class-3-collection-staff-don-quixote": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "A"
+    },
+    "t-corp-class-3-vdcu-staff-outis": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "A"
+    },
+    "the-house-of-spiders-the-middle-apprentice-ishmael": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "the-house-of-spiders-the-thumb-apprentice-heathcliff": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "the-index-proxy-effloresced-e-g-o-procuration-don-quixote": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "the-manager-of-la-manchaland-don-quixote": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "the-middle-little-brother-sinclair": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "the-ring-fauvist-docent-rodion": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "wild-hunt-heathcliff": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "S"
+    },
+    "wuthering-heights-butler-faust": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "A"
+    },
+    "wuthering-heights-chief-butler-outis": {
+      "tier": "S+",
+      "score": 8.25,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "A"
+    },
+    "lobotomy-e-g-o-lamp-gregor": {
+      "tier": "S",
+      "score": 8.0,
+      "role": "Support",
+      "prydwen": "S",
+      "gll": "S"
+    },
+    "s-corp-ch-unokkun-hong-lu": {
+      "tier": "S",
+      "score": 8.0,
+      "role": "Status",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "the-ring-pointillist-student-yi-sang": {
+      "tier": "S",
+      "score": 8.0,
+      "role": "Status",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "heishou-pack-wei-branch-don-quixote": {
+      "tier": "S",
+      "score": 7.75,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "A"
+    },
+    "lobotomy-e-g-o-in-the-name-of-love-and-hate-don-quixote": {
+      "tier": "S",
+      "score": 7.75,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "A"
+    },
+    "the-house-of-spiders-the-pinky-apprentice-sinclair": {
+      "tier": "S",
+      "score": 7.75,
+      "role": "Damage",
+      "prydwen": "S+",
+      "gll": "A"
+    },
+    "full-stop-office-fixer-heathcliff": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Damage",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "full-stop-office-rep-hong-lu": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Damage",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "haute-couture-boutique-du-rouge-ishmael": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Damage",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "heishou-pack-si-branch-gregor": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Damage",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "heishou-pack-si-branch-rodion": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Damage",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "lobotomy-e-g-o-hornet-alteration-meursault": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Damage",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "lobotomy-e-g-o-magic-bullet-outis": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Status",
+      "prydwen": "A",
+      "gll": "A"
+    },
+    "molar-boatworks-fixer-ishmael": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Status",
+      "prydwen": "A",
+      "gll": "A"
+    },
+    "n-corp-e-g-o-contempt-awe-ryoshu": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Damage",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "night-awls-capitano-gregor": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Damage",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "the-middle-little-sister-don-quixote": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Damage",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "the-prince-of-la-manchaland-meursault": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Support",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "the-ring-fauvist-student-meursault": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Damage",
+      "prydwen": "S",
+      "gll": "A"
+    },
+    "the-thumb-east-soldato-ii-sinclair": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Status",
+      "prydwen": "S+",
+      "gll": "B"
+    },
+    "w-corp-l3-cleanup-agent-yi-sang": {
+      "tier": "S",
+      "score": 7.5,
+      "role": "Status",
+      "prydwen": "A",
+      "gll": "A"
+    },
+    "molar-office-fixer-outis": {
+      "tier": "A",
+      "score": 7.25,
+      "role": "Status",
+      "prydwen": "S",
+      "gll": "B"
+    },
+    "heishou-pack-wu-branch-adept-yi-sang": {
+      "tier": "A",
+      "score": 7.0,
+      "role": "Support",
+      "prydwen": "A",
+      "gll": "A"
+    },
+    "heishou-pack-you-branch-sinclair": {
+      "tier": "A",
+      "score": 7.0,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "A"
+    },
+    "district-20-yurodivy-hong-lu": {
+      "tier": "A",
+      "score": 6.75,
+      "role": "Status",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "edgar-family-heir-gregor": {
+      "tier": "A",
+      "score": 6.75,
+      "role": "Status",
+      "prydwen": "B",
+      "gll": "A"
+    },
+    "lobotomy-e-g-o-lantern-don-quixote": {
+      "tier": "A",
+      "score": 6.75,
+      "role": "Status",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "the-middle-little-brother-meursault": {
+      "tier": "A",
+      "score": 6.75,
+      "role": "Support",
+      "prydwen": "S",
+      "gll": "B"
+    },
+    "cinq-assoc-east-section-3-don-quixote": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "cinq-assoc-east-section-3-hong-lu": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "cinq-assoc-west-section-3-meursault": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "devyat-assoc-north-section-3-rodion": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "devyat-assoc-north-section-3-sinclair": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "firefist-office-survivor-gregor": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "lce-e-g-o-aedd-gregor": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Support",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "multicrack-office-rep-faust": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "n-corp-e-g-o-fell-bullet-yi-sang": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "r-corp-4th-pack-rabbit-heathcliff": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Support",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "the-princess-of-la-manchaland-rodion": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Support",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "zwei-assoc-west-section-3-ishmael": {
+      "tier": "A",
+      "score": 6.25,
+      "role": "Tank",
+      "prydwen": "A",
+      "gll": "B"
+    },
+    "kurokumo-clan-wakashu-hong-lu": {
+      "tier": "B",
+      "score": 6.0,
+      "role": "Status",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "liu-assoc-south-section-4-director-rodion": {
+      "tier": "B",
+      "score": 6.0,
+      "role": "Status",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "seven-assoc-south-section-4-faust": {
+      "tier": "B",
+      "score": 6.0,
+      "role": "Status",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "blade-lineage-salsu-faust": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Support",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "blade-lineage-salsu-sinclair": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "blade-lineage-salsu-yi-sang": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "dieci-assoc-south-section-4-hong-lu": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "dieci-assoc-south-section-4-rodion": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Tank",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "family-hierarch-candidate-ishmael": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "haute-couture-le-noir-footwear-hall-ryoshu": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Tank",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "lce-e-g-o-dimension-shredder-yi-sang": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "liu-assoc-south-section-3-yi-sang": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Support",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "r-b-chef-de-cuisine-ryoshu": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "C"
+    },
+    "r-corp-4th-pack-reindeer-hong-lu": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "the-barber-of-la-manchaland-outis": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "the-index-proselyte-paper-slip-faust": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "B"
+    },
+    "the-one-who-shall-grip-sinclair": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "C"
+    },
+    "tingtang-gang-gangleader-hong-lu": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "C"
+    },
+    "w-corp-l3-cleanup-agent-don-quixote": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "C"
+    },
+    "w-corp-l3-cleanup-agent-ryoshu": {
+      "tier": "B",
+      "score": 5.5,
+      "role": "Damage",
+      "prydwen": "A",
+      "gll": "C"
+    },
+    "district-20-yurodivy-ryoshu": {
+      "tier": "B",
+      "score": 5.25,
+      "role": "Status",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "fanghunt-office-fixer-hong-lu": {
+      "tier": "B",
+      "score": 5.25,
+      "role": "Status",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "liu-assoc-south-section-4-ishmael": {
+      "tier": "B",
+      "score": 5.25,
+      "role": "Status",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "rosespanner-workshop-rep-rodion": {
+      "tier": "B",
+      "score": 5.25,
+      "role": "Status",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "seven-assoc-south-section-4-heathcliff": {
+      "tier": "B",
+      "score": 5.25,
+      "role": "Status",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "the-ring-pointillist-student-outis": {
+      "tier": "B",
+      "score": 5.25,
+      "role": "Status",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "blade-lineage-salsu-don-quixote": {
+      "tier": "B",
+      "score": 4.75,
+      "role": "Support",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "cinq-assoc-south-section-4-director-sinclair": {
+      "tier": "B",
+      "score": 4.75,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "edgar-family-chief-butler-ryoshu": {
+      "tier": "B",
+      "score": 4.75,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "r-corp-4th-pack-reindeer-rodion": {
+      "tier": "B",
+      "score": 4.75,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "the-one-who-grips-faust": {
+      "tier": "B",
+      "score": 4.75,
+      "role": "Support",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "the-pequod-captain-ishmael": {
+      "tier": "B",
+      "score": 4.75,
+      "role": "Support",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "the-pequod-first-mate-yi-sang": {
+      "tier": "B",
+      "score": 4.75,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "the-pequod-harpooneer-heathcliff": {
+      "tier": "B",
+      "score": 4.75,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "twinhook-pirates-first-mate-gregor": {
+      "tier": "B",
+      "score": 4.75,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "w-corp-l4-cleanup-agent-cca-heathcliff": {
+      "tier": "B",
+      "score": 4.75,
+      "role": "Damage",
+      "prydwen": "B",
+      "gll": "C"
+    },
+    "dieci-assoc-south-section-4-director-meursault": {
+      "tier": "C",
+      "score": 4.5,
+      "role": "Status",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "kurokumo-clan-wakashu-ryoshu": {
+      "tier": "C",
+      "score": 4.5,
+      "role": "Status",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "liu-assoc-south-section-4-ryoshu": {
+      "tier": "C",
+      "score": 4.5,
+      "role": "Status",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "lobotomy-e-g-o-regret-faust": {
+      "tier": "C",
+      "score": 4.5,
+      "role": "Status",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "molar-office-fixer-yi-sang": {
+      "tier": "C",
+      "score": 4.5,
+      "role": "Status",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "oufi-assoc-south-section-3-heathcliff": {
+      "tier": "C",
+      "score": 4.5,
+      "role": "Status",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "r-corp-4th-pack-rhino-meursault": {
+      "tier": "C",
+      "score": 4.5,
+      "role": "Status",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "blade-lineage-salsu-outis": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Damage",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "hook-office-fixer-hong-lu": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Damage",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "k-corp-class-3-excision-staff-hong-lu": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Tank",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "lcb-sinner-meursault": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Tank",
+      "prydwen": "B",
+      "gll": "D"
+    },
+    "lobotomy-e-g-o-red-eyes-penitence-ryoshu": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Tank",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "los-mariachis-jefe-sinclair": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Tank",
+      "prydwen": "B",
+      "gll": "D"
+    },
+    "multicrack-office-fixer-heathcliff": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Support",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "r-corp-4th-pack-reindeer-ishmael": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Damage",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "seven-assoc-south-section-6-ryoshu": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Support",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "shi-assoc-east-section-3-faust": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Damage",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "the-priest-of-la-manchaland-gregor": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Support",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "w-corp-l3-cleanup-captain-outis": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Support",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "zwei-assoc-south-section-4-gregor": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Tank",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "zwei-assoc-west-section-3-sinclair": {
+      "tier": "C",
+      "score": 4.0,
+      "role": "Tank",
+      "prydwen": "C",
+      "gll": "C"
+    },
+    "rosespanner-workshop-fixer-gregor": {
+      "tier": "C",
+      "score": 3.75,
+      "role": "Status",
+      "prydwen": "C",
+      "gll": "D"
+    },
+    "dead-rabbits-boss-meursault": {
+      "tier": "C",
+      "score": 3.25,
+      "role": "Damage",
+      "prydwen": "C",
+      "gll": "D"
+    },
+    "dieci-assoc-south-section-4-yi-sang": {
+      "tier": "C",
+      "score": 3.25,
+      "role": "Tank",
+      "prydwen": "D",
+      "gll": "C"
+    },
+    "kurokumo-clan-captain-gregor": {
+      "tier": "C",
+      "score": 3.25,
+      "role": "Support",
+      "prydwen": "C",
+      "gll": "D"
+    },
+    "kurokumo-clan-wakashu-rodion": {
+      "tier": "C",
+      "score": 3.25,
+      "role": "Damage",
+      "prydwen": "C",
+      "gll": "D"
+    },
+    "lccb-assistant-manager-ryoshu": {
+      "tier": "C",
+      "score": 3.25,
+      "role": "Support",
+      "prydwen": "C",
+      "gll": "D"
+    },
+    "lobotomy-corp-remnant-faust": {
+      "tier": "C",
+      "score": 3.25,
+      "role": "Damage",
+      "prydwen": "C",
+      "gll": "D"
+    },
+    "w-corp-l2-cleanup-agent-meursault": {
+      "tier": "C",
+      "score": 3.25,
+      "role": "Support",
+      "prydwen": "C",
+      "gll": "D"
+    },
+    "edgar-family-butler-ishmael": {
+      "tier": "D",
+      "score": 3.0,
+      "role": "Status",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-yi-sang": {
+      "tier": "D",
+      "score": 3.0,
+      "role": "Status",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "liu-assoc-south-section-5-hong-lu": {
+      "tier": "D",
+      "score": 3.0,
+      "role": "Status",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "liu-assoc-south-section-6-gregor": {
+      "tier": "D",
+      "score": 3.0,
+      "role": "Status",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "liu-assoc-south-section-6-meursault": {
+      "tier": "D",
+      "score": 3.0,
+      "role": "Status",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lobotomy-e-g-o-red-sheet-sinclair": {
+      "tier": "D",
+      "score": 3.0,
+      "role": "Status",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "molar-boatworks-fixer-sinclair": {
+      "tier": "D",
+      "score": 3.0,
+      "role": "Status",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "n-corp-mittelhammer-don-quixote": {
+      "tier": "D",
+      "score": 3.0,
+      "role": "Status",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "n-corp-mittelhammer-rodion": {
+      "tier": "D",
+      "score": 3.0,
+      "role": "Status",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "rosespanner-workshop-fixer-meursault": {
+      "tier": "D",
+      "score": 3.0,
+      "role": "Status",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "cinq-assoc-south-section-4-outis": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Tank",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "cinq-assoc-south-section-5-director-don-quixote": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "g-corp-head-manager-outis": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Support",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "g-corp-manager-corporal-gregor": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-don-quixote": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-faust": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Support",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-gregor": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Tank",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-heathcliff": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-hong-lu": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-ishmael": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Tank",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-outis": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-rodion": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-ryoshu": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lcb-sinner-sinclair": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lccb-assistant-manager-rodion": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Support",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lobotomy-e-g-o-sloshing-ishmael": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Tank",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "lobotomy-e-g-o-sunshower-heathcliff": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "n-corp-gro-hammer-meursault": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Tank",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "n-corp-kleinhammer-heathcliff": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Support",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "r-b-sous-chef-gregor": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Support",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "seven-assoc-south-section-6-director-outis": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Support",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "seven-assoc-south-section-6-yi-sang": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Support",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "shi-assoc-south-section-5-director-don-quixote": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "shi-assoc-south-section-5-heathcliff": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "shi-assoc-south-section-5-ishmael": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Damage",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "w-corp-l2-cleanup-agent-faust": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Support",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "w-corp-l2-cleanup-agent-hong-lu": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Support",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "zwei-assoc-south-section-4-faust": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Tank",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "zwei-assoc-south-section-5-rodion": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Tank",
+      "prydwen": "D",
+      "gll": "D"
+    },
+    "zwei-assoc-south-section-6-sinclair": {
+      "tier": "D",
+      "score": 2.5,
+      "role": "Tank",
+      "prydwen": "D",
+      "gll": "D"
+    }
   }
 }

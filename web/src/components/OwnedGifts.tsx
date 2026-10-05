@@ -1,33 +1,34 @@
 import { useId, useMemo, useState } from 'react'
-import type { Gift } from '../lib/types'
+import { type Gift, tierLabel } from '../lib/types'
+import { VESTIGES, addGift, countOf, isVestige, removeOne } from '../lib/vestiges'
+import { GiftIcon } from './GiftIcon'
 import { GiftLabel, KeywordChip, SinDot, TierBadge } from './bits'
+
+const VESTIGE_NAMES: Record<number, string> = { 1: 'Dark Vestige', 2: 'Faint Vestige', 3: 'Twinkling Vestige', 4: 'Brilliant Vestige', 5: 'Lunar Vestige' }
 
 interface Props {
   gifts: Gift[]
+  /** Owned gift ids; vestiges can appear more than once. */
   owned: string[]
   onChange: (owned: string[]) => void
-  title?: string
-  placeholder?: string
-  emptyHint?: string
-  /** Gift ids that can't be added here (e.g. already owned). */
-  exclude?: string[]
-  /** Extra info shown next to each gift. */
-  meta?: (g: Gift) => React.ReactNode
 }
 
-export function OwnedGifts({
-  gifts, owned, onChange, title = 'Gifts you have', placeholder = 'Add a gift…',
-  emptyHint = 'Add gifts as you pick them up during a run.', exclude = [], meta,
-}: Props) {
+/**
+ * "Gifts you have": search to add, icons, and a row of Vestige counters. Adding a
+ * gift you already have adds a Vestige of its tier instead, like the game does.
+ */
+export function OwnedGifts({ gifts, owned, onChange }: Props) {
   const byId = useMemo(() => new Map(gifts.map((g) => [g.id, g])), [gifts])
-  const ownedGifts = owned.map((id) => byId.get(id)).filter((g): g is Gift => !!g)
+  const ownedGifts = [...new Set(owned)].filter((id) => !isVestige(id)).map((id) => byId.get(id)).filter((g): g is Gift => !!g)
+  const vestiges = VESTIGES.map((id) => byId.get(id)).filter((g): g is Gift => !!g)
+  const vestigeTotal = owned.filter(isVestige).length
   const [confirmClear, setConfirmClear] = useState(false)
 
   return (
-    <section className="panel">
+    <section className="panel owned-panel">
       <header className="panel-head">
-        <h2>{title} <span className="count">{ownedGifts.length}</span></h2>
-        {ownedGifts.length > 0 && (
+        <h2>Gifts you have <span className="count">{ownedGifts.length + vestigeTotal}</span></h2>
+        {owned.length > 0 && (
           confirmClear ? (
             <span className="confirm">
               <button className="link-btn danger" onClick={() => { onChange([]); setConfirmClear(false) }}>Clear all</button>
@@ -38,24 +39,32 @@ export function OwnedGifts({
           )
         )}
       </header>
-      <GiftSearch gifts={gifts} exclude={new Set([...owned, ...exclude])} placeholder={placeholder}
-        onPick={(g) => onChange([...owned, g.id])} />
+      <GiftSearch gifts={gifts} owned={new Set(owned)} placeholder="Add a gift…"
+        onPick={(g) => onChange(addGift(owned, g.id, g.tier))} />
+      <div className="vestige-row" aria-label="Vestiges">
+        {vestiges.map((v) => {
+          const n = countOf(owned, v.id)
+          return (
+            <span key={v.id} className={n ? 'vestige has' : 'vestige'} title={`${v.name}: counts as a Tier ${tierLabel(v.tier)} gift for selling and fusing`}>
+              <GiftIcon gift={v} size={26} />
+              <span className="vestige-tier">{tierLabel(v.tier)}</span>
+              <button className="vestige-btn" aria-label={`Remove a ${v.name}`} disabled={!n}
+                onClick={() => onChange(removeOne(owned, v.id))}>−</button>
+              <span className="vestige-n">{n}</span>
+              <button className="vestige-btn" aria-label={`Add a ${v.name}`} onClick={() => onChange([...owned, v.id])}>+</button>
+            </span>
+          )
+        })}
+      </div>
       {ownedGifts.length === 0 ? (
-        <p className="hint">{emptyHint}</p>
+        <p className="hint">Add gifts as you pick them up. A gift you already have becomes a Vestige, like in game.</p>
       ) : (
         <ul className="owned">
           {ownedGifts.map((g) => (
             <li key={g.id}>
-              <GiftLabel gift={g} link={false} />
-              {meta && <span className="owned-meta">{meta(g)}</span>}
-              <button
-                className="icon-btn"
-                aria-label={`Remove ${g.name}`}
-                title="Remove"
-                onClick={() => onChange(owned.filter((id) => id !== g.id))}
-              >
-                ×
-              </button>
+              <GiftLabel gift={g} link={false} icon={24} />
+              <button className="icon-btn" aria-label={`Remove ${g.name}`} title="Remove"
+                onClick={() => onChange(owned.filter((id) => id !== g.id))}>×</button>
             </li>
           ))}
         </ul>
@@ -64,8 +73,8 @@ export function OwnedGifts({
   )
 }
 
-function GiftSearch({ gifts, exclude, onPick, placeholder }: {
-  gifts: Gift[]; exclude: Set<string>; onPick: (g: Gift) => void; placeholder: string
+function GiftSearch({ gifts, owned, onPick, placeholder }: {
+  gifts: Gift[]; owned: Set<string>; onPick: (g: Gift) => void; placeholder: string
 }) {
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(0)
@@ -74,11 +83,11 @@ function GiftSearch({ gifts, exclude, onPick, placeholder }: {
     const q = query.trim().toLowerCase()
     if (!q) return []
     return gifts
-      .filter((g) => !exclude.has(g.id) && g.name.toLowerCase().includes(q))
+      .filter((g) => !isVestige(g.id) && g.name.toLowerCase().includes(q))
       .sort((a, b) => Number(!a.name.toLowerCase().startsWith(q)) - Number(!b.name.toLowerCase().startsWith(q))
         || a.name.localeCompare(b.name))
       .slice(0, 8)
-  }, [gifts, exclude, query])
+  }, [gifts, query])
 
   const pick = (g: Gift) => {
     onPick(g)
@@ -116,10 +125,11 @@ function GiftSearch({ gifts, exclude, onPick, placeholder }: {
               onMouseDown={(e) => { e.preventDefault(); pick(g) }}
               onMouseEnter={() => setActive(i)}
             >
+              <GiftIcon gift={g} size={22} />
               <TierBadge tier={g.tier} />
               <SinDot sin={g.sin} />
               <span className="grow">{g.name}</span>
-              <KeywordChip keyword={g.keyword} />
+              {owned.has(g.id) ? <span className="muted small">have it: adds a {VESTIGE_NAMES[g.tier ?? 1]}</span> : <KeywordChip keyword={g.keyword} />}
             </li>
           ))}
         </ul>

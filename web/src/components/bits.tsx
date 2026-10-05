@@ -1,5 +1,6 @@
 import type { Reason } from '../lib/scoring'
 import { type Gift, isCoreKeyword, tierLabel } from '../lib/types'
+import { GiftIcon } from './GiftIcon'
 
 export function TierBadge({ tier }: { tier: number | null }) {
   return (
@@ -59,10 +60,11 @@ export function Reasons({ reasons, max = 3 }: { reasons: Reason[]; max?: number 
   )
 }
 
-/** One-line gift label: tier, sin, name (linked), keyword. */
-export function GiftLabel({ gift, link = true }: { gift: Gift; link?: boolean }) {
+/** One-line gift label: icon (optional, `icon` = size in px), tier, sin, name (linked), keyword. */
+export function GiftLabel({ gift, link = true, icon }: { gift: Gift; link?: boolean; icon?: number }) {
   return (
     <span className="gift-label">
+      {icon && <GiftIcon gift={gift} size={icon} />}
       <TierBadge tier={gift.tier} />
       <SinDot sin={gift.sin} />
       {link ? <WikiLink href={gift.wiki_url}>{gift.name}</WikiLink> : <span>{gift.name}</span>}
@@ -74,18 +76,3 @@ export function GiftLabel({ gift, link = true }: { gift: Gift; link?: boolean })
 export function Empty({ children }: { children: React.ReactNode }) {
   return <div className="empty">{children}</div>
 }
-
-export function TargetButton({ on, onToggle, name }: { on: boolean; onToggle: () => void; name: string }) {
-  return (
-    <button
-      className={on ? 'star on' : 'star'}
-      aria-pressed={on}
-      aria-label={on ? `Stop targeting ${name}` : `Target ${name}`}
-      title={on ? 'Targeted: packs that give this are ranked higher' : 'Target this gift'}
-      onClick={onToggle}
-    >
-      {on ? '★' : '☆'}
-    </button>
-  )
-}
-

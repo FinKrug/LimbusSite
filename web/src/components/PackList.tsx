@@ -1,12 +1,11 @@
-import { useMemo, useState } from 'react'
-import type { Difficulty, PackScore } from '../lib/scoring'
-import { type ThemePack, floorText } from '../lib/types'
+import { useMemo, useState, type ReactNode } from 'react'
+import { EXTREME_FROM, type Difficulty, type GiftScore, type PackScore, type RunSettings } from '../lib/scoring'
+import { type Gift, type ThemePack, floorText } from '../lib/types'
 import { Empty, GiftLabel, Reasons, RatingBar, WikiLink } from './bits'
-
-export interface FloorFilter {
-  difficulty: Difficulty
-  floor: number | null
-}
+import { HowToGet } from './HowToGet'
+import { PACK_GIFTS_FIRST, PACK_GIFTS_STEP, nextShown } from '../lib/format'
+import { PackWhy } from './WhyRank'
+import { neighbourLines, packEdgeReason, packSummary } from '../lib/explain'
 
 interface Props {
   allPacks: ThemePack[]
@@ -14,22 +13,22 @@ interface Props {
   ranked: PackScore[]
   offered: string[]
   onOfferedChange: (ids: string[]) => void
-  targetCount: number
-  floorFilter: FloorFilter
-  onFloorFilterChange: (f: FloorFilter) => void
+  run: RunSettings
+  onPickPack: (id: string | null) => void
+  packsForGift: Map<string, ThemePack[]>
+  giftsById: Map<string, Gift>
+  owned: Set<string>
 }
 
 const VERDICT = { go: 'Go', maybe: 'Maybe', skip: 'Skip' }
+const DIFF: Record<Difficulty, string> = { normal: 'Normal', hard: 'Hard', extreme: 'EXTREME' }
 
 export function PackList({
-  allPacks, ranked, offered, onOfferedChange, targetCount, floorFilter, onFloorFilterChange,
+  allPacks, ranked, offered, onOfferedChange, run, onPickPack, packsForGift, giftsById, owned,
 }: Props) {
+  const how = (g: Gift) => <HowToGet gift={g} packsForGift={packsForGift} giftsById={giftsById} owned={owned} />
   const [query, setQuery] = useState('')
   const byId = useMemo(() => new Map(allPacks.map((p) => [p.id, p])), [allPacks])
-  const hasFloorData = allPacks.some((p) => p.floors)
-  const hasExtreme = allPacks.some((p) => p.floors?.extreme)
-  const maxFloor = useMemo(() => Math.max(5, ...allPacks.flatMap((p) =>
-    [p.floors?.[floorFilter.difficulty]?.[1] ?? 0])), [allPacks, floorFilter.difficulty])
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return []
@@ -44,9 +43,10 @@ export function PackList({
         <p className="hint">
           {offered.length
             ? 'Comparing only the packs you’re being offered.'
-            : targetCount
-              ? `Packs that can give the most of your ${targetCount} target${targetCount > 1 ? 's' : ''} come first.`
-              : 'Star (☆) gifts you want on the Best gifts tab to find the packs that give them. Or add the packs the game is offering you to compare just those.'}
+            : run.floor !== null
+              ? `Packs that can show up on floor ${run.floor} (${DIFF[run.difficulty]}${run.difficulty === 'extreme'
+                ? run.floor < EXTREME_FROM ? ', a Hard floor' : ', an EXTREME floor' : ''}), best for your team first. Change the floor in Your run.`
+              : `Every ${DIFF[run.difficulty]} pack, best for your team first. Start your run to see just the packs on your floor, or add the packs the game is offering.`}
         </p>
         <div className="search">
           <input type="search" placeholder="Add an offered pack…" value={query}
@@ -75,31 +75,15 @@ export function PackList({
             ))}
             <button className="link-btn" onClick={() => onOfferedChange([])}>Show all packs</button>
           </div>
-        ) : hasFloorData ? (
-          <div className="pack-filters">
-            <select aria-label="Difficulty" value={floorFilter.difficulty}
-              onChange={(e) => onFloorFilterChange({ ...floorFilter, difficulty: e.target.value as Difficulty })}>
-              <option value="normal">Normal</option>
-              <option value="hard">Hard</option>
-              {hasExtreme && <option value="extreme">Extreme</option>}
-            </select>
-            <select aria-label="Floor" value={floorFilter.floor ?? ''}
-              onChange={(e) => onFloorFilterChange({ ...floorFilter, floor: e.target.value ? Number(e.target.value) : null })}>
-              <option value="">Any floor</option>
-              {Array.from({ length: maxFloor }, (_, i) => i + 1).map((f) => <option key={f} value={f}>Floor {f}</option>)}
-            </select>
-            {floorFilter.floor !== null && <span className="muted small">{visible.length} packs can appear here</span>}
-          </div>
-        ) : (
-          <p className="muted small">Floor info appears after a live scrape (python -m scraper).</p>
-        )}
+        ) : null}
       </div>
 
       {visible.length === 0 ? <Empty>No theme packs match.</Empty> : (
         <ol className="cards">
-          {visible.map((p) => {
+          {visible.map((p, k) => {
             const verdict = p.verdict
-            const others = p.top.filter((g) => !p.targets.some((t) => t.gift.id === g.gift.id)).slice(0, 3)
+            const { above, below } = neighbourLines(p, visible[k - 1], visible[k + 1], (x) => x.pack.name, packEdgeReason)
+            const summary = packSummary(p)
             const normal = floorText(p.pack.floors?.normal)
             const hard = floorText(p.pack.floors?.hard)
             const extreme = floorText(p.pack.floors?.extreme)
@@ -110,7 +94,7 @@ export function PackList({
                     <span className={`verdict verdict-${verdict}`}>{VERDICT[verdict]}</span>
                     <WikiLink href={p.pack.wiki_url}>{p.pack.name}</WikiLink>
                     {p.pack.pool !== 'themed' && <span className="tag">{p.pack.pool}</span>}
-                    {p.targets.length > 0 && <span className="pill">★ {p.targets.length} target{p.targets.length > 1 ? 's' : ''}</span>}
+                    {run.pack === p.pack.id && <span className="pill">Current pack</span>}
                   </span>
                   <RatingBar rating={p.rating} />
                 </div>
@@ -124,25 +108,57 @@ export function PackList({
                   </div>
                 )}
                 <Reasons reasons={p.reasons} />
-                {(p.targets.length > 0 || others.length > 0) && (
-                  <ul className="pack-gifts">
-                    {p.targets.map((g) => (
-                      <li key={g.gift.id}><span className="star-mark" aria-label="target">★</span><GiftLabel gift={g.gift} /></li>
-                    ))}
-                    {others.map((g) => (
-                      <li key={g.gift.id}><span className="star-mark" /><GiftLabel gift={g.gift} /></li>
-                    ))}
-                    {p.top.length > p.targets.length + others.length && (
-                      <li className="muted">+{p.top.length - p.targets.length - others.length} more</li>
-                    )}
-                  </ul>
-                )}
+                {summary && <p className="why-line">{summary}.</p>}
+                {above && <p className="why-line">{above}</p>}
+                <PackGifts pack={p} how={how} />
                 {p.ownedCount > 0 && <p className="muted small">You already have {p.ownedCount} of its gifts.</p>}
+                <div className="card-foot">
+                  <PackWhy score={p} below={below} />
+                  {run.floor !== null && (
+                    run.pack === p.pack.id
+                      ? <button className="btn" onClick={() => onPickPack(null)}>Unpick</button>
+                      : <button className="btn" onClick={() => onPickPack(p.pack.id)} title="Sets this as your current pack (used by Fusion)">Picking this</button>
+                  )}
+                </div>
               </li>
             )
           })}
         </ol>
       )}
     </div>
+  )
+}
+
+/** A pack's gifts, best for your team first, shown a few at a time. */
+function PackGifts({ pack: p, how }: { pack: PackScore; how: (g: Gift) => ReactNode }) {
+  const rows = p.top
+  const first = PACK_GIFTS_FIRST
+  const [shown, setShown] = useState(first)
+  if (!rows.length) return null
+  const visible = rows.slice(0, shown)
+  const left = rows.length - visible.length
+  const why = (g: GiftScore) => g.reasons[0] && <span className={`pack-gift-why reason-${g.reasons[0].kind}`}>{g.reasons[0].text}</span>
+  return (
+    <ul className="pack-gifts">
+      {visible.map((g) => {
+        return (
+          <li key={g.gift.id}>
+            <GiftLabel gift={g.gift} icon={28} />{why(g)}{how(g.gift)}
+          </li>
+        )
+      })}
+      {(left > 0 || shown > first) && (
+        <li className="pack-gifts-more">
+          {left > 0 && (
+            <button className="link-btn" onClick={() => setShown(nextShown(shown, rows.length))}>
+              Show {Math.min(left, PACK_GIFTS_STEP)} more{left > PACK_GIFTS_STEP && <span className="muted"> ({left} left)</span>}
+            </button>
+          )}
+          {shown > first && (
+            <button className="link-btn" onClick={() => setShown(first)}>Show less</button>
+          )}
+        </li>
+      )}
+    </ul>
   )
 }

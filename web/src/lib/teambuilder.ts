@@ -103,7 +103,7 @@ export interface OrderSuggestion {
 }
 
 /** How well one identity fits a gift on its own (for slot-limited gifts). */
-function identityGiftFit(g: Gift, i: Identity, identities: Identity[]): { fit: number; why: string } {
+export function identityGiftFit(g: Gift, i: Identity, identities: Identity[]): { fit: number; why: string } {
   const base = baseGiftFit(g, i)
   // Conditions on the unit in the slot: a Family Hierarch Candidate for Cultivation.
   const h = holderFactor(g, i, identities)
@@ -127,12 +127,12 @@ function baseGiftFit(g: Gift, i: Identity): { fit: number; why: string } {
 /**
  * Deployment order for a team.
  *
- * 1. Who's deployed: the identities most central to the team (its keywords and
- *    affiliations), then the strongest, nudged by slot-limited gift value.
+ * 1. Who's deployed: mostly the strongest on the Mirror Dungeon ranking, with
+ *    fit to the team's keywords and affiliations breaking close calls.
  * 2. Who goes where: the best assignment of deployed identities to slots,
  *    maximising
- *      - slot-limited gifts they can use (owned count double, then the best ones
- *        you could still pick up), scaled up for stronger units so the buffs go
+ *      - slot-limited gifts they can use (gifts you own count most; the best ones
+ *        you could still find count a little), scaled up for stronger units so the buffs go
  *        to the carries, plus
  *      - strength × how buffed the slot is in general (#1–#2 get the most
  *        slot-limited gifts), so top units sit there even before you own any.
@@ -143,7 +143,7 @@ export function suggestOrder(
   if (!team.length) return { order: [], notes: {} }
   const ownedSet = new Set(owned)
   // Score gifts for the whole team, not per slot or for whoever happens to be listed first.
-  const ctx = makeContext(data, team, ownedSet, [], [], team.length, tiers)
+  const ctx = makeContext(data, team, ownedSet, { deployed: team.length, tiers })
   ctx.lineup = []
   const profile = teamProfile(team)
   const str = new Map(team.map((i) => [i.id, strength(i, tiers)]))
@@ -158,7 +158,8 @@ export function suggestOrder(
     .map((g) => ({ g, slots: giftSlots(g) }))
     .filter((x) => x.slots)
     // A gift only partly limited to a slot ("[#1 Deployed Identity Exclusive Effect]") counts half.
-    .map((x) => ({ ...x, weight: intrinsicScore(x.g, ctx).score * (ownedSet.has(x.g.id) ? 2 : 1) * (x.slots!.whole ? 1 : 0.5) }))
+    // Gifts you own drive the order; ones you might find later only nudge it.
+    .map((x) => ({ ...x, weight: intrinsicScore(x.g, ctx).score * (ownedSet.has(x.g.id) ? 2 : 0.4) * (x.slots!.whole ? 1 : 0.5) }))
     .sort((a, b) => b.weight - a.weight)
   const relevant = [...slotGifts.filter((x) => ownedSet.has(x.g.id)), ...slotGifts.filter((x) => !ownedSet.has(x.g.id)).slice(0, 12)]
 
@@ -173,7 +174,9 @@ export function suggestOrder(
       v += part
       if (f.why && part > bestPart) {
         bestPart = part
-        why = `${f.why} for ${g.name} (${slotText(slots!.slots)})`
+        why = ownedSet.has(g.id)
+          ? `${f.why} for your ${g.name} (${slotText(slots!.slots)})`
+          : `${f.why} · ${g.name} (${slotText(slots!.slots)}) if found`
       }
     }
     return { v, why }
@@ -192,7 +195,9 @@ export function suggestOrder(
   // 1. Who's deployed.
   const reach = (i: Identity) => Math.max(0, ...Array.from({ length: maxSlot }, (_, k) => giftValue(i, k + 1).v))
   const maxReach = Math.max(1e-9, ...team.map(reach))
-  const deployScore = (i: Identity) => core(i) + 0.6 * power(i) + 0.5 * reach(i) / maxReach
+  // Strength counts most: a D-tier unit shouldn't be deployed over a B-tier one
+  // just because it shares the team's keyword. Fit breaks close calls.
+  const deployScore = (i: Identity) => core(i) + 2 * power(i) + 0.3 * reach(i) / maxReach
   const ranked = [...team].sort((a, b) => deployScore(b) - deployScore(a))
   const deployedSet = ranked.slice(0, deployed)
   const bench = ranked.slice(deployed)

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
-  intrinsicScore, makeContext, packOnFloor, packsByGift, planCombos, planFusions, rankGifts, rankThemePacks,
-  signatureStatuses, teamFocus, teamProfile,
+  intrinsicScore, isSurvival, makeContext, packInDifficulty, packOnFloor, packsByGift, planCombos, planFusions, rankGifts, rankThemePacks,
+  signatureStatuses, teamFocus, teamGate, teamProfile, upgradeMagnitude, upgradeValue,
 } from './scoring'
 import { gameData } from './data'
 import { traitShare } from './traitparts'
@@ -170,20 +170,9 @@ describe('targets and theme pack pools', () => {
     ],
   }
 
-  it('puts packs with the most targets first', () => {
-    const ctx = makeContext(poolData, burnTeam, [], ['bleed-2', 'general-2', 'burn-2'])
-    const ranked = rankThemePacks(ctx)
-    expect(ranked.map((p) => p.pack.id)).toEqual(['two-targets', 'one-target', 'no-targets'])
-    expect(ranked[0].targets).toHaveLength(3)
-    expect(ranked[0].reasons[0].text).toMatch(/Has 3 of your targets/)
-    expect(ranked[2].reasons.some((r) => r.text === 'None of your targets drop here')).toBe(true)
-    expect(ranked.filter((p) => p.targets.length).every((p) => p.verdict !== 'skip')).toBe(true)
-  })
-
-  it('ranks by pool quality when there are no targets, and ignores owned targets', () => {
-    const ranked = rankThemePacks(makeContext(poolData, burnTeam, ['burn-2'], ['burn-2']))
+  it('ranks by pool quality for the team', () => {
+    const ranked = rankThemePacks(makeContext(poolData, burnTeam, ['burn-2']))
     expect(ranked[0].pack.id).toBe('one-target') // tier IV Burn + exclusive Burn
-    expect(ranked.every((p) => p.targets.length === 0)).toBe(true)
   })
 
   it('knows which packs give a gift and which floors a pack is on', () => {
@@ -219,9 +208,9 @@ describe('gifts that work beyond their keyword', () => {
   ]
   const find = (ctx: ReturnType<typeof makeContext>, id: string) => rankGifts(ctx).find((g) => g.gift.id === id)!
 
-  it('values an attack-type gift for a team with that attack type', () => {
+  it('values an attack-type route less when no one uses the gift\'s keyword', () => {
     const r = find(makeContext(d, blunt, []), 'spanner')
-    expect(r.fit).toBe(1)
+    expect(r.fit).toBeCloseTo(0.3) // 2/2 use Blunt, but 0/2 use Tremor: x (0.3 + 0.4 x 0)
     expect(r.reasons[0].text).toBe('2/2 of your team use Blunt skills')
     expect(r.reasons.some((x) => /No one on your team uses Tremor/.test(x.text))).toBe(false)
   })
@@ -231,9 +220,9 @@ describe('gifts that work beyond their keyword', () => {
     expect(r.fit).toBe(0)
   })
 
-  it('counts gifts that apply their own status as working for any team', () => {
+  it('counts gifts that apply their own status as partly working for any team', () => {
     const ctx = makeContext(d, blunt, [])
-    expect(find(ctx, 'downpour').fit).toBe(0.5)
+    expect(find(ctx, 'downpour').fit).toBeCloseTo(0.15) // standalone 0.5 x 0.3: a Bleed team gets little from a Tremor gift
     expect(find(ctx, 'downpour').reasons[0].text).toMatch(/Works on its own: applies Tremor and Tremor Burst itself/)
     expect(find(ctx, 'tremor-plain').fit).toBe(0)
     expect(find(ctx, 'gated').fit).toBe(0) // only activates with enough identities
@@ -245,7 +234,7 @@ describe('gifts that work beyond their keyword', () => {
     expect(before.reasons.map((x) => x.text)).toContain(
       'Needs Tremor Burst on enemies, which nothing on your team or in your gifts provides (downpour would)')
     const after = find(makeContext(d, blunt, ['downpour']), 'bell')
-    expect(after.fit).toBe(0.75)
+    expect(after.fit).toBeCloseTo(0.225) // works with downpour (0.75), x 0.3 for a team without Tremor
     expect(after.reasons.some((x) => x.text === 'Works with downpour, which you have')).toBe(true)
     expect(after.score).toBeGreaterThan(before.score)
   })
@@ -263,13 +252,13 @@ describe('gifts that work beyond their keyword', () => {
   })
 
   it('boosts the rest of a combo you have started, including custom combos', () => {
-    const ctx = makeContext(d, blunt, ['downpour'], [], [{ id: 'mine', name: 'Mine', gifts: ['spanner', 'gloom-coat'], why: '', custom: true }])
-    expect(find(ctx, 'eyeball').reasons[0].text).toBe('Part of the "Tremor debuffs" combo (you have 1/3)')
+    const ctx = makeContext(d, blunt, ['downpour'], { combos: [{ id: 'mine', name: 'Mine', gifts: ['spanner', 'gloom-coat'], why: '', custom: true }] })
+    expect(find(ctx, 'eyeball').reasons[0].text).toBe('Combos with downpour, which you have ("Tremor debuffs")')
     const plans = planCombos(ctx)
     expect(plans.map((p) => p.combo.id)).toEqual(['c', 'mine'])
     expect(plans[0].missing.map((g) => g.id)).toEqual(['eyeball', 'bell'])
-    const withSpanner = makeContext(d, blunt, ['spanner'], [], ctx.combos.filter((c) => c.custom))
-    expect(find(withSpanner, 'gloom-coat').reasons[0].text).toMatch(/"Mine" combo/)
+    const withSpanner = makeContext(d, blunt, ['spanner'], { combos: ctx.combos.filter((c) => c.custom) })
+    expect(find(withSpanner, 'gloom-coat').reasons[0].text).toMatch(/Combos with spanner.*"Mine"/)
   })
 })
 
@@ -365,15 +354,215 @@ describe('affiliation-only effects', () => {
   })
 
   it('counts strong members for more', () => {
-    const rated = (tier: 'SSS' | 'D') => intrinsicScore(bloodflame, makeContext(real, youTeam, [], [], [], 6, {
+    const rated = (tier: 'SSS' | 'D') => intrinsicScore(bloodflame, makeContext(real, youTeam, [], { deployed: 6, tiers: {
       'heishou-pack-you-branch-adept-heathcliff': tier, 'heishou-pack-you-branch-sinclair': tier,
-    })).score
+    } })).score
     expect(rated('SSS')).toBeGreaterThan(rated('D'))
   })
 
   it('only counts members that are deployed', () => {
     const benched = [...youTeam.slice(2), ...youTeam.slice(0, 2)]
-    const ctx = makeContext(real, benched, [], [], [], 4)
+    const ctx = makeContext(real, benched, [], { deployed: 4 })
     expect(intrinsicScore(bloodflame, ctx).reasons.some((r) => r.text.startsWith('Built for'))).toBe(false)
+  })
+})
+
+describe('floors on EXTREME', () => {
+  const real = gameData.themePacks
+  const named = (n: string) => real.find((p) => p.name === n)!
+
+  it('uses Hard floors for 1–10 and the Extreme packs for 11–15', () => {
+    expect(packOnFloor(named('Line 3'), 'extreme', 6)).toBe(packOnFloor(named('Line 3'), 'hard', 6))
+    expect(packOnFloor(named('Bridle of Infinity'), 'extreme', 6)).toBe(false)
+    expect(packOnFloor(named('Bridle of Infinity'), 'extreme', 12)).toBe(true)
+    for (let floor = 1; floor <= 15; floor++) {
+      expect(real.filter((p) => packOnFloor(p, 'extreme', floor)).length, `floor ${floor}`).toBeGreaterThan(0)
+    }
+  })
+
+  it('ranks packs for every EXTREME floor', () => {
+    const ctx = makeContext(gameData, gameData.identities.filter((i) => i.keywords.includes('Rupture')).slice(0, 7), [])
+    for (const floor of [1, 5, 10, 11, 15]) {
+      const ranked = rankThemePacks(ctx, real.filter((p) => packOnFloor(p, 'extreme', floor)))
+      expect(ranked.length, `floor ${floor}`).toBeGreaterThan(0)
+      expect(ranked[0].verdict).toBe('go')
+    }
+  })
+
+  it('"any floor" keeps to packs that can show up on that difficulty', () => {
+    const normalOnly = real.find((p) => p.floors?.normal && !p.floors.hard && !p.floors.extreme)
+    if (normalOnly) expect(packInDifficulty(normalOnly, 'extreme')).toBe(false)
+    expect(packInDifficulty(named('Line 3'), 'extreme')).toBe(true)
+  })
+})
+
+describe('weights by how many units a gift helps, and by the run', () => {
+  const byName = (n: string) => gameData.identities.find((i) => i.name === n)!
+  const scorch = ['Dawn Office Fixer Faust', 'The Thumb East Capo IIII Meursault', 'The House of Spiders: The Thumb Apprentice Heathcliff',
+    'The House of Spiders: The Thumb Nursefather Rodion', 'The Thumb East Soldato II Sinclair', 'Dawn Office Rep Gregor',
+    'Heishou Pack - Mao Branch Outis'].map(byName)
+  const gift = (n: string) => gameData.gifts.find((g) => g.name === n)!
+  const score = (n: string, ctx: ReturnType<typeof makeContext>) => intrinsicScore(gift(n), ctx).score
+
+  it('keeps one Rupture unit from pulling Rupture gifts above Burn and Tremor ones', () => {
+    const top = rankGifts(makeContext(gameData, scorch, [])).slice(0, 12)
+    expect(top.filter((g) => g.gift.keyword === 'Rupture').map((g) => g.gift.name)).toEqual([])
+    const shadow = rankGifts(makeContext(gameData, scorch, [])).find((g) => g.gift.name === 'Shadowlurking')!
+    expect(shadow.reasons.some((r) => /only 1\/7 of your team use Rupture/.test(r.text))).toBe(true)
+  })
+
+  it('counts a slot gift for one unit less than the same effect for the whole team', () => {
+    const ctx = makeContext(gameData, scorch, [])
+    const slotted = intrinsicScore(gift('Sundered Memory'), ctx)
+    expect(slotted.parts.find((p) => p.kind === 'core')!.detail).toMatch(/Only helps \d of your 7 deployed units/)
+  })
+
+  it('values Cost gifts by the floors left', () => {
+    const at = (floors: number, floor: number) =>
+      score('Golden Urn', makeContext(gameData, scorch, [], { run: { difficulty: 'extreme', floors, floor, pack: null } }))
+    expect(at(15, 1)).toBeGreaterThan(at(15, 12))
+    expect(at(15, 1)).toBeGreaterThan(at(5, 1))
+  })
+
+  it('values "survive a lethal hit" gifts most late in a long run', () => {
+    const at = (floors: number, floor: number) =>
+      score('Swishing Fuel Tank', makeContext(gameData, scorch, [], { run: { difficulty: 'extreme', floors, floor, pack: null } }))
+    expect(at(15, 13)).toBeGreaterThan(at(15, 2))
+    expect(at(15, 2)).toBeGreaterThan(at(5, 2))
+  })
+
+  it('treats Spiderweb Entangled in Red as a Blade of the House of Spiders Ryoshu gift', () => {
+    const spiders = scorch // has House of Spiders Heathcliff and Rodion, no Blade Ryoshu
+    const without = intrinsicScore(gift('Spiderweb Entangled in Red'), makeContext(gameData, spiders, []))
+    expect(without.reasons.some((r) => /Built for The House of Spiders/.test(r.text))).toBe(false)
+    expect(without.reasons.some((r) => /only works for Blade of the House of Spiders Ryōshū, who isn't on your team/.test(r.text))).toBe(true)
+    expect(without.reasons.some((r) => /Only pays off when your own units die/.test(r.text))).toBe(true)
+    const blade = byName('Blade of the House of Spiders Ryōshū')
+    const withBlade = intrinsicScore(gift('Spiderweb Entangled in Red'), makeContext(gameData, [...spiders.slice(0, 6), blade], []))
+    expect(withBlade.reasons[0].text).toMatch(/Built for Blade of the House of Spiders Ryōshū, who's on your team/)
+    expect(withBlade.score).toBeGreaterThan(without.score * 2)
+    const rank = (ctx: ReturnType<typeof makeContext>) => rankGifts(ctx).findIndex((g) => g.gift.name === 'Spiderweb Entangled in Red')
+    expect(rank(makeContext(gameData, spiders, []))).toBeGreaterThan(40)
+  })
+
+  it('marks down gifts that only pay off when your own units die', () => {
+    const r = intrinsicScore(gift('Value Disposal'), makeContext(gameData, scorch, []))
+    expect(r.reasons.some((x) => /own units die/.test(x.text))).toBe(true)
+  })
+
+  it('does not count "will not be revived" as a survival gift', () => {
+    expect(isSurvival(gift('Spiderweb Entangled in Red'))).toBe(false)
+    expect(isSurvival(gift('Swishing Fuel Tank'))).toBe(true)
+  })
+
+  it('marks White Gossypium down unless the team is built on Bleed', () => {
+    const bleeders = gameData.identities.filter((i) => i.keywords.length === 1 && i.keywords[0] === 'Bleed').slice(0, 7)
+    const forScorch = intrinsicScore(gift('White Gossypium'), makeContext(gameData, scorch, []))
+    expect(forScorch.reasons[0]).toEqual(expect.objectContaining({ kind: 'bad', text: expect.stringMatching(/Un-staggers enemies/) }))
+    const forBleed = intrinsicScore(gift('White Gossypium'), makeContext(gameData, bleeders, []))
+    expect(forBleed.reasons[0].kind).toBe('info')
+  })
+})
+
+describe('E.G.O and Resonance in gift scores', () => {
+  const real = (n: string) => gameData.gifts.find((g) => g.name === n)!
+  const sk = (slot: 1 | 2 | 3, sin: Identity['affinities'][number], base: number) =>
+    ({ slot, name: `S${slot}`, sin, type: 'Slash', base, coin_power: 3, coins: 2, copies: slot === 1 ? 3 : slot === 2 ? 2 : 1, weight: 1, statuses: [] })
+  const unit = (id: string, sinner: Identity['sinner'], sins: Identity['affinities']) =>
+    ident(id, ['Burn'], [...new Set(sins)], { sinner, skills: [sk(1, sins[0], 4), sk(2, sins[1], 5), sk(3, sins[2], 7)] as Identity['skills'] })
+
+  it('an E.G.O-only gift is worth more to a team that uses its E.G.O', () => {
+    const team = [unit('a', 'Yi Sang', ['wrath', 'wrath', 'lust']), unit('b', 'Faust', ['lust', 'wrath', 'pride']), unit('c', 'Gregor', ['envy', 'wrath', 'gloom'])]
+    const egos = [{ id: 'e', name: 'e', sinner: 'Yi Sang' as const, grade: 'HE' as const, sin: 'wrath' as const, cost: { wrath: 2 }, sanity: 20, skill: null, statuses: [], wiki_url: '' }]
+    const d = { ...gameData, egos }
+    const frag = real('Fragment of Hellfire')
+    const without = intrinsicScore(frag, makeContext(d, team, []))
+    const withEgo = intrinsicScore(frag, makeContext(d, team, [], { loadout: { 'Yi Sang': { HE: 'e' } } }))
+    expect(withEgo.score).toBeGreaterThan(without.score)
+    expect(without.reasons.some((r) => /pick your E\.G\.O/.test(r.text))).toBe(true)
+  })
+
+  it('an Absolute Resonance gift is worth more to a team that lines that sin up', () => {
+    const gluttons = [0, 1, 2, 3].map((k) => unit(`g${k}`, 'Yi Sang', ['gluttony', 'gluttony', 'wrath']))
+    const others = [0, 1, 2, 3].map((k) => unit(`o${k}`, 'Yi Sang', ['wrath', 'gloom', 'gluttony']))
+    const crown = real('Crown of Roses')
+    const a = intrinsicScore(crown, makeContext(gameData, gluttons, []))
+    const b = intrinsicScore(crown, makeContext(gameData, others, []))
+    expect(a.score).toBeGreaterThan(b.score)
+    expect(a.reasons.some((r) => r.kind === 'good' && /Gluttony Absolute Resonance/.test(r.text))).toBe(true)
+  })
+})
+
+describe('team gates and fusion paths', () => {
+  const real = (n: string) => gameData.gifts.find((g) => g.name === n)!
+  const withPoise = (id: string, sinner: Identity['sinner']) => ident(id, ['Poise'], ['pride'], { sinner })
+  const without = (id: string, sinner: Identity['sinner']) => ident(id, ['Burn'], ['wrath'], { sinner })
+  const sinners: Identity['sinner'][] = ['Yi Sang', 'Faust', 'Don Quixote', 'Ryōshū', 'Meursault', 'Hong Lu', 'Heathcliff']
+
+  it('reads "N or more Identities have Attack Skills that ..." conditions', () => {
+    expect(teamGate(real('Cask Spirits'))).toEqual(expect.objectContaining({ n: 5, status: 'Poise', whole: true }))
+    expect(teamGate(real('Interlocked Cogs'))?.status).toBe('Tremor')
+    expect(teamGate(real('Endorphin Kit'))).toBeNull()
+  })
+
+  it('a gift that stays off for your team is worth little', () => {
+    const three = sinners.map((s, k) => (k < 3 ? withPoise(`p${k}`, s) : without(`b${k}`, s)))
+    const five = sinners.map((s, k) => (k < 5 ? withPoise(`p${k}`, s) : without(`b${k}`, s)))
+    const off = intrinsicScore(real('Cask Spirits'), makeContext(gameData, three, []))
+    const on = intrinsicScore(real('Cask Spirits'), makeContext(gameData, five, []))
+    expect(off.reasons[0].text).toMatch(/Stays off: needs 5 deployed identities with Poise skills, you have 3/)
+    expect(on.reasons.some((r) => /Switches on/.test(r.text))).toBe(true)
+    expect(on.score).toBeGreaterThan(off.score * 3)
+  })
+
+  it("a gift your team can't use still counts for a fusion result it can", () => {
+    const d: GameData = {
+      ...data,
+      gifts: [...data.gifts, gift('off1', { keyword: 'Tremor', tier: 1 }), gift('off2', { keyword: 'Tremor', tier: 1 }),
+        gift('payoff', { keyword: 'Burn', tier: 4, pools: ['fusion'] })],
+      fusions: [...data.fusions, { result: 'payoff', ingredients: ['off1', 'off2'] }],
+    }
+    const ctx = makeContext(d, burnTeam, [])
+    const piece = rankGifts(ctx).find((s) => s.gift.id === 'off1')!
+    expect(piece.parts.some((p) => p.kind === 'fusion' && /Starts a fusion into payoff/.test(p.label))).toBe(true)
+    expect(piece.reasons.some((r) => r.kind === 'good' && /suits your team better/.test(r.text))).toBe(true)
+    const plain = intrinsicScore(d.gifts.find((g) => g.id === 'off1')!, ctx).score
+    expect(piece.score).toBeGreaterThan(plain)
+  })
+})
+
+describe('upgrades', () => {
+  const real = (n: string) => gameData.gifts.find((g) => g.name === n)!
+  it('compares upgraded numbers sentence by sentence', () => {
+    const t = real('Thunderbranch')
+    const m = upgradeMagnitude(t.effect, t.upgrades![1])
+    expect(m.ratio).toBeCloseTo(2)
+    expect(m.extra).toBeGreaterThan(0.2)
+    // One 1 -> 10 jump doesn't make the whole gift 2.5x.
+    const g = real('Charge-type Gloves')
+    expect(upgradeMagnitude(g.effect, g.upgrades![0]).ratio).toBeLessThan(1.6)
+    expect(upgradeMagnitude('Deal +10% damage.', 'Deal +10% damage.').mag).toBe(1)
+  })
+
+  it('credits a slot gift that covers more units when upgraded', () => {
+    const team = ['Yi Sang', 'Faust', 'Don Quixote', 'Ryōshū', 'Meursault', 'Hong Lu'].map((s, k) =>
+      ident(`u${k}`, ['Burn'], ['wrath'], { sinner: s as Identity['sinner'], attack_types: ['Blunt'], attack_counts: { Blunt: 3 } }))
+    const ctx = makeContext(gameData, team, [], { deployed: 6 })
+    const curse = real('Burial Curse')
+    const up = upgradeValue(curse, ctx, intrinsicScore(curse, ctx).score)
+    expect(up).not.toBeNull()
+    expect(up!.reason.text).toMatch(/covers #4, #6 instead of #6/)
+    const ranked = rankGifts(ctx).find((s) => s.gift.id === curse.id)!
+    expect(ranked.parts.some((p) => p.kind === 'upgrade')).toBe(true)
+  })
+
+  it('counts less with few floors left', () => {
+    const team = burnTeam
+    const g = real('Thunderbranch')
+    const early = makeContext(gameData, team, [], { run: { difficulty: 'hard', floors: 10, floor: 1, pack: null } })
+    const late = makeContext(gameData, team, [], { run: { difficulty: 'hard', floors: 10, floor: 10, pack: null } })
+    const a = upgradeValue(g, early, intrinsicScore(g, early).score)
+    const b = upgradeValue(g, late, intrinsicScore(g, late).score)
+    expect((b?.add ?? 0)).toBeLessThan(a?.add ?? 0)
   })
 })

@@ -45,7 +45,7 @@ describe('deployment slots', () => {
     expect(good.score).toBeGreaterThan(bad.score)
     // A #7 gift does nothing when only 6 are deployed
     const seventh = gift('seventh', { effect: '[Effects apply only to #7 Deployed Identity] ...' })
-    const r = rankGifts(makeContext({ ...d, gifts: [seventh] }, [blunt, slash1], [], [], [], 6))[0]
+    const r = rankGifts(makeContext({ ...d, gifts: [seventh] }, [blunt, slash1], [], { deployed: 6 }))[0]
     expect(r.fit).toBe(0)
   })
 })
@@ -77,14 +77,16 @@ describe('team builder', () => {
     expect(names).not.toContain('Fixer') // too broad
   })
 
-  it('builds a Heishou team and deploys Heishou identities first', () => {
+  it('builds a Heishou team and deploys mostly Heishou identities', () => {
     const built = buildTeam(gameData, { kind: 'trait', value: 'Heishou Pack' })
     const byId = new Map(gameData.identities.map((i) => [i.id, i]))
     const team = Object.values(built.team).map((id) => byId.get(id!)!)
     expect(team.filter((i) => i.traits.includes('Heishou Pack')).length).toBe(9)
     const { order } = suggestOrder(gameData, team, 7)
     const deployed = order.slice(0, 7).map((s) => team.find((i) => i.sinner === s)!)
-    expect(deployed.every((i) => i.traits.includes('Heishou Pack'))).toBe(true)
+    // The Lord of Hongyuan (SSS, also H Corp.) may take the weakest Heishou unit's place.
+    expect(deployed.filter((i) => i.traits.includes('Heishou Pack')).length).toBeGreaterThanOrEqual(6)
+    expect(deployed.every((i) => i.traits.includes('H Corp.'))).toBe(true)
   })
 
   it('only uses owned identities when given', () => {
@@ -104,7 +106,7 @@ describe('team builder', () => {
     ]
     const { order, notes } = suggestOrder(d, team, 4, ['crushed'])
     expect(order.slice(0, 2).sort()).toEqual(['Don Quixote', 'Ryōshū'])
-    expect(notes['Don Quixote']).toMatch(/Blunt skills for crushed/)
+    expect(notes['Don Quixote']).toMatch(/Blunt skills for your crushed/)
   })
 })
 
@@ -112,12 +114,12 @@ describe('identity strength', () => {
   const heishouFaust = gameData.identities.find((i) => i.id === 'heishou-pack-mao-branch-adept-faust')!
 
   it('rates from the tier list, falls back to rarity, and lets you override', () => {
-    expect(identityTier(heishouFaust)).toEqual({ tier: 'SSS', from: 'list' })
+    expect(identityTier(heishouFaust)).toMatchObject({ tier: 'SSS', from: 'list' })
     expect(strength(heishouFaust)).toBe(1)
     const plain = ident('x', 'Yi Sang', { rarity: 1 })
     expect(identityTier(plain).tier).toBeNull()
     expect(strength(plain)).toBeLessThan(strength(ident('y', 'Yi Sang', { rarity: 3 })))
-    expect(identityTier(heishouFaust, { [heishouFaust.id]: 'B' })).toEqual({ tier: 'B', from: 'you' })
+    expect(identityTier(heishouFaust, { [heishouFaust.id]: 'B' })).toMatchObject({ tier: 'B', from: 'you' })
     expect(strength(heishouFaust, { [heishouFaust.id]: 'B' })).toBeLessThan(0.5)
   })
 
@@ -178,7 +180,10 @@ describe('conditions on the unit in a slot', () => {
   })
 
   it('reads more ways of naming a slot', () => {
-    expect(giftSlots(byName('Brilliant Lamplight'))).toEqual({ slots: [1], whole: true })
+    // Brilliant Lamplight used this wording; it was removed with Pilgrimage of Compassion.
+    const earliest = { ...byName('Bloody Mist'), id: 'earliest-test',
+      effect: '[Effects apply only to the Identity with the earliest Deployment order]\nGain 1 Power Up.' }
+    expect(giftSlots(earliest)).toEqual({ slots: [1], whole: true })
     expect(giftSlots(byName('Bloody Mist'))).toEqual({ slots: [1], whole: false })
     expect(giftSlots(byName('Sorrowful Exhale'))).toEqual({ slots: [5], whole: false })
     expect(giftSlots(byName('The End of all Evil'))).toBeNull() // "earliest Deployment order" among Pequod units, not a slot
@@ -215,6 +220,31 @@ describe('conditions on the unit in a slot', () => {
     const cult = byName('Cultivation: Cut, File, Carve, Polish')
     const { order, notes } = suggestOrder(real, [hierarch, ...rupture], 7, [cult.id])
     expect(order[5]).toBe('Ishmael')
-    expect(notes.Ishmael).toMatch(/Family Hierarch Candidate for Cultivation/)
+    expect(notes.Ishmael).toMatch(/Family Hierarch Candidate for your Cultivation/)
+  })
+})
+
+describe('suggested order on a real roster', () => {
+  // Finley's formation screen: mostly B/C/D units with two Heishou Mao units.
+  const ids = [
+    'the-pequod-first-mate-yi-sang', 'seven-assoc-south-section-4-faust', 'shi-assoc-south-section-5-director-don-quixote',
+    'heishou-pack-mao-branch-ryoshu', 'lcb-sinner-meursault', 'tingtang-gang-gangleader-hong-lu',
+    'seven-assoc-south-section-4-heathcliff', 'liu-assoc-south-section-4-ishmael', 'lccb-assistant-manager-rodion',
+    'zwei-assoc-south-section-6-sinclair', 'heishou-pack-mao-branch-outis', 'g-corp-manager-corporal-gregor',
+  ]
+  const team = ids.map((id) => gameData.identities.find((i) => i.id === id)!)
+
+  it("doesn't deploy a D-tier unit over a stronger one just for sharing the team's keyword", () => {
+    const { order } = suggestOrder(gameData, team, 7)
+    const deployed = order.slice(0, 7).map((s) => team.find((i) => i.sinner === s)!)
+    expect(deployed.map((i) => identityTier(i).tier)).not.toContain('D')
+    expect(order.slice(0, 2).sort()).toEqual(['Outis', 'Ryōshū']) // the two SS units take the buffed slots
+  })
+
+  it('says when a slot gift is one you still have to find', () => {
+    const { notes } = suggestOrder(gameData, team, 7)
+    expect(Object.values(notes).some((n) => n!.endsWith('if found'))).toBe(true)
+    const owned = suggestOrder(gameData, team, 7, ['sundered-memory']).notes
+    expect(owned['Ryōshū']).toBe('Slash skills for your Sundered Memory (#1–#2)')
   })
 })

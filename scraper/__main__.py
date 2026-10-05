@@ -4,6 +4,7 @@
     python -m scraper --offline       # rebuild from cached responses only
     python -m scraper --skip-identities
     python -m scraper --include-unobtainable   # keep non-Mirror-Dungeon gifts too
+    python -m scraper --skip-egos     # don't fetch E.G.O pages (data/egos.json)
 """
 
 from __future__ import annotations
@@ -15,13 +16,14 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import build, packs as packmod
+from . import build, egos as egomod, order, packs as packmod, skills
 from .lua_table import LuaParseError, parse_module
 from .wiki_api import DEFAULT_API, WikiClient, WikiError
 
 GIFT_DATA = "Module:EgoGift/data"
 GIFT_LIST = "Module:EgoGiftList/data"
 IDENTITY_CATEGORY = "Category:Identities"
+EGO_CATEGORY = "Category:E.G.O"
 FLOOR_THEMES = "List of Floor Themes"
 # Theme pack pages rarely change; reuse ones fetched in the last day, so a run
 # that fails partway can simply be started again.
@@ -38,6 +40,7 @@ def main(argv: list[str] | None = None) -> int:
                     help="also keep Story Dungeon and Legacy gifts (default: Mirror Dungeon only)")
     ap.add_argument("--skip-packs", action="store_true",
                     help="don't fetch theme pack pages (gift pools, floors)")
+    ap.add_argument("--skip-egos", action="store_true", help="don't fetch E.G.O pages")
     ap.add_argument("--api", default=DEFAULT_API, help="MediaWiki api.php URL")
     ap.add_argument("--delay", type=float, default=1.0, help="seconds between requests (default 1)")
     args = ap.parse_args(argv)
@@ -94,11 +97,19 @@ def main(argv: list[str] | None = None) -> int:
                 counts = build.identity_attack_types(sources.get(i["name"], {}).get("content", ""))
                 i["attack_types"] = sorted(counts, key=lambda t: -counts[t])
                 i["attack_counts"] = counts
+                i["order_notes"] = order.order_notes(sources.get(i["name"], {}).get("content", ""))
+                i["skills"] = skills.identity_skills(sources.get(i["name"], {}).get("content", ""))
             missing = [i["name"] for i in identities if not i["attack_types"] and not i["incomplete"]]
             if missing:
                 warnings.append(f"no attack types found for {len(missing)} identities, e.g. {missing[:5]}")
         except WikiError as e:
             warnings.append(f"identity pages not fetched, so no attack types ({_why(e, client)})")
+
+    # -- E.G.O (the sinners' E.G.O skills) ----------------------------------------
+    egos: list[dict] | None = None
+    if not args.skip_egos:
+        egos, w = fetch_egos(client)
+        warnings += w
 
     # -- theme pack pages -------------------------------------------------------
     pack_info, w = fetch_pack_info(client, gifts, packs, skip=args.skip_packs)
@@ -114,6 +125,9 @@ def main(argv: list[str] | None = None) -> int:
         if name == "identities" and args.skip_identities:
             continue
         _write(out / f"{name}.json", rows)
+    if egos is not None:
+        _write(out / "egos.json", egos)
+        print(f"  {len(egos)} E.G.O")
     print(f"  {len(data['gifts'])} gifts"
           f"{'' if args.include_unobtainable else ' (Mirror Dungeon only)'}, "
           f"{len(data['theme_packs'])} theme packs, {len(data['fusions'])} fusion recipes, "
@@ -126,7 +140,7 @@ def main(argv: list[str] | None = None) -> int:
         "offline": args.offline,
         "pages": {t: {k: v for k, v in p.items() if k != "content"} for t, p in pages.items()},
         "include_unobtainable": args.include_unobtainable,
-        "counts": {name: len(rows) for name, rows in data.items()},
+        "counts": {name: len(rows) for name, rows in data.items()} | ({"egos": len(egos)} if egos is not None else {}),
         "warnings": len(warnings),
     }
     _write(out / "meta.json", meta)
@@ -134,6 +148,18 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Done in {time.monotonic() - started:.1f}s "
           f"({client.requests_made} requests). {len(warnings)} warnings -> {out / 'report.txt'}")
     return 0
+
+
+def fetch_egos(client: WikiClient) -> tuple[list[dict] | None, list[str]]:
+    """Every E.G.O page: categories (sinner, grade, sin) plus page source (costs)."""
+    print(f"Fetching {EGO_CATEGORY} and each E.G.O page ...")
+    try:
+        titles = client.category_members(EGO_CATEGORY)
+        cats = client.page_categories(titles)
+        sources = client.page_sources(titles)
+    except WikiError as e:
+        return None, [f"E.G.O pages not fetched ({_why(e, client)}); data/egos.json left as it was"]
+    return egomod.build_egos(cats, sources, build.SINNERS, build.fold, build.slugify, build.wiki_url)
 
 
 def fetch_pack_info(client: WikiClient, gifts: list[dict], packs: list[dict], skip: bool):

@@ -1,0 +1,20 @@
+[
+  {
+    "identity": "the-lord-of-hongyuan-hong-lu",
+    "kind": "after_self",
+    "trait": "Heishou Pack",
+    "count": 2,
+    "tip": "Put your best Heishou units right after The Lord of Hongyuan.",
+    "why": "Player tip: his Skill 3 (Exalted Command) seems to pick the Heishou units after him first when their Unrelenting Storm stacks are tied. The skill text only says it picks the Heishou unit with the fewest stacks, and each pick adds a stack (max 2), so it cycles through your Heishou units. Being picked early means an extra Skill 3 and Offense/Defense Level Up sooner.",
+    "quote": "Among ally Heishou Pack units that can act, choose 1 unit that has the least Unrelenting Storm Stack and apply Unrelenting Storm; then, bestow Exalted Command.",
+    "from": "Answer Me, Heishou Packs (Skill 3)"
+  },
+  {
+    "identity": "heishou-pack-you-branch-sinclair",
+    "kind": "first_backup",
+    "tip": "Make You Branch Sinclair your first backup.",
+    "why": "Player tip: he gains 3 Bloodflame when he substitutes in, and with Bloodflame his Skill 3 (Bloodflame Massacre) turns all its coins Unbreakable. With The Lord of Hongyuan deployed, Heishou units that substitute in also use their base Skill 3 right away, so he comes in with it at full strength.",
+    "quote": "Gain 3 Bloodflame -血炎- in the same turn it Substitutes or Returns in",
+    "from": "Gamefowl (passive)"
+  }
+]

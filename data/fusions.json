@@ -430,5 +430,26 @@
       "red-tassel-md",
       "unadorned-sword-guard"
     ]
+  },
+  {
+    "result": "lunar-memory",
+    "ingredients": [
+      "sundered-memory",
+      "punctured-memory",
+      "crushed-memory"
+    ],
+    "any_of": {
+      "count": 2,
+      "from": [
+        "fragment-of-hellfire",
+        "fragment-of-allurement",
+        "fragment-of-inertia",
+        "fragment-of-desire",
+        "fragment-of-decay",
+        "fragment-of-conceit",
+        "fragment-of-friction"
+      ]
+    },
+    "super_shop": true
   }
 ]

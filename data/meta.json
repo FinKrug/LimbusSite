@@ -1,23 +1,24 @@
 {
-  "generated_at": "2026-09-23T01:32:37+00:00",
+  "generated_at": "2026-09-29T07:19:18+00:00",
   "source": "https://limbuscompany.wiki.gg/api.php",
-  "offline": true,
+  "offline": false,
   "pages": {
     "Module:EgoGift/data": {
       "revid": 191860,
       "timestamp": "2026-09-20T23:30:54Z"
     },
     "Module:EgoGiftList/data": {
-      "revid": 177480,
-      "timestamp": "2026-07-10T19:27:54Z"
+      "revid": 193816,
+      "timestamp": "2026-09-26T15:06:16Z"
     }
   },
   "include_unobtainable": false,
   "counts": {
-    "gifts": 456,
-    "theme_packs": 121,
-    "fusions": 58,
-    "identities": 188
+    "gifts": 447,
+    "theme_packs": 120,
+    "fusions": 59,
+    "identities": 189,
+    "egos": 114
   },
   "warnings": 19
 }

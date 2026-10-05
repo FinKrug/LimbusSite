@@ -28,7 +28,9 @@ Needs Python 3.10+ and no extra packages.
 ```
 python -m scraper                  # fetch from the wiki -> data/
 python -m scraper --offline        # rebuild from cached responses (no network)
+python -m scraper.tiers            # rebuild the Mirror Dungeon identity ranking from data/tiers/*.txt
 python -m scraper --skip-identities
+python -m scraper --skip-egos        # don't fetch E.G.O pages
 python -m unittest discover -s tests -t .
 ```
 
@@ -40,15 +42,18 @@ Re-run it after each game patch, once the wiki has caught up.
 |---|---|
 | `data/gifts.json` | [Module:EgoGift/data](https://limbuscompany.wiki.gg/wiki/Module:EgoGift/data) for each gift's sin, tier, cost, keyword and effect, plus [Module:EgoGiftList/data](https://limbuscompany.wiki.gg/wiki/Module:EgoGiftList/data) for where it drops |
 | `data/theme_packs.json` | [List of Floor Themes](https://limbuscompany.wiki.gg/wiki/List_of_Floor_Themes) and each "<Name> Theme Pack" page (floors, full gift pool), plus exclusives from Module:EgoGiftList/data |
-| `data/fusions.json` | Module:EgoGiftList/data (fusion recipes) |
-| `data/identities.json` | Pages in [Category:Identities](https://limbuscompany.wiki.gg/wiki/Category:Identities) and their categories |
+| `data/fusions.json` | Module:EgoGiftList/data (fusion recipes), plus the Super Shop recipe for Lunar Memory (`scraper/build.py`, `SPECIAL_FUSIONS`) |
+| `data/egos.json` | Pages in [Category:E.G.O](https://limbuscompany.wiki.gg/wiki/Category:E.G.O): sinner, grade, sin and statuses from categories; resource cost, Sanity and skill numbers from the page (`scraper/egos.py`, read loosely; missing costs fall back to typical ones for the grade) |
+| `data/identities.json` | Pages in [Category:Identities](https://limbuscompany.wiki.gg/wiki/Category:Identities) and their categories; skills 1-3 (sin, power, copies) from each page (`scraper/skills.py`) |
 | `data/meta.json` | Timestamp, wiki revision IDs and counts for this run |
 | `data/report.txt` | Warnings: names that didn't match, theme packs with no wiki page, etc. |
 
 `data/raw/` caches every API response so `--offline` works. It's git-ignored.
 
 Only gifts that can drop in a current Mirror Dungeon run are written. Story Dungeon gifts
-and retired "(Legacy)" versions are skipped (pass `--include-unobtainable` to keep them).
+and retired "(Legacy)" versions are skipped, and so is content removed from the game
+(`scraper/removed.py`: the Pilgrimage of Compassion pack and its gifts, from the wiki's
+"Removed Content" category). Pass `--include-unobtainable` to keep them.
 Full details stay on the wiki: every record has a `wiki_url`, and only the base effect
 text is stored, for tooltips and scoring.
 
@@ -72,7 +77,8 @@ text is stored, for tooltips and scoring.
   "theme_packs": [],            // ids of packs this gift is exclusive to
   "events": [{ "name": "Ardor Blossom Moth", "wiki_url": "..." }],
   "fusion_recipe": null,        // or [ingredient gift ids]
-  "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Hellterfly%27s%20Dream"
+  "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Hellterfly%27s%20Dream",
+  "icon": "Hellterfly’s Dream Gift.png"   // icon file on the wiki (imgname + " Gift.png", no "(MD)")
 }
 // theme_packs.json
 { "id": "the-outcast", "name": "The Outcast", "pool": "themed", "group": "Canto Themes",
@@ -82,10 +88,13 @@ text is stored, for tooltips and scoring.
   "wiki_url": "..." }
 // fusions.json
 { "result": "soothe-the-dead", "ingredients": ["ashes-to-ashes", "dust-to-dust", "secret-cookbook"] }
+{ "result": "lunar-memory", "ingredients": ["sundered-memory", "punctured-memory", "crushed-memory"],
+  "any_of": { "count": 2, "from": ["fragment-of-hellfire", ...] }, "super_shop": true }
 // identities.json
 { "id": "lcb-sinner-yi-sang", "name": "LCB Sinner Yi Sang", "sinner": "Yi Sang", "rarity": 1,
   "affinities": ["envy", "gloom", "sloth"], "keywords": ["Sinking"], "status_effects": [...],
-  "traits": ["LCB"], "wiki_url": "..." }
+  "traits": ["LCB"], "skills": [{ "slot": 1, "name": "...", "sin": "gloom", "type": "Blunt", "base": 4,
+  "coin_power": 3, "coins": 2, "copies": 3, "weight": 1, "statuses": ["Sinking"] }, ...], "wiki_url": "..." }
 ```
 
 Gifts have no wiki pages of their own, so `wiki_url` links to the gift list page and
@@ -102,5 +111,5 @@ keywords; event-only units the wiki gives no rarity or affinity are left out.
   identifying User-Agent (override it with the `LIMBUS_SCRAPER_UA` environment variable).
   A full run is about 100 requests (mostly theme pack pages), so roughly two minutes.
   `--skip-packs` skips the pack pages.
-- Identity data only has sin affinities and status keywords (taken from page categories),
-  not per-skill details.
+- Identity data has sin affinities and keywords (from page categories) and each skill's sin,
+  type, power, coins and copies (from the page), but not passives' numbers.
