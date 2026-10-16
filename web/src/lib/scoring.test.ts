@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  intrinsicScore, isSurvival, makeContext, packInDifficulty, packOnFloor, packsByGift, planCombos, planFusions, rankGifts, rankThemePacks,
+  intrinsicScore, isSurvival, makeContext, packInDifficulty, packOnFloor, packPool, packsByGift, planCombos, planFusions, rankGifts, rankThemePacks,
   signatureStatuses, teamFocus, teamGate, teamProfile, upgradeMagnitude, upgradeValue,
 } from './scoring'
 import { gameData } from './data'
@@ -564,5 +564,40 @@ describe('upgrades', () => {
     const a = upgradeValue(g, early, intrinsicScore(g, early).score)
     const b = upgradeValue(g, late, intrinsicScore(g, late).score)
     expect((b?.add ?? 0)).toBeLessThan(a?.add ?? 0)
+  })
+})
+
+describe('theme pack cards', () => {
+  it('show exclusives and a few boosted gifts, never fusion-only or widely shared ones', () => {
+    const real = gameData
+    const team = real.identities.filter((i) => i.keywords.includes('Rupture')).slice(0, 7)
+    const ranked = rankThemePacks(makeContext(real, team, []))
+    const count = new Map<string, number>()
+    for (const p of real.themePacks) for (const id of packPool(p)) count.set(id, (count.get(id) ?? 0) + 1)
+    for (const p of ranked) {
+      for (const h of p.highlights) {
+        expect(h.gift.gift.id).not.toBe('lunar-memory')
+        if (h.kind === 'exclusive') expect(p.pack.gifts).toContain(h.gift.gift.id)
+        else expect(count.get(h.gift.gift.id)!).toBeLessThanOrEqual(6)
+      }
+      expect(p.highlights.filter((h) => h.kind === 'boosted').length).toBeLessThanOrEqual(3)
+    }
+    expect(ranked.some((p) => p.highlights.length > 0)).toBe(true)
+  })
+})
+
+describe('owned status sources', () => {
+  it('a gift that already applies a status makes its payoffs worth more and other appliers worth less', () => {
+    const ids = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'heishou-pack-si-branch-rodion', 'heishou-pack-si-branch-gregor']
+    const team = ids.map((id) => gameData.identities.find((i) => i.id === id)!)
+    expect(team.some((i) => i.keywords.includes('Tremor'))).toBe(false)
+    const g = (id: string) => gameData.gifts.find((x) => x.id === id)!
+    const before = makeContext(gameData, team, [])
+    const after = makeContext(gameData, team, ['downpour'])
+    const applier = gameData.gifts.find((x) => x.name === 'Venomous Skin')!
+    expect(intrinsicScore(applier, after).score).toBeLessThan(intrinsicScore(applier, before).score)
+    expect(intrinsicScore(applier, after).reasons.some((r) => /Downpour, which you have, already does/.test(r.text))).toBe(true)
+    expect(intrinsicScore(g('bell-of-truth'), after).score).toBeGreaterThan(intrinsicScore(g('bell-of-truth'), before).score)
   })
 })

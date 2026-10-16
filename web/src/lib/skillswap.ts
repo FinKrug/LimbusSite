@@ -16,10 +16,20 @@
  *  - E.G.O: skills make resources of their sin, so a swap changes what your
  *    equipped E.G.O can afford, and turns spent on E.G.O don't use the deck.
  * That gain (as a % of your team's value per turn), per 100 Cost and weighted by
- * the floors left to enjoy it, decides whether it's worth buying.
+ * the floors left to enjoy it, is shown for every swap.
+ *
+ * Which swap to take (how players actually play it):
+ *  - Skill 3 is the default. It's the strongest skill, so S1 -> S3 and S2 -> S3 are
+ *    always worth it, unless it costs a sin's Resonance that a gift you own triggers on.
+ *  - Into Skill 2 only for a reason Skill 3 doesn't cover:
+ *      * it hits several targets (Atk Weight above 1, or "Atk Weight +N" in its text,
+ *        like Dawn Office Fixer Sinclair's S2) while Skill 1 and Skill 3 hit one, and
+ *        nothing else on the team does (no other multi-target skill or E.G.O);
+ *      * its sin lines up Resonance that a gift you own triggers on.
+ *    Then S1 -> S2 is the pick even ahead of S3; otherwise it's "go S3 instead".
  */
 import { deckCards, skillValue, type Swaps } from './battle'
-import { buildBattle, type BattleProfile, type Ego, type EgoLoadout } from './ego'
+import { buildBattle, resonanceTriggers, withBase, type BattleProfile, type Ego, type EgoLoadout } from './ego'
 import type { RunSettings } from './scoring'
 import type { Gift, Identity, Sin, Skill } from './types'
 
@@ -76,6 +86,8 @@ export interface SwapAdvice {
   /** % of team value per 100 Cost, weighted by floors left. */
   score: number
   worth: boolean
+  /** A Skill 2 swap with a reason Skill 3 doesn't cover (multi-target, Resonance for a gift). */
+  special: boolean
   pros: string[]
   cons: string[]
 }
@@ -95,6 +107,11 @@ export interface SwapOptions {
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+/** Does this skill hit (or can it hit) more than one target? */
+export function multiTarget(s: Pick<Skill, 'weight' | 'weight_bonus'> | null | undefined): boolean {
+  return !!s && ((s.weight ?? 1) > 1 || (s.weight_bonus ?? 0) > 0)
+}
 const pct = (x: number, sign = true) => `${sign && x > 0 ? '+' : ''}${(x * 100).toFixed(Math.abs(x) < 0.1 ? 1 : 0)}%`
 const total = (b: BattleProfile) => b.sim.valuePerTurn + b.ego.gain
 
@@ -113,6 +130,16 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
   const baseTotal = total(base) || 1
   const keywords = [...new Set(team.flatMap((i) => i.keywords))]
   const giftSins = new Set(owned.flatMap((g) => g.affinities ?? []))
+  // Sins whose Resonance a gift you own triggers on ("When activating Wrath Absolute Resonance").
+  const resonGifts = new Map<Sin, Gift[]>()
+  for (const g of owned) for (const t of resonanceTriggers(g)) resonGifts.set(t.sin, [...(resonGifts.get(t.sin) ?? []), g])
+  // Multi-target damage the team already has: other units' skills and equipped E.G.O.
+  const fullLoadout = withBase(loadout, egos)
+  const egoById = new Map(egos.map((e) => [e.id, e]))
+  const aoeEgo = team.flatMap((m) => Object.values(fullLoadout[m.sinner] ?? {})
+    .map((id) => egoById.get(id ?? ''))
+    .filter((e): e is Ego => !!e && (e.skill?.weight ?? 1) > 1))
+  const aoeFrom = (except: Identity) => team.filter((m) => m !== except && (m.skills ?? []).some(multiTarget))
   const { floorsLeft, weight } = floorsWeight(opts.run)
 
   return team.map((i) => {
@@ -171,11 +198,48 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
         if (d[sw.from] === 1) cons.push(`Removes your last S${sw.from}`)
         if (base.ego.share >= 0.08) cons.push(`E.G.O take about ${Math.round(base.ego.share * 100)}% of turns, so deck skills matter a bit less`)
         if (floorsLeft <= 3) cons.push(`Only ${floorsLeft} floor${floorsLeft > 1 ? 's' : ''} left to use it`)
-        const worth = score >= SWAP_WEIGHTS.worth && gain > 0
-        options.push({ kind: sw.kind, from, to, cost: sw.cost, search: sw.search, gain, score, worth, pros, cons })
+
+        // Resonance a gift you own triggers on, gained or lost by this swap.
+        const resonFor = (sin: Sin | null, dir: 1 | -1) => {
+          if (!sin || !resonGifts.has(sin)) return null
+          const delta = (after.sim.areson[sin] + after.sim.reson[sin]) - (base.sim.areson[sin] + base.sim.reson[sin])
+          return delta * dir >= 0.03 ? resonGifts.get(sin)! : null
+        }
+        const losesGiftReson = from.sin !== to.sin ? resonFor(from.sin, -1) : null
+        const gainsGiftReson = from.sin !== to.sin ? resonFor(to.sin, 1) : null
+        if (losesGiftReson) cons.unshift(`Less ${cap(from.sin!)} Resonance, which ${losesGiftReson[0].name} triggers on`)
+        if (gainsGiftReson) pros.unshift(`More ${cap(to.sin!)} Resonance, which ${gainsGiftReson[0].name} triggers on`)
+
+        let worth: boolean
+        let special = false
+        if (sw.to === 3) {
+          // Skill 3 is the default: the strongest skill.
+          pros.unshift(`Skill 3 is ${i.sinner}'s strongest skill: the default pick for swaps`)
+          worth = !losesGiftReson && floorsLeft > 1
+        } else {
+          // Into Skill 2 only for something Skill 3 doesn't give.
+          const s3 = skills.find((s) => s.slot === 3)
+          const aoe = multiTarget(to) && !multiTarget(from) && !multiTarget(s3)
+          const others = aoe ? aoeFrom(i) : []
+          if (aoe && !others.length && !aoeEgo.length) {
+            pros.unshift(`${to.name} (S2) can hit several targets; ${from.name} (S1) and Skill 3 hit one, and nothing else on your team does`)
+            special = true
+          }
+          if (gainsGiftReson) special = true
+          if (!special) {
+            const covered = others.length ? `${others[0].sinner} already hits several targets`
+              : aoeEgo.length ? `${aoeEgo[0].sinner}'s ${aoeEgo[0].name} (E.G.O) already hits several targets` : ''
+            cons.unshift(aoe
+              ? `${to.name} (S2) can hit several targets, but ${covered}: Skill 3 hits harder, so go S1 → S3 or S2 → S3`
+              : `Skill 3 hits harder: spend on S1 → S3 or S2 → S3 instead`)
+          }
+          worth = special && !losesGiftReson && gain > -0.02 && floorsLeft > 1
+        }
+        options.push({ kind: sw.kind, from, to, cost: sw.cost, search: sw.search, gain, score, worth, special, pros, cons })
       }
     }
-    options.sort((a, b) => b.score - a.score)
+    // A Skill 2 swap with a reason Skill 3 can't cover comes first; then Skill 3 swaps.
+    options.sort((a, b) => Number(b.special) - Number(a.special) || Number(b.to.slot === 3) - Number(a.to.slot === 3) || b.score - a.score)
     const best = options.find((o) => o.worth) ?? null
     return { identity: i, deck: d, skills, best, options }
   })

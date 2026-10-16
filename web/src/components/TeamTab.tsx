@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { shortName } from '../lib/format'
 import type { ArtVariant } from '../lib/images'
 import type { LineupInfo, LineupSuggestion } from '../lib/ordering'
@@ -38,8 +38,6 @@ interface Props {
   /** All gifts and the ones you own (for E.G.O resource gift notes). */
   gifts: Gift[]
   owned: Set<string>
-  /** Saved teams (PresetBox), shown at the top of the side column. */
-  presets?: ReactNode
 }
 
 /**
@@ -68,14 +66,30 @@ export function TeamTab(props: Props) {
     <div className="formation">
       <div className="formation-main">
         <div className="formation-toolbar">
-          <span className="muted small">Click identities in the order you want them deployed, like in game. ⇄ swaps an identity.</span>
+          <div className="formation-controls">
+            <span className="participants-inline" title="Sinners in your lineup (deployed + backups)">
+              <strong>{selection.length}</strong>/12
+            </span>
+            <label className="deployed-pick">
+              Deployed
+              <select value={deployed} onChange={(e) => onDeployedChange(Number(e.target.value))} aria-label="Deployed sinners">
+                {[5, 6, 7].map((n) => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </label>
+            <button className="btn small-btn" onClick={onClear} disabled={!selection.length}
+              title="Take everyone out of the lineup (identities stay equipped)">⟲ Clear order</button>
+            <button className="btn small-btn" onClick={onSelectAll} disabled={selection.length === 12}
+              title="Add everyone not in the lineup yet, after the ones you picked">Select all</button>
+            <BuildControl identities={identities} onBuild={props.onBuild} />
+          </div>
           <div className="seg" role="group" aria-label="Card art">
             <button className={art === 'uptie' ? 'seg-btn on' : 'seg-btn'} aria-pressed={art === 'uptie'} onClick={() => props.onArtChange('uptie')}
-              title="The art identities get at Uptie III (threadspinning). Used on every tab.">Threadspun art</button>
+              title="The art identities get at Uptie III (threadspinning). Used on every tab.">Threadspun</button>
             <button className={art === 'base' ? 'seg-btn on' : 'seg-btn'} aria-pressed={art === 'base'} onClick={() => props.onArtChange('base')}
               title="The art identities have before Uptie III. Used on every tab.">Base art</button>
           </div>
         </div>
+        <p className="muted small formation-tip">Click identities in the order you want them deployed, like in game. Swap changes an identity.</p>
         <ol className="card-grid" aria-label="Sinners">
           {SINNERS.map((s) => {
             const i = equipped[s]
@@ -96,7 +110,6 @@ export function TeamTab(props: Props) {
       </div>
 
       <aside className="formation-side">
-        {props.presets}
         <SuggestionBox {...props} />
 
         <section className="side-box">
@@ -116,25 +129,6 @@ export function TeamTab(props: Props) {
             </p>
           )}
         </section>
-
-        <section className="side-box">
-          <div className="participants">
-            <span>Total participants</span>
-            <strong>{selection.length}/12</strong>
-          </div>
-          <label className="deployed-pick">
-            Deployed
-            <select value={deployed} onChange={(e) => onDeployedChange(Number(e.target.value))} aria-label="Deployed sinners">
-              {[5, 6, 7].map((n) => <option key={n} value={n}>{n}</option>)}
-            </select>
-          </label>
-          <div className="side-actions">
-            <button className="btn" onClick={onClear} disabled={!selection.length}>⟲ Clear selection</button>
-            <button className="btn" onClick={onSelectAll} disabled={selection.length === 12}>Select all</button>
-          </div>
-        </section>
-
-        <BuildBox identities={identities} onBuild={props.onBuild} />
       </aside>
 
       {picking && (
@@ -286,18 +280,14 @@ function IdentityPicker({ sinner, identities, current, art, onPick, onClose }: {
   )
 }
 
-function BuildBox({ identities, onBuild }: { identities: Identity[]; onBuild: (f: Focus) => void }) {
+/** "Build around…" + Build: picks an identity per sinner and a starting order for all 12. */
+function BuildControl({ identities, onBuild }: { identities: Identity[]; onBuild: (f: Focus) => void }) {
   const traits = useMemo(() => traitOptions(identities), [identities])
   const [focus, setFocus] = useState('')
   return (
-    <section className="side-box">
-      <h3>Build a team</h3>
-      <p className="hint small">
-        Picks an identity per sinner for a keyword or affiliation and a starting order for all 12. It doesn't know
-        which identities you own.
-      </p>
-      <select aria-label="Build around" value={focus} onChange={(e) => setFocus(e.target.value)}>
-        <option value="">Build around…</option>
+    <span className="build-control" title="Picks an identity per sinner for a keyword or affiliation and a starting order for all 12. It doesn't know which identities you own.">
+      <select aria-label="Build a team around" value={focus} onChange={(e) => setFocus(e.target.value)}>
+        <option value="">Build a team around…</option>
         <optgroup label="Keyword">
           {CORE_KEYWORDS.map((k) => <option key={k} value={focusKey({ kind: 'keyword', value: k })}>{k}</option>)}
         </optgroup>
@@ -307,9 +297,9 @@ function BuildBox({ identities, onBuild }: { identities: Identity[]; onBuild: (f
           ))}
         </optgroup>
       </select>
-      <button className="btn" disabled={!parseFocus(focus)} onClick={() => { const f = parseFocus(focus); if (f) onBuild(f) }}>
-        Build team
+      <button className="btn small-btn" disabled={!parseFocus(focus)} onClick={() => { const f = parseFocus(focus); if (f) onBuild(f) }}>
+        Build
       </button>
-    </section>
+    </span>
   )
 }

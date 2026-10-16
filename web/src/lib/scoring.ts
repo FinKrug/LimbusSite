@@ -78,6 +78,9 @@ export const WEIGHTS = {
   /** A mechanic gate (Ammo, ...) counts as fully met once this x the share of the team uses it
    *  (2.5: about 3 of 7 deployed units). */
   mechanicSpread: 2.5,
+  /** A gift that applies a status your team doesn't use, when a gift you own already applies it,
+   *  counts this share of `standalone` (more of the same supply adds little). */
+  redundantSupply: 0.3,
   /** Fit of a gift whose needs are met by gifts you own (not by your team). */
   comboFit: 0.75,
   /** Fit cap for a gift whose needs nothing on your team or in your gifts provides. */
@@ -111,7 +114,9 @@ export const WEIGHTS = {
    *  A gift in 60 packs is no reason to pick any particular one of them. */
   packExclusive: 1.5,
   packRareAt: 6,
-  packCommonFloor: 0.25,
+  packCommonFloor: 0.1,
+  /** Pack cards: up to this many boosted (featured, in few packs) gifts besides the exclusives. */
+  packBoostedShown: 3,
   /** Flat bonus per gift in the pool that's built for your team, times its rarity weight. */
   packSynergy: 1.5,
   /** Synergy credit for a gift built for another branch of your team's faction
@@ -655,7 +660,17 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
   }
   if (profile.size && worksAlone(gift)) {
     const applied = [...new Set(gift.applies!.filter((a) => a.when === 'always').map((a) => a.status))]
-    routes.push({ fit: WEIGHTS.standalone, reason: { kind: 'good', text: `Works on its own: applies ${applied.slice(0, 2).join(' and ')} itself` } })
+    // Applying a status your team doesn't use is only worth much if nothing you own applies it yet:
+    // once Broken Compass spreads Sinking, another Sinking applier adds little (its payoffs are what to get).
+    const supplier = (st: string) => !teamSupplies(profile, st)
+      ? (ctx.giftSupply.get(st) ?? []).find((g) => g.id !== gift.id) : undefined
+    const covered = applied.map(supplier)
+    if (applied.length && covered.every((g) => !!g)) {
+      routes.push({ fit: WEIGHTS.standalone * WEIGHTS.redundantSupply, reason: { kind: 'info',
+        text: `Applies ${applied.slice(0, 2).join(' and ')}, but ${covered[0]!.name}, which you have, already does: get gifts that use it instead` } })
+    } else {
+      routes.push({ fit: WEIGHTS.standalone, reason: { kind: 'good', text: `Works on its own: applies ${applied.slice(0, 2).join(' and ')} itself` } })
+    }
   }
 
   const needs = gift.needs ?? []
@@ -783,7 +798,8 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
     reasons.push({ kind: 'good', text: `Also uses ${extras.slice(0, 3).join(', ')}, which your team applies` })
   }
 
-  if (isCoreKeyword(gift.keyword)) {
+  // Momentum: building a keyword your team uses. Not for a keyword only your gifts provide.
+  if (isCoreKeyword(gift.keyword) && profile.keywordCounts[gift.keyword] > 0) {
     const n = ctx.ownedKeywordCounts.get(gift.keyword) ?? 0
     if (n > 0) {
       bonus += Math.min(WEIGHTS.momentumMax, n * WEIGHTS.momentumEach)
@@ -1211,8 +1227,20 @@ export interface PackScore {
   reasons: Reason[]
   /** What each gift adds to the pack's score, largest first. */
   parts: PackPart[]
+  /** What the pack card shows: its exclusive gifts (best for your team first), then a few
+   *  strong gifts it features that few other packs do. Not gifts most packs give. */
+  highlights: PackHighlight[]
   /** The score split two ways: its best gifts, and gifts built for your team. */
   split: { best: number; team: number }
+}
+
+export interface PackHighlight {
+  gift: GiftScore
+  kind: 'exclusive' | 'boosted'
+  /** Fits your team (keyword fit or built for it). */
+  fits: boolean
+  /** "Only in this pack", "Featured in 3 packs". */
+  where: string
 }
 
 /** One gift's share of a theme pack's score. */
@@ -1225,6 +1253,7 @@ export interface PackPart {
 
 /** How much a gift in a pack counts, by how many packs can give it. */
 function packRarity(pack: ThemePack, id: string, packCount: Map<string, number>): { value: number; note: string } {
+  if (recipeResultIds.has(id)) return { value: 0, note: 'fusion only, not a pack drop' }
   if (pack.gifts.includes(id)) return { value: WEIGHTS.packExclusive, note: `only in this pack (×${WEIGHTS.packExclusive})` }
   const n = packCount.get(id) ?? 1
   const value = Math.max(WEIGHTS.packCommonFloor, Math.min(1, WEIGHTS.packRareAt / n))
@@ -1232,7 +1261,12 @@ function packRarity(pack: ThemePack, id: string, packCount: Map<string, number>)
   return { value, note: `in ${n} packs, so it counts ×${+value.toFixed(2)}` }
 }
 
+/** Recipe results (Lunar Memory, ...) are only made by fusing, even when a pack page's list names them. */
+const recipeResultIds = new Set<string>()
+
 export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.themePacks): PackScore[] {
+  recipeResultIds.clear()
+  for (const f of ctx.data.fusions) recipeResultIds.add(f.result)
   // How many packs (of all of them, not just those in view) can give each gift.
   const packCount = new Map<string, number>()
   for (const p of ctx.data.themePacks) for (const id of packPool(p)) packCount.set(id, (packCount.get(id) ?? 0) + 1)
@@ -1263,8 +1297,22 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
     const top = [...scored].sort((a, b) => weight(b) + (b.synergy ? WEIGHTS.packSynergy * rarity(b) : 0)
       - (weight(a) + (a.synergy ? WEIGHTS.packSynergy * rarity(a) : 0)))
     const parts = [...partOf.values()].sort((a, b) => b.value - a.value)
+    // The card: every exclusive (fitting ones first), then a few boosted gifts few packs feature.
+    const fits = (g: GiftScore) => g.fit > 0 || g.synergy
+    const exclusives = scored.filter((g) => pack.gifts.includes(g.gift.id))
+      .sort((a, b) => Number(fits(b)) - Number(fits(a)) || b.score - a.score)
+      .map((g): PackHighlight => ({ gift: g, kind: 'exclusive', fits: fits(g), where: 'Only in this pack' }))
+    const boosted = scored
+      .filter((g) => !pack.gifts.includes(g.gift.id) && !recipeResultIds.has(g.gift.id) && fits(g)
+        && (packCount.get(g.gift.id) ?? 99) <= WEIGHTS.packRareAt)
+      .slice(0, WEIGHTS.packBoostedShown)
+      .map((g): PackHighlight => {
+        const n = packCount.get(g.gift.id) ?? 1
+        return { gift: g, kind: 'boosted', fits: true, where: n <= 1 ? 'Featured only here' : `Featured in ${n} packs` }
+      })
+    const highlights = [...exclusives, ...boosted]
     return {
-      pack, score: bestValue + teamValue, top, ownedCount, parts,
+      pack, score: bestValue + teamValue, top, ownedCount, parts, highlights,
       split: { best: bestValue, team: teamValue },
     }
   })
@@ -1284,8 +1332,9 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
       }
       if (ctx.profile.size && fitting.length === 0) {
         reasons.push({ kind: 'bad', text: "None of its gifts match your team's keywords" })
-      } else if (!synergy.length) {
-        reasons.push({ kind: r.top[0].fit > 0 ? 'good' : 'info', text: `Best gift: ${r.top[0].gift.name}` })
+      } else if (!synergy.length && r.highlights.some((h) => h.fits)) {
+        const h = r.highlights.find((x) => x.fits)!
+        reasons.push({ kind: 'good', text: `${h.kind === 'exclusive' ? 'Exclusive' : 'Boosted'} for your team: ${h.gift.gift.name}` })
       }
     }
     const exclusivesLeft = r.pack.gifts.filter((id) => !ctx.owned.has(id)).length
@@ -1297,6 +1346,7 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
     return {
       ...r, rating: Math.round(rel * 100), verdict, reasons, top: r.top.map(rate),
       parts: r.parts.map((p) => ({ ...p, gift: rate(p.gift) })),
+      highlights: r.highlights.map((h) => ({ ...h, gift: rate(h.gift) })),
     }
   })
   ranked.sort((a, b) =>

@@ -61,6 +61,25 @@ class SkillTests(unittest.TestCase):
         self.assertEqual(s2["coin_power"], -6)
         self.assertEqual((s3["name"], s3["copies"]), ("Awe, Contempt", 1))
 
+    def test_conditional_atk_weight_bonus(self):
+        src = """{{IDPage
+|skill2={{UptieSkills
+|slevel=2
+|sin=Envy
+|name=Sunset Blade
+|spower=5
+|cpower=+ 3
+|coin=3
+|atkweight=1
+|amt=2
+|se={{SkillCon|Before Attack}} When in a volatile E.G.O state, Atk Weight +1<br>- At 45 SP, Atk Weight +2 instead
+|1se={{SkillCon|Before Attack}} When in a volatile E.G.O state, Atk Weight +1
+}}
+}}"""
+        (s2,) = skills.identity_skills(src)
+        self.assertEqual((s2["weight"], s2["weight_bonus"]), (1, 2))
+        self.assertEqual(skills.identity_skills(PAGE)[0]["weight_bonus"], 0)
+
     def test_no_template(self):
         self.assertEqual(skills.identity_skills(""), [])
 

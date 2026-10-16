@@ -1,11 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { EvaluateTab } from './components/EvaluateTab'
 import { EventsTab } from './components/EventsTab'
+import { Welcome } from './components/Welcome'
 import { FusionTab } from './components/FusionTab'
 import { GiftList } from './components/GiftList'
 import { OwnedGifts } from './components/OwnedGifts'
 import { PlanPanel } from './components/PlanPanel'
-import { PresetBox } from './components/PresetBox'
+import { LineupTools, PresetBox } from './components/PresetBox'
 import { availability } from './lib/plan'
 import { PackList } from './components/PackList'
 import { FormationBar } from './components/FormationBar'
@@ -20,7 +21,7 @@ import {
 } from './lib/scoring'
 import { DEFAULT_DEPLOYED } from './lib/lineup'
 import { usePersistentState } from './lib/storage'
-import { restoreSelection, restoreTeam, validPresets, type Equipped, type TeamPreset } from './lib/presets'
+import { makePreset, presetMatches, restoreSelection, restoreTeam, validPresets, type Equipped, type TeamPreset } from './lib/presets'
 import type { TierOverrides } from './lib/strength'
 import type { ArtVariant } from './lib/images'
 import { lineupSuggestions, moveTo } from './lib/ordering'
@@ -32,6 +33,29 @@ import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
 type Tab = 'team' | 'gifts' | 'packs' | 'fusion' | 'events' | 'evaluate' | 'skills'
 const TABS: Tab[] = ['team', 'gifts', 'packs', 'fusion', 'events', 'evaluate', 'skills']
+
+/** The "Try a demo team" run: a Heishou lineup on Hard, floor 3, with a few gifts already picked up. */
+const DEMO = {
+  team: {
+    'Hong Lu': 'the-lord-of-hongyuan-hong-lu', Faust: 'heishou-pack-mao-branch-adept-faust',
+    'Ryōshū': 'heishou-pack-mao-branch-ryoshu', Outis: 'heishou-pack-mao-branch-outis',
+    Ishmael: 'family-hierarch-candidate-ishmael', Rodion: 'heishou-pack-si-branch-rodion',
+    Gregor: 'heishou-pack-si-branch-gregor', Sinclair: 'heishou-pack-you-branch-sinclair',
+    Heathcliff: 'heishou-pack-you-branch-adept-heathcliff', 'Don Quixote': 'heishou-pack-wei-branch-don-quixote',
+    'Yi Sang': 'heishou-pack-wu-branch-adept-yi-sang', Meursault: 'cinq-assoc-west-section-3-meursault',
+  } as Equipped,
+  order: ['Hong Lu', 'Faust', 'Ryōshū', 'Outis', 'Ishmael', 'Rodion', 'Gregor', 'Sinclair', 'Heathcliff', 'Don Quixote', 'Yi Sang', 'Meursault'] as Sinner[],
+  owned: ['thrill', 'glyph-of-glass-shards', 'sundered-memory'],
+}
+
+/** Show the welcome screen on a first visit (or with #welcome in the address). */
+function firstVisit(): boolean {
+  try {
+    return location.hash === '#welcome' || localStorage.getItem('limbussite.welcomed.v1') === null
+  } catch {
+    return true
+  }
+}
 
 /** Lineups saved before the Team tab (team + order) become the selection. */
 function legacySelection(): Sinner[] {
@@ -75,7 +99,7 @@ export default function App() {
   const [dismissed, setDismissed] = usePersistentState<string[]>('limbussite.dismissed.v1', [])
   // Equipped E.G.O per sinner and grade (Team tab).
   const [loadout, setLoadout] = usePersistentState<EgoLoadout>('limbussite.egos.v1', {})
-  // Saved teams (Team tab > Team presets) and the one last loaded or saved.
+  // Saved lineups (strip above the lineup; Manage opens the full list) and the one last loaded or saved.
   const [storedPresets, setPresets] = usePersistentState<TeamPreset[]>('limbussite.presets.v1', [])
   const presets = useMemo(() => validPresets(storedPresets), [storedPresets])
   const [activePreset, setActivePreset] = usePersistentState<string | null>('limbussite.presets.active.v1', null)
@@ -100,6 +124,33 @@ export default function App() {
     [equipped],
   )
   const knownIdentities = useMemo(() => new Set(gameData.identities.map((i) => i.id)), [])
+  // Load a saved lineup: its identities, and its order if it saved one.
+  const applyLineup = (t: Equipped, sel?: Sinner[]) => {
+    setTeam(restoreTeam(t, knownIdentities))
+    if (sel) setSelection(restoreSelection(sel))
+  }
+  const [managing, setManaging] = useState(false)
+  // Welcome screen: first visit, or the LimbusSite title.
+  const [home, setHome] = useState(firstVisit)
+  const [, setWelcomed] = usePersistentState<boolean>('limbussite.welcomed.v1', false)
+  const leaveHome = (to: Tab) => { setHome(false); setWelcomed(true); setTab(to); window.scrollTo(0, 0) }
+  const loadDemo = () => {
+    // Keep the lineup you had: save it first unless it's already saved.
+    if (order.length && !presets.some((p) => presetMatches(p, currentTeam, order))) {
+      const kept = makePreset('Before demo', currentTeam, order, presets)
+      setPresets([...presets, kept])
+    }
+    const known = new Set(gameData.gifts.map((g) => g.id))
+    setTeam(restoreTeam(DEMO.team, knownIdentities))
+    setSelection(DEMO.order)
+    setDeployed(7)
+    setOwned(DEMO.owned.filter((id) => known.has(id)))
+    setOffered([])
+    setDismissed([])
+    setRun({ difficulty: 'hard', floors: defaultFloors('hard'), floor: 3, pack: null })
+    setActivePreset(null)
+    leaveHome('gifts')
+  }
   const teamIdentities = useMemo(() => order.map((s) => equipped[s]).filter(Boolean), [order, equipped])
   const ctx = useMemo(
     () => makeContext(gameData, teamIdentities, owned, { deployed, tiers, run, loadout, swaps }),
@@ -133,13 +184,21 @@ export default function App() {
 
   const own = (id: string) => setOwned((o) => addGift(o, id, ctx.giftsById.get(id)?.tier ?? null))
 
+  if (home) {
+    return (
+      <Welcome equipped={equipped} art={art} hasTeam={order.length > 0}
+        counts={{ gifts: gameData.gifts.length, packs: gameData.themePacks.length, events: (gameData.events ?? []).length, identities: gameData.identities.length }}
+        onDemo={loadDemo} onBuild={() => leaveHome('team')} onContinue={() => leaveHome(tab)} />
+    )
+  }
+
   return (
     <div className="app">
       <header className="top">
-        <div>
+        <button className="top-home" onClick={() => { setHome(true); window.scrollTo(0, 0) }} title="Back to the welcome screen">
           <h1>LimbusSite</h1>
           <p className="sub">Mirror Dungeon E.G.O gift planner</p>
-        </div>
+        </button>
         <p className="data-note">
           {gameData.gifts.length} gifts · {gameData.themePacks.length} theme packs · data from the{' '}
           <a href="https://limbuscompany.wiki.gg/" target="_blank" rel="noreferrer">Limbus Company Wiki</a>
@@ -161,6 +220,16 @@ export default function App() {
         <TabButton id="skills" tab={tab} setTab={setTab}>Skill swaps</TabButton>
       </nav>
 
+      <LineupTools presets={presets} onPresetsChange={setPresets} activeId={activePreset} onActiveChange={setActivePreset}
+        current={currentTeam} selection={order} identities={gameData.identities}
+        onApply={applyLineup}
+        onManage={() => setManaging(true)} />
+      {managing && (
+        <Dialog title="Saved lineups" onClose={() => setManaging(false)}>
+          <PresetBox presets={presets} onPresetsChange={setPresets} activeId={activePreset} onActiveChange={setActivePreset}
+            current={currentTeam} selection={order} onApply={applyLineup} identities={gameData.identities} art={art} />
+        </Dialog>
+      )}
       <FormationBar selection={order} equipped={equipped} deployed={deployed} minDeployed={5} maxDeployed={7}
         suggested={suggestedTo} suggestionCount={suggestions.length} art={art}
         onSelectionChange={setSelection}
@@ -173,14 +242,6 @@ export default function App() {
             art={art} onArtChange={setArt}
             egos={gameData.egos ?? []} loadout={loadout} onLoadoutChange={setLoadout} battle={ctx.battle}
             gifts={gameData.gifts} owned={ctx.owned}
-            presets={
-              <PresetBox presets={presets} onPresetsChange={setPresets} activeId={activePreset} onActiveChange={setActivePreset}
-                current={currentTeam} selection={order}
-                onApply={(t, sel) => {
-                  setTeam(restoreTeam(t, knownIdentities))
-                  if (sel) setSelection(restoreSelection(sel))
-                }} identities={gameData.identities} art={art} />
-            }
             suggestions={suggestions} info={lineup.info}
             dismissedCount={lineup.suggestions.length - suggestions.length}
             onApply={(sug) => setSelection(moveTo(order, sug.sinner, sug.to))}
@@ -203,7 +264,14 @@ export default function App() {
       ) : (
       <div className="layout">
         <aside className="side">
-          <RunPanel run={run} onChange={setRun} packs={gameData.themePacks} ranked={rankedGifts} ctx={ctx} />
+          <RunPanel run={run} onChange={setRun} packs={gameData.themePacks} ranked={rankedGifts} ctx={ctx}
+            onClearRun={() => {
+              // Run data only: the team, E.G.O, saved lineups and settings stay.
+              setOwned([])
+              setOffered([])
+              setDismissed([])
+              setRun({ ...run, floor: null, pack: null })
+            }} />
           <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={setOwned} />
         </aside>
 
@@ -266,6 +334,26 @@ export default function App() {
         </main>
       </div>
       )}
+    </div>
+  )
+}
+
+/** A modal panel (Saved lineups): closes on Escape, the ✕ or a click outside. */
+function Dialog({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+  return (
+    <div className="picker-backdrop" onClick={onClose}>
+      <div className="picker dialog" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
+        <header className="picker-head">
+          <h2>{title}</h2>
+          <button className="icon-btn" onClick={onClose} aria-label="Close">✕</button>
+        </header>
+        <div className="picker-scroll dialog-body">{children}</div>
+      </div>
     </div>
   )
 }

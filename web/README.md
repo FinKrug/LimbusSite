@@ -70,6 +70,7 @@ src/
   components/
     TeamTab.tsx      "Team" tab: the formation screen (cards, identity picker, Build)
     EgoLoadout.tsx   E.G.O loadout per deployed sinner (Team tab), E.G.O lean and Resonance odds
+    Welcome.tsx      welcome screen (clock of sinners, demo team, features)
     EventsTab.tsx    "Events" tab: search an event, best choice for your team, who to send on a check
     PresetBox.tsx    "Team presets" on the Team tab: save, load, rename, reorder, delete saved teams
     FormationBar.tsx the lineup strip shown on every tab (drag to reorder)
@@ -145,6 +146,12 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
 - **Ally deaths:** effects that pay off when your own units die (Spiderweb Entangled in Red,
   Value Disposal, Devouring Cube, The Unchosen) count ×(1 − 0.7 × the share of the text that's
   about it), unless your team has the identity the gift is built around.
+- **Owned status sources:** when a gift you own already applies a status your team doesn't use
+  (Broken Compass spreads Sinking, Downpour applies Tremor), gifts that need that status get
+  "Works with X, which you have", while other gifts that only apply it drop to 0.3× their
+  "works on its own" credit ("X already does: get gifts that use it instead"). The "You already
+  have N <keyword> gifts" bonus only counts for keywords your team itself uses. A team that
+  uses the keyword still values more appliers normally (more stacks is the point).
 - **Fusions:** an ingredient gets extra value when you already hold other parts of its
   recipe.
 - **Fusion tab** (`src/lib/fusion.ts`), following the wiki's rules: pick a keyword, put 2-3
@@ -227,13 +234,20 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
 - **Skill swaps tab** (`src/lib/skillswap.ts`): each swap is played out with and without it (same
   draws). The gain covers the stronger skill (one swap = 1 turn in 5 on the better skill), the
   Resonance it gains or loses (Absolute Resonance odds per sin shown) and what the equipped
-  E.G.O can afford. Worth it at ≥ 1.3% team damage per 100 Cost, weighted by floors left (full at
-  8+). Press Did it to record a swap; decks update.
+  E.G.O can afford. Skill 3 is the default pick (S1 → S3, S2 → S3 are always worth it) unless it
+  costs Resonance a gift you own triggers on. S1 → S2 is only suggested, ahead of Skill 3, when
+  Skill 2 gives something Skill 3 doesn't: it can hit several targets (Atk Weight > 1, or "Atk
+  Weight +N" in its text, `weight_bonus` from `scraper/skills.py`, like Dawn Office Fixer
+  Sinclair) while Skill 1 and 3 hit one and no other unit or equipped E.G.O does, or it lines up
+  Resonance a gift you own triggers on. Press Did it to record a swap; decks update.
 - **Removed content:** `scraper/removed.py` drops the Pilgrimage of Compassion pack and its gifts,
   which are gone from the game.
 - **Theme packs:** a pack is worth the best gifts in its pool, weighted by how rare each gift
-  is across packs: an exclusive counts ×1.5, while a gift in 60 packs counts ×0.25 (it's no
-  reason to pick any one of them). Gifts built for your team add a bonus. Go, Maybe and Skip
+  is across packs: an exclusive counts ×1.5, while a gift in 60 packs counts ×0.1 (it's no
+  reason to pick any one of them), and fusion-only gifts (Lunar Memory) count for nothing even
+  when a pack page lists them. Gifts built for your team add a bonus. A pack card shows its
+  exclusive gifts (fitting your team first) and up to 3 gifts it features that 6 or fewer packs
+  do and that fit your team ("Boosted"); everything else is under "Everything it can give". Go, Maybe and Skip
   are relative to the best pack in view: the packs on your run's floor, or the packs you're
   being offered. "Picking this" sets your current pack (Fusion uses it).
 - **Best gifts search:** type a theme pack ("spring cultivation"), sin ("wrath"), keyword
@@ -244,10 +258,10 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   art switch applies on every tab, including the lineup strip and the identity picker), rarity,
   role and keywords. Click cards in the order you want them deployed and each gets the next
   number; click again to take it out. The Swap strip across the top of a card changes the
-  identity; the picker lists 000, then 00, then 0 identities, A–Z. The side panel has lineup
-  suggestions, affinity counts for the deployed sinners, total participants, the deployed count
-  (5–7, default 7 as in Mirror Dungeon, so backups start at #8), Clear selection, Select all and
-  Build. Tiers aren't shown anywhere: order depends on more than how strong a unit is.
+  identity; the picker lists 000, then 00, then 0 identities, A–Z. The toolbar above the cards
+  has the lineup count, the deployed count (5–7, default 7 as in Mirror Dungeon, so backups start
+  at #8), Clear order, Select all and Build a team around…; the side panel only has lineup
+  suggestions and affinity counts for the deployed sinners. Tiers aren't shown anywhere: order depends on more than how strong a unit is.
 - **Suggested E.G.O** (Team tab, E.G.O loadout, `src/lib/egorec.ts`): for each deployed sinner and
   grade, the E.G.O worth the most per turn: value of one use over the skill it replaces (power, plus
   team keywords it inflicts) times the uses per turn your team can pay for, from the resources its
@@ -259,6 +273,19 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   note naming gifts that make them (ones naming the sin first, then random ones), and Best gifts
   marks those gifts and scores them a bit higher (`ctx.egoNeeds`, `egoAdjust` in scoring.ts). Once
   you own one, its resources count and the suggestion switches to that E.G.O on its own.
+- **Welcome screen** (`Welcome.tsx`): shown on a first visit, from the LimbusSite title, or with
+  `#welcome` at the end of the address. Dante's clock with the twelve sinners (your equipped
+  identities) at their hours, rising sin-colored embers, counters from the data, and two ways in:
+  **Try a demo team** (a Heishou lineup on Hard, floor 3, with a few gifts; your current lineup is
+  saved as "Before demo" first if it isn't saved) and **Build my own team**. Animations are off
+  for `prefers-reduced-motion`. The title font (Cinzel) and portraits load online; offline it
+  falls back to a serif and initials.
+- **Saved lineups** (above the lineup strip on every tab; **Manage saved lineups** opens the full
+  list to rename, reorder or delete): **Save lineup** stores every sinner's identity and, if you've picked one, the
+  lineup order; pick one from **Load a saved lineup…** to switch back. Changing a saved lineup
+  offers **Save changes** or **Save as new**.
+- **Clear run** (Your run panel): clears the gifts you have, offered theme packs, dismissed lineup
+  suggestions, floor and pack, after a confirm. The team, E.G.O, saved lineups and difficulty stay.
 - **Team presets** (top of the Team tab's side panel, `src/lib/presets.ts`): save which identity
   each sinner has equipped (e.g. The Thumb Rodion) under a name, and switch between saved teams in
   one click. If you've picked a lineup order it's saved with the preset and restored when you load
@@ -312,9 +339,8 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   get" section: its fusion recipe (with ✓ on ingredients you own), the theme packs it's exclusive
   to or featured in (with floors), abnormality events, whether it's in the general pool (battle
   rewards and shops on any floor), Extreme-only or cursed, and other notes from the wiki.
-- **Theme pack gift lists** show a pack's first 5 gifts (the best for
-  your team), then "Show 30 more" at a time (5, 35, 65, …) and "Show less". Each row has the
-  gift's icon and its top reason.
+- **Theme pack gift lists:** "Everything it can give" lists the whole pool, best for your team
+  first, 30 more at a time. Each row has the gift's icon and its top reason.
 - **Why this rank** (`src/lib/explain.ts`): theme pack cards say why they're ranked above the
   next pack ("its best gift for you, X (only in this pack), beats Y's best"); gift cards don't
   compare gifts with each other. Open "Why this rank" for the full breakdown: each part of a gift's

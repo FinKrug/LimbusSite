@@ -42,6 +42,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -56,6 +57,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -70,6 +72,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Fragile"
@@ -122,6 +125,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Insight",
           "Discard",
@@ -138,6 +142,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Insight",
           "Discard",
@@ -155,6 +160,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Insight",
           "Aggro",
@@ -212,6 +218,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Rupture",
@@ -228,6 +235,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Rupture",
@@ -244,6 +252,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Fairy Lure",
           "Aggro",
@@ -298,6 +307,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -312,6 +322,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Discard",
@@ -328,6 +339,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Discard",
           "Tremor",
@@ -382,6 +394,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -396,6 +409,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Paralyze",
           "Rupture",
@@ -412,6 +426,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Pierce Fragility",
           "Rupture"
@@ -462,6 +477,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bind",
@@ -478,6 +494,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed"
@@ -493,6 +510,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed"
@@ -540,6 +558,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -554,6 +573,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -568,6 +588,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -620,6 +641,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Sinking"
@@ -635,6 +657,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Sinking"
@@ -650,6 +673,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Sinking",
@@ -713,6 +737,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Tremor",
@@ -729,6 +754,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Linebreaker",
           "Rupture",
@@ -748,6 +774,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Linebreaker",
           "Strider -Wu-",
@@ -812,6 +839,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Rupture",
@@ -829,6 +857,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Dimensional Rift",
@@ -845,6 +874,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Rupture",
@@ -896,6 +926,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -910,6 +941,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -924,6 +956,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -977,6 +1010,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "The Living & The Departed",
           "Sinking",
@@ -993,6 +1027,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "The Living & The Departed",
           "Sinking",
@@ -1010,6 +1045,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "The Living & The Departed",
           "Sinking",
@@ -1071,6 +1107,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Torn Memory",
           "Poise",
@@ -1087,6 +1124,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Torn Memory",
           "Poise",
@@ -1104,6 +1142,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 2,
+        "weight_bonus": 0,
         "statuses": [
           "Torn Memory",
           "Poise",
@@ -1181,6 +1220,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Karmic Consequence",
           "Mark of the Prescript",
@@ -1200,6 +1240,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Karmic Consequence",
           "Mark of the Prescript",
@@ -1219,6 +1260,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Procuration -Hermes-",
           "Karmic Consequence",
@@ -1284,6 +1326,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Burn",
@@ -1302,6 +1345,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Burn",
@@ -1320,6 +1364,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Burn",
@@ -1377,6 +1422,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Rupture"
@@ -1392,6 +1438,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Bind",
@@ -1408,6 +1455,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Rupture",
@@ -1458,6 +1506,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Paralyze"
         ]
@@ -1472,6 +1521,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Offense Level Down"
         ]
@@ -1486,6 +1536,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Attack Power Down"
         ]
@@ -1537,6 +1588,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Rupture"
@@ -1552,6 +1604,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Haste"
@@ -1567,6 +1620,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -1615,6 +1669,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge"
         ]
@@ -1629,6 +1684,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Bind"
@@ -1644,6 +1700,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Attack Power Down",
@@ -1696,6 +1753,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -1710,6 +1768,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -1724,6 +1783,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Echoes of the Manor"
@@ -1774,6 +1834,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Defense Level Up"
@@ -1789,6 +1850,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Level Up"
         ]
@@ -1803,6 +1865,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Level Up",
           "Haste"
@@ -1862,6 +1925,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Red Plum Blossom"
@@ -1877,6 +1941,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bind",
@@ -1893,6 +1958,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Red Plum Blossom",
           "Poise",
@@ -1957,6 +2023,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor",
@@ -1973,6 +2040,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor",
@@ -1990,6 +2058,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Fire Butterfly Coffin",
           "Burn",
@@ -2058,6 +2127,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -2072,6 +2142,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tianjiu Star's Blade",
           "Rupture",
@@ -2090,6 +2161,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Assist Defense",
@@ -2150,6 +2222,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -2164,6 +2237,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Unbreakable Coin"
@@ -2179,6 +2253,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -2234,6 +2309,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -2248,6 +2324,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Offense Level Down",
@@ -2264,6 +2341,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Tremor Burst"
@@ -2316,6 +2394,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge"
         ]
@@ -2330,6 +2409,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge"
         ]
@@ -2344,6 +2424,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Envy Fragility"
@@ -2397,6 +2478,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -2411,6 +2493,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Weakness Analyzed"
@@ -2426,6 +2509,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Haste",
@@ -2483,6 +2567,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed"
@@ -2498,6 +2583,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed",
@@ -2514,6 +2600,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed",
@@ -2587,6 +2674,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Iron Maiden",
           "Bleed",
@@ -2604,6 +2692,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Iron Maiden",
           "Bleed",
@@ -2622,6 +2711,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Iron Maiden",
           "Bleed",
@@ -2684,6 +2774,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Mark of the Prescript",
           "Poise",
@@ -2700,6 +2791,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Mark of the Prescript",
           "Poise",
@@ -2716,6 +2808,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Mark of the Prescript",
           "Poise",
@@ -2776,6 +2869,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Nails",
           "Bleed"
@@ -2791,6 +2885,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Nails",
           "Paralyze",
@@ -2807,6 +2902,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Pierce DMG Up",
           "Blunt DMG Up",
@@ -2857,6 +2953,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Haste"
         ]
@@ -2871,6 +2968,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Attack Power Up",
           "Bleed"
@@ -2886,6 +2984,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -2935,6 +3034,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -2949,6 +3049,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -2963,6 +3064,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Slash DMG Up"
@@ -3015,6 +3117,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Rupture"
@@ -3030,6 +3133,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Rupture"
@@ -3045,6 +3149,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Rupture"
@@ -3099,6 +3204,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Nails",
           "Tremor"
@@ -3114,6 +3220,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor Burst",
           "Nails"
@@ -3129,6 +3236,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Nails",
           "Tremor",
@@ -3179,6 +3287,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Haste",
           "Poise"
@@ -3194,6 +3303,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Haste",
           "Poise"
@@ -3209,6 +3319,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": []
       }
     ],
@@ -3258,6 +3369,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Burn"
@@ -3273,6 +3385,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Nerve Strike - Don Quixote",
@@ -3290,6 +3403,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Nerve Strike - Don Quixote",
           "Poise",
@@ -3341,6 +3455,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Haste",
           "Bind"
@@ -3356,6 +3471,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Haste",
           "Bind"
@@ -3371,6 +3487,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Declared Duel - Don Quixote"
         ]
@@ -3432,6 +3549,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Promised Nail (Don Quixote)",
@@ -3449,6 +3567,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Promised Nail (Don Quixote)",
@@ -3466,6 +3585,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sanctum of Conservation (Don Quixote)",
           "Offense Level Up",
@@ -3533,6 +3653,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Shattermark",
           "Rupture",
@@ -3549,6 +3670,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Sinking",
@@ -3566,6 +3688,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Sinking",
@@ -3630,6 +3753,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Love-Hate",
           "Rupture"
@@ -3645,6 +3769,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Love-Hate",
           "Rupture",
@@ -3661,6 +3786,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Magical Arcana",
           "Love-Hate",
@@ -3719,6 +3845,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Aggro"
@@ -3734,6 +3861,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Bind",
@@ -3750,6 +3878,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Bind",
@@ -3816,6 +3945,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Mark of the Prescript",
           "Poise",
@@ -3832,6 +3962,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Mark of the Prescript",
           "Poise",
@@ -3848,6 +3979,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Mark of the Prescript",
           "Poise",
@@ -3908,6 +4040,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bloodfeast",
           "Hardblood (Ally)",
@@ -3924,6 +4057,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 1,
         "statuses": [
           "Bloodfeast",
           "Hardblood (Ally)",
@@ -3941,6 +4075,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Hardblood (Ally)",
           "Bleed",
@@ -3995,6 +4130,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -4009,6 +4145,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Damage Down"
@@ -4024,6 +4161,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -4074,6 +4212,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Rupture"
@@ -4089,6 +4228,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Fragile"
@@ -4104,6 +4244,7 @@
         "coins": 5,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Rupture"
@@ -4152,6 +4293,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -4166,6 +4308,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": []
       },
       {
@@ -4178,6 +4321,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Slash DMG Up",
           "Poise"
@@ -4234,6 +4378,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -4248,6 +4393,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -4262,6 +4408,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Tremor Burst"
@@ -4319,6 +4466,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -4333,6 +4481,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Offense Level Down"
@@ -4348,6 +4497,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Ammo",
@@ -4400,6 +4550,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -4414,6 +4565,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -4428,6 +4580,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -4479,6 +4632,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -4493,6 +4647,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Slash Fragility",
           "Attack Power Up",
@@ -4509,6 +4664,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Slash Fragility"
         ]
@@ -4582,6 +4738,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Burn",
@@ -4600,6 +4757,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Burn",
@@ -4617,6 +4775,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Burn",
@@ -4684,6 +4843,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Rupture"
@@ -4699,6 +4859,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Rupture"
@@ -4714,6 +4875,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Protector's Stance",
           "Poise",
@@ -4774,6 +4936,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "B.M."
@@ -4789,6 +4952,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "B.M."
@@ -4804,6 +4968,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "B.M.",
           "Poise",
@@ -4867,6 +5032,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Preservation",
           "Le Noir Gabardine Overcoat",
@@ -4884,6 +5050,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Preservation",
           "Le Noir Gabardine Overcoat",
@@ -4902,6 +5069,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Le Noir Gabardine Overcoat",
           "Preservation",
@@ -4957,6 +5125,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -4971,6 +5140,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Haste"
@@ -4986,6 +5156,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Strider -Mao-",
@@ -5037,6 +5208,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Paralyze"
@@ -5052,6 +5224,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Damage Down"
@@ -5067,6 +5240,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Offense Level Down"
@@ -5129,6 +5303,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Sinking",
@@ -5145,6 +5320,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Sinking",
@@ -5162,6 +5338,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Sinking",
@@ -5221,6 +5398,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Red Eyes",
           "Penitence",
@@ -5237,6 +5415,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Red Eyes",
           "Penitence",
@@ -5254,6 +5433,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Red Eyes",
           "Penitence",
@@ -5319,6 +5499,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Gaze (Ryoshu)",
           "Contempt (Ryoshu)",
@@ -5336,6 +5517,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Gaze (Ryoshu)",
           "Contempt (Ryoshu)",
@@ -5355,6 +5537,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Gaze (Ryoshu)",
           "Bleed",
@@ -5416,6 +5599,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Appetite"
@@ -5431,6 +5615,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Appetite",
           "Bind",
@@ -5449,6 +5634,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": []
       }
     ],
@@ -5495,6 +5681,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge"
         ]
@@ -5509,6 +5696,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Slash Fragility",
@@ -5525,6 +5713,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Charge Barrier"
@@ -5574,6 +5763,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -5588,6 +5778,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Power Up",
           "Tremor Burst"
@@ -5603,6 +5794,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Protection",
           "Tremor"
@@ -5653,6 +5845,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -5667,6 +5860,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Offense Level Down"
@@ -5682,6 +5876,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Offense Level Down"
@@ -5731,6 +5926,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -5745,6 +5941,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -5759,6 +5956,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -5810,6 +6008,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -5824,6 +6023,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Attack Power Down"
@@ -5839,6 +6039,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Charge",
@@ -5893,6 +6094,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Envy DMG Up",
           "Bleed"
@@ -5908,6 +6110,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Envy Power Up",
           "Envy DMG Up",
@@ -5924,6 +6127,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Vengeance Mark",
           "Plus Coin Drop",
@@ -5982,6 +6186,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Sword of the Homeland - Rending"
@@ -5997,6 +6202,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Sword of the Homeland - Penetrating",
@@ -6013,6 +6219,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Poise"
@@ -6065,6 +6272,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Poise"
@@ -6080,6 +6288,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Poise"
@@ -6095,6 +6304,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Poise",
@@ -6151,6 +6361,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Insight",
           "Discard",
@@ -6168,6 +6379,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Insight",
           "Erudition",
@@ -6185,6 +6397,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Insight",
           "Sinking",
@@ -6246,6 +6459,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Spore",
           "Spore Round -Base-",
@@ -6264,6 +6478,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 2,
+        "weight_bonus": 0,
         "statuses": [
           "Spore",
           "Burn",
@@ -6285,6 +6500,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 2,
+        "weight_bonus": 1,
         "statuses": [
           "Spore",
           "Spore Round -Base-",
@@ -6346,6 +6562,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro"
         ]
@@ -6360,6 +6577,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Nails",
@@ -6377,6 +6595,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Nails"
@@ -6428,6 +6647,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge"
         ]
@@ -6442,6 +6662,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Charge"
@@ -6457,6 +6678,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Bleed"
@@ -6517,6 +6739,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bloodfeast",
           "Hardblood Armor",
@@ -6534,6 +6757,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bloodfeast",
           "Hardblood Armor",
@@ -6552,6 +6776,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Hardblood Armor",
           "Bleed",
@@ -6615,6 +6840,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Sinking"
@@ -6630,6 +6856,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Mauled Color -Rouge-",
           "Bleed",
@@ -6646,6 +6873,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Sinking",
@@ -6708,6 +6936,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor",
@@ -6724,6 +6953,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor",
@@ -6741,6 +6971,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Savage Tigermark Round",
           "Burn",
@@ -6797,6 +7028,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Slash Protection",
           "Charge"
@@ -6812,6 +7044,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Rupture",
@@ -6828,6 +7061,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Defense Level Down"
@@ -6880,6 +7114,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -6894,6 +7129,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Rupture"
@@ -6909,6 +7145,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Attack Power Down",
           "Sinking",
@@ -6960,6 +7197,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -6974,6 +7212,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "HP Healing Down"
@@ -6989,6 +7228,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -7039,6 +7279,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Haste",
           "Bleed"
@@ -7054,6 +7295,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Haste",
           "Bleed"
@@ -7069,6 +7311,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -7117,6 +7360,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -7131,6 +7375,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -7145,6 +7390,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Paralyze"
@@ -7193,6 +7439,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -7207,6 +7454,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -7221,6 +7469,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -7272,6 +7521,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge"
         ]
@@ -7286,6 +7536,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Charge Barrier"
@@ -7301,6 +7552,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Charge Barrier",
@@ -7355,6 +7607,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Burn",
@@ -7371,6 +7624,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Burn",
@@ -7388,6 +7642,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Burn",
@@ -7444,6 +7699,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Discard",
           "Insight",
@@ -7460,6 +7716,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Discard",
           "Insight",
@@ -7476,6 +7733,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Insight",
           "Sinking"
@@ -7535,6 +7793,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -7549,6 +7808,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Tremor Burst"
@@ -7564,6 +7824,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Amplitude Entanglement",
@@ -7626,6 +7887,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Ammo"
@@ -7641,6 +7903,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Ammo",
           "Target Spotted",
@@ -7659,6 +7922,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Ammo",
           "Target Spotted",
@@ -7714,6 +7978,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Aggro"
@@ -7729,6 +7994,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Rupture"
@@ -7744,6 +8010,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "K Corp Ampule"
@@ -7795,6 +8062,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Sinking"
@@ -7810,6 +8078,7 @@
         "coins": 4,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 1,
         "statuses": [
           "Charge",
           "Sinking",
@@ -7826,6 +8095,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Sinking"
@@ -7888,6 +8158,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed",
@@ -7905,6 +8176,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed",
@@ -7923,6 +8195,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed",
@@ -8009,6 +8282,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Defense Level Down",
@@ -8025,6 +8299,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Corpus Ingredient (Ally)",
@@ -8043,6 +8318,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Corpus Ingredient (Ally)",
@@ -8125,6 +8401,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Power Up",
           "Assist Defense",
@@ -8142,6 +8419,7 @@
         "coins": 4,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Gluttony DMG Up",
           "Rupture",
@@ -8159,6 +8437,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Poise",
@@ -8217,6 +8496,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -8231,6 +8511,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -8245,6 +8526,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -8293,6 +8575,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -8307,6 +8590,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Attack Power Up",
           "Damage Up",
@@ -8323,6 +8607,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor Burst"
         ]
@@ -8385,6 +8670,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge"
         ]
@@ -8399,6 +8685,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Defense Level Down",
@@ -8416,6 +8703,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Photoelectricity",
@@ -8470,6 +8758,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Nails",
           "Bleed"
@@ -8485,6 +8774,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Plus Coin Drop"
         ]
@@ -8499,6 +8789,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": []
       }
     ],
@@ -8546,6 +8837,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -8560,6 +8852,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Defense Level Down"
@@ -8575,6 +8868,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -8624,6 +8918,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -8638,6 +8933,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -8652,6 +8948,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 1,
         "statuses": [
           "Poise"
         ]
@@ -8718,6 +9015,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Haste",
@@ -8734,6 +9032,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Haste",
@@ -8751,6 +9050,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Ammo - Atelier Logic",
           "Poise",
@@ -8822,6 +9122,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Rupture"
@@ -8837,6 +9138,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Rupture",
@@ -8853,6 +9155,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 3,
+        "weight_bonus": 0,
         "statuses": [
           "Unfocused Volley",
           "Burn",
@@ -8916,6 +9219,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Defense Power Up",
@@ -8932,6 +9236,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Defense Power Up",
@@ -8949,6 +9254,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Cumulus Wall",
@@ -9012,6 +9318,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -9026,6 +9333,7 @@
         "coins": 4,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Sinking",
@@ -9042,6 +9350,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Paralyze",
@@ -9098,6 +9407,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Ammo",
           "Charge"
@@ -9113,6 +9423,7 @@
         "coins": 4,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Ammo",
           "Bleed"
@@ -9128,6 +9439,7 @@
         "coins": 5,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Ammo",
           "Fragile",
@@ -9192,6 +9504,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor"
@@ -9207,6 +9520,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor",
@@ -9225,6 +9539,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "The Duel Escalates (Heathcliff)",
           "Burn",
@@ -9300,6 +9615,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Bleed",
@@ -9317,6 +9633,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Bleed",
@@ -9336,6 +9653,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Bleed",
@@ -9391,6 +9709,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Aggro",
@@ -9407,6 +9726,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Poise",
@@ -9423,6 +9743,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -9482,6 +9803,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Rupture"
@@ -9497,6 +9819,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge Barrier",
           "Charge",
@@ -9513,6 +9836,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Unbreakable Coin",
@@ -9576,6 +9900,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -9590,6 +9915,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 1,
         "statuses": [
           "Sinking",
           "Coffin",
@@ -9607,6 +9933,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Dullahan",
           "Sinking",
@@ -9660,6 +9987,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -9674,6 +10002,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -9688,6 +10017,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Amplitude Conversion",
@@ -9738,6 +10068,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -9752,6 +10083,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Power Down",
           "Tremor"
@@ -9767,6 +10099,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor Burst",
           "Blunt Fragility"
@@ -9823,6 +10156,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Sinking",
@@ -9839,6 +10173,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Haste",
@@ -9857,6 +10192,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Sinking",
@@ -9913,6 +10249,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Tremor",
@@ -9929,6 +10266,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Attack Power Down",
           "Ammo",
@@ -9945,6 +10283,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Tremor Burst",
@@ -9999,6 +10338,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Tremor",
@@ -10015,6 +10355,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Tremor",
@@ -10031,6 +10372,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Tremor",
@@ -10084,6 +10426,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -10098,6 +10441,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -10112,6 +10456,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -10195,6 +10540,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Poise",
@@ -10211,6 +10557,7 @@
         "coins": 4,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Defense Level Down",
@@ -10228,6 +10575,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 1,
         "statuses": [
           "Launcher -始-",
           "Rupture",
@@ -10299,6 +10647,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Pulsation (Ally)",
           "Bleed"
@@ -10314,6 +10663,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Pulsation (Ally)",
           "Bleed",
@@ -10331,6 +10681,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Pulsation (Ally)",
           "Full Makeover",
@@ -10396,6 +10747,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Discard",
           "Tremor",
@@ -10412,6 +10764,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Discard",
           "Tremor",
@@ -10428,6 +10781,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bright -光-",
           "Discard",
@@ -10490,6 +10844,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Offense Level Down"
@@ -10505,6 +10860,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Damage Up",
@@ -10523,6 +10879,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Slash Power Up"
@@ -10581,6 +10938,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed",
@@ -10599,6 +10957,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed",
@@ -10617,6 +10976,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Haste",
@@ -10669,6 +11029,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -10683,6 +11044,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -10697,6 +11059,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Plus Coin Boost"
@@ -10748,6 +11111,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Sinking"
@@ -10763,6 +11127,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Sinking",
@@ -10779,6 +11144,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Sinking",
@@ -10829,6 +11195,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Sinking"
@@ -10844,6 +11211,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Sinking"
@@ -10859,6 +11227,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Sinking"
@@ -10921,6 +11290,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Bleed",
@@ -10937,6 +11307,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Bleed",
@@ -10957,6 +11328,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Bleed",
@@ -11022,6 +11394,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Level Up",
           "Aggro",
@@ -11039,6 +11412,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Offense Level Up",
           "Assist Attack (Ishmael)",
@@ -11058,6 +11432,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Poise",
@@ -11113,6 +11488,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Defense Level Up",
@@ -11129,6 +11505,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Defense Level Up",
@@ -11146,6 +11523,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Level Up",
           "Tremor",
@@ -11195,6 +11573,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -11209,6 +11588,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -11223,6 +11603,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -11268,6 +11649,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Paralyze"
         ]
@@ -11282,6 +11664,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Power Down"
         ]
@@ -11296,6 +11679,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Power Down",
           "Defense Level Down",
@@ -11351,6 +11735,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Nails"
@@ -11366,6 +11751,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Fanatic",
           "Nails",
@@ -11382,6 +11768,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Fanatic",
           "Bleed"
@@ -11433,6 +11820,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -11447,6 +11835,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bind",
           "Tremor"
@@ -11462,6 +11851,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bind",
           "Tremor",
@@ -11514,6 +11904,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Poise"
@@ -11529,6 +11920,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Aggro"
@@ -11544,6 +11936,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Fragile"
         ]
@@ -11603,6 +11996,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Courier Trunk - Rodion",
           "Rupture"
@@ -11618,6 +12012,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Courier Trunk - Rodion",
           "Rupture",
@@ -11635,6 +12030,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Courier Trunk - Rodion",
           "Rupture",
@@ -11687,6 +12083,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Insight"
         ]
@@ -11701,6 +12098,7 @@
         "coins": 4,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Insight",
           "Discard",
@@ -11718,6 +12116,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Insight",
           "Discard",
@@ -11790,6 +12189,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Duality",
           "Charge",
@@ -11809,6 +12209,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge Identity",
           "Offense Level Up",
@@ -11828,6 +12229,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Blossom Scissors",
           "Charge Identity",
@@ -11894,6 +12296,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Rupture",
@@ -11910,6 +12313,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Rupture",
@@ -11927,6 +12331,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 3,
+        "weight_bonus": 0,
         "statuses": [
           "Unfocused Volley",
           "Poise",
@@ -11980,6 +12385,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -11994,6 +12400,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed"
@@ -12009,6 +12416,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Poise"
@@ -12066,6 +12474,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -12080,6 +12489,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -12094,6 +12504,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -12163,6 +12574,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Protecting Sword",
@@ -12179,6 +12591,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Protecting Sword",
@@ -12195,6 +12608,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Protecting Sword",
@@ -12249,6 +12663,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Sinking"
@@ -12264,6 +12679,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Sinking",
@@ -12280,6 +12696,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 1,
         "statuses": [
           "Charge",
           "Sinking",
@@ -12337,6 +12754,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Tremor"
@@ -12352,6 +12770,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Charge",
@@ -12368,6 +12787,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Tremor",
@@ -12445,6 +12865,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Burn",
@@ -12462,6 +12883,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Acceleration Round",
           "Poise",
@@ -12481,6 +12903,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Burn",
@@ -12543,6 +12966,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bloodfeast",
           "Blooming Thorn (Ally)",
@@ -12560,6 +12984,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Attack Power Up",
           "Bloodfeast",
@@ -12578,6 +13003,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Blooming Thorn (Ally)",
           "Bleed",
@@ -12650,6 +13076,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Palette Vibrante",
           "Bleed",
@@ -12667,6 +13094,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Palette Vibrante",
           "Bleed",
@@ -12686,6 +13114,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Palette Vibrante",
           "Bleed",
@@ -12737,6 +13166,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -12751,6 +13181,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": []
       },
       {
@@ -12763,6 +13194,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Attack Power Up",
           "Rupture"
@@ -12813,6 +13245,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Talisman"
@@ -12828,6 +13261,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Talisman",
           "Rupture"
@@ -12843,6 +13277,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Talisman",
           "Rupture"
@@ -12893,6 +13328,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -12907,6 +13343,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Poise"
@@ -12922,6 +13359,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -12971,6 +13409,7 @@
         "coins": 4,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -12985,6 +13424,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -12999,6 +13439,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Tremor Burst"
@@ -13052,6 +13493,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Protection",
           "Tremor"
@@ -13067,6 +13509,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Tremor",
@@ -13083,6 +13526,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Protection",
           "Aggro",
@@ -13142,6 +13586,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Defense Level Up",
@@ -13158,6 +13603,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Defense Level Up",
@@ -13175,6 +13621,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Level Up",
           "Tremor",
@@ -13230,6 +13677,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -13244,6 +13692,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Attack Power Up",
           "Poise"
@@ -13259,6 +13708,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Paralyze",
@@ -13312,6 +13762,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Haste"
@@ -13327,6 +13778,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -13341,6 +13793,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Declared Duel - Sinclair",
@@ -13404,6 +13857,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -13418,6 +13872,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 2,
         "statuses": [
           "Burn"
         ]
@@ -13432,6 +13887,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -13490,6 +13946,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Courier Trunk - Sinclair",
           "Rupture",
@@ -13506,6 +13963,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Courier Trunk - Sinclair",
           "Rupture",
@@ -13523,6 +13981,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Courier Trunk - Sinclair",
           "Rupture",
@@ -13599,6 +14058,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Duality",
           "Pulsation (Ally)",
@@ -13617,6 +14077,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Duality",
           "Pulsation (Ally)",
@@ -13638,6 +14099,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Offense Level Up",
           "Attack Power Up",
@@ -13709,6 +14171,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Rupture"
@@ -13724,6 +14187,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Rupture",
@@ -13740,6 +14204,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 3,
+        "weight_bonus": 0,
         "statuses": [
           "Unfocused Volley",
           "Bloodflame -血炎-",
@@ -13802,6 +14267,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed",
@@ -13818,6 +14284,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 3,
+        "weight_bonus": 0,
         "statuses": [
           "Unfocused Volley",
           "Poise",
@@ -13835,6 +14302,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 1,
         "statuses": [
           "Moonlit Azure Blade",
           "Unbreakable Coin",
@@ -13891,6 +14359,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Aggro"
@@ -13906,6 +14375,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Aggro"
@@ -13921,6 +14391,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Book of Vengeance -Sinclair-",
           "Bleed"
@@ -13977,6 +14448,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Fanatic",
           "Burn"
@@ -13992,6 +14464,7 @@
         "coins": 4,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Fanatic",
           "Burn",
@@ -14008,6 +14481,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Fanatic",
           "Bleed",
@@ -14080,6 +14554,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor"
@@ -14095,6 +14570,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor",
@@ -14112,6 +14588,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor",
@@ -14165,6 +14642,7 @@
         "coins": 3,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -14179,6 +14657,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": []
       },
       {
@@ -14191,6 +14670,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -14240,6 +14720,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise"
         ]
@@ -14254,6 +14735,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Slash DMG Up"
@@ -14269,6 +14751,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": []
       }
     ],
@@ -14317,6 +14800,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Haste",
           "Aggro",
@@ -14333,6 +14817,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Aggro",
@@ -14349,6 +14834,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Declared Duel - Outis",
@@ -14404,6 +14890,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Protection"
@@ -14419,6 +14906,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Attack Power Up",
           "Damage Up"
@@ -14434,6 +14922,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Attack Power Down"
@@ -14496,6 +14985,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -14510,6 +15000,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -14524,6 +15015,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Haste",
@@ -14583,6 +15075,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -14597,6 +15090,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Haste"
@@ -14612,6 +15106,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Strider -Mao-",
@@ -14672,6 +15167,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Sinking",
@@ -14691,6 +15187,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Sinking",
@@ -14710,6 +15207,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "The Udjat -Vanguard-",
           "Aggro",
@@ -14774,6 +15272,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Dark Flame"
@@ -14789,6 +15288,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Magic Bullet",
@@ -14805,6 +15305,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Magic Bullet",
@@ -14858,6 +15359,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -14872,6 +15374,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Offense Level Up",
           "Discard",
@@ -14889,6 +15392,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Discard",
           "Tremor",
@@ -14945,6 +15449,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Paralyze",
           "Rupture"
@@ -14960,6 +15465,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Defense Level Down"
@@ -14975,6 +15481,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Offense Level Down",
@@ -15032,6 +15539,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor"
         ]
@@ -15046,6 +15554,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Amplitude Conversion",
@@ -15064,6 +15573,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Amplitude Conversion",
           "Amplitude Entanglement",
@@ -15123,6 +15633,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bloodfeast",
           "Blood-tinged Scissorblades (Ally)",
@@ -15140,6 +15651,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bloodfeast",
           "Blood-tinged Scissorblades (Ally)",
@@ -15157,6 +15669,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 2,
         "statuses": [
           "Blood-tinged Scissorblades (Ally)",
           "Bleed",
@@ -15226,6 +15739,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Bleed",
@@ -15245,6 +15759,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Bleed",
@@ -15268,6 +15783,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Bleed",
@@ -15336,6 +15852,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge"
         ]
@@ -15350,6 +15867,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Charge Barrier",
@@ -15366,6 +15884,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Load",
@@ -15418,6 +15937,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -15432,6 +15952,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -15446,6 +15967,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Echoes of the Manor"
@@ -15496,6 +16018,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -15510,6 +16033,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture",
           "Pierce Fragility"
@@ -15525,6 +16049,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -15576,6 +16101,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed"
         ]
@@ -15590,6 +16116,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Offense Level Down",
@@ -15606,6 +16133,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Offense Level Down",
@@ -15655,6 +16183,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -15669,6 +16198,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Attack Power Up"
@@ -15684,6 +16214,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn"
         ]
@@ -15736,6 +16267,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bind",
           "Paralyze",
@@ -15752,6 +16284,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Bind"
@@ -15767,6 +16300,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Paralyze"
@@ -15821,6 +16355,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Rupture",
@@ -15837,6 +16372,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Tremor",
@@ -15853,6 +16389,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Tremor",
           "Tremor Burst",
@@ -15916,6 +16453,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor",
@@ -15933,6 +16471,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Tremor",
@@ -15951,6 +16490,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "Protection",
@@ -16010,6 +16550,7 @@
         "coins": 1,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking"
         ]
@@ -16024,6 +16565,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Haste"
@@ -16039,6 +16581,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Sinking",
           "Plus Coin Boost",
@@ -16089,6 +16632,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "District 12 Fuel"
@@ -16104,6 +16648,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "District 12 Fuel",
@@ -16120,6 +16665,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Burn",
           "District 12 Fuel",
@@ -16171,6 +16717,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -16185,6 +16732,7 @@
         "coins": 1,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -16199,6 +16747,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Rupture"
         ]
@@ -16262,6 +16811,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Rupture",
@@ -16278,6 +16828,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Rupture",
@@ -16295,6 +16846,7 @@
         "coins": 1,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Rupture",
@@ -16370,6 +16922,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Rupture"
@@ -16385,6 +16938,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Charge",
           "Unbreakable Coin",
@@ -16402,6 +16956,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "High-voltage Exoskeleton",
           "Charge",
@@ -16477,6 +17032,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Dazzle",
           "Sinking",
@@ -16494,6 +17050,7 @@
         "coins": 4,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Dazzle",
           "Sinking",
@@ -16510,6 +17067,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Dazzle",
           "Sinking",
@@ -16573,6 +17131,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Haste",
           "Bleed",
@@ -16590,6 +17149,7 @@
         "coins": 3,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Tremor",
@@ -16608,6 +17168,7 @@
         "coins": 4,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Deep Wound",
           "Bleed",
@@ -16670,6 +17231,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Bleed",
@@ -16687,6 +17249,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Aggro",
           "Bleed",
@@ -16706,6 +17269,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Bloodied Hand (Ally)",
@@ -16759,6 +17323,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed"
@@ -16774,6 +17339,7 @@
         "coins": 2,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Bleed",
           "Poise"
@@ -16789,6 +17355,7 @@
         "coins": 2,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Poise",
           "Bleed",
@@ -16839,6 +17406,7 @@
         "coins": 2,
         "copies": 3,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Level Up",
           "Haste"
@@ -16854,6 +17422,7 @@
         "coins": 4,
         "copies": 2,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Level Up",
           "Aggro"
@@ -16869,6 +17438,7 @@
         "coins": 3,
         "copies": 1,
         "weight": 1,
+        "weight_bonus": 0,
         "statuses": [
           "Defense Power Up",
           "Defense Level Up"

@@ -12,6 +12,8 @@ interface Props {
   /** Gifts ranked for the current floor (the Best gifts list). */
   ranked: GiftScore[]
   ctx: RunContext
+  /** Start fresh: gifts you have, offered packs, floor and pack (team and saved lineups stay). */
+  onClearRun: () => void
 }
 
 const DIFFICULTY: Record<Difficulty, string> = { normal: 'Normal', hard: 'Hard', extreme: 'EXTREME' }
@@ -21,7 +23,8 @@ const DIFFICULTY: Record<Difficulty, string> = { normal: 'Normal', hard: 'Hard',
  * floor's theme pack. Gift scores use the length and floor (Cost gifts early,
  * "survive a lethal hit" gifts late); Theme packs and Fusion use the floor and pack.
  */
-export function RunPanel({ run, onChange, packs, ranked, ctx }: Props) {
+export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun }: Props) {
+  const [confirmClear, setConfirmClear] = useState(false)
   const onFloor = useMemo(
     () => run.floor === null ? [] : packs.filter((p) => packOnFloor(p, run.difficulty, run.floor!))
       .sort((a, b) => a.name.localeCompare(b.name)),
@@ -35,8 +38,24 @@ export function RunPanel({ run, onChange, packs, ranked, ctx }: Props) {
   return (
     <section className="panel run-panel">
       <header className="panel-head"><h2>Your run</h2>
-        {run.floor !== null && <button className="link-btn" onClick={() => setFloor(null)}>End run</button>}
+        <span className="run-actions">
+          {run.floor !== null && <button className="link-btn" onClick={() => setFloor(null)}
+            title="Stop tracking the floor (keeps your gifts)">End run</button>}
+          <button className="link-btn danger" onClick={() => setConfirmClear(!confirmClear)}
+            title="Start a new run: clears the gifts you have, offered theme packs, floor and pack. Your team and saved lineups stay.">
+            Clear run
+          </button>
+        </span>
       </header>
+      {confirmClear && (
+        <div className="run-clear small">
+          <span>Clear the gifts you have, offered theme packs, floor and pack? Your team and saved lineups stay.</span>
+          <span className="run-clear-btns">
+            <button className="btn small-btn danger-btn" onClick={() => { onClearRun(); setConfirmClear(false) }}>Clear run</button>
+            <button className="link-btn" onClick={() => setConfirmClear(false)}>Cancel</button>
+          </span>
+        </div>
+      )}
       <div className="run-grid">
         <label className="run-field">
           <span>Difficulty</span>

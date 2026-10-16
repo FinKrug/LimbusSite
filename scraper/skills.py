@@ -94,7 +94,10 @@ def _int(value: str | None) -> int | None:
 
 
 def identity_skills(source: str) -> list[dict]:
-    """[{slot, name, sin, type, base, coin_power, coins, copies, weight, statuses}] for skills 1-3."""
+    """[{slot, name, sin, type, base, coin_power, coins, copies, weight, weight_bonus, statuses}] for skills 1-3.
+
+    weight_bonus: the most "Atk Weight +N" the skill text grants (usually conditional, like
+    Dawn Office Fixer Sinclair's Skill 2 in his Volatile E.G.O state), 0 if none."""
     skills: dict[int, dict] = {}
     for m in _SKILL_PARAM.finditer(source or ""):
         slot = int(m.group(1))
@@ -103,6 +106,9 @@ def identity_skills(source: str) -> list[dict]:
         p = _params(_template_body(source, m.start()))
         sin = (p.get("sin") or "").strip().lower()
         effects = " ".join(v for k, v in p.items() if k == "se" or re.fullmatch(r"ce\d+", k))
+        # "Atk Weight +1 (+2 at 45 SP)" in any uptie's skill text: it can hit extra targets.
+        all_se = " ".join(v for k, v in p.items() if re.fullmatch(r"\d?se", k))
+        bonus = max((int(n) for n in re.findall(r"Atk Weight \+\s*(\d+)", all_se, re.IGNORECASE)), default=0)
         skills[slot] = {
             "slot": slot,
             "name": wikitext.to_plain(p.get("name", "")).strip(),
@@ -113,6 +119,7 @@ def identity_skills(source: str) -> list[dict]:
             "coins": _int(p.get("coin")),
             "copies": _int(p.get("amt")),
             "weight": _int(p.get("atkweight")),
+            "weight_bonus": bonus,
             "statuses": wikitext.status_effects(effects),
         }
     return [skills[k] for k in sorted(skills)]

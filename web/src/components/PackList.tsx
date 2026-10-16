@@ -129,36 +129,49 @@ export function PackList({
   )
 }
 
-/** A pack's gifts, best for your team first, shown a few at a time. */
+/**
+ * A pack's card gifts: its exclusives (fitting your team first) and a few strong gifts
+ * it features that few other packs do. Gifts most packs give aren't a reason to pick
+ * this one, so they're only in "Everything it can give".
+ */
 function PackGifts({ pack: p, how }: { pack: PackScore; how: (g: Gift) => ReactNode }) {
-  const rows = p.top
-  const first = PACK_GIFTS_FIRST
-  const [shown, setShown] = useState(first)
-  if (!rows.length) return null
-  const visible = rows.slice(0, shown)
-  const left = rows.length - visible.length
+  const [all, setAll] = useState(false)
+  const [shown, setShown] = useState(PACK_GIFTS_FIRST)
   const why = (g: GiftScore) => g.reasons[0] && <span className={`pack-gift-why reason-${g.reasons[0].kind}`}>{g.reasons[0].text}</span>
+  const rows = p.top
   return (
-    <ul className="pack-gifts">
-      {visible.map((g) => {
-        return (
-          <li key={g.gift.id}>
-            <GiftLabel gift={g.gift} icon={28} />{why(g)}{how(g.gift)}
-          </li>
-        )
-      })}
-      {(left > 0 || shown > first) && (
-        <li className="pack-gifts-more">
-          {left > 0 && (
-            <button className="link-btn" onClick={() => setShown(nextShown(shown, rows.length))}>
-              Show {Math.min(left, PACK_GIFTS_STEP)} more{left > PACK_GIFTS_STEP && <span className="muted"> ({left} left)</span>}
-            </button>
-          )}
-          {shown > first && (
-            <button className="link-btn" onClick={() => setShown(first)}>Show less</button>
-          )}
-        </li>
+    <>
+      {p.highlights.length > 0 ? (
+        <ul className="pack-gifts">
+          {p.highlights.map((h) => (
+            <li key={h.gift.gift.id} className={h.fits ? '' : 'pack-gift-off'}>
+              <span className={`pill ${h.kind === 'exclusive' ? '' : 'pill-boost'}`}>{h.kind === 'exclusive' ? 'Exclusive' : 'Boosted'}</span>
+              <GiftLabel gift={h.gift.gift} icon={28} />{why(h.gift)}{how(h.gift.gift)}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="muted small">No exclusive gifts, and nothing boosted here that fits your team.</p>
       )}
-    </ul>
+      {rows.length > 0 && (
+        <details className="pack-all" open={all} onToggle={(e) => setAll((e.target as HTMLDetailsElement).open)}>
+          <summary className="muted small">Everything it can give ({rows.length})</summary>
+          {all && (
+            <ul className="pack-gifts">
+              {rows.slice(0, shown).map((g) => (
+                <li key={g.gift.id}><GiftLabel gift={g.gift} icon={24} />{why(g)}</li>
+              ))}
+              {rows.length > shown && (
+                <li className="pack-gifts-more">
+                  <button className="link-btn" onClick={() => setShown(nextShown(shown, rows.length))}>
+                    Show {Math.min(rows.length - shown, PACK_GIFTS_STEP)} more
+                  </button>
+                </li>
+              )}
+            </ul>
+          )}
+        </details>
+      )}
+    </>
   )
 }

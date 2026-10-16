@@ -109,6 +109,8 @@ export interface Skill {
   /** Copies in the identity's deck (usually 3 / 2 / 1). */
   copies: number | null
   weight: number | null
+  /** The most "Atk Weight +N" its text grants (usually conditional, e.g. in a Volatile E.G.O state). */
+  weight_bonus?: number
   statuses: string[]
 }
 

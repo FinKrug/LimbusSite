@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { ArtVariant } from '../lib/images'
-import { SWAPS, SWAP_WEIGHTS, floorsWeight, planSwaps, teamSins, type SwapKind, type SwapState } from '../lib/skillswap'
+import { SWAPS, floorsWeight, multiTarget, planSwaps, teamSins, type SwapKind, type SwapState } from '../lib/skillswap'
 import type { BattleProfile, Ego, EgoLoadout } from '../lib/ego'
 import type { RunSettings } from '../lib/scoring'
 import type { Gift, Identity, Sin } from '../lib/types'
@@ -65,7 +65,9 @@ export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadou
           turn and lining up same-sin skills for Resonance. The gain counts the stronger skill, Resonance
           (Absolute Resonance {sim.anyAreson ? `on ${Math.round(sim.anyAreson * 100)}% of turns now` : 'rare right now'})
           and what your E.G.O can afford (E.G.O lean {lean}{ego.known ? '' : <>, <button className="link-btn" onClick={onOpenTeam}>pick your E.G.O</button></>}).
-          Worth it = at least +{SWAP_WEIGHTS.worth}% team damage per 100 Cost, less with fewer floors left ({floorsLeft} now).
+          Skill 3 is the default pick, since it's the strongest skill. A swap into Skill 2 is only suggested when it
+          gives something Skill 3 doesn't: hitting several targets when nothing else on your team does, or the
+          Resonance a gift you own triggers on. {floorsLeft} floor{floorsLeft === 1 ? '' : 's'} left.
         </p>
         {anyDone && <button className="link-btn" onClick={() => onSwapsChange({})}>Reset all swaps (new run)</button>}
       </section>
@@ -90,7 +92,14 @@ export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadou
                     <li key={s.slot} className={`skill-row sinborder-${s.sin ?? 'none'}`}>
                       <span className="skill-slot">S{s.slot}</span>
                       <SinDot sin={s.sin} />
-                      <span className="skill-title">{s.name}</span>
+                      <span className="skill-title">
+                        <span className="skill-title-name">{s.name}</span>
+                        {multiTarget(s) && (
+                          <span className="skill-aoe" title={(s.weight ?? 1) > 1 ? `Atk Weight ${s.weight}: hits up to ${s.weight} targets` : `Its text can add Atk Weight +${s.weight_bonus} (usually under a condition)`}>
+                            {(s.weight ?? 1) > 1 ? `${s.weight} targets` : `+${s.weight_bonus} targets`}
+                          </span>
+                        )}
+                      </span>
                       <span className="muted small">{s.base ?? '?'}{(s.coin_power ?? 0) >= 0 ? '+' : ''}{s.coin_power ?? '?'} ×{s.coins ?? '?'}</span>
                       <span className="skill-copies" title="Copies in the deck">×{p.deck[s.slot]}</span>
                     </li>

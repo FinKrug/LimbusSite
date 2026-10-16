@@ -67,8 +67,7 @@ export function PresetBox({ presets, onPresetsChange, activeId, onActiveChange, 
   }
 
   return (
-    <section className="side-box presets" aria-label="Team presets">
-      <h3>Team presets {presets.length > 0 && <span className="badge">{presets.length}</span>}</h3>
+    <section className="presets" aria-label="Saved lineups">
 
       <p className="preset-status small">
         {matching ? <>Current team: <b>{matching.name}</b></>
@@ -192,4 +191,77 @@ function suggestName(ids: Identity[], count: number): string {
     .map((k) => ({ k, n: ids.filter((i) => i.keywords.includes(k)).length }))
     .sort((a, b) => b.n - a.n)[0]
   return top && top.n >= 4 ? `${top.k} team` : `Team ${count + 1}`
+}
+
+/**
+ * Save lineup / load a saved lineup, above the lineup strip on every tab. Manage
+ * opens the full list (PresetBox) in a dialog.
+ */
+export function LineupTools({ presets, onPresetsChange, activeId, onActiveChange, current, selection, onApply, identities, onManage }: Omit<Props, 'art'> & {
+  /** Open the full list (rename, reorder, delete). */
+  onManage: () => void
+}) {
+  const [naming, setNaming] = useState<string | null>(null)
+  const [undo, setUndo] = useState<{ team: Equipped; selection: Sinner[]; activeId: string | null; to: string } | null>(null)
+  const byId = useMemo(() => new Map(identities.map((i) => [i.id, i])), [identities])
+  const matching = presets.find((p) => presetMatches(p, current, selection))
+  const active = presets.find((p) => p.id === activeId)
+  const edited = active && !matching && !presetMatches(active, current, selection) ? active : undefined
+  const suggested = suggestName(
+    SINNERS.map((s) => byId.get(current[s] ?? '')).filter((i): i is Identity => !!i), presets.length,
+  )
+
+  const load = (id: string) => {
+    const p = presets.find((x) => x.id === id)
+    if (!p) return
+    setUndo(!matching ? { team: current, selection, activeId, to: p.id } : null)
+    onApply(p.team, hasOrder(p) ? restoreSelection(p.selection) : undefined)
+    onActiveChange(p.id)
+    setNaming(null)
+  }
+  const saveNew = (name: string) => {
+    const p = makePreset(cleanName(name) || suggested, current, selection, presets)
+    onPresetsChange([...presets, p])
+    onActiveChange(p.id)
+    setNaming(null)
+    setUndo(null)
+  }
+
+  return (
+    <div className="lineup-tools" aria-label="Saved lineups">
+      <select value={matching?.id ?? ''} onChange={(e) => load(e.target.value)} aria-label="Load a saved lineup"
+        disabled={!presets.length}>
+        <option value="" disabled>
+          {presets.length ? (edited ? `${edited.name} (edited)` : 'Load a saved lineup…') : 'No saved lineups yet'}
+        </option>
+        {presets.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+      </select>
+      {naming !== null ? (
+        <form className="lineup-name" onSubmit={(e) => { e.preventDefault(); saveNew(naming) }}>
+          <input type="text" value={naming} placeholder={suggested} maxLength={MAX_NAME} autoFocus aria-label="Lineup name"
+            onChange={(e) => setNaming(e.target.value)} onKeyDown={(e) => { if (e.key === 'Escape') setNaming(null) }} />
+          <button className="btn primary small-btn" type="submit">Save</button>
+          <button className="link-btn" type="button" onClick={() => setNaming(null)}>Cancel</button>
+        </form>
+      ) : matching ? (
+        <span className="lineup-saved small">Saved as <b>{matching.name}</b></span>
+      ) : edited ? (
+        <>
+          <button className="btn primary small-btn" onClick={() => { onPresetsChange(updatePreset(presets, edited.id, current, selection)); setUndo(null) }}>
+            Save changes to “{edited.name}”
+          </button>
+          <button className="btn small-btn" onClick={() => setNaming('')}>Save as new</button>
+        </>
+      ) : (
+        <button className="btn primary small-btn" onClick={() => setNaming('')}>Save lineup</button>
+      )}
+      {undo && matching?.id === undo.to && (
+        <span className="small muted">
+          Your previous lineup wasn't saved.{' '}
+          <button className="link-btn" onClick={() => { onApply(undo.team, undo.selection); onActiveChange(undo.activeId); setUndo(null) }}>Undo</button>
+        </span>
+      )}
+      {presets.length > 0 && <button className="link-btn small lineup-manage" onClick={onManage}>Manage saved lineups</button>}
+    </div>
+  )
 }
