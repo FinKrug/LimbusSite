@@ -3,6 +3,7 @@ import {
   FUSION_KEYWORDS, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, fusionIdeas, fusionPoints, fusionTier, keywordChance,
   matchRecipe, recipePlans, type FusionIdea,
 } from '../lib/fusion'
+import { mustHave } from '../lib/musthave'
 import { scoreGift, type RunContext, type RunSettings } from '../lib/scoring'
 import { addGift, isVestige, removeOne } from '../lib/vestiges'
 import { type Gift, type ThemePack, tierLabel } from '../lib/types'
@@ -21,6 +22,9 @@ interface Props {
 }
 
 type Sort = 'tier' | 'value'
+
+/** A gift worth less than this share of your best one does next to nothing: fuse it right away. */
+const FUSE_NOW = 0.15
 
 /**
  * The Fuse E.G.O Gift screen, like in game: pick a keyword, put gifts in the
@@ -81,10 +85,10 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
     return fusionIdeas(ctx, owned, kws, pack, isSuper).slice(0, 4)
   }, [ctx, owned, teamKeywords, pack, isSuper])
   const recipes = useMemo(() => recipePlans(ctx, owned), [ctx, owned])
-  const spare = useMemo(() => {
+  const { spare, spareBest } = useMemo(() => {
     const all = fodder(ctx, [...new Set(owned)])
     const best = Math.max(1, ...all.map((f) => f.value))
-    return all.filter((f) => !f.keepFor && (isVestige(f.gift.id) || f.value < best * 0.3))
+    return { spare: all.filter((f) => !f.keepFor && (isVestige(f.gift.id) || f.value < best * 0.3)), spareBest: best }
   }, [ctx, owned])
 
   const ring = Array.from({ length: SUPER_SLOTS }, (_, k) => k)
@@ -238,7 +242,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
         </section>
 
         <section className="panel">
-          <h3>Recipes you've started</h3>
+          <h3>Recipes to work on</h3>
           {recipes.length === 0 ? (
             <p className="muted small">Own an ingredient of a recipe and it shows up here. Fusion Guide lists them all.</p>
           ) : (
@@ -255,9 +259,15 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                     {r.missing.map((g) => <span key={g.id} className="muted">{g.name} · </span>)}
                     {r.anyMissing > 0 && <span className="muted">+ {r.anyMissing} more Sin Fragment{r.anyMissing > 1 ? 's' : ''}</span>}
                   </p>
-                  <p className={r.worthIt ? 'small reason-good' : 'small reason-bad'}>
-                    {r.worthIt ? `Worth it: ${r.result.name} beats what you give up` : `The ingredients are worth more to your team than ${r.result.name}`}
-                  </p>
+                  {mustHave(r.result.id) ? (
+                    <p className="small reason-good">
+                      Always build toward it: {mustHave(r.result.id)!.why} Take its pieces whenever they show up, even if you can't fuse it yet.
+                    </p>
+                  ) : (
+                    <p className={r.worthIt ? 'small reason-good' : 'small reason-bad'}>
+                      {r.worthIt ? `Worth it: ${r.result.name} beats what you give up` : `The ingredients are worth more to your team than ${r.result.name}`}
+                    </p>
+                  )}
                   {r.fusion.super_shop && (
                     <p className="muted small">
                       5 gifts, so only a Super Shop can fuse it. Super Shops only replace shops on Hard floors, with a 3% chance
@@ -289,8 +299,10 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
               {spare.map((f) => (
                 <li key={f.gift.id}>
                   <GiftLabel gift={f.gift} icon={24} link={false} />
+                  {f.value < spareBest * FUSE_NOW && !isVestige(f.gift.id) && <span className="pill warn">Fuse now</span>}
                   <span className="muted small grow-right">
-                    {isVestige(f.gift.id) ? `×${owned.filter((x) => x === f.gift.id).length} · only good for selling or fusing` : 'does little for your team'}
+                    {isVestige(f.gift.id) ? `×${owned.filter((x) => x === f.gift.id).length} · only good for selling or fusing`
+                      : scoreGift(f.gift, ctx).reasons.find((r) => r.kind === 'bad')?.text ?? 'does little for your team'}
                   </span>
                 </li>
               ))}

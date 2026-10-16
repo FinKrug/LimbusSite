@@ -17,3 +17,4 @@ fusion 'Miniature Ferris Wheel': some ingredients can't drop in Mirror Dungeon
 theme pack 'Audio Logs of That Day': no wiki page found
 theme pack 'T Corp. Time Prepayment Apparatus': no wiki page found
 theme pack 'Yield My Flesh': no wiki page found
+events: 5 gifts not in gifts.json (story-only?), e.g. ['Brilliant Lamplight', 'Goldforged Compass', 'Sea Terror Jerky', 'Sea Terror Notes', 'Silver Key Bundle']

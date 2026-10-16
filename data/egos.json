@@ -645,6 +645,52 @@
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Everlasting_Faust"
   },
   {
+    "id": "hollow-faust",
+    "name": "Hollow",
+    "sinner": "Faust",
+    "grade": "WAW",
+    "sin": "pride",
+    "cost": {
+      "gloom": 2,
+      "pride": 4,
+      "envy": 2
+    },
+    "sanity": 15,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 6,
+      "coin_power": 5,
+      "coins": 1,
+      "weight": 1,
+      "statuses": [
+        "Ashen Bullet",
+        "Poise",
+        "Charge",
+        "Black Wings"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Ammo",
+      "Ashen Bullet",
+      "Attack Power Up",
+      "Black Wings",
+      "Charge",
+      "Coin Reuse",
+      "Crit DMG Up",
+      "Damage Up",
+      "Offense Level Up",
+      "Poise",
+      "SP Healing",
+      "Sinking",
+      "Unbreakable Coin",
+      "Unclashable Skills",
+      "Unique Ammo"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hollow_Faust"
+  },
+  {
     "id": "i-ll-go-fer-scissors-how-bout-you-don-quixote",
     "name": "I'll Go fer Scissors. How 'Bout You?",
     "sinner": "Don Quixote",
@@ -1564,6 +1610,55 @@
       "unique Status Effects"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Crushbound_Past_Meursault"
+  },
+  {
+    "id": "hollow-meursault",
+    "name": "Hollow",
+    "sinner": "Meursault",
+    "grade": "WAW",
+    "sin": "pride",
+    "cost": {
+      "sloth": 2,
+      "gloom": 2,
+      "pride": 4,
+      "envy": 4
+    },
+    "sanity": 20,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 12,
+      "coin_power": 2,
+      "coins": 2,
+      "weight": 7,
+      "statuses": [
+        "Poise",
+        "Charge",
+        "Ashen Bullet",
+        "Black Wings",
+        "Unbreakable Coin",
+        "Pierce Fragility",
+        "Sinking"
+      ]
+    },
+    "statuses": [
+      "7 Atk Weight",
+      "Ammo",
+      "Ashen Bullet",
+      "Bind",
+      "Black Wings",
+      "Charge",
+      "Coin Reuse",
+      "HP Healing",
+      "Pierce Fragility",
+      "Poise",
+      "Power Up",
+      "SP Healing",
+      "Sinking",
+      "Unbreakable Coin",
+      "Unique Ammo"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hollow_Meursault"
   },
   {
     "id": "yearning-mircalla-meursault",
@@ -2753,7 +2848,8 @@
       "Poise",
       "Tremor",
       "Tremor Burst",
-      "Unbreakable Coin"
+      "Unbreakable Coin",
+      "unique Status Effects"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Mirror-touch_Rodion"
   },

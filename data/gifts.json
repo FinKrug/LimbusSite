@@ -3974,8 +3974,8 @@
     "theme_packs": [],
     "events": [
       {
-        "name": "Hole-in-the-Man",
-        "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hole-in-the-Man"
+        "name": "Hollowed Man",
+        "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hollowed_Man"
       }
     ],
     "fusion_recipe": null,
@@ -6833,7 +6833,7 @@
     "sin": "lust",
     "tier": 2,
     "cost": 200,
-    "keyword": null,
+    "keyword": "Bleed",
     "secondary_keyword": null,
     "status_effects": [
       "Bleed"
@@ -6869,7 +6869,7 @@
     "sin": "lust",
     "tier": 2,
     "cost": 200,
-    "keyword": null,
+    "keyword": "Bleed",
     "secondary_keyword": null,
     "status_effects": [],
     "traits": [
@@ -7737,11 +7737,11 @@
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
-    "effect": "Enemies in Low Morale or Panic states lose 1 Final Power (against targets that are Non-SP Units, when they have 25+ Sinking\n- When dealing damage against the affected enemies with Skills that apply Sinking, Sinking Count or Unique Sinking, inflict 2 Defense Level Down (2 times per turn)",
+    "effect": "Enemies in Low Morale or Panic states lose 1 Final Power (against targets that are Non-SP Units, when they have 25+ Sinking\n- When dealing damage against the affected enemies with Skills that apply Sinking, Sinking Count or Unique Sinking, inflict 2 Defense Level Down next turn (2 times per turn)",
     "max_level": 2,
     "upgrades": [
-      "Enemies in Low Morale or Panic states lose 2 Final Power (against targets that are Non-SP Units, when they have 15+ Sinking\n- When dealing damage against the affected enemies with Skills that apply Sinking, Sinking Count or Unique Sinking, inflict 3 Defense Level Down (2 times per turn)",
-      "Enemies in Low Morale or Panic states lose 3 Final Power (against targets that are Non-SP Units, when they have 10+ Sinking\n- When dealing damage against the affected enemies with Skills that apply Sinking, Sinking Count or Unique Sinking, inflict 3 Defense Level Down (3 times per turn)"
+      "Enemies in Low Morale or Panic states lose 2 Final Power (against targets that are Non-SP Units, when they have 15+ Sinking\n- When dealing damage against the affected enemies with Skills that apply Sinking, Sinking Count or Unique Sinking, inflict 3 Defense Level Down next turn (2 times per turn)",
+      "Enemies in Low Morale or Panic states lose 3 Final Power (against targets that are Non-SP Units, when they have 10+ Sinking\n- When dealing damage against the affected enemies with Skills that apply Sinking, Sinking Count or Unique Sinking, inflict 3 Defense Level Down next turn (3 times per turn)"
     ],
     "pools": [
       "main"
@@ -15553,11 +15553,11 @@
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
-    "effect": "Max Burn Potency +11.\nTriple the first Burn Potency to be inflicted in the Encounter (once per Encounter)\n\nWhen an enemy takes Burn damage, deal Wrath damage equal to Burn Potency\n\nSkills that inflict Burn Potency, Burn Count, or 'Unique Burn' deal +20% damage",
+    "effect": "Max Burn Potency +11.\nTriple the first Burn Potency to be inflicted in the Encounter (once per Encounter)\n\nWhen an enemy takes Burn damage due to Burn activation, deal Wrath damage equal to Burn Potency\n\nSkills that inflict Burn Potency, Burn Count, or 'Unique Burn' deal +20% damage",
     "max_level": 2,
     "upgrades": [
-      "Max Burn Potency +21.\nTriple the first Burn Potency to be inflicted in the Encounter (once per Encounter)\n\nWhen an enemy takes Burn damage, deal Wrath damage equal to Burn Potency\n\nSkills that inflict Burn Potency, Burn Count, or 'Unique Burn' deal +25% damage",
-      "Max Burn Potency +21.\nTriple the first Burn Potency to be inflicted in the Encounter (once per Encounter).\n\nWhen an enemy takes Burn damage, deal Wrath damage equal to (Burn Potency x 1.5)\n\nSkills that inflict Burn Potency, Burn Count, or 'Unique Burn' deal +30% damage"
+      "Max Burn Potency +21.\nTriple the first Burn Potency to be inflicted in the Encounter (once per Encounter)\n\nWhen an enemy takes Burn damage from Burn activation, deal Wrath damage equal to Burn Potency\n\nSkills that inflict Burn Potency, Burn Count, or 'Unique Burn' deal +25% damage",
+      "Max Burn Potency +21.\nTriple the first Burn Potency to be inflicted in the Encounter (once per Encounter).\n\nWhen an enemy takes Burn damage due to Burn activation, deal Wrath damage equal to (Burn Potency x 1.5)\n\nSkills that inflict Burn Potency, Burn Count, or 'Unique Burn' deal +30% damage"
     ],
     "pools": [
       "themed"

@@ -58,13 +58,20 @@ src/
     giftsearch.ts    Best gifts search (theme pack, sin, keyword, tier or text)
     vestiges.ts      vestiges and duplicates
     storage.ts       usePersistentState (localStorage with a fallback)
+    presets.ts       team presets: saved identities and lineup order (Team tab)
+    egorec.ts        Suggested E.G.O per deployed sinner and grade (Team tab)
+    events.ts        Events tab: value each choice of a Mirror Dungeon event for your team
+    musthave.ts      must-have gifts (Lunar Memory) and building toward them
   data/
-    combos.json          hand-picked gift combos
+    combos.json          hand-picked gift combos ("Gift sets to build")
+    must_have.json       gifts to always build toward (Lunar Memory)
     identity_tiers.json  Mirror Dungeon identity ranking (built by scraper/tiers.py; not shown in the app)
     order_tips.json      player tips about lineup order the skill text doesn't spell out
   components/
     TeamTab.tsx      "Team" tab: the formation screen (cards, identity picker, Build)
     EgoLoadout.tsx   E.G.O loadout per deployed sinner (Team tab), E.G.O lean and Resonance odds
+    EventsTab.tsx    "Events" tab: search an event, best choice for your team, who to send on a check
+    PresetBox.tsx    "Team presets" on the Team tab: save, load, rename, reorder, delete saved teams
     FormationBar.tsx the lineup strip shown on every tab (drag to reorder)
     Portrait.tsx     identity art (threadspun or base) with an offline fallback; the wiki has no
                      threadspun square portrait, so small ones are a face crop of the card art
@@ -146,8 +153,34 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   for 2/3/4+ gifts), or the recipe result. It lists the gifts a random fusion can give, including
   your current pack's exclusives. Fuse removes the ingredients from your gifts and adds what you
   got. Below: suggested fusions from the gifts you'd miss least (vestiges first; never recipe or
-  combo pieces), recipes you've started (Lunar Memory: the three Memories + any 2 Sin Fragments,
-  Super Shop only), and gifts to sell or fuse.
+  combo pieces), recipes to work on (ones you've started, plus Lunar Memory on Hard: the three
+  Memories + any 2 Sin Fragments, Super Shop only), and gifts to sell or fuse. A gift worth under
+  15% of your best one is marked **Fuse now**, with the reason it does nothing for you. A gift is
+  only kept for a recipe whose result fits your team (fit ≥ 0.35), so Staticky Two-way Radio isn't
+  held for Desperado on a team with no Ammo users.
+- **Mechanics your team lacks** (`mechanicGates` in `src/lib/holder.ts`): parts of a gift that only
+  work for units with a mechanic of their own ("a Skill that gains or spends Ammo", "Skills that
+  consume Ammo", Bloodfeast; statuses on 20 or fewer identities) count by how many of your deployed
+  units use it (full at about 3 of 7). With none, those parts and the small bonuses (sin affinity,
+  other statuses) count for nothing: "Mostly works for units that use Ammo, and no one on your team does".
+- **Must-have gifts** (`src/data/must_have.json`, `src/lib/musthave.ts`): Lunar Memory turns every
+  enemy resistance Fatal, so it scores above any regular gift for every team (3.5× its tier value).
+  On Hard, each piece it still needs (the three Memories, and Sin Fragments until you have 2) gets
+  "Builds toward Lunar Memory": 0.2 × its value × (0.6 + 0.4 × pieces you'd have ÷ 5), even if the
+  piece does nothing for your team. Your plan lists it first with "build toward it even if you
+  can't fuse it yet", the Fusion tab always shows it and keeps its pieces. On Normal (no Super
+  Shops) it's marked blocked and its pieces get no bonus. Recipe results are "Fusion only" in Your
+  plan, even when the wiki lists them in the main pool.
+- **Events tab** (`src/lib/events.ts`, `EventsTab.tsx`, `data/events.json`): type the event you
+  walked into (or a gift it gives; your current pack's events are listed first). Each choice is
+  valued for your team: gifts it gives (scored like Best gifts, ×0.9 for a fight you have to win,
+  0.3 for one you already own) + 0.006 per Cost − 0.25 / 0.6 for hurting one / all units − 1.0 for
+  a lasting penalty − 0.6 for a fight; a check is chance × pass + (1 − chance) × fail; a choice that
+  leads to more choices adds its best follow-up. The best one is marked, ones 1.2 below it are
+  "Avoid". Check odds are an estimate: the sinner rolls a skill (base + coin power per heads, 50%
+  heads) and needs the lower number with a skill of a checked sin, the higher one without, plus any
+  identity bonus the check lists; it suggests the sinner with the best odds. The game shows the
+  exact chance when you pick one.
 - **Vestiges:** a duplicate of a gift you own becomes a Vestige of its tier, like in game; the
   side panel counts them and fusing uses them up.
 - **Evaluate tab:** type a gift or pack for its pros, cons and a verdict for your team and run:
@@ -179,8 +212,8 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   of their packs can show up on this floor, your picked pack first), **Later this run** (top gifts
   from later floors' packs), **Fusions to work toward** (result worth ≥0.45× what it uses up,
   pieces reachable this run; progress and pieces on this floor first; Lunar Memory's "any 2 Sin
-  Fragments" and Super Shop rule included) and **Gift sets to build** (combos.json plus your own
-  sets, added with "+ Add a gift set", stored in `limbussite.combos.v1`). Pieces show ✓ have, ●
+  Fragments" and Super Shop rule included) and **Gift sets to build** (the hand-picked sets in
+  `src/data/combos.json`; there's no in-app editor). Pieces show ✓ have, ●
   this floor, ○ later floor, ◇ fuse first. The list below has a "Fits my team, on this floor" filter.
 - **Upgrades (+/++):** gifts that can be enhanced are also scored at each upgrade level, as if
   the upgraded text were the gift (so "#6 Deployed" → "#4, #6 Deployed" counts the extra unit), ×
@@ -215,6 +248,26 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   suggestions, affinity counts for the deployed sinners, total participants, the deployed count
   (5–7, default 7 as in Mirror Dungeon, so backups start at #8), Clear selection, Select all and
   Build. Tiers aren't shown anywhere: order depends on more than how strong a unit is.
+- **Suggested E.G.O** (Team tab, E.G.O loadout, `src/lib/egorec.ts`): for each deployed sinner and
+  grade, the E.G.O worth the most per turn: value of one use over the skill it replaces (power, plus
+  team keywords it inflicts) times the uses per turn your team can pay for, from the resources its
+  skills make after your other equipped E.G.O. Each suggestion lists why (keywords it inflicts,
+  whether the team makes enough of its sins); Equip takes one, Equip all takes every one. Empty
+  slots are only suggested when the team can mostly afford the E.G.O, and a pick is only replaced
+  for a clear improvement. Like Build, it doesn't know which E.G.O you own. When a slot's strongest
+  E.G.O is held back only by resources your team doesn't make, the slot gets a "With resource gifts"
+  note naming gifts that make them (ones naming the sin first, then random ones), and Best gifts
+  marks those gifts and scores them a bit higher (`ctx.egoNeeds`, `egoAdjust` in scoring.ts). Once
+  you own one, its resources count and the suggestion switches to that E.G.O on its own.
+- **Team presets** (top of the Team tab's side panel, `src/lib/presets.ts`): save which identity
+  each sinner has equipped (e.g. The Thumb Rodion) under a name, and switch between saved teams in
+  one click. If you've picked a lineup order it's saved with the preset and restored when you load
+  it; you don't need one to save, and a preset without an order leaves your current order alone
+  (Save this order to it adds one later). Deployed count, E.G.O and run state are never part of a
+  preset. The preset you loaded shows as Current, or Edited once you swap an identity or change
+  its saved order, with Save changes / Revert. Loading over a team that isn't saved anywhere
+  offers Undo. Identities a data refresh removed fall back to the sinner's default. Stored in
+  `limbussite.presets.v1`.
 - **Lineup suggestions** (`src/lib/ordering.ts`): single moves with a reason ("Make Sinclair the
   first backup (#8)"). Press Move to accept one or Dismiss to hide it; nothing is reordered on its
   own, and the list updates as you pick up gifts or swap identities. They come from, in order:

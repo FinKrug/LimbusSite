@@ -13,6 +13,7 @@ import {
   intrinsicScore, packOnFloor, WEIGHTS, type GiftScore, type Reason, type RunContext,
 } from './scoring'
 import type { Combo, Fusion, Gift, ThemePack } from './types'
+import { mustHave } from './musthave'
 
 export type Where = 'now' | 'later' | 'fuse' | 'no'
 
@@ -23,8 +24,19 @@ export interface Availability {
 }
 
 /** Can you get this gift on the floor you're on, and how? */
+const recipeResults = new WeakMap<Fusion[], Set<string>>()
+/** Gifts made by a recipe can only be had by fusing (Lunar Memory is listed in the main pool but isn't). */
+function isRecipeResult(id: string, fusions: Fusion[]): boolean {
+  let set = recipeResults.get(fusions)
+  if (!set) recipeResults.set(fusions, set = new Set(fusions.map((f) => f.result)))
+  return set.has(id)
+}
+
 export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>): Availability {
-  if (g.fusion_recipe) return { where: 'fuse', text: 'Fusion only' }
+  if (g.fusion_recipe || isRecipeResult(g.id, ctx.data.fusions)) {
+    const f = ctx.data.fusions.find((x) => x.result === g.id)
+    return { where: 'fuse', text: f?.super_shop ? 'Fusion only (Super Shop, Hard)' : 'Fusion only' }
+  }
   const { difficulty, floors } = ctx.run
   const floor = ctx.run.floor ?? 1
   const packs = packsForGift.get(g.id) ?? []
@@ -121,40 +133,42 @@ export function fusionTargets(ctx: RunContext, packsForGift: Map<string, ThemePa
     const total = pieces.length + (anyOf?.count ?? 0)
     const have = done(pieces) + (anyOf?.have ?? 0)
     const r = intrinsicScore(result, ctx)
+    const must = mustHave(fusion.result)
     const used = (gifts as Gift[]).reduce((s, g) => s + intrinsicScore(g, ctx).score, 0)
       + (anyOf ? anyOf.count * Math.min(...anyPieces.map((p) => intrinsicScore(p.gift, ctx).score)) : 0)
-    if (r.score < used * WEIGHTS.craftRatio) continue
+    if (!must && r.score < used * WEIGHTS.craftRatio) continue
     const unreachable = [...pieces.filter((p) => !p.have), ...(anyOf && anyOf.have < anyOf.count ? anyPieces.filter((p) => !p.have) : [])]
       .every((p) => p.where.where === 'no')
-    if (unreachable && have < total) continue
+    // A must-have (Lunar Memory) is always listed: its pieces can turn up on later runs' floors too.
+    if (!must && unreachable && have < total) continue
     const blocked = fusion.super_shop && ctx.run.difficulty === 'normal'
       ? 'Needs a Super Shop, which only appears on Hard floors' : undefined
     const progress = have / total
     const soon = pieces.filter((p) => !p.have && p.where.where === 'now').length / Math.max(1, total - have)
-    const rank = r.score * (0.35 + 0.5 * progress + 0.15 * soon) * (blocked ? 0.3 : 1)
-    const reasons: Reason[] = r.reasons.filter((x) => x.kind !== 'bad').slice(0, 2)
+    const rank = must && !blocked ? Infinity : r.score * (0.35 + 0.5 * progress + 0.15 * soon) * (blocked ? 0.3 : 1)
+    const reasons: Reason[] = must
+      ? [{ kind: 'good', text: must.why }, ...(blocked ? [] : [{ kind: 'info' as const,
+        text: 'Build toward it even if you can\'t fuse it yet: take its pieces whenever they show up, and keep them' }])]
+      : r.reasons.filter((x) => x.kind !== 'bad').slice(0, 2)
     out.push({ fusion, result, value: r.score, pieces, anyOf, progress, blocked, reasons, rank })
   }
   return out.sort((a, b) => b.rank - a.rank).slice(0, n)
 }
 
-/** Gift sets (combos and your own sets) to build, most valuable for your team first.
- *  Your own sets are always listed (after the top `n`), even when complete. */
+/** Gift sets (src/data/combos.json) to build, most valuable for your team first. */
 export function setTargets(ctx: RunContext, packsForGift: Map<string, ThemePack[]>, n = 3): SetTarget[] {
   const out: SetTarget[] = []
   for (const combo of ctx.combos) {
     const gifts = combo.gifts.map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
     if (gifts.length < 2) continue
     const pieces = gifts.map((g) => ({ gift: g, have: ctx.owned.has(g.id), where: availability(g, ctx, packsForGift) }))
-    if (pieces.every((p) => p.have) && !combo.custom) continue
+    if (pieces.every((p) => p.have)) continue
     const value = gifts.reduce((s, g) => s + intrinsicScore(g, ctx).score, 0) / gifts.length + WEIGHTS.comboPiece
     const progress = done(pieces) / pieces.length
     const soon = pieces.filter((p) => !p.have && p.where.where === 'now').length / Math.max(1, pieces.length - done(pieces))
     out.push({ combo, value, pieces, progress, rank: value * (0.4 + 0.45 * progress + 0.15 * soon) })
   }
-  out.sort((a, b) => b.rank - a.rank)
-  const top = out.filter((t) => !t.combo.custom).slice(0, n)
-  return [...out.filter((t) => t.combo.custom), ...top]
+  return out.sort((a, b) => b.rank - a.rank).slice(0, n)
 }
 
 /** Reasons to show first: good ones, then info, then bad. */

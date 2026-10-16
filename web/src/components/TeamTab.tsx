@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { shortName } from '../lib/format'
 import type { ArtVariant } from '../lib/images'
 import type { LineupInfo, LineupSuggestion } from '../lib/ordering'
 import { identityTier } from '../lib/strength'
 import { type Focus, focusKey, parseFocus, traitOptions } from '../lib/teambuilder'
-import { CORE_KEYWORDS, SINNERS, type Identity, type Sin, type Sinner } from '../lib/types'
+import { CORE_KEYWORDS, SINNERS, type Gift, type Identity, type Sin, type Sinner } from '../lib/types'
 import { KeywordChip } from './bits'
 import { EgoLoadoutPanel } from './EgoLoadout'
 import type { BattleProfile, Ego, EgoLoadout } from '../lib/ego'
@@ -35,6 +35,11 @@ interface Props {
   loadout: EgoLoadout
   onLoadoutChange: (l: EgoLoadout) => void
   battle: BattleProfile
+  /** All gifts and the ones you own (for E.G.O resource gift notes). */
+  gifts: Gift[]
+  owned: Set<string>
+  /** Saved teams (PresetBox), shown at the top of the side column. */
+  presets?: ReactNode
 }
 
 /**
@@ -46,7 +51,7 @@ interface Props {
 export function TeamTab(props: Props) {
   const { identities, equipped, selection, deployed, art, suggestions, onToggle, onClear, onSelectAll, onDeployedChange } = props
   const [picking, setPicking] = useState<Sinner | null>(null)
-  const deployedIds = selection.slice(0, deployed).map((s) => equipped[s])
+  const deployedIds = useMemo(() => selection.slice(0, deployed).map((s) => equipped[s]), [selection, deployed, equipped])
   const suggestedFor = new Map(suggestions.map((s) => [s.sinner, s]))
 
   const sinCounts = useMemo(() => {
@@ -86,10 +91,12 @@ export function TeamTab(props: Props) {
           })}
         </ol>
         <EgoLoadoutPanel egos={props.egos} loadout={props.loadout} onChange={props.onLoadoutChange}
-          selection={selection} deployed={deployed} battle={props.battle} />
+          selection={selection} deployed={deployed} members={deployedIds} battle={props.battle}
+          gifts={props.gifts} owned={props.owned} />
       </div>
 
       <aside className="formation-side">
+        {props.presets}
         <SuggestionBox {...props} />
 
         <section className="side-box">

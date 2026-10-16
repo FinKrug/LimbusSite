@@ -11,6 +11,7 @@
  */
 import { intrinsicScore, scoreGift, type GiftScore, type RunContext } from './scoring'
 import { isVestige } from './vestiges'
+import { fusableThisRun, mustHave, mustHaveRecipes, neededPiece } from './musthave'
 import type { Combo, Fusion, Gift, ThemePack } from './types'
 
 /** Keyword categories on the fusion screen. */
@@ -102,17 +103,36 @@ export interface KeepNote {
   keepFor: string | null
 }
 
+/**
+ * Is this recipe worth holding ingredients for? Only if its result does something for
+ * your team: Desperado doesn't for a team with no Ammo users, so Staticky Two-way Radio
+ * and Torn Bandolier are fodder there, not pieces to keep.
+ */
+export function recipeWorthKeeping(f: Fusion, ctx: RunContext): boolean {
+  const result = ctx.giftsById.get(f.result)
+  return !!result && intrinsicScore(result, ctx).fit >= KEEP_MIN_FIT
+}
+/** A recipe result must fit your team at least this well to hold its pieces. */
+const KEEP_MIN_FIT = 0.35
+
 /** Owned gifts (one row per copy), cheapest to give up first, with what they're kept for. */
 export function fodder(ctx: RunContext, owned: string[]): KeepNote[] {
   const recipeIngredient = (id: string) => ctx.data.fusions.find((f) =>
-    !ctx.owned.has(f.result) && [...f.ingredients, ...(f.any_of?.from ?? [])].includes(id)
-    && f.ingredients.some((i) => i !== id && ctx.owned.has(i)))
+    !ctx.owned.has(f.result) && !mustHave(f.result) && [...f.ingredients, ...(f.any_of?.from ?? [])].includes(id)
+    && f.ingredients.some((i) => i !== id && ctx.owned.has(i)) && recipeWorthKeeping(f, ctx))
   const comboWith = (id: string): Combo | undefined => ctx.combos.find((c) =>
     c.gifts.includes(id) && c.gifts.some((o) => o !== id && ctx.owned.has(o)))
+  // Pieces of a must-have (Lunar Memory) are always kept on a run that can fuse it.
+  const mustPiece = (g: Gift) => mustHaveRecipes(g, ctx).find((f) => fusableThisRun(f, ctx) && neededPiece(f, g, ctx.owned))
   return owned
     .map((id) => ctx.giftsById.get(id))
     .filter((g): g is Gift => !!g)
     .map((g) => {
+      const m = mustPiece(g)
+      if (m) {
+        const name = ctx.giftsById.get(m.result)?.name ?? m.result
+        return { gift: g, value: keepValue(g, ctx), keepFor: `piece of ${name}: always build toward it (${mustHave(m.result)!.short})` }
+      }
       const r = isVestige(g.id) ? undefined : recipeIngredient(g.id)
       const c = isVestige(g.id) ? undefined : comboWith(g.id)
       const keepFor = r ? `ingredient for ${ctx.giftsById.get(r.result)?.name ?? r.result}`
@@ -197,7 +217,8 @@ export function recipePlans(ctx: RunContext, owned: string[]): RecipePlan[] {
     const anyMissing = f.any_of ? Math.max(0, f.any_of.count - anyHave) : 0
     const started = have.length + anyHave > 0
     const resultScore = intrinsicScore(result, ctx).score
-    if (!started) continue
+    // Must-haves (Lunar Memory) are always listed on a run that can fuse them, started or not.
+    if (!started && !(mustHave(f.result) && fusableThisRun(f, ctx))) continue
     const giveUp = have.reduce((s, g) => s + keepValue(g, ctx), 0)
     plans.push({
       fusion: f, result, have, missing, anyMissing, ready: missing.length === 0 && anyMissing === 0,
@@ -206,6 +227,7 @@ export function recipePlans(ctx: RunContext, owned: string[]): RecipePlan[] {
   }
   return plans.sort((a, b) =>
     Number(b.ready) - Number(a.ready)
+    || Number(!!mustHave(b.result.id)) - Number(!!mustHave(a.result.id))
     || (a.missing.length + a.anyMissing) - (b.missing.length + b.anyMissing)
     || b.resultScore - a.resultScore)
 }

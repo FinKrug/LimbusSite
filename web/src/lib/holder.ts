@@ -187,3 +187,52 @@ export function holderFactor(g: Gift, i: Identity, identities: Identity[]): {
   }
   return { factor: Math.max(0, factor), met, missed }
 }
+
+// -- team-wide mechanic gates ---------------------------------------------------------
+
+const statusUsers = new WeakMap<Identity[], Map<string, number>>()
+function userCounts(identities: Identity[]): Map<string, number> {
+  let m = statusUsers.get(identities)
+  if (!m) {
+    m = new Map()
+    for (const i of identities) for (const s of new Set(i.status_effects)) m.set(s, (m.get(s) ?? 0) + 1)
+    statusUsers.set(identities, m)
+  }
+  return m
+}
+
+/** A mechanic only a few identities have (Ammo is on 7): common statuses aren't gates. */
+const MAX_MECHANIC_USERS = 20
+const gateCache = new WeakMap<Gift, HolderCondition[]>()
+
+/**
+ * Parts of a gift (any gift, not just slot-limited ones) that only work for units
+ * using a mechanic of their own: "On Use with a Skill that gains or spends Ammo",
+ * "Skills that consume Ammo", "Identities with Attack Skills that gain or spend Ammo".
+ * A team without that mechanic gets nothing from those parts.
+ */
+export function mechanicGates(g: Gift, identities: Identity[]): HolderCondition[] {
+  const hit = gateCache.get(g)
+  if (hit) return hit
+  const lines = mergeSubLines(g.effect.split(/\n+/).map((l) => l.trim()).filter(Boolean))
+  const total = lines.reduce((s, l) => s + l.length, 0) || 1
+  const counts = userCounts(identities)
+  const found = new Map<string, HolderCondition>()
+  for (const line of lines) {
+    const hits = [
+      ...line.matchAll(/\b(?:gains? or spends?|gains? or consumes?|spends?|consumes?|When gaining) ([A-Z][\w-]*)/g),
+    ].map((m) => m[1])
+    for (const s of new Set(hits)) {
+      const n = counts.get(s) ?? 0
+      if (!n || n > MAX_MECHANIC_USERS || isCoreKeyword(s)) continue
+      const prev = found.get(s)
+      const share = Math.min(1, (prev?.share ?? 0) + line.length / total)
+      found.set(s, { kind: 'status', status: s, share, noun: `units that use ${s}`, pred: `uses ${s}` })
+    }
+  }
+  // A gift that's mostly one mechanic ("This E.G.O Gift's effects are enhanced based on ...") is all about it.
+  for (const c of found.values()) if (c.share >= 0.6) c.share = 1
+  const out = [...found.values()]
+  gateCache.set(g, out)
+  return out
+}

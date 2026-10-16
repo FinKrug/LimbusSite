@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { makeContext } from './scoring'
+import { makeContext, scoreGift } from './scoring'
 import {
   fodder, forecast, fusionIdeas, fusionPoints, fusionTier, keywordChance, matchRecipe, pointsFor, randomPool, recipePlans,
 } from './fusion'
@@ -8,6 +8,7 @@ import {
 const g = (name: string) => gameData.gifts.find((x) => x.name === name)!
 const id = (name: string) => g(name).id
 const burners = gameData.identities.filter((i) => i.keywords.length === 1 && i.keywords[0] === 'Burn').slice(0, 7)
+const burnGifts = gameData.gifts.filter((x) => x.keyword === 'Burn' && x.tier === 3 && !x.fusion_recipe).slice(0, 2).map((x) => x.id)
 
 describe('fusion rules', () => {
   it('turns fusion points into a tier like the wiki table', () => {
@@ -58,6 +59,17 @@ describe('fusion suggestions', () => {
     const used = ideas[0].ingredients.map((i) => i.gift.id)
     expect(used).not.toContain(id('Dust to Dust')) // kept: 2/3 of Soothe the Dead
     expect(fodder(ctx, owned).find((f) => f.gift.id === id('Dust to Dust'))!.keepFor).toMatch(/Soothe the Dead/)
+  })
+
+  it('does not hold Ammo gifts for Desperado on a team with no Ammo users: fuse them', () => {
+    const owned = [id('Staticky Two-way Radio'), id('Torn Bandolier'), ...burnGifts]
+    const ctx = makeContext(gameData, burners, owned)
+    expect(ctx.members.some((i) => i.status_effects.includes('Ammo'))).toBe(false)
+    const radio = fodder(ctx, owned).find((f) => f.gift.id === id('Staticky Two-way Radio'))!
+    expect(radio.keepFor).toBeNull()
+    expect(radio.value).toBeLessThan(0.15 * Math.max(...fodder(ctx, owned).map((f) => f.value)))
+    const why = scoreGift(gameData.gifts.find((g) => g.id === id('Desperado'))!, ctx).reasons.map((r) => r.text)
+    expect(why.some((t) => /units that use Ammo, and no one on your team does/.test(t))).toBe(true)
   })
 
   it('lists recipes you have started, ready ones first', () => {

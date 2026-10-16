@@ -29,7 +29,6 @@ export interface Combo {
   gifts: string[]
   why: string
   source?: string
-  custom?: boolean
 }
 
 export type Pool = 'main' | 'themed' | 'extreme' | 'cursed' | 'fusion'
@@ -153,6 +152,8 @@ export interface GameData {
   combos?: Combo[]
   /** The sinners' E.G.O (data/egos.json; empty until the scraper has fetched them). */
   egos?: import('./ego').Ego[]
+  /** Mirror Dungeon events (data/events.json, scraper/events.py). */
+  events?: import('./events').GameEvent[]
   generatedAt: string | null
 }
 

@@ -3407,9 +3407,13 @@
       "Tremor - Conservation",
       "Tremor Burst",
       "Unclashable Skills",
-      "Unique Charge"
+      "Unique Charge",
+      "unique Status Effects"
     ],
-    "traits": [],
+    "traits": [
+      "Le Noir",
+      "Sisyphe"
+    ],
     "attack_types": [
       "Blunt"
     ],
@@ -3417,7 +3421,64 @@
       "Blunt": 6
     },
     "order_notes": [],
-    "skills": [],
+    "skills": [
+      {
+        "slot": 1,
+        "name": "Cometh the Nail",
+        "sin": "pride",
+        "type": "Blunt",
+        "base": 3,
+        "coin_power": 4,
+        "coins": 2,
+        "copies": 3,
+        "weight": 1,
+        "statuses": [
+          "Tremor",
+          "Promised Nail (Don Quixote)",
+          "Preservation",
+          "Charge"
+        ]
+      },
+      {
+        "slot": 2,
+        "name": "Summoneth the Nail",
+        "sin": "envy",
+        "type": "Blunt",
+        "base": 6,
+        "coin_power": 5,
+        "coins": 2,
+        "copies": 2,
+        "weight": 1,
+        "statuses": [
+          "Tremor",
+          "Promised Nail (Don Quixote)",
+          "Preservation",
+          "Tremor Burst"
+        ]
+      },
+      {
+        "slot": 3,
+        "name": "I Sever Thine Advent!",
+        "sin": "sloth",
+        "type": "Blunt",
+        "base": 5,
+        "coin_power": 4,
+        "coins": 3,
+        "copies": 1,
+        "weight": 1,
+        "statuses": [
+          "Sanctum of Conservation (Don Quixote)",
+          "Offense Level Up",
+          "Defense Level Up",
+          "Tremor",
+          "Promised Nail (Don Quixote)",
+          "Preservation",
+          "Amplitude Conversion",
+          "Tremor - Conservation",
+          "Tremor Burst"
+        ]
+      }
+    ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Le_Noir_Brand_Manager_Don_Quixote"
   },
   {
@@ -7270,8 +7331,7 @@
       "Evade Skills",
       "Haste",
       "Nerve Strike",
-      "Poise",
-      "unique Status Effects"
+      "Poise"
     ],
     "traits": [
       "Cinq Association",
@@ -10205,8 +10265,10 @@
       "HP Healing",
       "Lust Fragility",
       "Power Up",
+      "Pulsation",
       "Unbreakable Coin",
-      "Unique Charge"
+      "Unique Charge",
+      "unique Status Effects"
     ],
     "traits": [
       "Le Rouge",
@@ -10493,7 +10555,8 @@
       "Paralyze",
       "Poise",
       "Slash Fragility",
-      "Unbreakable Coin"
+      "Unbreakable Coin",
+      "unique Status Effects"
     ],
     "traits": [
       "Blade Lineage",
@@ -11692,7 +11755,8 @@
       "Tremor",
       "Tremor Burst",
       "Unclashable Skills",
-      "Unique Charge"
+      "Unique Charge",
+      "unique Status Effects"
     ],
     "traits": [
       "Sisyphe"
@@ -13467,6 +13531,125 @@
       }
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devyat'_Assoc._North_Section_3_Sinclair"
+  },
+  {
+    "id": "haute-couture-the-crimson-god-of-le-rouge-sinclair",
+    "name": "Haute Couture::The Crimson God of Le Rouge Sinclair",
+    "sinner": "Sinclair",
+    "rarity": 3,
+    "affinities": [
+      "gluttony",
+      "lust",
+      "pride",
+      "wrath"
+    ],
+    "keywords": [
+      "Bleed",
+      "Charge"
+    ],
+    "status_effects": [
+      "Assist Defense",
+      "Attack Power Up",
+      "Bleed",
+      "Charge",
+      "Charge Potency",
+      "Clashable Counter",
+      "Clashable Guard",
+      "Counter Skills",
+      "Duality",
+      "Evade Skills",
+      "Guard Skills",
+      "HP Healing",
+      "Lust Fragility",
+      "Offense Level Up",
+      "Power Up",
+      "Pulsation",
+      "SP Healing",
+      "Unbreakable Coin",
+      "Unique Bleed",
+      "Unique Charge",
+      "unique Sanity mechanics",
+      "unique Status Effects"
+    ],
+    "traits": [
+      "Le Rouge",
+      "Sisyphe"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
+    "attack_counts": {
+      "Pierce": 11
+    },
+    "order_notes": [
+      {
+        "kind": "in_order",
+        "text": "Prioritizes \"Le Rouge\" allies, in Deployment order",
+        "source": "La Moisson"
+      }
+    ],
+    "skills": [
+      {
+        "slot": 1,
+        "name": "La Pulsion",
+        "sin": "gluttony",
+        "type": "Pierce",
+        "base": 5,
+        "coin_power": 6,
+        "coins": 1,
+        "copies": 3,
+        "weight": 1,
+        "statuses": [
+          "Duality",
+          "Pulsation (Ally)",
+          "Bleed",
+          "Power Up",
+          "Charge"
+        ]
+      },
+      {
+        "slot": 2,
+        "name": "L'Appétit",
+        "sin": "wrath",
+        "type": "Pierce",
+        "base": 4,
+        "coin_power": 5,
+        "coins": 2,
+        "copies": 2,
+        "weight": 1,
+        "statuses": [
+          "Duality",
+          "Pulsation (Ally)",
+          "Clash Power Up",
+          "Desperate Hunger",
+          "Charge Identity",
+          "Charge",
+          "Offense Level Up",
+          "Bleed"
+        ]
+      },
+      {
+        "slot": 3,
+        "name": "Le Baptême rouge",
+        "sin": "lust",
+        "type": "Pierce",
+        "base": 5,
+        "coin_power": 4,
+        "coins": 3,
+        "copies": 1,
+        "weight": 1,
+        "statuses": [
+          "Offense Level Up",
+          "Attack Power Up",
+          "Bleed",
+          "Pulsation (Ally)",
+          "Uncontrollable Rampage (Sinclair)",
+          "Unbreakable Coin",
+          "Relentless Hunger"
+        ]
+      }
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::The_Crimson_God_of_Le_Rouge_Sinclair"
   },
   {
     "id": "heishou-pack-you-branch-sinclair",

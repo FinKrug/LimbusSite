@@ -7,10 +7,12 @@ import fusionsJson from '@data/fusions.json'
 import identitiesJson from '@data/identities.json'
 import metaJson from '@data/meta.json'
 import egosJson from '@data/egos.json'
+import eventsJson from '@data/events.json'
 // Hand-picked combos (not scraped): edit src/data/combos.json to add more.
 import combosJson from '../data/combos.json'
 import type { Combo, Fusion, GameData, Gift, Identity, ThemePack } from './types'
 import type { Ego } from './ego'
+import type { GameEvent } from './events'
 
 export const gameData: GameData = {
   gifts: giftsJson as unknown as Gift[],
@@ -19,5 +21,6 @@ export const gameData: GameData = {
   identities: identitiesJson as unknown as Identity[],
   combos: combosJson as Combo[],
   egos: egosJson as unknown as Ego[],
+  events: eventsJson as unknown as GameEvent[],
   generatedAt: (metaJson as { generated_at?: string }).generated_at ?? null,
 }

@@ -5,6 +5,7 @@
     python -m scraper --skip-identities
     python -m scraper --include-unobtainable   # keep non-Mirror-Dungeon gifts too
     python -m scraper --skip-egos     # don't fetch E.G.O pages (data/egos.json)
+    python -m scraper --skip-events   # don't fetch Mirror Dungeon event pages (data/events.json)
 """
 
 from __future__ import annotations
@@ -16,7 +17,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import build, egos as egomod, order, packs as packmod, skills
+from . import build, egos as egomod, events as eventmod, order, packs as packmod, skills
 from .lua_table import LuaParseError, parse_module
 from .wiki_api import DEFAULT_API, WikiClient, WikiError
 
@@ -41,6 +42,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--skip-packs", action="store_true",
                     help="don't fetch theme pack pages (gift pools, floors)")
     ap.add_argument("--skip-egos", action="store_true", help="don't fetch E.G.O pages")
+    ap.add_argument("--skip-events", action="store_true", help="don't fetch Mirror Dungeon event pages")
     ap.add_argument("--api", default=DEFAULT_API, help="MediaWiki api.php URL")
     ap.add_argument("--delay", type=float, default=1.0, help="seconds between requests (default 1)")
     args = ap.parse_args(argv)
@@ -128,6 +130,14 @@ def main(argv: list[str] | None = None) -> int:
     if egos is not None:
         _write(out / "egos.json", egos)
         print(f"  {len(egos)} E.G.O")
+
+    # -- Mirror Dungeon events (needs the gift ids above) --------------------------
+    if not args.skip_events:
+        evs, w = fetch_events(client, data["gifts"])
+        warnings += w
+        if evs is not None:
+            _write(out / "events.json", evs)
+            print(f"  {len(evs)} Mirror Dungeon events")
     print(f"  {len(data['gifts'])} gifts"
           f"{'' if args.include_unobtainable else ' (Mirror Dungeon only)'}, "
           f"{len(data['theme_packs'])} theme packs, {len(data['fusions'])} fusion recipes, "
@@ -160,6 +170,17 @@ def fetch_egos(client: WikiClient) -> tuple[list[dict] | None, list[str]]:
     except WikiError as e:
         return None, [f"E.G.O pages not fetched ({_why(e, client)}); data/egos.json left as it was"]
     return egomod.build_egos(cats, sources, build.SINNERS, build.fold, build.slugify, build.wiki_url)
+
+
+def fetch_events(client: WikiClient, gifts: list[dict]) -> tuple[list[dict] | None, list[str]]:
+    """Every page in Category:Mirror Dungeon Events: choices, checks and what each gives."""
+    print(f"Fetching {eventmod.CATEGORY} and each event page ...")
+    try:
+        titles = client.category_members(eventmod.CATEGORY)
+        sources = client.page_sources(titles)
+    except WikiError as e:
+        return None, [f"event pages not fetched ({_why(e, client)}); data/events.json left as it was"]
+    return eventmod.build_events(sources, gifts, build.fold, build.slugify, build.wiki_url)
 
 
 def fetch_pack_info(client: WikiClient, gifts: list[dict], packs: list[dict], skip: bool):

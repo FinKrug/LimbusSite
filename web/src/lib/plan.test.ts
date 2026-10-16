@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { availability, comingUp, fusionTargets, getNow, setTargets } from './plan'
+import { availability, comingUp, fusionTargets, getNow } from './plan'
 import { makeContext, packOnFloor, packsByGift, rankGifts, type RunSettings } from './scoring'
 import type { Identity } from './types'
 
@@ -53,11 +53,5 @@ describe('your plan', () => {
     expect(lunar?.anyOf?.count).toBe(2)
     const hard = makeContext(gameData, team, memories, { run: run() })
     expect(fusionTargets(hard, pfg, 60).find((f) => f.result.id === 'lunar-memory')?.blocked).toBeUndefined()
-  })
-
-  it('always lists your own gift sets', () => {
-    const mine = { id: 'custom-x', name: 'Mine', gifts: ['downpour', 'melted-eyeball'], why: '', custom: true }
-    const ctx = makeContext(gameData, team, ['downpour', 'melted-eyeball'], { run: run(), combos: [mine] })
-    expect(setTargets(ctx, pfg, 0).map((t) => t.combo.id)).toEqual(['custom-x'])
   })
 })

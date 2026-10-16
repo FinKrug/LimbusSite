@@ -251,13 +251,13 @@ describe('gifts that work beyond their keyword', () => {
     expect(r.reasons.some((x) => x.text === 'Uses Gloom affinity (1/2 of your team have it)')).toBe(true)
   })
 
-  it('boosts the rest of a combo you have started, including custom combos', () => {
-    const ctx = makeContext(d, blunt, ['downpour'], { combos: [{ id: 'mine', name: 'Mine', gifts: ['spanner', 'gloom-coat'], why: '', custom: true }] })
+  it('boosts the rest of a combo you have started', () => {
+    const ctx = makeContext(d, blunt, ['downpour'], { combos: [{ id: 'mine', name: 'Mine', gifts: ['spanner', 'gloom-coat'], why: '' }] })
     expect(find(ctx, 'eyeball').reasons[0].text).toBe('Combos with downpour, which you have ("Tremor debuffs")')
     const plans = planCombos(ctx)
     expect(plans.map((p) => p.combo.id)).toEqual(['c', 'mine'])
     expect(plans[0].missing.map((g) => g.id)).toEqual(['eyeball', 'bell'])
-    const withSpanner = makeContext(d, blunt, ['spanner'], { combos: ctx.combos.filter((c) => c.custom) })
+    const withSpanner = makeContext(d, blunt, ['spanner'], { combos: ctx.combos.filter((c) => c.id === 'mine') })
     expect(find(withSpanner, 'gloom-coat').reasons[0].text).toMatch(/Combos with spanner.*"Mine"/)
   })
 })

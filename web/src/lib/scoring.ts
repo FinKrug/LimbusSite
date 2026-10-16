@@ -40,7 +40,9 @@ import {
 import { DEFAULT_DEPLOYED, giftSlots, slotText } from './lineup'
 import { strength, type TierOverrides } from './strength'
 import { traitShare } from './traitparts'
-import { holderConditions, holderFactor, meets } from './holder'
+import { holderConditions, holderFactor, mechanicGates, meets } from './holder'
+import { MUST_HAVE_MULT, PIECE_SHARE, fusableThisRun, mustHave, mustHaveRecipes, neededPiece, recipeProgress } from './musthave'
+import { egoNeeds, recommendEgos, type EgoNeed } from './egorec'
 import { buildBattle, EGO_WEIGHTS, egoGiftInfo, resonanceTriggers, type BattleProfile, type EgoLoadout } from './ego'
 import type { Swaps } from './battle'
 
@@ -73,6 +75,9 @@ export const WEIGHTS = {
   traitStrength: 0.8,
   /** Fit of a gift that works on its own (applies its status itself, no team condition). */
   standalone: 0.5,
+  /** A mechanic gate (Ammo, ...) counts as fully met once this x the share of the team uses it
+   *  (2.5: about 3 of 7 deployed units). */
+  mechanicSpread: 2.5,
   /** Fit of a gift whose needs are met by gifts you own (not by your team). */
   comboFit: 0.75,
   /** Fit cap for a gift whose needs nothing on your team or in your gifts provides. */
@@ -320,6 +325,8 @@ export interface RunContext {
   tiers: TierOverrides
   /** What the deployed team plays: Resonance odds, E.G.O resources and E.G.O lean (ego.ts). */
   battle: BattleProfile
+  /** Strong E.G.O your team can't pay for yet, and the sins they need (egorec.ts). */
+  egoNeeds: EgoNeed[]
 }
 
 /** Does your team (not your gifts) put this status on enemies? */
@@ -438,6 +445,7 @@ export function makeContext(
     data, profile, owned: ownedSet, ownedCounts, run, giftsById,
     fusionsByIngredient, ownedKeywordCounts, signature: signatureStatuses(data.identities),
     giftSupply, unmetOwned, enablers, combos, combosByGift, lineup: team, deployed, members, tiers, battle,
+    egoNeeds: egoNeeds(recommendEgos(members, data.egos ?? [], loadout, battle, data.gifts, ownedSet)),
   }
 }
 
@@ -483,6 +491,16 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
   const { profile } = ctx
   const reasons: Reason[] = []
   const tierValue = WEIGHTS.tier[gift.tier ?? 1] ?? 1
+  // Must-haves (Lunar Memory) are top picks for every team (musthave.ts).
+  const must = mustHave(gift.id)
+  if (must) {
+    const value = tierValue * MUST_HAVE_MULT
+    return {
+      gift, score: value, fit: 1, synergy: false,
+      reasons: [{ kind: 'good', text: must.why }],
+      parts: [{ kind: 'core', label: `Must-have for any team: ${must.short}`, value, detail: must.why }],
+    }
+  }
 
   // How well does it fit? Take the best of several routes, so a Tremor gift
   // that's really about Blunt skills (Oil-gunked Spanner) or one that applies
@@ -702,6 +720,22 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
     // No lineup (e.g. while planning the order): assume the best unit takes the slot.
     fit *= Math.max(...ctx.members.map((i) => holderFactor(gift, i, ctx.data.identities).factor))
   }
+  // Parts that only work for units with a mechanic of their own (Ammo, Bloodfeast): a team
+  // without it gets nothing from them (Staticky Two-way Radio, Desperado on a non-Ammo team).
+  // gateFactor also scales the small bonuses (sin affinity, ...): a gift that does nothing gets none.
+  let gateFactor = 1
+  if (profile.size && !slotInfo?.whole && ctx.members.length) {
+    for (const c of mechanicGates(gift, ctx.data.identities)) {
+      const users = ctx.members.filter((i) => meets(i, c) >= 0.99)
+      const covered = Math.min(1, (users.length / ctx.members.length) * WEIGHTS.mechanicSpread)
+      fit *= 1 - c.share * (1 - covered)
+      gateFactor *= 1 - c.share * (1 - covered)
+      const how = c.share >= 0.95 ? 'Only works for' : c.share >= 0.5 ? 'Mostly works for' : 'Part of it works for'
+      reasons.push(users.length
+        ? { kind: covered >= 0.99 ? 'good' : 'info', text: `${how} ${c.noun}: ${users.map((i) => i.sinner).join(', ')}` }
+        : { kind: 'bad', text: `${how} ${c.noun}, and no one on your team does` })
+    }
+  }
   if (profile.size && unmet.length) {
     fit = Math.min(fit, WEIGHTS.unmetCap)
     const helper = ctx.enablers.get(unmet[0])?.find((g) => g.id !== gift.id)
@@ -793,15 +827,15 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
       : 'Survives a lethal hit: gets more valuable on the late floors of a long run' })
   }
 
-  for (const p of parts) if (p.kind === 'bonus') p.value *= slotFactor
-  let score = tierValue * (WEIGHTS.base + fit + bonus) * slotFactor + synergyBonus + enablerBonus + runBonus
+  for (const p of parts) if (p.kind === 'bonus') p.value *= slotFactor * gateFactor
+  let score = tierValue * ((WEIGHTS.base + bonus) * gateFactor + fit) * slotFactor + synergyBonus + enablerBonus + runBonus
   // The core: the gift's tier times how well it fits. Everything else is added on top.
   const fitWhy = best.reason?.text ?? (fit === 0 ? keywordReason?.text
     : !isCoreKeyword(gift.keyword) ? 'Not tied to a status keyword, so it partly fits any team' : undefined)
   parts.unshift({
     kind: 'core',
     label: `Tier ${tierLabel(gift.tier)} gift, ${Math.round(Math.min(1, fit) * 100)}% fit with ${who}`,
-    value: tierValue * (WEIGHTS.base + fit) * slotFactor,
+    value: tierValue * (WEIGHTS.base * gateFactor + fit) * slotFactor,
     fitReason: fitWhy,
     detail: [
       `Higher tiers count for more (Tier ${tierLabel(gift.tier)} ×${tierValue})`,
@@ -893,11 +927,24 @@ export function egoAdjust(gift: Gift, ctx: RunContext): { factor: number; reason
         ? `; your E.G.O use ${info.resourceSins.map(cap).join('/')}`
         : `, but your E.G.O barely use ${info.resourceSins.map(cap).join('/')}`
     }
+    // A strong E.G.O held back by these resources makes the gift worth more (more if it names the sin).
+    const needs = (ctx.egoNeeds ?? []).filter((n) => !info.resourceSins.length || n.sins.some((s) => info.resourceSins.includes(s)))
+    if (needs.length) {
+      resF = Math.max(resF, info.resourceSins.length ? 1.2 : 1.05)
+      const sins = [...new Set(needs.flatMap((n) => n.sins))].filter((x) => !info.resourceSins.length || info.resourceSins.includes(x))
+      const which = needs.slice(0, 2).map((n) => `${n.sinner}'s ${n.ego.name}`).join(' and ')
+      reasons.push({
+        kind: 'good',
+        text: `Makes ${info.resourceSins.length ? sins.map(cap).join('/') : 'random'} E.G.O resources, which ${which}`
+          + ` need${needs.length === 1 ? 's' : ''}: stronger than the E.G.O your team can pay for now (Team tab > Suggested E.G.O)`,
+      })
+    } else {
+      reasons.push({
+        kind: resF >= 0.95 ? 'good' : resF < 0.6 ? 'bad' : 'info',
+        text: `Gives E.G.O resources: worth it if you spend them (E.G.O lean ${lean}${named})`,
+      })
+    }
     factor += info.resourceShare * (resF - 1)
-    reasons.push({
-      kind: resF >= 0.95 ? 'good' : resF < 0.6 ? 'bad' : 'info',
-      text: `Gives E.G.O resources: worth it if you spend them (E.G.O lean ${lean}${named})`,
-    })
   }
   for (const t of resonanceTriggers(gift)) {
     const chance = t.absolute ? sim.areson[t.sin] : sim.reson[t.sin]
@@ -1024,7 +1071,7 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
   // clearly better for your team than this gift (a Poise piece for a payoff you'd use).
   let start: { f: Fusion; result: Gift; value: number; add: number } | null = null
   for (const f of ctx.fusionsByIngredient.get(gift.id) ?? []) {
-    if (ctx.owned.has(f.result) || !f.ingredients.includes(gift.id)) continue
+    if (ctx.owned.has(f.result) || !f.ingredients.includes(gift.id) || mustHave(f.result)) continue
     const result = ctx.giftsById.get(f.result)
     if (!result) continue
     const others = f.ingredients.filter((i) => i !== gift.id)
@@ -1047,8 +1094,27 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
         : `Can also fuse into ${result.name} (with ${rest.join(' and ')})`,
     })
   }
+  // Pieces of a must-have (Lunar Memory): always worth taking, even off-team, more the closer you are.
+  for (const f of mustHaveRecipes(gift, ctx)) {
+    const result = ctx.giftsById.get(f.result)
+    if (!result || !neededPiece(f, gift, ctx.owned)) continue
+    const must = mustHave(f.result)!
+    const prog = recipeProgress(f, new Set([...ctx.owned, gift.id]))
+    if (!fusableThisRun(f, ctx)) {
+      reasons.push({ kind: 'info', text: `Piece of ${result.name} (${must.short}), but that needs a Super Shop, which only appears on Hard` })
+      continue
+    }
+    const add = intrinsicScore(result, ctx).score * PIECE_SHARE * (0.6 + 0.4 * prog.have / prog.total)
+    score += add
+    parts.push({ kind: 'fusion', label: `Builds toward ${result.name}`, value: add,
+      detail: `${prog.have}/${prog.total} pieces with this one; ${must.why}` })
+    reasons.unshift({
+      kind: 'good',
+      text: `Builds toward ${result.name} (${must.short}): ${prog.have}/${prog.total} pieces with this one. Take it even if it doesn't fit your team`,
+    })
+  }
   for (const f of ctx.fusionsByIngredient.get(gift.id) ?? []) {
-    if (ctx.owned.has(f.result)) continue
+    if (ctx.owned.has(f.result) || mustHave(f.result)) continue
     const result = ctx.giftsById.get(f.result)
     if (!result) continue
     const others = f.ingredients.filter((i) => i !== gift.id)

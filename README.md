@@ -31,6 +31,7 @@ python -m scraper --offline        # rebuild from cached responses (no network)
 python -m scraper.tiers            # rebuild the Mirror Dungeon identity ranking from data/tiers/*.txt
 python -m scraper --skip-identities
 python -m scraper --skip-egos        # don't fetch E.G.O pages
+python -m scraper --skip-events      # don't fetch Mirror Dungeon event pages
 python -m unittest discover -s tests -t .
 ```
 
@@ -44,6 +45,7 @@ Re-run it after each game patch, once the wiki has caught up.
 | `data/theme_packs.json` | [List of Floor Themes](https://limbuscompany.wiki.gg/wiki/List_of_Floor_Themes) and each "<Name> Theme Pack" page (floors, full gift pool), plus exclusives from Module:EgoGiftList/data |
 | `data/fusions.json` | Module:EgoGiftList/data (fusion recipes), plus the Super Shop recipe for Lunar Memory (`scraper/build.py`, `SPECIAL_FUSIONS`) |
 | `data/egos.json` | Pages in [Category:E.G.O](https://limbuscompany.wiki.gg/wiki/Category:E.G.O): sinner, grade, sin and statuses from categories; resource cost, Sanity and skill numbers from the page (`scraper/egos.py`, read loosely; missing costs fall back to typical ones for the grade) |
+| `data/events.json` | Pages in [Category:Mirror Dungeon Events](https://limbuscompany.wiki.gg/wiki/Category:Mirror_Dungeon_Events): each event's choices, sin checks (`adv`/`disadv` thresholds, identity bonuses) and what each result gives (gifts, Cost, fights, damage), with follow-up choices nested (`scraper/events.py`) |
 | `data/identities.json` | Pages in [Category:Identities](https://limbuscompany.wiki.gg/wiki/Category:Identities) and their categories; skills 1-3 (sin, power, copies) from each page (`scraper/skills.py`) |
 | `data/meta.json` | Timestamp, wiki revision IDs and counts for this run |
 | `data/report.txt` | Warnings: names that didn't match, theme packs with no wiki page, etc. |

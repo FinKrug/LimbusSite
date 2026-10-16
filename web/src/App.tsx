@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
 import { EvaluateTab } from './components/EvaluateTab'
+import { EventsTab } from './components/EventsTab'
 import { FusionTab } from './components/FusionTab'
 import { GiftList } from './components/GiftList'
 import { OwnedGifts } from './components/OwnedGifts'
 import { PlanPanel } from './components/PlanPanel'
+import { PresetBox } from './components/PresetBox'
 import { availability } from './lib/plan'
 import { PackList } from './components/PackList'
 import { FormationBar } from './components/FormationBar'
@@ -18,6 +20,7 @@ import {
 } from './lib/scoring'
 import { DEFAULT_DEPLOYED } from './lib/lineup'
 import { usePersistentState } from './lib/storage'
+import { restoreSelection, restoreTeam, validPresets, type Equipped, type TeamPreset } from './lib/presets'
 import type { TierOverrides } from './lib/strength'
 import type { ArtVariant } from './lib/images'
 import { lineupSuggestions, moveTo } from './lib/ordering'
@@ -25,12 +28,10 @@ import type { SwapState } from './lib/skillswap'
 import type { EgoLoadout } from './lib/ego'
 import { buildTeam, suggestOrder } from './lib/teambuilder'
 import { addGift } from './lib/vestiges'
-import { SINNERS, type Combo, type Gift, type Identity, type Sinner } from './lib/types'
+import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
-type Tab = 'team' | 'gifts' | 'packs' | 'fusion' | 'evaluate' | 'skills'
-const TABS: Tab[] = ['team', 'gifts', 'packs', 'fusion', 'evaluate', 'skills']
-/** Each sinner's equipped identity id (every sinner always has one, like in game). */
-type Equipped = Partial<Record<Sinner, string | null>>
+type Tab = 'team' | 'gifts' | 'packs' | 'fusion' | 'events' | 'evaluate' | 'skills'
+const TABS: Tab[] = ['team', 'gifts', 'packs', 'fusion', 'events', 'evaluate', 'skills']
 
 /** Lineups saved before the Team tab (team + order) become the selection. */
 function legacySelection(): Sinner[] {
@@ -65,8 +66,6 @@ export default function App() {
   const [run, setRun] = usePersistentState<RunSettings>('limbussite.run.v1', firstRun)
   const [storedTab, setTab] = usePersistentState<string>('limbussite.tab.v1', 'team')
   const tab: Tab = storedTab === 'fusions' ? 'fusion' : (TABS as string[]).includes(storedTab) ? storedTab as Tab : 'team'
-  // Your own gift sets (Best gifts > Your plan > Add a gift set); they count in scores like combos.
-  const [customCombos, setCustomCombos] = usePersistentState<Combo[]>('limbussite.combos.v1', [])
   const [swaps, setSwaps] = usePersistentState<SwapState>('limbussite.swaps.v1', {})
   const [deployed, setDeployed] = usePersistentState<number>('limbussite.deployed.v3', DEFAULT_DEPLOYED)
   // Ratings set in an earlier version still count; there's no UI for them now that tiers aren't shown.
@@ -76,6 +75,10 @@ export default function App() {
   const [dismissed, setDismissed] = usePersistentState<string[]>('limbussite.dismissed.v1', [])
   // Equipped E.G.O per sinner and grade (Team tab).
   const [loadout, setLoadout] = usePersistentState<EgoLoadout>('limbussite.egos.v1', {})
+  // Saved teams (Team tab > Team presets) and the one last loaded or saved.
+  const [storedPresets, setPresets] = usePersistentState<TeamPreset[]>('limbussite.presets.v1', [])
+  const presets = useMemo(() => validPresets(storedPresets), [storedPresets])
+  const [activePreset, setActivePreset] = usePersistentState<string | null>('limbussite.presets.active.v1', null)
 
   const identitiesById = useMemo(() => new Map(gameData.identities.map((i) => [i.id, i])), [])
   const packsById = useMemo(() => new Map(gameData.themePacks.map((p) => [p.id, p])), [])
@@ -91,10 +94,16 @@ export default function App() {
     return out
   }, [team, identitiesById])
   const order = useMemo(() => selection.filter((s, k) => SINNERS.includes(s) && selection.indexOf(s) === k), [selection])
+  // Every sinner's identity as a preset saves it (presets also keep the order, if one is picked).
+  const currentTeam = useMemo<Equipped>(
+    () => Object.fromEntries(SINNERS.map((s) => [s, equipped[s]?.id ?? null])) as Equipped,
+    [equipped],
+  )
+  const knownIdentities = useMemo(() => new Set(gameData.identities.map((i) => i.id)), [])
   const teamIdentities = useMemo(() => order.map((s) => equipped[s]).filter(Boolean), [order, equipped])
   const ctx = useMemo(
-    () => makeContext(gameData, teamIdentities, owned, { combos: customCombos, deployed, tiers, run, loadout, swaps }),
-    [teamIdentities, owned, customCombos, deployed, tiers, run, loadout, swaps],
+    () => makeContext(gameData, teamIdentities, owned, { deployed, tiers, run, loadout, swaps }),
+    [teamIdentities, owned, deployed, tiers, run, loadout, swaps],
   )
   // Suggestions update live as gifts and identities change; nothing moves until you press Move.
   const lineup = useMemo(
@@ -147,6 +156,7 @@ export default function App() {
           Theme packs {run.floor !== null && <span className="badge">F{run.floor}</span>}
         </TabButton>
         <TabButton id="fusion" tab={tab} setTab={setTab}>Fusion</TabButton>
+        <TabButton id="events" tab={tab} setTab={setTab}>Events</TabButton>
         <TabButton id="evaluate" tab={tab} setTab={setTab}>Evaluate</TabButton>
         <TabButton id="skills" tab={tab} setTab={setTab}>Skill swaps</TabButton>
       </nav>
@@ -162,6 +172,15 @@ export default function App() {
             identities={gameData.identities} equipped={equipped} selection={order} deployed={deployed}
             art={art} onArtChange={setArt}
             egos={gameData.egos ?? []} loadout={loadout} onLoadoutChange={setLoadout} battle={ctx.battle}
+            gifts={gameData.gifts} owned={ctx.owned}
+            presets={
+              <PresetBox presets={presets} onPresetsChange={setPresets} activeId={activePreset} onActiveChange={setActivePreset}
+                current={currentTeam} selection={order}
+                onApply={(t, sel) => {
+                  setTeam(restoreTeam(t, knownIdentities))
+                  if (sel) setSelection(restoreSelection(sel))
+                }} identities={gameData.identities} art={art} />
+            }
             suggestions={suggestions} info={lineup.info}
             dismissedCount={lineup.suggestions.length - suggestions.length}
             onApply={(sug) => setSelection(moveTo(order, sug.sinner, sug.to))}
@@ -219,10 +238,7 @@ export default function App() {
           </section>}
 
           <div role="tabpanel">
-            {tab === 'gifts' && <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={own}
-              gifts={gameData.gifts} customSets={customCombos}
-              onAddSet={(c) => setCustomCombos((l) => [...l.filter((x) => x.id !== c.id), c])}
-              onRemoveSet={(id) => setCustomCombos((l) => l.filter((x) => x.id !== id))} />}
+            {tab === 'gifts' && <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={own} />}
             {tab === 'gifts' && (
               <GiftList ranked={rankedGifts} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
                 teamKeywords={focus.map((f) => f.keyword)}
@@ -237,6 +253,9 @@ export default function App() {
             {tab === 'fusion' && (
               <FusionTab ctx={ctx} owned={owned} onOwnedChange={setOwned} run={run} pack={currentPack}
                 teamKeywords={focus.map((f) => f.keyword)} packsForGift={packsForGift} />
+            )}
+            {tab === 'events' && (
+              <EventsTab ctx={ctx} events={gameData.events ?? []} team={teamIdentities.length ? teamIdentities : ctx.members} pack={currentPack} />
             )}
             {tab === 'evaluate' && <EvaluateTab ctx={ctx} packsForGift={packsForGift} />}
             {tab === 'skills' && (

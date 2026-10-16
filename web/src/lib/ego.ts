@@ -191,7 +191,7 @@ export function egoCost(e: Ego): { cost: Partial<Record<Sin, number>>; estimated
   return { cost: e.sin ? { [e.sin]: Math.round(total * 0.75) } : { wrath: total }, estimated: true }
 }
 
-function egoValue(e: Ego, unitBest: number, boost: number): number {
+export function egoValue(e: Ego, unitBest: number, boost: number): number {
   const s = e.skill
   if (s && (s.base !== null || s.coin_power !== null)) {
     const { power, perCoin } = skillPower(s)
