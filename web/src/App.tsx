@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { EvaluateTab } from './components/EvaluateTab'
 import { EventsTab } from './components/EventsTab'
 import { Welcome } from './components/Welcome'
@@ -152,6 +152,11 @@ export default function App() {
     leaveHome('gifts')
   }
   const teamIdentities = useMemo(() => order.map((s) => equipped[s]).filter(Boolean), [order, equipped])
+  // The same context with other gifts owned (starting-gift picks try gifts one at a time).
+  const rebuildCtx = useCallback(
+    (ids: string[]) => makeContext(gameData, teamIdentities, ids, { deployed, tiers, run, loadout, swaps }),
+    [teamIdentities, deployed, tiers, run, loadout, swaps],
+  )
   const ctx = useMemo(
     () => makeContext(gameData, teamIdentities, owned, { deployed, tiers, run, loadout, swaps }),
     [teamIdentities, owned, deployed, tiers, run, loadout, swaps],
@@ -306,7 +311,7 @@ export default function App() {
           </section>}
 
           <div role="tabpanel">
-            {tab === 'gifts' && <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={own} />}
+            {tab === 'gifts' && <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={own} rebuild={rebuildCtx} />}
             {tab === 'gifts' && (
               <GiftList ranked={rankedGifts} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
                 teamKeywords={focus.map((f) => f.keyword)}

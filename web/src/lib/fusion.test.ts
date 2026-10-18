@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { makeContext, scoreGift } from './scoring'
+import { makeContext, rankGifts, rankThemePacks, scoreGift } from './scoring'
 import {
   fodder, forecast, fusionIdeas, fusionPoints, fusionTier, keywordChance, matchRecipe, pointsFor, randomPool, recipePlans,
 } from './fusion'
@@ -72,6 +72,16 @@ describe('fusion suggestions', () => {
     expect(why.some((t) => /units that use Ammo, and no one on your team does/.test(t))).toBe(true)
   })
 
+  it('fuses same-keyword ingredients into the stronger result (Enrapturing Trance for Rupture)', () => {
+    const rupture = gameData.identities.filter((i) => i.keywords.includes('Rupture')).slice(0, 7)
+    const f = gameData.fusions.find((x) => x.result === 'enrapturing-trance')!
+    const ctx = makeContext(gameData, rupture, f.ingredients)
+    const plan = recipePlans(ctx, f.ingredients).find((p) => p.result.id === f.result)!
+    expect(plan.ready).toBe(true)
+    expect(plan.worthIt).toBe(true)
+    expect(plan.covered.map((g) => g.id).sort()).toEqual([...f.ingredients].sort())
+  })
+
   it('lists recipes you have started, ready ones first', () => {
     const owned = [id('Dust to Dust'), id('Secret Cookbook'), id('Ashes to Ashes'), id('Sundered Memory')]
     const plans = recipePlans(makeContext(gameData, burners, owned), owned)
@@ -79,5 +89,29 @@ describe('fusion suggestions', () => {
     const lunar = plans.find((p) => p.result.id === 'lunar-memory')!
     expect(lunar.fusion.super_shop).toBe(true)
     expect(lunar.anyMissing).toBe(2)
+  })
+})
+
+describe('ingredients used up by a recipe you own', () => {
+  const heishou = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+    'heishou-pack-mao-branch-outis', 'heishou-pack-si-branch-rodion', 'heishou-pack-si-branch-gregor']
+    .map((i) => gameData.identities.find((x) => x.id === i)!)
+
+  it('drops Shadowlurking\'s ingredients from every list once you have Shadowlurking', () => {
+    const f = gameData.fusions.find((x) => x.result === 'shadowlurking')!
+    const ctx = makeContext(gameData, heishou, ['shadowlurking'])
+    for (const id of f.ingredients) {
+      expect(ctx.gone.get(id)).toBe('Shadowlurking')
+      expect(rankGifts(ctx).some((s) => s.gift.id === id)).toBe(false)
+      expect(scoreGift(g(gameData.gifts.find((x) => x.id === id)!.name), ctx).score).toBe(0)
+    }
+    expect(rankThemePacks(ctx).some((p) => p.top.some((s) => f.ingredients.includes(s.gift.id)))).toBe(false)
+    const kw = g(gameData.gifts.find((x) => x.id === f.ingredients[0])!.name)
+    expect(randomPool(ctx, kw.keyword!, kw.tier!, null).some((x) => f.ingredients.includes(x.id))).toBe(false)
+  })
+
+  it('keeps Lunar Memory\'s pieces available after you have it', () => {
+    const ctx = makeContext(gameData, heishou, ['lunar-memory'])
+    expect(ctx.gone.size).toBe(0)
   })
 })

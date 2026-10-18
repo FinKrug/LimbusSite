@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { howToGet } from './acquire'
+import { eventSources, howToGet, packEventOdds } from './acquire'
 import { gameData } from './data'
 import { packsByGift } from './scoring'
 
 const packs = packsByGift(gameData.themePacks)
 const byId = new Map(gameData.gifts.map((g) => [g.id, g]))
 const named = (n: string) => gameData.gifts.find((g) => g.name === n)!
-const lines = (n: string, owned: string[] = []) => howToGet(named(n), packs, byId, new Set(owned))
+const lines = (n: string, owned: string[] = []) => howToGet(named(n), packs, byId, new Set(owned), gameData.events, gameData.themePacks)
 
 describe('how to get a gift', () => {
   it('lists fusion ingredients and which you own', () => {
@@ -20,15 +20,34 @@ describe('how to get a gift', () => {
   it('names the theme pack an exclusive gift comes from, with floors', () => {
     const l = lines('Heishou Bolus - Mao')
     const pack = l.find((x) => x.kind === 'pack')!
-    expect(pack.text).toBe('Only from this theme pack')
+    expect(pack.text).toBe('Only in this theme pack')
     expect(pack.packs!.map((p) => p.name)).toEqual(['Nocturnal Sweeping BokGak'])
   })
 
   it('explains the general pool and featured packs', () => {
     const g = gameData.gifts.find((x) => x.pools.includes('main') && !x.fusion_recipe && (packs.get(x.id)?.length ?? 0) > 3)!
-    const l = howToGet(g, packs, byId, new Set())
+    const l = howToGet(g, packs, byId, new Set(), gameData.events, gameData.themePacks)
     expect(l.some((x) => x.kind === 'pool' && /any floor/.test(x.text))).toBe(true)
-    expect(l.find((x) => x.kind === 'pack')!.text).toMatch(/^Featured in \d+ theme packs$/)
+    expect(l.find((x) => x.kind === 'pack')!.text).toMatch(/^Boosted odds in \d+ theme packs$/)
+  })
+
+  it('says how to get a pack exclusive inside its pack: its own event, the choice, and how often', () => {
+    const chicken = gameData.themePacks.find((p) => p.name === "Hell's Chicken")!
+    expect(packEventOdds(chicken)).toMatch(/^75% of its "\?" event nodes/)
+    const src = eventSources(gameData.events!, gameData.themePacks)
+    const id = chicken.gifts.find((g) => (src.get(g) ?? []).some((s) => s.pack?.id === chicken.id))!
+    const line = howToGet(byId.get(id)!, packs, byId, new Set(), gameData.events, gameData.themePacks)
+      .find((l) => l.kind === 'pack' && l.packs?.[0].id === chicken.id)!
+    expect(line.details!.some((d) => /^Event ".+": pick "/.test(d))).toBe(true)
+    expect(line.details!.some((d) => /75%/.test(d))).toBe(true)
+    expect(line.details!.some((d) => /Battle rewards/.test(d))).toBe(true)
+  })
+
+  it('marks random "?" events as chance, with the choice to make', () => {
+    const l = lines('Wobbling Keg')
+    const ev = l.find((x) => x.kind === 'event' && x.text === 'Drunkard')!
+    expect(ev.odds).toBe('chance')
+    expect(ev.details![0]).toMatch(/^Pick "I don't know how to live without alcohol\.", then pass a Sloth\/Gluttony check/)
   })
 
   it('shows events and other notes from the wiki', () => {

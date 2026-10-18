@@ -552,6 +552,8 @@ def export_for_app(
             "floors": (info or {}).get("floors"),
             "gifts": exclusives,        # exclusive to this pack
             "gift_pool": pool_ids,      # everything it can give, exclusives included
+            "layout": (info or {}).get("layout"),          # {"nodes", "dungeon_nodes", "shop"} or None
+            "event_note": (info or {}).get("event_note"),  # how often its own events show up, or None
             "wiki_url": wiki_url(title) if title else None,
         }
 

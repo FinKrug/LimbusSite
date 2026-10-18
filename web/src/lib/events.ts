@@ -16,7 +16,7 @@
  * (`adv`), without one the higher (`disadv`). Some checks add a bonus for certain
  * identities. We pick the sinner on your team with the best odds.
  */
-import { scoreGift, type RunContext } from './scoring'
+import { isGone, scoreGift, type RunContext } from './scoring'
 import type { Identity, Sin } from './types'
 
 export interface EventOutcome {
@@ -58,6 +58,8 @@ export interface EventVariant {
 export interface GameEvent {
   id: string
   name: string
+  /** Theme pack id when this is a pack's own events page ("Hell's Chicken Theme Pack"). */
+  pack?: string
   gifts: string[]
   variants: EventVariant[]
   wiki_url: string
@@ -103,6 +105,10 @@ export function outcomeValue(o: EventOutcome | undefined, ctx: RunContext): Valu
     if (ctx.owned.has(id)) {
       value += W.duplicate
       why.push(`${g.name}: you already have it`)
+      continue
+    }
+    if (isGone(ctx, id)) {
+      why.push(`${g.name}: you can't get it any more (you have ${ctx.gone.get(id)})`)
       continue
     }
     const s = scoreGift(g, ctx)

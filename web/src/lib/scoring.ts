@@ -81,6 +81,9 @@ export const WEIGHTS = {
   /** A gift that applies a status your team doesn't use, when a gift you own already applies it,
    *  counts this share of `standalone` (more of the same supply adds little). */
   redundantSupply: 0.3,
+  /** A recipe ingredient the result covers (same keyword or its statuses) counts this share of its
+   *  value against fusing: the result does its job, better. */
+  recipeCovered: 0.25,
   /** Fit of a gift whose needs are met by gifts you own (not by your team). */
   comboFit: 0.75,
   /** Fit cap for a gift whose needs nothing on your team or in your gifts provides. */
@@ -332,6 +335,15 @@ export interface RunContext {
   battle: BattleProfile
   /** Strong E.G.O your team can't pay for yet, and the sins they need (egorec.ts). */
   egoNeeds: EgoNeed[]
+  /** Gifts you can't get any more this run -> the recipe result you own that used them up.
+   *  Once you have a recipe's result, its ingredients stop showing up (Heishou Bolus - Mao after
+   *  Shadowlurking). Not for Lunar Memory: its Memories and Sin Fragments keep dropping. */
+  gone: Map<string, string>
+}
+
+/** Can't be had any more this run (see RunContext.gone). */
+export function isGone(ctx: RunContext, id: string): boolean {
+  return ctx.gone?.has(id) ?? false
 }
 
 /** Does your team (not your gifts) put this status on enemies? */
@@ -389,6 +401,13 @@ export function makeContext(
 ): RunContext {
   const { combos: customCombos = [], deployed = DEFAULT_DEPLOYED, tiers = {}, run = DEFAULT_RUN, loadout = {}, swaps = {} } = opts
   const giftsById = new Map(data.gifts.map((g) => [g.id, g]))
+  const ownedForGone = new Set([...owned])
+  const gone = new Map<string, string>()
+  for (const f of data.fusions) {
+    if (!ownedForGone.has(f.result) || f.super_shop || mustHave(f.result)) continue
+    const name = giftsById.get(f.result)?.name ?? f.result
+    for (const i of f.ingredients) if (!ownedForGone.has(i) && !gone.has(i)) gone.set(i, name)
+  }
   const ownedList = [...owned].filter((id) => giftsById.has(id))
   const ownedSet = new Set(ownedList)
   const ownedCounts = new Map<string, number>()
@@ -451,6 +470,7 @@ export function makeContext(
     fusionsByIngredient, ownedKeywordCounts, signature: signatureStatuses(data.identities),
     giftSupply, unmetOwned, enablers, combos, combosByGift, lineup: team, deployed, members, tiers, battle,
     egoNeeds: egoNeeds(recommendEgos(members, data.egos ?? [], loadout, battle, data.gifts, ownedSet)),
+    gone,
   }
 }
 
@@ -1073,6 +1093,10 @@ export function upgradeValue(gift: Gift, ctx: RunContext, base: number): Upgrade
 /** Full value: intrinsic plus progress toward fusions it's an ingredient of. */
 export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'> {
   const s = intrinsicScore(gift, ctx)
+  // Used up by a recipe result you own: it won't show up again this run.
+  if (isGone(ctx, gift.id)) {
+    return { ...s, score: 0, reasons: [{ kind: 'bad', text: `You can't get it any more this run: you have ${ctx.gone.get(gift.id)}, which it fuses into` }, ...s.reasons] }
+  }
   let score = s.score
   const reasons = [...s.reasons]
   const parts = [...s.parts]
@@ -1109,6 +1133,11 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
         ? `Fuses into ${result.name} with ${rest.join(' and ')}, which suits your team better than this gift does`
         : `Can also fuse into ${result.name} (with ${rest.join(' and ')})`,
     })
+  }
+  // EX gifts only come from a rare event gamble: worth it if you get one, never something to plan on.
+  if ((gift.tier ?? 0) >= 6) {
+    const ev = gift.events?.[0]?.name
+    reasons.unshift({ kind: 'info', text: `Rare: only from ${ev ? `the ${ev} event` : 'a rare event'}, if you win its gamble. Great if it happens, but don't plan around it` })
   }
   // Pieces of a must-have (Lunar Memory): always worth taking, even off-team, more the closer you are.
   for (const f of mustHaveRecipes(gift, ctx)) {
@@ -1170,7 +1199,7 @@ function withRatings<T extends { score: number }>(items: T[]): (T & { rating: nu
 
 /** Every gift you don't own yet, best first. */
 export function rankGifts(ctx: RunContext): GiftScore[] {
-  const scored = ctx.data.gifts.filter((g) => !ctx.owned.has(g.id)).map((g) => scoreGift(g, ctx))
+  const scored = ctx.data.gifts.filter((g) => !ctx.owned.has(g.id) && !isGone(ctx, g.id)).map((g) => scoreGift(g, ctx))
   scored.sort((a, b) => b.score - a.score || a.gift.name.localeCompare(b.gift.name))
   return withRatings(scored)
 }
@@ -1270,12 +1299,19 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
   // How many packs (of all of them, not just those in view) can give each gift.
   const packCount = new Map<string, number>()
   for (const p of ctx.data.themePacks) for (const id of packPool(p)) packCount.set(id, (packCount.get(id) ?? 0) + 1)
+  // A gift's score doesn't depend on the pack: score each gift once, not once per pack.
+  const scoreCache = new Map<string, GiftScore>()
+  const scoreOf = (g: Gift): GiftScore => {
+    let s = scoreCache.get(g.id)
+    if (!s) scoreCache.set(g.id, s = { ...scoreGift(g, ctx), rating: 0 })
+    return s
+  }
   const raw = packs.map((pack) => {
     const gifts = packPool(pack).map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
     const ownedCount = gifts.filter((g) => ctx.owned.has(g.id)).length
     const scored = gifts
-      .filter((g) => !ctx.owned.has(g.id))
-      .map((g) => ({ ...scoreGift(g, ctx), rating: 0 }))
+      .filter((g) => !ctx.owned.has(g.id) && !isGone(ctx, g.id))
+      .map(scoreOf)
       .sort((a, b) => b.score - a.score)
     const rarity = (g: GiftScore) => packRarity(pack, g.gift.id, packCount).value
     const weight = (g: GiftScore) => g.score * rarity(g)
@@ -1371,6 +1407,31 @@ export interface FusionPlan {
 }
 
 /** Fusions you've started collecting, most complete first. Ignores ones whose result you own. */
+/**
+ * What fusing a recipe really costs you: the ingredients' value, except that an ingredient
+ * the result covers (same keyword, or every status it uses is also the result's) counts only
+ * `recipeCovered` of it: the result does that job, better. Enrapturing Trance is three Rupture
+ * gifts in one stronger gift, not three gifts lost.
+ */
+export function recipeGiveUp(result: Gift, ingredients: Gift[], ctx: RunContext): { value: number; covered: Gift[] } {
+  const covered: Gift[] = []
+  let value = 0
+  for (const g of ingredients) {
+    const v = isVestigeId(g.id) ? 0 : intrinsicScore(g, ctx).score
+    const sameKeyword = !!result.keyword && g.keyword === result.keyword
+    const statuses = g.status_effects.filter((x) => x !== g.keyword)
+    const subset = statuses.length > 0 && statuses.every((x) => result.status_effects.includes(x))
+    if (sameKeyword || subset) {
+      covered.push(g)
+      value += v * WEIGHTS.recipeCovered
+    } else {
+      value += v
+    }
+  }
+  return { value, covered }
+}
+const isVestigeId = (id: string) => /-vestige$/.test(id)
+
 export function planFusions(ctx: RunContext): FusionPlan[] {
   const plans: FusionPlan[] = []
   for (const fusion of ctx.data.fusions) {
@@ -1384,13 +1445,15 @@ export function planFusions(ctx: RunContext): FusionPlan[] {
     const status: FusionStatus = missing.length === 0 ? 'ready' : missing.length === 1 ? 'close' : 'started'
     const r = intrinsicScore(result, ctx)
     const resultScore = r.score
-    const allIngredientsScore = (ingredients as Gift[]).reduce((s, g) => s + intrinsicScore(g, ctx).score, 0)
-    const ingredientScore = owned.reduce((s, g) => s + intrinsicScore(g, ctx).score, 0)
-    const worthIt = resultScore >= allIngredientsScore * WEIGHTS.craftRatio
+    const all = recipeGiveUp(result, ingredients as Gift[], ctx)
+    const ingredientScore = recipeGiveUp(result, owned, ctx).value
+    const worthIt = resultScore >= all.value * WEIGHTS.craftRatio
     const reasons: Reason[] = [...r.reasons.slice(0, 2)]
     reasons.push(
       worthIt
-        ? { kind: 'good', text: `${result.name} is worth more to this team than its ingredients` }
+        ? { kind: 'good', text: all.covered.length
+          ? `${result.name} does what ${all.covered.map((g) => g.name).join(', ')} do${all.covered.length === 1 ? 'es' : ''}, better`
+          : `${result.name} is worth more to this team than its ingredients` }
         : { kind: 'bad', text: `The ingredients are worth more to this team than ${result.name}` },
     )
     plans.push({

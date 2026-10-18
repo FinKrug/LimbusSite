@@ -85,3 +85,19 @@ class TraitTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PackLayoutTests(unittest.TestCase):
+    PAGE = (
+        '<h2><span>Dungeon Layout</span></h2><p>The pack has a variable layout with 6 nodes total:</p>'
+        '<ul><li>4 randomly generated Dungeon nodes.</li><li>1 Shop node after the Dungeon nodes.</li>'
+        '<li>1 Boss node after the Shop node.</li></ul>'
+        '<h2><span>Dungeon Events</span></h2><p>All Abnormality Event nodes within the \'X\' Theme Pack have a '
+        '75% chance to generate as one of the following two Events.</p><h3>First</h3><p>...</p>'
+    )
+
+    def test_layout_and_event_note(self):
+        from scraper import packs
+        self.assertEqual(packs.parse_layout(self.PAGE), {"nodes": 6, "dungeon_nodes": 4, "shop": True})
+        self.assertIn("75% chance", packs.parse_event_note(self.PAGE))
+        self.assertIsNone(packs.parse_layout("<h2>Enemies</h2><p>none</p>"))

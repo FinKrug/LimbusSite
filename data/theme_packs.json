@@ -130,6 +130,12 @@
       "imposed-weight",
       "chief-butler-s-secret-arts"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/A_Certain_World_Theme_Pack"
   },
   {
@@ -205,6 +211,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Abnormal_Seismic_Zone_Theme_Pack"
   },
   {
@@ -286,7 +298,115 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Addicting_Lust_Theme_Pack"
+  },
+  {
+    "id": "an-anarchy-of-colors",
+    "name": "An Anarchy of Colors",
+    "pool": "themed",
+    "group": "Canto Themes",
+    "floors": {
+      "normal": null,
+      "hard": [
+        4,
+        10
+      ],
+      "extreme": null
+    },
+    "gifts": [
+      "straight-pin-of-the-king-of-needleworks",
+      "cartilage"
+    ],
+    "gift_pool": [
+      "hellterfly-s-dream",
+      "ashes-to-ashes",
+      "fiery-down",
+      "pinpoint-logic-circuit",
+      "glimpse-of-flames",
+      "dust-to-dust",
+      "charred-disk",
+      "burning-intellect",
+      "wound-clerid",
+      "grimy-iron-stake",
+      "white-gossypium",
+      "little-and-to-be-naughty-plushie",
+      "smokes-and-wires",
+      "rusted-cutting-knife",
+      "red-stained-gossypium",
+      "rusted-muzzle",
+      "green-spirit",
+      "melted-eyeball",
+      "nixie-divergence",
+      "oscillating-bracelet",
+      "downpour",
+      "reverberation",
+      "bell-of-truth",
+      "talisman-bundle",
+      "crown-of-roses",
+      "thunderbranch",
+      "standard-duty-battery",
+      "barbed-lasso",
+      "thrill",
+      "broken-revolver",
+      "fluorescent-lamp",
+      "red-order",
+      "thorny-path",
+      "melted-spring",
+      "midwinter-nightmare",
+      "skeletal-crumbs",
+      "artistic-sense",
+      "headless-portrait",
+      "broken-compass",
+      "cigarette-holder",
+      "stone-tomb",
+      "four-leaf-clover",
+      "pendant-of-nostalgia",
+      "nebulizer",
+      "clear-mirror-calm-water",
+      "endorphin-kit",
+      "ornamental-horseshoe",
+      "employee-card",
+      "portable-battery-socket",
+      "nightvision-goggles",
+      "curriculum-vitae",
+      "wrist-guards",
+      "lightning-rod",
+      "charge-type-gloves",
+      "material-interference-force-field",
+      "dreaming-electric-sheep",
+      "sticky-muck",
+      "gathering-skulls",
+      "today-s-expression",
+      "lowest-star",
+      "disk-fragment",
+      "special-contract",
+      "grand-welcome",
+      "first-aid-kit",
+      "painkiller",
+      "voracious-hammer",
+      "golden-urn",
+      "milepost-of-survival",
+      "faith",
+      "piece-of-relationship",
+      "lunar-memory",
+      "ancient-effigy",
+      "non-disclosure-agreement",
+      "straight-pin-of-the-king-of-needleworks",
+      "cartilage"
+    ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/An_Anarchy_of_Colors_Theme_Pack"
   },
   {
     "id": "automated-factory",
@@ -384,6 +504,12 @@
       "made-to-order",
       "haunted-shoes"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Automated_Factory_Theme_Pack"
   },
   {
@@ -522,6 +648,8 @@
       "the-spider-s-thread",
       "spiderweb-entangled-in-red"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_and_Artwork_Theme_Pack"
   },
   {
@@ -572,7 +700,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -729,6 +856,12 @@
       "prestige-card",
       "for-you-who-love-the-city"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Bridle_of_Infinity_Theme_Pack"
   },
   {
@@ -804,6 +937,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Burning_Haze_Theme_Pack"
   },
   {
@@ -941,6 +1080,8 @@
       "stolen-fixer-magazine",
       "spiderweb-entangled-in-red"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Charm,_Wander,_Doubt_Theme_Pack"
   },
   {
@@ -1040,7 +1181,115 @@
       "town-protecting-harpoon",
       "cetacean-heart"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Crawling_Abyss_Theme_Pack"
+  },
+  {
+    "id": "creed-of-preservation",
+    "name": "Creed of Preservation",
+    "pool": "themed",
+    "group": "Canto Themes",
+    "floors": {
+      "normal": null,
+      "hard": [
+        4,
+        10
+      ],
+      "extreme": null
+    },
+    "gifts": [
+      "maison-du-noir-slacks",
+      "le-noir-mary-janes"
+    ],
+    "gift_pool": [
+      "hellterfly-s-dream",
+      "ashes-to-ashes",
+      "fiery-down",
+      "pinpoint-logic-circuit",
+      "glimpse-of-flames",
+      "dust-to-dust",
+      "charred-disk",
+      "burning-intellect",
+      "wound-clerid",
+      "grimy-iron-stake",
+      "white-gossypium",
+      "little-and-to-be-naughty-plushie",
+      "smokes-and-wires",
+      "rusted-cutting-knife",
+      "red-stained-gossypium",
+      "rusted-muzzle",
+      "green-spirit",
+      "melted-eyeball",
+      "nixie-divergence",
+      "oscillating-bracelet",
+      "downpour",
+      "reverberation",
+      "bell-of-truth",
+      "talisman-bundle",
+      "crown-of-roses",
+      "thunderbranch",
+      "standard-duty-battery",
+      "barbed-lasso",
+      "thrill",
+      "broken-revolver",
+      "fluorescent-lamp",
+      "red-order",
+      "thorny-path",
+      "melted-spring",
+      "midwinter-nightmare",
+      "skeletal-crumbs",
+      "artistic-sense",
+      "headless-portrait",
+      "broken-compass",
+      "cigarette-holder",
+      "stone-tomb",
+      "four-leaf-clover",
+      "pendant-of-nostalgia",
+      "nebulizer",
+      "clear-mirror-calm-water",
+      "endorphin-kit",
+      "ornamental-horseshoe",
+      "employee-card",
+      "portable-battery-socket",
+      "nightvision-goggles",
+      "curriculum-vitae",
+      "wrist-guards",
+      "lightning-rod",
+      "charge-type-gloves",
+      "material-interference-force-field",
+      "dreaming-electric-sheep",
+      "sticky-muck",
+      "gathering-skulls",
+      "today-s-expression",
+      "lowest-star",
+      "disk-fragment",
+      "special-contract",
+      "grand-welcome",
+      "first-aid-kit",
+      "painkiller",
+      "voracious-hammer",
+      "golden-urn",
+      "milepost-of-survival",
+      "faith",
+      "piece-of-relationship",
+      "lunar-memory",
+      "ancient-effigy",
+      "non-disclosure-agreement",
+      "maison-du-noir-slacks",
+      "le-noir-mary-janes"
+    ],
+    "layout": {
+      "nodes": null,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Creed_of_Preservation_Theme_Pack"
   },
   {
     "id": "crushers-breakers",
@@ -1115,6 +1364,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Crushers_%26_Breakers_Theme_Pack"
   },
   {
@@ -1190,6 +1445,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Crushing_External_Force_Theme_Pack"
   },
   {
@@ -1265,6 +1526,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Deep_Sigh_Theme_Pack"
   },
   {
@@ -1350,6 +1617,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Degraded_Gloom_Theme_Pack"
   },
   {
@@ -1431,6 +1704,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devoured_Gluttony_Theme_Pack"
   },
   {
@@ -1506,6 +1785,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dizzying_Waves_Theme_Pack"
   },
   {
@@ -1641,6 +1926,12 @@
       "broken-violin",
       "manor-shaped-music-box"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dregs_of_the_Manor_Theme_Pack"
   },
   {
@@ -1722,6 +2013,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Craving_Theme_Pack"
   },
   {
@@ -1807,6 +2104,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Flood_Theme_Pack"
   },
   {
@@ -1890,6 +2193,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Indolence_Theme_Pack"
   },
   {
@@ -1976,6 +2285,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Judgment_Theme_Pack"
   },
   {
@@ -2059,6 +2374,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Repression_Theme_Pack"
   },
   {
@@ -2140,6 +2461,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Seduction_Theme_Pack"
   },
   {
@@ -2223,6 +2550,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Subservience_Theme_Pack"
   },
   {
@@ -2304,6 +2637,12 @@
       "prestige-card",
       "entangled-fate"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Excessive_Gluttony_Theme_Pack"
   },
   {
@@ -2402,6 +2741,12 @@
       "nagel-und-hammer-scriptures-md",
       "blood-red-mane-md"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Faith_%26_Erosion_Theme_Pack"
   },
   {
@@ -2499,6 +2844,12 @@
       "spicebush-branch",
       "kaleidoscope"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Falling_Flowers_Theme_Pack"
   },
   {
@@ -2592,6 +2943,12 @@
       "homeward",
       "tomorrow-s-fortune"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Flat-broke_Gamblers_Theme_Pack"
   },
   {
@@ -2724,6 +3081,12 @@
       "lightning-axe-md",
       "tenacity-bolus-md"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Four_Houses_and_Greed_Theme_Pack"
   },
   {
@@ -2831,6 +3194,12 @@
       "gear-shrapnel",
       "cqc-manual"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": null,
+      "shop": null
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stopped_by_a_Bullet_Theme_Pack"
   },
   {
@@ -2940,6 +3309,12 @@
       "trauma-shield",
       "value-disposal"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hatred_and_Despair_Theme_Pack"
   },
   {
@@ -3044,6 +3419,12 @@
       "tango-marinade-md",
       "sharp-needle-thread-md"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": "All Abnormality Event nodes within the 'Hell's Chicken' Theme Pack have a 75% chance to generate as one of the following two Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hell's_Chicken_Theme_Pack"
   },
   {
@@ -3127,6 +3508,12 @@
       "prestige-card",
       "entangled-fate"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Inert_Sloth_Theme_Pack"
   },
   {
@@ -3213,6 +3600,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Insignificant_Envy_Theme_Pack"
   },
   {
@@ -3245,7 +3638,6 @@
       "tangled-bundle",
       "millarca",
       "ruptured-blood-sac",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "venomous-skin",
       "clockwork-spring",
@@ -3278,12 +3670,19 @@
       "renewed-merch",
       "trial-plan-guide",
       "prestige-card",
+      "wb-flask",
       "la-manchaland-all-day-pass-md",
       "token-of-victory-md",
       "mask-of-the-parade-md",
       "a-drop",
       "devouring-cube-md"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/La_Manchaland_Re-opening_Theme_Pack"
   },
   {
@@ -3378,6 +3777,12 @@
       "ancient-effigy",
       "non-disclosure-agreement"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lake_World_Theme_Pack"
   },
   {
@@ -3446,6 +3851,12 @@
       "regular-operational-gear",
       "operation-authorization-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": "All Abnormality Event nodes within the 'LCB Regular Check-up' Theme Pack have a 75% chance to generate one of the following Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Regular_Check-up_Theme_Pack"
   },
   {
@@ -3511,6 +3922,12 @@
       "regular-operational-gear",
       "operation-authorization-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": "All Abnormality Event nodes within the 'LCB Regular Check-up' Theme Pack have a 75% chance to generate one of the following Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Regular_Check-up_BokGak_Theme_Pack"
   },
   {
@@ -3550,6 +3967,8 @@
       "snake-slough",
       "false-halo"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_1_Theme_Pack"
   },
   {
@@ -3589,6 +4008,8 @@
       "metronome",
       "bridle"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_2_Theme_Pack"
   },
   {
@@ -3631,6 +4052,8 @@
       "unhatched-embers",
       "contempt-of-the-gaze-of-contempt"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_3_Theme_Pack"
   },
   {
@@ -3647,6 +4070,8 @@
       "anti-ovine-grounding-plug",
       "vestiges-of-the-king"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_4:_Masquerade"
   },
   {
@@ -3689,6 +4114,8 @@
       "anti-ovine-grounding-plug",
       "vestiges-of-the-king"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_4_-_Section_3_Theme_Pack"
   },
   {
@@ -3731,6 +4158,8 @@
       "anti-ovine-grounding-plug",
       "vestiges-of-the-king"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_4_-_Section_4_Theme_Pack"
   },
   {
@@ -3775,6 +4204,8 @@
       "sorrowful-exhale",
       "shatterbound-cannon"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_5_Theme_Pack"
   },
   {
@@ -3876,6 +4307,12 @@
       "huge-gift-sack",
       "sad-plushie"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Miracle_in_District_20_Theme_Pack"
   },
   {
@@ -3979,6 +4416,8 @@
       "packaging-box",
       "packaging-ribbon"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Miracle_in_District_20_BokGak_Theme_Pack"
   },
   {
@@ -4086,6 +4525,12 @@
       "unadorned-sword-guard",
       "baekja-water-dropper"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": "Each Abnormality Event node within the 'Mnestic Experience' Theme Pack is has a 75% chance to be one of the following events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Mnestic_Experience_Theme_Pack"
   },
   {
@@ -4119,7 +4564,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "perversion",
@@ -4163,6 +4607,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Mountain_of_Corpses,_Sea_of_Blood_Theme_Pack"
   },
   {
@@ -4274,6 +4724,12 @@
       "economy-class-discount-voucher",
       "canned-ice-cream"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": "All Abnormality Event nodes within the 'Murder on the WARP Express' Theme Pack have a 75% chance to generate one of the following five Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Murder_on_the_WARP_Express_Theme_Pack"
   },
   {
@@ -4312,7 +4768,6 @@
       "rusted-cutting-knife",
       "red-stained-gossypium",
       "rusted-muzzle",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "green-spirit",
       "melted-eyeball",
@@ -4385,6 +4840,12 @@
       "economy-class-discount-voucher",
       "canned-ice-cream"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": "All Abnormality Event nodes within the 'Murder on the WARP Express' Theme Pack have a 75% chance to generate one of the following Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Murder_on_the_WARP_Express_BokGak_Theme_Pack"
   },
   {
@@ -4478,6 +4939,12 @@
       "homeward",
       "tomorrow-s-fortune"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nagel_und_Hammer_Theme_Pack"
   },
   {
@@ -4570,6 +5037,12 @@
       "piece-of-relationship",
       "lunar-memory"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nest,_Workshop,_and_Technology_Theme_Pack"
   },
   {
@@ -4623,6 +5096,12 @@
       "chains-of-loyalty",
       "swishing-fuel-tank"
     ],
+    "layout": {
+      "nodes": 5,
+      "dungeon_nodes": 3,
+      "shop": true
+    },
+    "event_note": "Each Abnormality Event node within the 'Nocturnal Sweeping' Theme Pack is guaranteed to be one of the following 4 Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nocturnal_Sweeping_Theme_Pack"
   },
   {
@@ -4670,6 +5149,12 @@
       "chains-of-loyalty",
       "swishing-fuel-tank"
     ],
+    "layout": {
+      "nodes": 5,
+      "dungeon_nodes": 3,
+      "shop": true
+    },
+    "event_note": "Each Abnormality Event node within the 'Nocturnal Sweeping' Theme Pack is guaranteed to be one of the following Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nocturnal_Sweeping_BokGak_Theme_Pack"
   },
   {
@@ -4744,6 +5229,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Piercers_%26_Penetrators_Theme_Pack"
   },
   {
@@ -4830,6 +5321,12 @@
       "prestige-card",
       "entangled-fate"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Pitiful_Envy_Theme_Pack"
   },
   {
@@ -4905,7 +5402,115 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Poised_Breathing_Theme_Pack"
+  },
+  {
+    "id": "readvent-of-gluttony",
+    "name": "Readvent of Gluttony",
+    "pool": "themed",
+    "group": "Canto Themes",
+    "floors": {
+      "normal": null,
+      "hard": [
+        4,
+        10
+      ],
+      "extreme": null
+    },
+    "gifts": [
+      "out-of-style-rouge-clothing",
+      "soda-pop"
+    ],
+    "gift_pool": [
+      "hellterfly-s-dream",
+      "ashes-to-ashes",
+      "fiery-down",
+      "pinpoint-logic-circuit",
+      "glimpse-of-flames",
+      "dust-to-dust",
+      "charred-disk",
+      "burning-intellect",
+      "wound-clerid",
+      "grimy-iron-stake",
+      "white-gossypium",
+      "little-and-to-be-naughty-plushie",
+      "smokes-and-wires",
+      "rusted-cutting-knife",
+      "red-stained-gossypium",
+      "rusted-muzzle",
+      "green-spirit",
+      "melted-eyeball",
+      "nixie-divergence",
+      "oscillating-bracelet",
+      "downpour",
+      "reverberation",
+      "bell-of-truth",
+      "talisman-bundle",
+      "crown-of-roses",
+      "thunderbranch",
+      "standard-duty-battery",
+      "barbed-lasso",
+      "thrill",
+      "broken-revolver",
+      "fluorescent-lamp",
+      "red-order",
+      "thorny-path",
+      "melted-spring",
+      "midwinter-nightmare",
+      "skeletal-crumbs",
+      "artistic-sense",
+      "headless-portrait",
+      "broken-compass",
+      "cigarette-holder",
+      "stone-tomb",
+      "four-leaf-clover",
+      "pendant-of-nostalgia",
+      "nebulizer",
+      "clear-mirror-calm-water",
+      "endorphin-kit",
+      "ornamental-horseshoe",
+      "employee-card",
+      "portable-battery-socket",
+      "nightvision-goggles",
+      "curriculum-vitae",
+      "wrist-guards",
+      "lightning-rod",
+      "charge-type-gloves",
+      "material-interference-force-field",
+      "dreaming-electric-sheep",
+      "sticky-muck",
+      "gathering-skulls",
+      "today-s-expression",
+      "lowest-star",
+      "disk-fragment",
+      "special-contract",
+      "grand-welcome",
+      "first-aid-kit",
+      "painkiller",
+      "voracious-hammer",
+      "golden-urn",
+      "milepost-of-survival",
+      "faith",
+      "piece-of-relationship",
+      "lunar-memory",
+      "ancient-effigy",
+      "non-disclosure-agreement",
+      "out-of-style-rouge-clothing",
+      "soda-pop"
+    ],
+    "layout": {
+      "nodes": null,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Readvent_of_Gluttony_Theme_Pack"
   },
   {
     "id": "repressed-wrath",
@@ -4988,6 +5593,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Repressed_Wrath_Theme_Pack"
   },
   {
@@ -5063,6 +5674,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rising_Power_Supply_Theme_Pack"
   },
   {
@@ -5162,6 +5779,12 @@
       "trash-crab-brain-wine",
       "twinkling-scrap"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/S.E.A._Theme_Pack"
   },
   {
@@ -5242,6 +5865,12 @@
       "searing-brass",
       "wing-shaped-waxen-candle"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Season_of_the_Flame_Theme_Pack"
   },
   {
@@ -5322,6 +5951,12 @@
       "prestige-card",
       "raincloud"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Sinking_Deluge_Theme_Pack"
   },
   {
@@ -5399,6 +6034,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Sinking_Pang_Theme_Pack"
   },
   {
@@ -5473,6 +6114,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Slicers_%26_Dicers_Theme_Pack"
   },
   {
@@ -5582,7 +6229,118 @@
       "red-cloth-that-closes-the-heart",
       "shaoxing-wine"
     ],
+    "layout": {
+      "nodes": null,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": "The two Dungeon Event nodes within this Theme Pack is guaranteed to be chosen from the following Dungeon Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Spring_Cultivation_Theme_Pack"
+  },
+  {
+    "id": "storefront-campout",
+    "name": "Storefront Campout",
+    "pool": "themed",
+    "group": "Canto Themes",
+    "floors": {
+      "normal": [
+        3,
+        4
+      ],
+      "hard": [
+        3,
+        4
+      ],
+      "extreme": null
+    },
+    "gifts": [
+      "blanket",
+      "blossom-scissors"
+    ],
+    "gift_pool": [
+      "hellterfly-s-dream",
+      "ashes-to-ashes",
+      "fiery-down",
+      "pinpoint-logic-circuit",
+      "glimpse-of-flames",
+      "dust-to-dust",
+      "charred-disk",
+      "burning-intellect",
+      "wound-clerid",
+      "grimy-iron-stake",
+      "white-gossypium",
+      "little-and-to-be-naughty-plushie",
+      "smokes-and-wires",
+      "rusted-cutting-knife",
+      "red-stained-gossypium",
+      "rusted-muzzle",
+      "green-spirit",
+      "melted-eyeball",
+      "nixie-divergence",
+      "oscillating-bracelet",
+      "downpour",
+      "reverberation",
+      "bell-of-truth",
+      "talisman-bundle",
+      "crown-of-roses",
+      "thunderbranch",
+      "standard-duty-battery",
+      "barbed-lasso",
+      "thrill",
+      "broken-revolver",
+      "fluorescent-lamp",
+      "red-order",
+      "thorny-path",
+      "melted-spring",
+      "midwinter-nightmare",
+      "skeletal-crumbs",
+      "artistic-sense",
+      "headless-portrait",
+      "broken-compass",
+      "cigarette-holder",
+      "stone-tomb",
+      "four-leaf-clover",
+      "pendant-of-nostalgia",
+      "nebulizer",
+      "clear-mirror-calm-water",
+      "endorphin-kit",
+      "ornamental-horseshoe",
+      "employee-card",
+      "portable-battery-socket",
+      "nightvision-goggles",
+      "curriculum-vitae",
+      "wrist-guards",
+      "lightning-rod",
+      "charge-type-gloves",
+      "material-interference-force-field",
+      "dreaming-electric-sheep",
+      "sticky-muck",
+      "gathering-skulls",
+      "today-s-expression",
+      "lowest-star",
+      "disk-fragment",
+      "special-contract",
+      "grand-welcome",
+      "first-aid-kit",
+      "painkiller",
+      "voracious-hammer",
+      "golden-urn",
+      "milepost-of-survival",
+      "faith",
+      "piece-of-relationship",
+      "lunar-memory",
+      "ancient-effigy",
+      "non-disclosure-agreement",
+      "blanket",
+      "blossom-scissors"
+    ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Storefront_Campout_Theme_Pack"
   },
   {
     "id": "sunk-gloom",
@@ -5669,6 +6427,12 @@
       "raincloud",
       "entangled-fate"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Sunk_Gloom_Theme_Pack"
   },
   {
@@ -5750,6 +6514,12 @@
       "prestige-card",
       "entangled-fate"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tangling_Lust_Theme_Pack"
   },
   {
@@ -5842,6 +6612,12 @@
       "piece-of-relationship",
       "lunar-memory"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tearful_Things_Theme_Pack"
   },
   {
@@ -5978,6 +6754,8 @@
       "tributary-cigar",
       "spiderweb-entangled-in-red"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Textbook_Theme_Pack"
   },
   {
@@ -6028,7 +6806,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -6185,6 +6962,8 @@
       "prestige-card",
       "bongy-plush"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_B.E._Theme_Pack"
   },
   {
@@ -6217,7 +6996,6 @@
       "tangled-bundle",
       "millarca",
       "ruptured-blood-sac",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "venomous-skin",
       "clockwork-spring",
@@ -6250,12 +7028,19 @@
       "renewed-merch",
       "trial-plan-guide",
       "prestige-card",
+      "wb-flask",
       "la-manchaland-all-day-pass-md",
       "token-of-victory-md",
       "mask-of-the-parade-md",
       "a-drop",
       "devouring-cube-md"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Dream_Ending_Theme_Pack"
   },
   {
@@ -6365,6 +7150,12 @@
       "staticky-two-way-radio",
       "still-warm-coffee"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": null,
+      "shop": null
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Dusk_of_Amber_Theme_Pack"
   },
   {
@@ -6459,6 +7250,12 @@
       "non-disclosure-agreement",
       "harpoon-prosthetic-leg"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Evil_Defining_Theme_Pack"
   },
   {
@@ -6552,6 +7349,12 @@
       "homeward",
       "tomorrow-s-fortune"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Forgotten_Theme_Pack"
   },
   {
@@ -6581,7 +7384,6 @@
       "tangled-bundle",
       "millarca",
       "ruptured-blood-sac",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "venomous-skin",
       "clockwork-spring",
@@ -6617,6 +7419,12 @@
       "refraction-glass-pod",
       "butler-style-binding-arts"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Heartbreaking_Theme_Pack"
   },
   {
@@ -6649,7 +7457,6 @@
       "tangled-bundle",
       "millarca",
       "ruptured-blood-sac",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "venomous-skin",
       "clockwork-spring",
@@ -6682,12 +7489,19 @@
       "renewed-merch",
       "trial-plan-guide",
       "prestige-card",
+      "wb-flask",
       "la-manchaland-all-day-pass-md",
       "token-of-victory-md",
       "mask-of-the-parade-md",
       "a-drop",
       "devouring-cube-md"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Infinite_Procession_Theme_Pack"
   },
   {
@@ -6797,6 +7611,12 @@
       "hardship",
       "crown-of-thorns"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Noon_of_Violet_Theme_Pack"
   },
   {
@@ -6895,6 +7715,12 @@
       "contained-maggots",
       "ebony-brooch-md"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Outcast_Theme_Pack"
   },
   {
@@ -7027,6 +7853,12 @@
       "flower-in-the-mirror-md",
       "moon-in-the-water-md"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Surrendered_Witnessing_Theme_Pack"
   },
   {
@@ -7119,6 +7951,12 @@
       "lunar-memory",
       "broken-glasses"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Unchanging_Theme_Pack"
   },
   {
@@ -7215,6 +8053,12 @@
       "tomorrow-s-fortune",
       "squalidity"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Unconfronting_Theme_Pack"
   },
   {
@@ -7311,6 +8155,12 @@
       "tomorrow-s-fortune",
       "frozen-cries"
     ],
+    "layout": {
+      "nodes": 5,
+      "dungeon_nodes": 3,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Unloving_Theme_Pack"
   },
   {
@@ -7447,6 +8297,8 @@
       "omni-tool",
       "spiderweb-entangled-in-red"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Unsevering_Theme_Pack"
   },
   {
@@ -7522,6 +8374,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Thunder_and_Lightning_Theme_Pack"
   },
   {
@@ -7631,6 +8489,12 @@
       "warning-notice",
       "prepaid-time-receipt"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": "All Abnormality Event nodes within the 'Timekilling Time' Theme Pack have a 75% chance to generate as one of the following five Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Timekilling_Time_Theme_Pack"
   },
   {
@@ -7738,6 +8602,12 @@
       "prepaid-time-receipt",
       "emergency-investigator-badge"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Timekilling_Time_BokGak_Theme_Pack"
   },
   {
@@ -7812,6 +8682,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/To_be_Cleaved_Theme_Pack"
   },
   {
@@ -7887,6 +8763,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/To_be_Crushed_Theme_Pack"
   },
   {
@@ -7961,6 +8843,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/To_be_Pierced_Theme_Pack"
   },
   {
@@ -8044,6 +8932,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Treadwheel_Sloth_Theme_Pack"
   },
   {
@@ -8077,7 +8971,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "perversion",
@@ -8121,6 +9014,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Trickled_Sanguine_Blood_Theme_Pack"
   },
   {
@@ -8228,6 +9127,12 @@
       "unoccupied-birdcage",
       "universal-instinct"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": "Each Abnormality Event node within the 'Twining Threads' Theme Pack is has a 75% chance to be one of the following events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Twining_Threads_Theme_Pack"
   },
   {
@@ -8311,6 +9216,12 @@
       "prestige-card",
       "entangled-fate"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tyrannical_Pride_Theme_Pack"
   },
   {
@@ -8398,6 +9309,12 @@
       "wing-shaped-waxen-candle",
       "entangled-fate"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Unbound_Wrath_Theme_Pack"
   },
   {
@@ -8473,6 +9390,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 7,
+      "dungeon_nodes": 5,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Unrelenting_Might_Theme_Pack"
   },
   {
@@ -8559,6 +9482,12 @@
       "prestige-card",
       "for-you-who-love-the-city"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Vain_Pride_Theme_Pack"
   },
   {
@@ -8668,6 +9597,12 @@
       "old-dopo-robe-md",
       "black-ledger"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": "All Abnormality Event nodes within the 'Yield My Flesh to Claim Their Bones' Theme Pack have a 75% chance to generate as one of the following five Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Yield_My_Flesh_to_Claim_Their_Bones_Theme_Pack"
   },
   {
@@ -8773,6 +9708,12 @@
       "black-ledger",
       "hardwood-liquor-cup"
     ],
+    "layout": {
+      "nodes": 6,
+      "dungeon_nodes": 4,
+      "shop": true
+    },
+    "event_note": "All Abnormality Event nodes within the 'Yield My Flesh to Claim Their Bones' Theme Pack have a 75% chance to generate as one of the following five Events.",
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Yield_My_Flesh_to_Claim_Their_Bones_BokGak_Theme_Pack"
   },
   {
@@ -8974,6 +9915,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/A_Beautiful_Voice_Theme_Pack"
   },
   {
@@ -9024,7 +9971,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -9181,6 +10127,12 @@
       "prestige-card",
       "kkomi-s-mini-gift"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/A_Midspring_Night's_Dream_2_Theme_Pack"
   },
   {
@@ -9197,6 +10149,8 @@
       "record-logs-of-that-day",
       "potentialities"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": null
   },
   {
@@ -9247,7 +10201,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -9404,6 +10357,12 @@
       "prestige-card",
       "burning-fate"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Bearers_of_Weight_Theme_Pack"
   },
   {
@@ -9454,7 +10413,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -9609,8 +10567,15 @@
       "renewed-merch",
       "trial-plan-guide",
       "prestige-card",
+      "wb-flask",
       "carousel-figurine"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blessed_Carnival_Theme_Pack"
   },
   {
@@ -9661,7 +10626,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -9818,6 +10782,12 @@
       "prestige-card",
       "clappity-clap"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Bloodtinged_Ichthyic_Odor_Theme_Pack"
   },
   {
@@ -9868,7 +10838,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -10025,6 +10994,12 @@
       "prestige-card",
       "for-the-capo"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Chachihu_Theme_Pack"
   },
   {
@@ -10075,7 +11050,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -10232,6 +11206,12 @@
       "prestige-card",
       "mid-range-k-corp-ampule"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Code_Purple_Theme_Pack"
   },
   {
@@ -10282,7 +11262,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -10439,6 +11418,12 @@
       "prestige-card",
       "rules-of-the-middle"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Complete_%26_Total_Extermination_Theme_Pack"
   },
   {
@@ -10487,7 +11472,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -10643,6 +11627,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Efflorescing_Greenery_Theme_Pack"
   },
   {
@@ -10693,7 +11683,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -10850,6 +11839,12 @@
       "prestige-card",
       "another-round"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Fairy_Tale_Theme_Pack"
   },
   {
@@ -10898,7 +11893,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -11054,6 +12048,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Impenetrable_Path_Theme_Pack"
   },
   {
@@ -11255,6 +12255,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Into_a_Certain_Library's_Book_Theme_Pack"
   },
   {
@@ -11305,7 +12311,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -11462,6 +12467,12 @@
       "prestige-card",
       "nail-and-hammer"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_1_:_MADNESS_Theme_Pack"
   },
   {
@@ -11510,7 +12521,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -11666,6 +12676,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_3_-_Terminus_Theme_Pack"
   },
   {
@@ -11714,7 +12730,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -11870,6 +12885,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._New_League_of_Nine_Litt%C3%A9rateurs_Theme_Pack"
   },
   {
@@ -11918,7 +12939,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -12074,6 +13094,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/S.E.A._C.R_Theme_Pack"
   },
   {
@@ -12090,6 +13116,8 @@
       "tarnished-gauntlet",
       "golden-hour"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": null
   },
   {
@@ -12291,6 +13319,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Dawn_of_Green_Theme_Pack"
   },
   {
@@ -12341,7 +13375,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -12496,8 +13529,15 @@
       "renewed-merch",
       "trial-plan-guide",
       "prestige-card",
+      "wb-flask",
       "the-family-s-resentment"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Master_of_La_Manchaland_Theme_Pack"
   },
   {
@@ -12546,7 +13586,6 @@
       "millarca",
       "ruptured-blood-sac",
       "layered-bandages",
-      "wb-flask",
       "sanguine-fragrance-descends",
       "blood-sweat-and-tears",
       "green-spirit",
@@ -12702,6 +13741,12 @@
       "trial-plan-guide",
       "prestige-card"
     ],
+    "layout": {
+      "nodes": 4,
+      "dungeon_nodes": null,
+      "shop": true
+    },
+    "event_note": null,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Who_Couldn't_Be_Bloodfiends_Theme_Pack"
   },
   {
@@ -12718,6 +13763,8 @@
       "baleful-hwando",
       "one-with-the-blade"
     ],
+    "layout": null,
+    "event_note": null,
     "wiki_url": null
   }
 ]

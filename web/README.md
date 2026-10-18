@@ -62,6 +62,7 @@ src/
     egorec.ts        Suggested E.G.O per deployed sinner and grade (Team tab)
     events.ts        Events tab: value each choice of a Mirror Dungeon event for your team
     musthave.ts      must-have gifts (Lunar Memory) and building toward them
+    startgifts.ts    gifts to buy before the run starts
   data/
     combos.json          hand-picked gift combos ("Gift sets to build")
     must_have.json       gifts to always build toward (Lunar Memory)
@@ -146,6 +147,29 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
 - **Ally deaths:** effects that pay off when your own units die (Spiderweb Entangled in Red,
   Value Disposal, Devouring Cube, The Unchosen) count ×(1 − 0.7 × the share of the text that's
   about it), unless your team has the identity the gift is built around.
+- **Used-up ingredients** (`ctx.gone`, `isGone` in scoring.ts): once you own a recipe's result,
+  its ingredients stop showing up for the rest of the run (Heishou Bolus - Mao, Harestride and
+  Shadow Bamboo Hat after Shadowlurking), so they drop out of Best gifts, Your plan ("Gone"),
+  theme pack cards, random fusion pools, event choices and the pre-run picks. Lunar Memory
+  (a Super Shop recipe) is the exception: its Memories and Sin Fragments keep dropping.
+- **How to get** (`src/lib/acquire.ts`, on gift cards): for each theme pack that has the gift,
+  how to get it there: the pack's own events that give it (which choice, the check and its
+  numbers, or a fight to win), how often its "?" nodes are its own events (from the pack page:
+  "75% of …" / "always"), and battle rewards plus the shop before the boss for its exclusives.
+  Then random "?" events on any floor (marked Chance, with the choice to pick), the general pool,
+  packs with boosted odds, and fusion recipes. Event sources come from `data/events.json`, which
+  now also includes every theme pack page's "Dungeon Events" (`pack` on those events);
+  `theme_packs.json` has each pack's `layout` (nodes, shop) and `event_note`.
+- **Before the run** (Best gifts, while Your run has no floor; `src/lib/startgifts.ts`): the gifts to
+  buy at the start, in order (`START_RULES`: up to 3, Tier I–III; change it there if the game
+  does). Value = score × 0.5 + score × find (0.25 for main-pool gifts, else min(1, 3 ÷ packs in
+  this difficulty that give it)) + 0.8 × score × its share of a pack's fitting exclusives when
+  that share is ≥ 0.6 ("Lets you skip <pack>"). Picks are greedy: each next pick is scored as
+  if you owned the earlier ones, so recipe pieces pull each other in. It also says what the picks
+  do together (complete a recipe, cover everything a pack has for you). Got it marks one bought.
+- **EX gifts** (Wealth, A Certain Philosophy) only come from a rare event gamble: Your plan
+  marks them "?" (luck) and never lists them under Get now, and their reasons say not to plan
+  around them.
 - **Owned status sources:** when a gift you own already applies a status your team doesn't use
   (Broken Compass spreads Sinking, Downpour applies Tremor), gifts that need that status get
   "Works with X, which you have", while other gifts that only apply it drop to 0.3× their
@@ -153,7 +177,11 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   have N <keyword> gifts" bonus only counts for keywords your team itself uses. A team that
   uses the keyword still values more appliers normally (more stacks is the point).
 - **Fusions:** an ingredient gets extra value when you already hold other parts of its
-  recipe.
+  recipe. Whether a recipe is worth fusing (`recipeGiveUp` in scoring.ts) compares the result
+  with what you give up, but an ingredient the result covers (same keyword, or all its statuses
+  are the result's) counts only 0.25× of its value: the result does its job, better. So
+  Enrapturing Trance beats keeping Talisman Bundle + Standard-duty Battery + Thorny Rope Cuffs
+  for a Rupture team, while off-keyword ingredients still count in full.
 - **Fusion tab** (`src/lib/fusion.ts`), following the wiki's rules: pick a keyword, put 2-3
   gifts in (5 in a Super Shop, Hard floors only), and it forecasts the tier (points: I 3, II 6,
   III 10, IV 15, V 30; ≥25 is Tier IV, ≥22 in a Super Shop) and the keyword chance (60/90/99%

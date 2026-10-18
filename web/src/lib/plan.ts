@@ -10,12 +10,12 @@
  *  - fusion results: only by fusing; Super Shop recipes (Lunar Memory) only on Hard floors.
  */
 import {
-  intrinsicScore, packOnFloor, WEIGHTS, type GiftScore, type Reason, type RunContext,
+  intrinsicScore, isGone, packOnFloor, recipeGiveUp, WEIGHTS, type GiftScore, type Reason, type RunContext,
 } from './scoring'
 import type { Combo, Fusion, Gift, ThemePack } from './types'
 import { mustHave } from './musthave'
 
-export type Where = 'now' | 'later' | 'fuse' | 'no'
+export type Where = 'now' | 'later' | 'fuse' | 'luck' | 'no'
 
 export interface Availability {
   where: Where
@@ -33,6 +33,13 @@ function isRecipeResult(id: string, fusions: Fusion[]): boolean {
 }
 
 export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>): Availability {
+  if (isGone(ctx, g.id)) return { where: 'no', text: `Gone: you have ${ctx.gone.get(g.id)}, which it fuses into` }
+  // EX gifts (Wealth, A Certain Philosophy) don't show up in shops or rewards: only a rare
+  // event gamble gives them, so plans never count on them.
+  if ((g.tier ?? 0) >= 6) {
+    const ev = g.events?.[0]?.name
+    return { where: 'luck', text: ev ? `Rare: only from the ${ev} event, if you win it` : 'Rare EX gift: not in shops or rewards' }
+  }
   if (g.fusion_recipe || isRecipeResult(g.id, ctx.data.fusions)) {
     const f = ctx.data.fusions.find((x) => x.result === g.id)
     return { where: 'fuse', text: f?.super_shop ? 'Fusion only (Super Shop, Hard)' : 'Fusion only' }
@@ -134,7 +141,7 @@ export function fusionTargets(ctx: RunContext, packsForGift: Map<string, ThemePa
     const have = done(pieces) + (anyOf?.have ?? 0)
     const r = intrinsicScore(result, ctx)
     const must = mustHave(fusion.result)
-    const used = (gifts as Gift[]).reduce((s, g) => s + intrinsicScore(g, ctx).score, 0)
+    const used = recipeGiveUp(result, gifts as Gift[], ctx).value
       + (anyOf ? anyOf.count * Math.min(...anyPieces.map((p) => intrinsicScore(p.gift, ctx).score)) : 0)
     if (!must && r.score < used * WEIGHTS.craftRatio) continue
     const unreachable = [...pieces.filter((p) => !p.have), ...(anyOf && anyOf.have < anyOf.count ? anyPieces.filter((p) => !p.have) : [])]

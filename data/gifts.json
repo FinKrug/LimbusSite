@@ -2516,6 +2516,42 @@
     "icon": "Blackiron Barding Gift.png"
   },
   {
+    "id": "blanket",
+    "name": "Blanket",
+    "sin": "sloth",
+    "tier": 2,
+    "cost": 199,
+    "keyword": "Charge",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Charge Identity",
+      "Offense Level Up",
+      "Power Up"
+    ],
+    "traits": [
+      "Sisyphe"
+    ],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "team_gate": false,
+    "effect": "Identities that equipped Defense Skills this turn take -20% damage from enemy attacks\n- Combat End: If the affected Identity is a Charge Identity, gain 2 Offense Level Up next turn\n- Combat End: If the affected Identity is a \"Sisyphe\" Identity, gain 1 Power Up next turn",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "storefront-campout"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Blanket",
+    "icon": "Blanket Gift.png"
+  },
+  {
     "id": "blood-sweat-and-tears",
     "name": "Blood, Sweat, and Tears",
     "sin": "sloth",
@@ -2633,6 +2669,45 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Bloodflame%20Sword",
     "icon": "Bloodflame Sword Gift.png"
+  },
+  {
+    "id": "blossom-scissors",
+    "name": "Blossom Scissors",
+    "sin": "envy",
+    "tier": 2,
+    "cost": 204,
+    "keyword": "Charge",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Charge Identity"
+    ],
+    "traits": [
+      "Sisyphe"
+    ],
+    "needs": [],
+    "applies": [],
+    "attack_types": [
+      "Slash"
+    ],
+    "affinities": [],
+    "team_gate": false,
+    "effect": "[Effects apply only to #1 Deployed Identity]\n\n\"Sisyphe\" Identity or Charge Identity: On Base Skill final Coin Hit, deal Slash Damage equal to 5% of the said Coin's final damage on the main target (once per Skill)",
+    "max_level": 2,
+    "upgrades": [
+      "[Effects apply only to #1 Deployed Identity]\n\n\"Sisyphe\" Identity or Charge Identity: On Base Skill final Coin Hit, deal Slash Damage equal to 10% of the said Coin's final damage on the main target (once per Skill)",
+      "[Effects apply only to #1 Deployed Identity]\n\n\"Sisyphe\" Identity or Charge Identity: On Base Skill final Coin Hit, deal Slash Damage equal to 15% of the said Coin's final damage on the main target (once per Skill)"
+    ],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "storefront-campout"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Blossom%20Scissors",
+    "icon": "Blossom Scissors Gift.png"
   },
   {
     "id": "boombox-of-dramatic-entrances",
@@ -6140,6 +6215,38 @@
     "icon": "Snuffed Candlestick Gift.png"
   },
   {
+    "id": "soda-pop",
+    "name": "Soda Pop",
+    "sin": "sloth",
+    "tier": 2,
+    "cost": 201,
+    "keyword": null,
+    "secondary_keyword": null,
+    "status_effects": [
+      "Offense Level Up"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "team_gate": false,
+    "effect": "Sinners who attempt to heal HP on self this turn using Skill or Coin effects gain the following effects next turn:\n- Skills deal +10% damage\n- Gain Offense Level Up equal to (sum of HP healed during the turn (including excess healing) / 10) (max 6; rounded down)\n\nIf there are other Identities on the field that are in the same faction as the units that activated the above effect, they gain half of the Offense Level Up the above units gained (min 1, max 3 per turn; rounded down)",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "readvent-of-gluttony"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Soda%20Pop",
+    "icon": "Soda Pop Gift.png"
+  },
+  {
     "id": "someone-s-azure-blade",
     "name": "Someone's Azure Blade",
     "sin": "gloom",
@@ -7865,6 +7972,41 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Broken%20Violin",
     "icon": "Broken Violin Gift.png"
+  },
+  {
+    "id": "cartilage",
+    "name": "Cartilage",
+    "sin": "envy",
+    "tier": 3,
+    "cost": 256,
+    "keyword": "Charge",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Charge",
+      "Haste"
+    ],
+    "traits": [
+      "Sisyphe"
+    ],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "team_gate": false,
+    "effect": "Skills that consume Charge Count or Unique Charge deal +(Charge Potency on self x 2)% damage (max 10%)\n\nTurn End: Units that consumed Charge Count or Unique Charge this turn gain 1 Haste next turn\n\nIf a unit's Speed is faster than the target's, Clash Power +1\n- If the said unit is a \"Sisyphe\" Identity, gain Final Power +1 instead",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "an-anarchy-of-colors"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Cartilage",
+    "icon": "Cartilage Gift.png"
   },
   {
     "id": "chains-of-loyalty",
@@ -9634,6 +9776,38 @@
     "icon": "La Manchaland All-day Pass Gift.png"
   },
   {
+    "id": "le-noir-mary-janes",
+    "name": "Le Noir Mary Janes",
+    "sin": "sloth",
+    "tier": 3,
+    "cost": 254,
+    "keyword": "Charge",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Charge Identity"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "team_gate": false,
+    "effect": "Combat Start: On Hit from an Identity that has the highest Shield, deal (current Shield / 2) Sloth Damage (2 times per Skill, max 100 damage per tick; rounded down)\n- If 2+ Identities have the same Shield HP, applies to the Identity with the earlier Deployment Order\n\nIf the affected Identity is a Charge Identity, deal Sloth Damage equal to current Shield instead (3 times per skill, max 100 per tick; rounded down)",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "creed-of-preservation"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Le%20Noir%20Mary%20Janes",
+    "icon": "Le Noir Mary Janes Gift.png"
+  },
+  {
     "id": "lightning-rod",
     "name": "Lightning Rod",
     "sin": "envy",
@@ -9667,6 +9841,54 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Lightning%20Rod",
     "icon": "Lightning Rod Gift.png"
+  },
+  {
+    "id": "maison-du-noir-slacks",
+    "name": "Maison du Noir Slacks",
+    "sin": "envy",
+    "tier": 3,
+    "cost": 258,
+    "keyword": "Tremor",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Charge",
+      "Tremor Burst",
+      "Bind",
+      "Offense Level Up"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [
+      {
+        "status": "Tremor Burst",
+        "when": "always"
+      },
+      {
+        "status": "Bind",
+        "when": "always"
+      },
+      {
+        "status": "Charge",
+        "when": "always"
+      }
+    ],
+    "attack_types": [],
+    "affinities": [],
+    "team_gate": false,
+    "effect": "When allies that have 2+ Charge Potency trigger Tremor Burst, apply the following effects:\n- Deal (Charge Potency on self x Charge Count) Envy Damage (2 times per skill, max 100 damage per tick)\n- Every 2 times the above effect deals Envy Damage, inflict 3 Bind next turn on target\n\nEvery time an ally triggers Tremor Burst using a Skill, gain (Charge Potency on self / 3) Offense Level Up next turn (max 5 per turn; rounded down)",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "creed-of-preservation"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Maison%20du%20Noir%20Slacks",
+    "icon": "Maison du Noir Slacks Gift.png"
   },
   {
     "id": "manor-shaped-music-box",
@@ -10076,6 +10298,38 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Operation%20Authorization%20Card",
     "icon": "Operation Authorization Card Gift.png"
+  },
+  {
+    "id": "out-of-style-rouge-clothing",
+    "name": "Out-of-style Rouge Clothing",
+    "sin": "wrath",
+    "tier": 3,
+    "cost": 258,
+    "keyword": null,
+    "secondary_keyword": null,
+    "status_effects": [
+      "Changing Room (Ishmael)"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "team_gate": false,
+    "effect": "When allies heal HP through Base Attack Skills' Skill or Coin effects, heal +50% HP (3 times per turn; rounded down)\n\n[Haute Couture::Boutique du Rouge Ishmael Exclusive Effect]\nIf Haute Couture::The Crimson God of Le Rouge Sinclair is with this unit on the field, gain 1 Changing Room (Ishmael) at Turn Start and enter Changing Room (Ishmael) state (once per Encounter)\n- If \"In this Encounter, when this unit takes damage that brings its HP down to 0, nullify that damage; then, immediately gain 2 Changing Room (Ishmael) and enter the Changing Room (Ishmael) state (once per Encounter)\" from the Passive \"Into the Changing Room…\" activated, the exclusive effect does not activate\n- When the exclusive effect activates, the effect \"In this Encounter, when this unit takes damage that brings its HP down to 0, nullify that damage; then, immediately gain 2 Changing Room (Ishmael) and enter the Changing Room (Ishmael) state (once per Encounter)\" from the Passive \"Into the Changing Room…\" does not activate",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "readvent-of-gluttony"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Out%2Dof%2Dstyle%20Rouge%20Clothing",
+    "icon": "Out-of-style Rouge Clothing Gift.png"
   },
   {
     "id": "packaging-ribbon",
@@ -11544,6 +11798,38 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Stolen%20Fixer%20Magazine",
     "icon": "Stolen Fixer Magazine Gift.png"
+  },
+  {
+    "id": "straight-pin-of-the-king-of-needleworks",
+    "name": "Straight Pin of the King of Needleworks",
+    "sin": "lust",
+    "tier": 3,
+    "cost": 249,
+    "keyword": "Charge",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Mark of the King of Needleworks"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "team_gate": false,
+    "effect": "Turn Start: If no enemies have Mark of the King of Needleworks, inflict Mark of the King of Needleworks on a random enemy (in Focused Encounters, a Part)",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "an-anarchy-of-colors"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Straight%20Pin%20of%20the%20King%20of%20Needleworks",
+    "icon": "Straight Pin of the King of Needleworks Gift.png"
   },
   {
     "id": "strange-glyph-inscriptions",

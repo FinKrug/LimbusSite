@@ -101,10 +101,13 @@ class WikiClient:
                     continue
                 raise WikiError(f"API error: {data['error']}")
             if cache:
-                cache.write_text(
+                # Write then rename, so a run stopped mid-write never leaves a broken cache file.
+                tmp = cache.with_suffix(".tmp")
+                tmp.write_text(
                     json.dumps({"params": params, "response": data}, ensure_ascii=False),
                     encoding="utf-8",
                 )
+                os.replace(tmp, cache)
             return data
         raise WikiError(f"gave up after retries: {url}")
 

@@ -1,6 +1,8 @@
-// How to get a gift in Mirror Dungeon, from what the scraper knows: its pool,
-// the theme packs that give or feature it, events, fusion recipes and other
-// notes on the wiki's gift list.
+// How to get a gift in Mirror Dungeon, in as much detail as the wiki gives: inside
+// which theme pack, and how there (its own events: which choice, which check;
+// battle rewards and the shop), from random "?" events on any floor, from the
+// general pool, or by fusing.
+import type { EventCheck, EventChoice, EventOutcome, EventVariant, GameEvent } from './events'
 import { floorText, type Gift, type ThemePack } from './types'
 
 export interface AcquireLine {
@@ -12,6 +14,10 @@ export interface AcquireLine {
   packs?: ThemePack[]
   morePacks?: number
   link?: string | null
+  /** The steps: "Event "The Chicken Strife": pick "…" (Sloth check …)", "Battle rewards and the shop". */
+  details?: string[]
+  /** How sure you can be: in every run of this pack, only by chance, or in the general pool. */
+  odds?: 'sure' | 'chance' | 'common'
 }
 
 function floors(p: ThemePack): string {
@@ -27,8 +33,96 @@ export function packLabel(p: ThemePack): string {
   return `${p.name}${floors(p)}`
 }
 
+// -- where events give a gift ---------------------------------------------------------
+
+export interface EventSource {
+  event: GameEvent
+  variant: EventVariant
+  /** Theme pack this version of the event belongs to, or null for a random "?" event. */
+  pack: ThemePack | null
+  /** "pick "Nod." → "Shake your head."", "…, then pass a Sloth check (12+ …)". */
+  how: string
+}
+
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+function checkText(c: EventCheck): string {
+  if (!c.sins.length || c.adv === null) return 'a gamble with no sin check'
+  const sins = c.sins.map(cap).join('/')
+  return `a ${sins} check (${c.adv}+ with a ${c.sins.map(cap).join(' or ')} skill, ${c.disadv}+ without)`
+}
+
+/** How to reach a gift through one choice (and its follow-ups). */
+function routes(c: EventChoice, id: string, path: string[]): string[] {
+  const here = [...path, `"${c.label}"`]
+  const pick = `pick ${here.join(' → ')}`
+  const has = (o?: EventOutcome) => !!o && o.gifts.includes(id)
+  const out: string[] = []
+  if (c.check) {
+    const pass = has(c.pass)
+    const fail = has(c.fail)
+    if (pass && fail) out.push(`${pick} (you get it either way)`)
+    else if (pass) out.push(`${pick}, then pass ${checkText(c.check)}`)
+    else if (fail) out.push(`${pick} (it comes from failing ${checkText(c.check)})`)
+  } else if (has(c.result)) {
+    out.push(c.result!.combat ? `${pick} and win the fight` : pick)
+  }
+  for (const n of c.next ?? []) out.push(...routes(n, id, here))
+  return out
+}
+
+const indexCache = new WeakMap<GameEvent[], Map<string, EventSource[]>>()
+
+/** gift id -> every event choice that gives it, with the pack it belongs to. */
+export function eventSources(events: GameEvent[], packs: ThemePack[]): Map<string, EventSource[]> {
+  const hit = indexCache.get(events)
+  if (hit) return hit
+  const byId = new Map(packs.map((p) => [p.id, p]))
+  // Longest names first, so "Nocturnal Sweeping BokGak" wins over "Nocturnal Sweeping".
+  const named = [...packs].sort((a, b) => b.name.length - a.name.length)
+  const packOf = (e: GameEvent, v: EventVariant): ThemePack | null => {
+    if (e.pack) return byId.get(e.pack) ?? null
+    const note = v.note.toLowerCase()
+    return note ? named.find((p) => note.includes(p.name.toLowerCase())) ?? null : null
+  }
+  const out = new Map<string, EventSource[]>()
+  for (const e of events) {
+    for (const v of e.variants) {
+      const ids = new Set<string>()
+      const walk = (c: EventChoice) => {
+        for (const o of [c.result, c.pass, c.fail]) for (const g of o?.gifts ?? []) ids.add(g)
+        for (const n of c.next ?? []) walk(n)
+      }
+      v.choices.forEach(walk)
+      for (const id of ids) {
+        const how = v.choices.flatMap((c) => routes(c, id, []))
+        if (!how.length) continue
+        const list = out.get(id) ?? []
+        list.push({ event: e, variant: v, pack: packOf(e, v), how: how.slice(0, 2).join('; or ') })
+        out.set(id, list)
+      }
+    }
+  }
+  indexCache.set(events, out)
+  return out
+}
+
+/** "75% of its "?" nodes are its own events" / "its "?" nodes are always its own events". */
+export function packEventOdds(p: ThemePack): string | null {
+  const n = p.event_note
+  if (!n) return null
+  const pct = n.match(/(\d+)%/)
+  if (pct) return `${pct[1]}% of its "?" event nodes are its own events`
+  if (/guaranteed|always/i.test(n)) return `its "?" event nodes are always its own events`
+  return null
+}
+
+const eventName = (s: EventSource) =>
+  s.variant.name && !/^Mirror Dungeon Event$/i.test(s.variant.name) ? s.variant.name : s.event.name.replace(/ Theme Pack$/, '')
+
 export function howToGet(
   gift: Gift, packsForGift: Map<string, ThemePack[]>, giftsById: Map<string, Gift>, owned: Set<string>,
+  events: GameEvent[] = [], allPacks: ThemePack[] = [],
 ): AcquireLine[] {
   const lines: AcquireLine[] = []
   if (gift.fusion_recipe?.length) {
@@ -38,23 +132,53 @@ export function howToGet(
   const packs = packsForGift.get(gift.id) ?? []
   const exclusive = packs.filter((p) => p.gifts.includes(gift.id))
   const featured = packs.filter((p) => !p.gifts.includes(gift.id))
-  if (exclusive.length) {
+  const sources = eventSources(events, allPacks.length ? allPacks : packs).get(gift.id) ?? []
+
+  // Inside each pack that has it: its own events first, then battle rewards and the shop.
+  const packEvents = (p: ThemePack) => sources.filter((s) => s.pack?.id === p.id)
+  const shown = [...exclusive, ...packs.filter((p) => !exclusive.includes(p) && packEvents(p).length)].slice(0, 4)
+  for (const p of shown) {
+    const details: string[] = []
+    const evs = packEvents(p)
+    for (const s of evs) details.push(`Event "${eventName(s)}": ${s.how}`)
+    const odds = packEventOdds(p)
+    if (evs.length && odds) details.push(cap(odds))
+    if (p.gifts.includes(gift.id)) {
+      details.push(p.layout?.shop === false ? 'Battle rewards in this pack' : 'Battle rewards in this pack, and its shop before the boss')
+    }
     lines.push({
-      kind: 'pack', packs: exclusive.slice(0, 4), morePacks: Math.max(0, exclusive.length - 4),
-      text: exclusive.length === 1 ? 'Only from this theme pack' : 'Only from these theme packs',
+      kind: 'pack', packs: [p], details,
+      text: exclusive.length > 1 || !p.gifts.includes(gift.id) ? 'In this theme pack' : 'Only in this theme pack',
+      odds: evs.length && /always/.test(odds ?? '') ? 'sure' : undefined,
     })
   }
-  for (const e of gift.events) lines.push({ kind: 'event', text: e.name, link: e.wiki_url })
+  if (exclusive.length > shown.length) {
+    lines.push({ kind: 'pack', text: 'Also in', packs: exclusive.filter((p) => !shown.includes(p)).slice(0, 3),
+      morePacks: Math.max(0, exclusive.length - shown.length - 3) })
+  }
+
+  // Random "?" events, any floor.
+  const random = sources.filter((s) => !s.pack)
+  for (const s of random.slice(0, 3)) {
+    lines.push({ kind: 'event', text: eventName(s), link: s.event.wiki_url, details: [cap(s.how)], odds: 'chance' })
+  }
+  // Events the wiki lists for the gift that we couldn't read choices for.
+  for (const e of gift.events) {
+    if (sources.some((s) => s.event.name === e.name)) continue
+    lines.push({ kind: 'event', text: e.name, link: e.wiki_url, odds: 'chance' })
+  }
+
   const pools = gift.pools ?? []
   if (pools.includes('main')) {
-    lines.push({ kind: 'pool', text: 'General pool: can show up in battle rewards and shops on any floor' })
+    lines.push({ kind: 'pool', text: 'General pool: battle rewards and shops on any floor', odds: 'common' })
   }
   if (pools.includes('extreme') && !exclusive.length) lines.push({ kind: 'pool', text: 'Extreme difficulty only' })
   if (pools.includes('cursed')) lines.push({ kind: 'pool', text: 'Cursed gift: it comes with a drawback' })
   if (featured.length) {
     lines.push({
-      kind: 'pack', packs: featured.slice(0, 3), morePacks: Math.max(0, featured.length - 3),
-      text: `Featured in ${featured.length} theme pack${featured.length > 1 ? 's' : ''}`,
+      kind: 'pack', packs: featured.filter((p) => !shown.includes(p)).slice(0, 3),
+      morePacks: Math.max(0, featured.filter((p) => !shown.includes(p)).length - 3),
+      text: `Boosted odds in ${featured.length} theme pack${featured.length > 1 ? 's' : ''}`,
     })
   }
   for (const o of gift.other_sources ?? []) lines.push({ kind: 'other', text: o })

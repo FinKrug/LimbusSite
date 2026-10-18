@@ -84,6 +84,10 @@ export interface ThemePack {
   gifts: string[]
   /** Every gift the pack can give, exclusives included. */
   gift_pool: string[]
+  /** Node layout from its wiki page ("6 nodes: 4 dungeon nodes, a shop, the boss"). */
+  layout?: { nodes: number | null; dungeon_nodes: number | null; shop: boolean | null } | null
+  /** How often its own events show up ("...have a 75% chance to generate as one of..."). */
+  event_note?: string | null
   wiki_url: string | null
 }
 

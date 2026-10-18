@@ -136,12 +136,47 @@ class PackPage:
     gift_pool: list[str] = field(default_factory=list)
     unique: list[str] = field(default_factory=list)
     featured: list[str] = field(default_factory=list)
+    # {"nodes": 6, "dungeon_nodes": 4, "shop": True} from "Dungeon Layout"; None if not stated.
+    layout: dict | None = None
+    # "All Abnormality Event nodes within ... have a 75% chance to generate as one of the following two Events."
+    event_note: str | None = None
     unresolved: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
 
+def parse_layout(page_html: str) -> dict | None:
+    """Node counts from the "Dungeon Layout" section ("5 nodes total: 3 randomly generated
+    Dungeon nodes. 1 Shop node ... 1 Boss node")."""
+    sec = section_html(page_html, "Dungeon Layout", "Layout")
+    if sec is None:
+        return None
+    text = html_to_text(sec)
+    total = re.search(r"(\d+)\s+nodes?\s+total", text, re.IGNORECASE)
+    dungeon = re.search(r"(\d+)\s+(?:randomly generated\s+)?Dungeon nodes?", text, re.IGNORECASE)
+    shops = re.search(r"(\d+)\s+Shop nodes?", text, re.IGNORECASE)
+    if not (total or dungeon or shops):
+        return None
+    return {
+        "nodes": int(total.group(1)) if total else None,
+        "dungeon_nodes": int(dungeon.group(1)) if dungeon else None,
+        "shop": bool(shops and int(shops.group(1)) > 0) if shops else ("shop" in text.lower() or None),
+    }
+
+
+def parse_event_note(page_html: str) -> str | None:
+    """The sentence on how often this pack's own events appear, from "Dungeon Events"."""
+    sec = section_html(page_html, "Dungeon Events")
+    if sec is None:
+        return None
+    text = html_to_text(sec)
+    m = re.search(r"[^.\n]*(?:Event nodes?|Abnormality Event)[^.\n]*(?:chance|guaranteed|always)[^.\n]*\.", text, re.IGNORECASE)
+    return m.group(0).strip() if m else None
+
+
 def parse_pack_page(title: str, page_html: str, finder: NameFinder) -> PackPage:
     page = PackPage(title)
+    page.layout = parse_layout(page_html)
+    page.event_note = parse_event_note(page_html)
     page.floors = parse_floors(page_html)
     if page.floors is None:
         page.warnings.append(f"{title}: no Featured Floors in the infobox")

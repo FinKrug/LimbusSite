@@ -408,6 +408,73 @@
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Ambling_Pearl"
   },
   {
+    "id": "an-anarchy-of-colors-theme-pack",
+    "name": "An Anarchy of Colors Theme Pack",
+    "gifts": [],
+    "variants": [
+      {
+        "name": "Palette and Putty",
+        "note": "",
+        "story": "Fluorescent dyes in every color stream down into vats around the room.\n\nBetween them, Palette sweeps the floor with her fluffy hair while checking Putty's legs from every angle.\n\n\"You've got dye residue gunking your knee joints. This must've been really uncomfortable, Big Sis.\"\n\n\"……\"\n\n\"I can't even scrape it off… It's already seeped into the gaps and hardened. I think we'll have to replace the who",
+        "choices": [
+          {
+            "label": "Offer to go get it.",
+            "desc": "Envy Advantage check. Pass to gain a Charge E.G.O Gift (failing begins a combat Encounter)",
+            "check": {
+              "sins": [
+                "envy"
+              ],
+              "adv": 16,
+              "disadv": 32,
+              "bonuses": []
+            },
+            "pass": {
+              "text": "E.G.O Gift Cartilage obtained!",
+              "gifts": [
+                "cartilage"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "Battle!\n\nReinforcements:\n\nWin the battle to gain E.G.O Gift Cartilage!",
+              "gifts": [
+                "cartilage"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": true,
+              "hurts": false,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Tell her we're busy too.",
+            "desc": "No particular effect",
+            "check": null,
+            "result": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": true
+            }
+          }
+        ]
+      }
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/An_Anarchy_of_Colors_Theme_Pack",
+    "pack": "an-anarchy-of-colors"
+  },
+  {
     "id": "ardor-blossom-moth",
     "name": "Ardor Blossom Moth",
     "gifts": [
@@ -1457,6 +1524,179 @@
       }
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cozy_Bed"
+  },
+  {
+    "id": "creed-of-preservation-theme-pack",
+    "name": "Creed of Preservation Theme Pack",
+    "gifts": [],
+    "variants": [
+      {
+        "name": "Le Noir, 3F",
+        "note": "",
+        "story": "\"Interested in this season's new arrivals?\"\n\nWe were browsing the Maison du Noir when a group of sales associates wrapped head to toe in black fabric approached us.\n\n\"You have an eye for quality. This one here—the balance of warp and weft is exquisite.\"\n\n\"A dense weave, yet not a trace of stiffness. It brings out the softness of the fabric beautifully.\"\n\n\"32 stitches to the inch. You could roll ac",
+        "choices": [
+          {
+            "label": "Try bargaining by appealing to Le Noir's aesthetic despite our empty eyeball wallet.",
+            "desc": "Sloth & Envy Advantage check. Pass to gain a Tremor E.G.O Gift\n(Only selectable with 200 or more Cost)",
+            "check": {
+              "sins": [
+                "sloth",
+                "envy"
+              ],
+              "adv": 16,
+              "disadv": 32,
+              "bonuses": [
+                {
+                  "who": "Le Noir Identities",
+                  "mod": 10
+                }
+              ]
+            },
+            "pass": {
+              "text": "Cost 200 lost\nE.G.O Gift Maison du Noir Slacks obtained!",
+              "gifts": [
+                "maison-du-noir-slacks"
+              ],
+              "unknown_gifts": [],
+              "cost": -200,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": true
+            }
+          },
+          {
+            "label": "Tell them we don't have any eyeballs.",
+            "desc": "All allies lose SP",
+            "check": null,
+            "result": {
+              "text": "All allies lost 5!",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Boutique du Rouge's lineup looks more stylish, though…?",
+            "desc": "Lust & Gluttony Advantage check. Pass to gain a Tremor E.G.O Gift",
+            "check": {
+              "sins": [
+                "lust",
+                "gluttony"
+              ],
+              "adv": 16,
+              "disadv": 32,
+              "bonuses": [
+                {
+                  "who": "Le Rouge Identities",
+                  "mod": 10
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift Maison du Noir Slacks obtained!",
+              "gifts": [
+                "maison-du-noir-slacks"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "All allies lost 5!",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            }
+          }
+        ]
+      },
+      {
+        "name": "One-leg, Four-legs",
+        "note": "",
+        "story": "As we enter Le Noir's Footwear Hall, we find One-leg tearing Four-legs a new one.\n\n\"You vile, lowly little thing. The vulgar sound of your appendages clopping against the floor revolts me. The worst part is how disgustingly close together they are.\"\n\n\"Please forgive me… One-leg…\"\n\n\"Quiet. Dragging around all those useless legs was bad enough. Now you're cluttering my ears with useless words too, y",
+        "choices": [
+          {
+            "label": "Stand up for Four-legs.",
+            "desc": "Sloth & Envy Advantage check. Pass to gain a Keywordless E.G.O Gift",
+            "check": {
+              "sins": [
+                "sloth",
+                "envy"
+              ],
+              "adv": 16,
+              "disadv": 32,
+              "bonuses": [
+                {
+                  "who": "Le Noir Identities",
+                  "mod": 10
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift Le Noir Mary Janes obtained!\nAll allies lost 5!",
+              "gifts": [
+                "le-noir-mary-janes"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "All allies lost 5!",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Ignore the situation and move on.",
+            "desc": "No particular effect",
+            "check": null,
+            "result": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": true
+            }
+          }
+        ]
+      }
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Creed_of_Preservation_Theme_Pack",
+    "pack": "creed-of-preservation"
   },
   {
     "id": "cyclops",
@@ -3434,7 +3674,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stopped_by_a_Bullet_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stopped_by_a_Bullet_Theme_Pack",
+    "pack": "full-stopped-by-a-bullet"
   },
   {
     "id": "funeral-of-a-dying-butterfly",
@@ -3998,7 +4239,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hatred_and_Despair_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hatred_and_Despair_Theme_Pack",
+    "pack": "hatred-and-despair"
   },
   {
     "id": "have-you-become-strong",
@@ -4457,7 +4699,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hell's_Chicken_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hell's_Chicken_Theme_Pack",
+    "pack": "hell-s-chicken"
   },
   {
     "id": "highway-devotee",
@@ -5481,7 +5724,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Regular_Check-up_BokGak_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Regular_Check-up_BokGak_Theme_Pack",
+    "pack": "lcb-regular-check-up-bokgak"
   },
   {
     "id": "lcb-regular-check-up-theme-pack",
@@ -5857,7 +6101,83 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Regular_Check-up_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Regular_Check-up_Theme_Pack",
+    "pack": "lcb-regular-check-up"
+  },
+  {
+    "id": "la-manchaland-re-opening-theme-pack",
+    "name": "La Manchaland Re-opening Theme Pack",
+    "gifts": [],
+    "variants": [
+      {
+        "name": "Carnival of La Manchaland",
+        "note": "",
+        "story": "\"In this endlessly… this eternally… blessed carnival…\"\n\nThe parade brings happy exclamations and smiles to the spectators. It's gaudy and extravagant no matter where or how we look at it.\n\nIt's just like the lyrics… it feels as though the carnival really is eternally blessed to go on forever.\n\n\"Oh.\"\n\nSomeone lets out a brief cry of pain, and a rusty syringe clatters to the ground.\n\n\"B-blood! Blood",
+        "choices": [
+          {
+            "label": "Try to stop them.",
+            "desc": "Lust & Sloth Advantage check. Pass to gain a Bleed E.G.O Gift.",
+            "check": {
+              "sins": [
+                "lust",
+                "sloth"
+              ],
+              "adv": 12,
+              "disadv": 24,
+              "bonuses": [
+                {
+                  "who": "The Manager of La Manchaland Don Quixote Identity",
+                  "mod": 5
+                },
+                {
+                  "who": "The Barber of La Manchaland Outis, The Priest of La Manchaland Gregor, & The Princess of La Manchaland Rodion Identities",
+                  "mod": -10
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift A Drop Earned!",
+              "gifts": [
+                "a-drop"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "The Selected Identity takes 5% Damage!\nDon Quixote loses 10!",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Ignore them.",
+            "desc": "",
+            "check": null,
+            "result": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": true
+            }
+          }
+        ]
+      }
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/La_Manchaland_Re-opening_Theme_Pack",
+    "pack": "la-manchaland-re-opening"
   },
   {
     "id": "line-5-theme-pack",
@@ -6047,7 +6367,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_5_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_5_Theme_Pack",
+    "pack": "line-5"
   },
   {
     "id": "miracle-in-district-20-bokgak-theme-pack",
@@ -6167,7 +6488,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Miracle_in_District_20_BokGak_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Miracle_in_District_20_BokGak_Theme_Pack",
+    "pack": "miracle-in-district-20-bokgak"
   },
   {
     "id": "mnestic-experience-theme-pack",
@@ -6393,7 +6715,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Mnestic_Experience_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Mnestic_Experience_Theme_Pack",
+    "pack": "mnestic-experience"
   },
   {
     "id": "monkey-tree",
@@ -7169,7 +7492,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Murder_on_the_WARP_Express_BokGak_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Murder_on_the_WARP_Express_BokGak_Theme_Pack",
+    "pack": "murder-on-the-warp-express-bokgak"
   },
   {
     "id": "murder-on-the-warp-express-theme-pack",
@@ -7628,7 +7952,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Murder_on_the_WARP_Express_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Murder_on_the_WARP_Express_Theme_Pack",
+    "pack": "murder-on-the-warp-express"
   },
   {
     "id": "my-form-empties",
@@ -8175,7 +8500,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nocturnal_Sweeping_BokGak_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nocturnal_Sweeping_BokGak_Theme_Pack",
+    "pack": "nocturnal-sweeping-bokgak"
   },
   {
     "id": "nocturnal-sweeping-theme-pack",
@@ -8477,7 +8803,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nocturnal_Sweeping_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nocturnal_Sweeping_Theme_Pack",
+    "pack": "nocturnal-sweeping"
   },
   {
     "id": "nymph",
@@ -9423,6 +9750,141 @@
       }
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Queen_Bee"
+  },
+  {
+    "id": "readvent-of-gluttony-theme-pack",
+    "name": "Readvent of Gluttony Theme Pack",
+    "gifts": [],
+    "variants": [
+      {
+        "name": "Le Rouge Casualwear Hall, 1F",
+        "note": "",
+        "story": "\"Damn it! The trend's changed again!\"\n\nA Rouge sales associate scans a list, yanking clothes from the racks and flinging them onto the floor one after another.\n\n\"Fluorescent plaid only just went out. Now it's polka dots? Hah!\"\n\nLooks like they have no use for any of those clothes now… Maybe we can take them off their hands?",
+        "choices": [
+          {
+            "label": "Ask if we can have the out-of-fashion clothes.",
+            "desc": "Lust & Gluttony Advantage check. Pass to gain a Keywordless E.G.O Gift (failing begins a combat Encounter)",
+            "check": {
+              "sins": [
+                "lust",
+                "gluttony"
+              ],
+              "adv": 16,
+              "disadv": 32,
+              "bonuses": [
+                {
+                  "who": "Le Rouge Identities",
+                  "mod": 10
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift Out-of-style Rouge Clothing obtained!",
+              "gifts": [
+                "out-of-style-rouge-clothing"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "Battle!\n\nWin the battle to gain E.G.O Gift Out-of-style Rouge Clothing!",
+              "gifts": [
+                "out-of-style-rouge-clothing"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": true,
+              "hurts": false,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Ignore them.",
+            "desc": "No particular effect",
+            "check": null,
+            "result": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": true
+            }
+          }
+        ]
+      },
+      {
+        "name": "Sous Chef",
+        "note": "",
+        "story": "\"Come try this season's Meat Soda, you hear?\"\n\nSous Chef stops us beside a fountain bubbling with soda.\n\n\"Camemblack Scabbardfish… fresh larva, even a fisherman's chair… *slurp* I infused it with all kinds of rarity-rare ingredients, you hear?\"\n\n\"First time? Then it's just 3 eyeballs a cup, you hear? It's crazy value, you hear? Special discount, you hear? Once-in-a-lifetime deal, you hear?\"\n\nThat ",
+        "choices": [
+          {
+            "label": "Ask for a cup of soda.",
+            "desc": "Lust & Gluttony Advantage check. Pass to gain a Keywordless E.G.O Gift",
+            "check": {
+              "sins": [
+                "lust",
+                "gluttony"
+              ],
+              "adv": 16,
+              "disadv": 32,
+              "bonuses": [
+                {
+                  "who": "Gregor",
+                  "mod": -3
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift Soda Pop obtained!\n[Gregor] loses 5!",
+              "gifts": [
+                "soda-pop"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": true
+            }
+          },
+          {
+            "label": "Still, that looks a little… hard to stomach.",
+            "desc": "All allies lose HP",
+            "check": null,
+            "result": {
+              "text": "All allies take 50 damage!",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            }
+          }
+        ]
+      }
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Readvent_of_Gluttony_Theme_Pack",
+    "pack": "readvent-of-gluttony"
   },
   {
     "id": "recurring-faith-and-promise",
@@ -11156,7 +11618,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Spring_Cultivation_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Spring_Cultivation_Theme_Pack",
+    "pack": "spring-cultivation"
   },
   {
     "id": "star-luminary",
@@ -11327,6 +11790,73 @@
       }
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Steam_Transport_Machine"
+  },
+  {
+    "id": "storefront-campout-theme-pack",
+    "name": "Storefront Campout Theme Pack",
+    "gifts": [],
+    "variants": [
+      {
+        "name": "Annette",
+        "note": "",
+        "story": "\"Shoulder seams hanging a touch too low… hems of the arm a span too short. Much work to be done, this one. So, what would you like to have altere—Aha. You came to snip-snip.\"\n\nThe Alterationist looks up from the fabric she is cutting in the middle of the room.\n\n\"Need to borrow scissors to cut something away?\"\n\n\"Hm… Then in return, mind if I split open and dig around in one of your heads a little b",
+        "choices": [
+          {
+            "label": "Accept.",
+            "desc": "Envy Advantage check. Pass to gain a Charge E.G.O Gift.",
+            "check": {
+              "sins": [
+                "envy"
+              ],
+              "adv": 16,
+              "disadv": 32,
+              "bonuses": []
+            },
+            "pass": {
+              "text": "E.G.O Gift Blossom Scissors obtained!",
+              "gifts": [
+                "blossom-scissors"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "The selected Identity takes 100% damage!\nE.G.O Gift Blossom Scissors obtained!",
+              "gifts": [
+                "blossom-scissors"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Refuse.",
+            "desc": "No particular effect",
+            "check": null,
+            "result": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": true
+            }
+          }
+        ]
+      }
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Storefront_Campout_Theme_Pack",
+    "pack": "storefront-campout"
   },
   {
     "id": "stuck-in-heaven",
@@ -11595,7 +12125,83 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_B.E._Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_B.E._Theme_Pack",
+    "pack": "the-b-e"
+  },
+  {
+    "id": "the-dream-ending-theme-pack",
+    "name": "The Dream Ending Theme Pack",
+    "gifts": [],
+    "variants": [
+      {
+        "name": "Carnival of La Manchaland",
+        "note": "",
+        "story": "\"In this endlessly… this eternally… blessed carnival…\"\n\nThe parade brings happy exclamations and smiles to the spectators. It's gaudy and extravagant no matter where or how we look at it.\n\nIt's just like the lyrics… it feels as though the carnival really is eternally blessed to go on forever.\n\n\"Oh.\"\n\nSomeone lets out a brief cry of pain, and a rusty syringe clatters to the ground.\n\n\"B-blood! Blood",
+        "choices": [
+          {
+            "label": "Try to stop them.",
+            "desc": "Lust & Sloth Advantage check. Pass to gain a Bleed E.G.O Gift.",
+            "check": {
+              "sins": [
+                "lust",
+                "sloth"
+              ],
+              "adv": 12,
+              "disadv": 24,
+              "bonuses": [
+                {
+                  "who": "The Manager of La Manchaland Don Quixote Identity",
+                  "mod": 5
+                },
+                {
+                  "who": "The Barber of La Manchaland Outis, The Priest of La Manchaland Gregor, & The Princess of La Manchaland Rodion Identities",
+                  "mod": -10
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift A Drop Earned!",
+              "gifts": [
+                "a-drop"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "The Selected Identity takes 5% Damage!\nDon Quixote loses 10!",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Ignore them.",
+            "desc": "",
+            "check": null,
+            "result": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": true
+            }
+          }
+        ]
+      }
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Dream_Ending_Theme_Pack",
+    "pack": "the-dream-ending"
   },
   {
     "id": "the-dusk-of-amber-theme-pack",
@@ -11989,26 +12595,7 @@
               "hurts": true,
               "lasting": false,
               "nothing": false
-            },
-            "next": [
-              {
-                "label": "Leave. We're satisfied.",
-                "desc": "No particular effect",
-                "_id": "6.2.2",
-                "_prev": "6.2",
-                "check": null,
-                "result": {
-                  "text": "Nothing happened.",
-                  "gifts": [],
-                  "unknown_gifts": [],
-                  "cost": 0,
-                  "combat": false,
-                  "hurts": false,
-                  "lasting": false,
-                  "nothing": true
-                }
-              }
-            ]
+            }
           },
           {
             "label": "Refuse to help.",
@@ -12028,7 +12615,83 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Dusk_of_Amber_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Dusk_of_Amber_Theme_Pack",
+    "pack": "the-dusk-of-amber"
+  },
+  {
+    "id": "the-infinite-procession-theme-pack",
+    "name": "The Infinite Procession Theme Pack",
+    "gifts": [],
+    "variants": [
+      {
+        "name": "Carnival of La Manchaland",
+        "note": "",
+        "story": "\"In this endlessly… this eternally… blessed carnival…\"\n\nThe parade brings happy exclamations and smiles to the spectators. It's gaudy and extravagant no matter where or how we look at it.\n\nIt's just like the lyrics… it feels as though the carnival really is eternally blessed to go on forever.\n\n\"Oh.\"\n\nSomeone lets out a brief cry of pain, and a rusty syringe clatters to the ground.\n\n\"B-blood! Blood",
+        "choices": [
+          {
+            "label": "Try to stop them.",
+            "desc": "Lust & Sloth Advantage check. Pass to gain a Bleed E.G.O Gift.",
+            "check": {
+              "sins": [
+                "lust",
+                "sloth"
+              ],
+              "adv": 12,
+              "disadv": 24,
+              "bonuses": [
+                {
+                  "who": "The Manager of La Manchaland Don Quixote Identity",
+                  "mod": 5
+                },
+                {
+                  "who": "The Barber of La Manchaland Outis, The Priest of La Manchaland Gregor, & The Princess of La Manchaland Rodion Identities",
+                  "mod": -10
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift A Drop Earned!",
+              "gifts": [
+                "a-drop"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "The Selected Identity takes 5% Damage!\nDon Quixote loses 10!",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Ignore them.",
+            "desc": "",
+            "check": null,
+            "result": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "lasting": false,
+              "nothing": true
+            }
+          }
+        ]
+      }
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Infinite_Procession_Theme_Pack",
+    "pack": "the-infinite-procession"
   },
   {
     "id": "the-king-in-binds",
@@ -12538,7 +13201,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Noon_of_Violet_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Noon_of_Violet_Theme_Pack",
+    "pack": "the-noon-of-violet"
   },
   {
     "id": "the-queen-of-hatred",
@@ -13347,7 +14011,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Timekilling_Time_BokGak_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Timekilling_Time_BokGak_Theme_Pack",
+    "pack": "timekilling-time-bokgak"
   },
   {
     "id": "timekilling-time-theme-pack",
@@ -13706,7 +14371,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Timekilling_Time_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Timekilling_Time_Theme_Pack",
+    "pack": "timekilling-time"
   },
   {
     "id": "tomb-of-bone",
@@ -14087,7 +14753,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Twining_Threads_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Twining_Threads_Theme_Pack",
+    "pack": "twining-threads"
   },
   {
     "id": "wailing-coffin",
@@ -14959,7 +15626,8 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Yield_My_Flesh_to_Claim_Their_Bones_BokGak_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Yield_My_Flesh_to_Claim_Their_Bones_BokGak_Theme_Pack",
+    "pack": "yield-my-flesh-to-claim-their-bones-bokgak"
   },
   {
     "id": "yield-my-flesh-to-claim-their-bones-theme-pack",
@@ -15386,6 +16054,7 @@
         ]
       }
     ],
-    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Yield_My_Flesh_to_Claim_Their_Bones_Theme_Pack"
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Yield_My_Flesh_to_Claim_Their_Bones_Theme_Pack",
+    "pack": "yield-my-flesh-to-claim-their-bones"
   }
 ]

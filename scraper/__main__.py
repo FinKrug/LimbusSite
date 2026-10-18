@@ -14,6 +14,7 @@ import argparse
 import json
 import sys
 import time
+import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -133,7 +134,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # -- Mirror Dungeon events (needs the gift ids above) --------------------------
     if not args.skip_events:
-        evs, w = fetch_events(client, data["gifts"])
+        evs, w = fetch_events(client, data["gifts"], data["theme_packs"])
         warnings += w
         if evs is not None:
             _write(out / "events.json", evs)
@@ -172,15 +173,26 @@ def fetch_egos(client: WikiClient) -> tuple[list[dict] | None, list[str]]:
     return egomod.build_egos(cats, sources, build.SINNERS, build.fold, build.slugify, build.wiki_url)
 
 
-def fetch_events(client: WikiClient, gifts: list[dict]) -> tuple[list[dict] | None, list[str]]:
-    """Every page in Category:Mirror Dungeon Events: choices, checks and what each gives."""
-    print(f"Fetching {eventmod.CATEGORY} and each event page ...")
+def fetch_events(client: WikiClient, gifts: list[dict], packs: list[dict] | None = None) -> tuple[list[dict] | None, list[str]]:
+    """Every page in Category:Mirror Dungeon Events, plus every theme pack page (their own
+    "Dungeon Events"): choices, checks and what each gives. Events on a pack's page get `pack`."""
+    print(f"Fetching {eventmod.CATEGORY}, theme pack pages and each event page ...")
+    pack_titles = {}
+    for p in packs or []:
+        if p.get("wiki_url"):
+            pack_titles[urllib.parse.unquote(p["wiki_url"].rsplit("/wiki/", 1)[-1]).replace("_", " ")] = p["id"]
     try:
-        titles = client.category_members(eventmod.CATEGORY)
+        titles = list(dict.fromkeys(client.category_members(eventmod.CATEGORY) + list(pack_titles)))
         sources = client.page_sources(titles)
     except WikiError as e:
         return None, [f"event pages not fetched ({_why(e, client)}); data/events.json left as it was"]
-    return eventmod.build_events(sources, gifts, build.fold, build.slugify, build.wiki_url)
+    evs, warnings = eventmod.build_events(sources, gifts, build.fold, build.slugify, build.wiki_url)
+    # A pack page without events isn't a problem.
+    warnings = [w for w in warnings if not any(w.startswith(f"event {t}:") for t in pack_titles)]
+    for e in evs:
+        if e["name"] in pack_titles:
+            e["pack"] = pack_titles[e["name"]]
+    return evs, warnings
 
 
 def fetch_pack_info(client: WikiClient, gifts: list[dict], packs: list[dict], skip: bool):
@@ -236,10 +248,12 @@ def fetch_pack_info(client: WikiClient, gifts: list[dict], packs: list[dict], sk
     print(f"Fetching {len(with_pages)} theme pack pages ...")
     info: dict[str, dict] = {}
     for i, (name, title, group) in enumerate(sorted(with_pages), 1):
-        entry: dict = {"title": title, "group": group, "floors": None, "gift_pool": [], "unique": []}
+        entry: dict = {"title": title, "group": group, "floors": None, "gift_pool": [], "unique": [],
+                       "layout": None, "event_note": None}
         try:
             page = packmod.parse_pack_page(title, _parse_html(client, title, PACK_CACHE_AGE), finder)
-            entry.update(floors=page.floors, gift_pool=page.gift_pool, unique=page.unique)
+            entry.update(floors=page.floors, gift_pool=page.gift_pool, unique=page.unique,
+                         layout=page.layout, event_note=page.event_note)
             warnings += page.warnings
             unresolved.update(page.unresolved)
         except WikiError as e:

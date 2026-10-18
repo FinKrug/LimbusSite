@@ -9,7 +9,7 @@
  *   with 60% (2 gifts), 90% (3) or 99% (4+) chance, and the pool includes gifts
  *   exclusive to the current floor's theme pack.
  */
-import { intrinsicScore, scoreGift, type GiftScore, type RunContext } from './scoring'
+import { intrinsicScore, isGone, recipeGiveUp, scoreGift, type GiftScore, type RunContext } from './scoring'
 import { isVestige } from './vestiges'
 import { fusableThisRun, mustHave, mustHaveRecipes, neededPiece } from './musthave'
 import type { Combo, Fusion, Gift, ThemePack } from './types'
@@ -66,7 +66,7 @@ export function matchRecipe(ids: string[], fusions: Fusion[]): Fusion | null {
 export function randomPool(ctx: RunContext, keyword: string, tier: number, pack: ThemePack | null): Gift[] {
   const recipeResults = new Set(ctx.data.fusions.map((f) => f.result))
   return ctx.data.gifts.filter((g) =>
-    g.keyword === keyword && g.tier === tier && !ctx.owned.has(g.id) && !recipeResults.has(g.id) && !isVestige(g.id)
+    g.keyword === keyword && g.tier === tier && !ctx.owned.has(g.id) && !isGone(ctx, g.id) && !recipeResults.has(g.id) && !isVestige(g.id)
     && (g.pools.includes('main') || (pack !== null && pack.gifts.includes(g.id))))
 }
 
@@ -200,6 +200,8 @@ export interface RecipePlan {
   resultScore: number
   giveUp: number
   worthIt: boolean
+  /** Ingredients the result does the job of (same keyword): fusing loses little. */
+  covered: Gift[]
 }
 
 /** Recipes you've started (or whose result is great for you), closest first. */
@@ -219,10 +221,12 @@ export function recipePlans(ctx: RunContext, owned: string[]): RecipePlan[] {
     const resultScore = intrinsicScore(result, ctx).score
     // Must-haves (Lunar Memory) are always listed on a run that can fuse them, started or not.
     if (!started && !(mustHave(f.result) && fusableThisRun(f, ctx))) continue
-    const giveUp = have.reduce((s, g) => s + keepValue(g, ctx), 0)
+    // Ingredients the result covers (same keyword) count little: it does their job, better.
+    const anyGifts = f.any_of ? f.any_of.from.filter((i) => counts.has(i)).map((i) => ctx.giftsById.get(i)).filter((g): g is Gift => !!g) : []
+    const { value: giveUp, covered } = recipeGiveUp(result, [...have, ...anyGifts], ctx)
     plans.push({
       fusion: f, result, have, missing, anyMissing, ready: missing.length === 0 && anyMissing === 0,
-      resultScore, giveUp, worthIt: resultScore >= giveUp * 0.8,
+      resultScore, giveUp, worthIt: resultScore >= giveUp * 0.8, covered,
     })
   }
   return plans.sort((a, b) =>

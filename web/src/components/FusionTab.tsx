@@ -265,7 +265,11 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                     </p>
                   ) : (
                     <p className={r.worthIt ? 'small reason-good' : 'small reason-bad'}>
-                      {r.worthIt ? `Worth it: ${r.result.name} beats what you give up` : `The ingredients are worth more to your team than ${r.result.name}`}
+                      {r.worthIt
+                        ? r.covered.length
+                          ? `Worth it: ${r.result.name} does what ${r.covered.map((g) => g.name).join(', ')} ${r.covered.length === 1 ? 'does' : 'do'}, better`
+                          : `Worth it: ${r.result.name} beats what you give up`
+                        : `The ingredients are worth more to your team than ${r.result.name}`}
                     </p>
                   )}
                   {r.fusion.super_shop && (
