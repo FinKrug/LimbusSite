@@ -145,7 +145,7 @@ describe('team synergy', () => {
   it('marks down affiliation gifts your team can\'t use', () => {
     const team = [ident('x', ['Rupture']), ident('y', ['Rupture'])]
     const bolus = rankGifts(makeContext(synergyData, team, [])).find((g) => g.gift.id === 'mao-bolus')!
-    expect(bolus.reasons.some((r) => r.kind === 'bad' && /doesn't have/.test(r.text))).toBe(true)
+    expect(bolus.reasons.some((r) => r.kind === 'bad' && /none are deployed/.test(r.text))).toBe(true)
   })
 
   it('treats rare statuses like Tremor - Scorch as team-specific, but not common ones', () => {
@@ -349,8 +349,23 @@ describe('affiliation-only effects', () => {
     const withYou = intrinsicScore(bloodflame, makeContext(real, youTeam, []))
     expect(withYou.score).toBeGreaterThan(2 * plain.score)
     expect(plain.reasons.map((r) => r.text)).toContain(
-      "Most of it only works for Heishou Pack - You Branch identities, which your team doesn't have")
+      'Most of it only works for Heishou Pack - You Branch identities (Heathcliff, Sinclair), and none are deployed')
     expect(withYou.reasons[0].text).toBe('Built for Heishou Pack - You Branch identities (2 on your team: Heathcliff, Sinclair)')
+  })
+
+  it('gives other Heishou branches no credit for a You Branch gift', () => {
+    // The demo lineup: five Heishou units deployed (Mao, Si), the You Branch pair on the bench.
+    const ids = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion',
+      'heishou-pack-si-branch-gregor', 'heishou-pack-you-branch-sinclair', 'heishou-pack-you-branch-adept-heathcliff']
+    const lineup = ids.map(byId)
+    const heishou = intrinsicScore(bloodflame, makeContext(real, lineup, [], { deployed: 7 }))
+    const texts = heishou.reasons.map((r) => r.text)
+    expect(texts.some((t) => /5 Heishou/.test(t))).toBe(false)
+    expect(texts).toContain('Most of it only works for Heishou Pack - You Branch identities (Heathcliff, Sinclair), and yours (Sinclair, Heathcliff) are backups')
+    expect(heishou.parts.some((p) => p.kind === 'synergy')).toBe(false)
+    const deployedYou = intrinsicScore(bloodflame, makeContext(real, lineup, [], { deployed: 9 }))
+    expect(deployedYou.score).toBeGreaterThan(heishou.score)
   })
 
   it('counts strong members for more', () => {
@@ -576,8 +591,11 @@ describe('theme pack cards', () => {
     for (const p of real.themePacks) for (const id of packPool(p)) count.set(id, (count.get(id) ?? 0) + 1)
     for (const p of ranked) {
       for (const h of p.highlights) {
-        expect(h.gift.gift.id).not.toBe('lunar-memory')
+        // Fusion-only gifts never, except as a pack's clear reward (The B.E. offers Lunar Memory).
+        if (h.kind === 'clear') expect(p.pack.clear_rewards).toContain(h.gift.gift.id)
+        else expect(h.gift.gift.id).not.toBe('lunar-memory')
         if (h.kind === 'exclusive') expect(p.pack.gifts).toContain(h.gift.gift.id)
+        else if (h.kind === 'clear') continue
         else expect(count.get(h.gift.gift.id)!).toBeLessThanOrEqual(6)
       }
       expect(p.highlights.filter((h) => h.kind === 'boosted').length).toBeLessThanOrEqual(3)

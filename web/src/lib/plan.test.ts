@@ -27,6 +27,29 @@ describe('where a gift can come from', () => {
     }
   })
 
+  it("once this floor's pack is picked, other packs' gifts wait, and played packs don't come back", () => {
+    const bolus = gameData.gifts.find((g) => g.id === 'heishou-bolus-mao')!
+    // Floor 5, Spring Cultivation picked: Nocturnal Sweeping BokGak's gift isn't on this floor.
+    const picked = makeContext(gameData, team, [], { run: run({ floor: 5, pack: 'spring-cultivation' }) })
+    expect(availability(bolus, picked, pfg).where).toBe('later')
+    // BokGak already played on floor 4: no other pack has it.
+    const played = makeContext(gameData, team, [], {
+      run: run({ floor: 5, pack: 'spring-cultivation', visited: { 4: 'nocturnal-sweeping-bokgak', 5: 'spring-cultivation' } }),
+    })
+    expect(availability(bolus, played, pfg).where).toBe('no')
+  })
+
+  it("treats a hidden pack's exclusive as luck, not something to plan for", () => {
+    const bongy = gameData.gifts.find((g) => g.id === 'bongy-plush')!
+    const c = makeContext(gameData, team, [], { run: run({ floor: 5 }) })
+    const w = availability(bongy, c, pfg)
+    expect(w.where).toBe('luck')
+    expect(w.text).toMatch(/The B\.E\., a rare hidden pack \(about 1 in 5,000 times\)/)
+    // Once you're in it, it's right here.
+    const inIt = makeContext(gameData, team, [], { run: run({ floor: 5, pack: 'the-b-e' }) })
+    expect(availability(bongy, inIt, pfg).where).toBe('now')
+  })
+
   it('a picked pack makes its pool available', () => {
     const pack = gameData.themePacks.find((p) => p.gift_pool.length > 0)!
     const g = gameData.gifts.find((x) => pack.gift_pool.includes(x.id) && !x.fusion_recipe)!

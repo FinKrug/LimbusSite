@@ -225,6 +225,8 @@ input[type='search']:focus, select:focus, button:focus-visible {
 .verdict-go { background: rgb(127 196 122 / 0.16); color: var(--good); }
 .verdict-maybe { background: rgb(227 169 60 / 0.16); color: var(--accent); }
 .verdict-skip { background: rgb(224 103 90 / 0.16); color: var(--bad); }
+.verdict-rare { background: var(--panel-2); color: var(--muted); border: 1px dashed var(--line); }
+.card.card-rare { border-left-color: var(--line); opacity: 0.85; }
 
 .offered { display: grid; gap: 10px; margin-bottom: 14px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
@@ -1063,3 +1065,12 @@ p.skill-best { background: none; border-color: var(--line); }
 .start-body .plan-now-top .btn { margin-left: auto; }
 .start-why { margin: 0; padding-left: 18px; color: var(--muted); }
 .start-together { margin: 0; padding: 8px 10px 8px 26px; border-left: 3px solid var(--good); border-radius: 0 8px 8px 0; background: rgba(127, 196, 122, 0.08); color: #cfe9cb; font-size: 13px; }
+.skill-best.skill-spare { border-style: dashed; }
+.skill-spare p { margin: 4px 0 0; }
+
+.offered-advice { margin: 2px 0 0; font-size: 13px; }
+.offered-advice.advice-best { color: var(--good); }
+.offered-advice.advice-last { color: var(--accent); }
+.offered-advice.advice-wait { color: var(--muted); }
+.pill.pill-clear { background: #3d3418; color: #f3dfa6; }
+.skill-row.skill-def { border-left-style: dashed; background: transparent; outline: 1px dashed var(--line); outline-offset: -1px; }

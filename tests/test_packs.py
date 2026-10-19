@@ -96,6 +96,20 @@ class PackLayoutTests(unittest.TestCase):
         '75% chance to generate as one of the following two Events.</p><h3>First</h3><p>...</p>'
     )
 
+    def test_hidden_pack_rate_and_clear_rewards(self):
+        page = (
+            '<p><b>The B.E.</b> Theme Pack is a Hidden Theme Pack related to X.</p>'
+            '<p>The E.G.O Gifts offered after clearing the Theme Pack will always be the following:\n</p><ul>'
+            '<li><span class="advanced-tooltip"><img alt="Bongy Plush Gift.png" src="x"/><span>Bongy Plush</span>'
+            '<span class="tooltip-contents"><img alt="Faith Gift.png"/></span></span></li>'
+            '<li><span class="advanced-tooltip"><img alt="Lunar Memory Gift.png" src="x"/></span></li></ul>'
+            '<h2>Trivia</h2><ul><li>This Theme Pack has a unique "hiddenThemeRate" value of 0.0002 in the game files</li></ul>'
+        )
+        self.assertEqual(packs.parse_rarity(page), (True, 0.0002))
+        self.assertEqual(packs.parse_clear_rewards(page), ["Bongy Plush", "Lunar Memory"])
+        self.assertEqual(packs.parse_rarity("<p>A normal pack.</p>"), (False, None))
+        self.assertEqual(packs.parse_clear_rewards("<p>A normal pack.</p>"), [])
+
     def test_layout_and_event_note(self):
         from scraper import packs
         self.assertEqual(packs.parse_layout(self.PAGE), {"nodes": 6, "dungeon_nodes": 4, "shop": True})

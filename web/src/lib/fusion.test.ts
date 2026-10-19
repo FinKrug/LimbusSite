@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { makeContext, rankGifts, rankThemePacks, scoreGift } from './scoring'
 import {
-  fodder, forecast, fusionIdeas, fusionPoints, fusionTier, keywordChance, matchRecipe, pointsFor, randomPool, recipePlans,
+  fodder, forecast, fusionIdeas, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans,
 } from './fusion'
 
 const g = (name: string) => gameData.gifts.find((x) => x.name === name)!
@@ -39,6 +39,38 @@ describe('fusion rules', () => {
     const pack = gameData.themePacks.find((p) => p.name === 'Nocturnal Sweeping')!
     const withPack = randomPool(ctx, 'Rupture', 3, pack)
     expect(withPack.length).toBeGreaterThanOrEqual(randomPool(ctx, 'Rupture', 3, null).length)
+  })
+
+  it("aims fusions at the current pack's exclusives when it's the last chance at them", () => {
+    const you = ['heishou-pack-you-branch-sinclair', 'heishou-pack-you-branch-adept-heathcliff']
+      .map((x) => gameData.identities.find((i) => i.id === x)!)
+    const team = [...you, ...burners.filter((i) => i.sinner !== 'Sinclair' && i.sinner !== 'Heathcliff').slice(0, 5)]
+    const spring = gameData.themePacks.find((p) => p.id === 'spring-cultivation')!
+    const vestige = id('Faint Vestige')
+    const ctx = makeContext(gameData, team, [vestige, vestige], {
+      run: { difficulty: 'hard', floors: 10, floor: 7, pack: spring.id, visited: { 7: spring.id } },
+    })
+    const last = lastChanceGifts(ctx, spring)
+    expect(last.has('bloodflame-sword')).toBe(true)
+    // Two Tier II vestiges make a Tier II fusion: Bloodflame Sword is in the Burn pool.
+    const ideas = fusionIdeas(ctx, [vestige, vestige], ['Burn'], spring, false)
+    expect(ideas[0].chase?.gift.id).toBe('bloodflame-sword')
+    expect(ideas[0].forecast.lastChanceOdds).toBeGreaterThan(0)
+    const f = forecast(ctx, 'Burn', [g('Faint Vestige'), g('Faint Vestige')], spring, false)
+    expect(f.lastChance.map((x) => x.gift.id)).toContain('bloodflame-sword')
+    // Without the pack in play there's nothing to chase.
+    expect(fusionIdeas(ctx, [vestige, vestige], ['Burn'], null, false).every((i) => !i.chase)).toBe(true)
+  })
+
+  it("doesn't call it a last chance when a later pack has the gift too", () => {
+    const pack = gameData.themePacks.find((p) => p.id === 'unbound-wrath')!
+    const ctx = makeContext(gameData, burners, [], { run: { difficulty: 'hard', floors: 10, floor: 1, pack: pack.id } })
+    const shared = gameData.gifts.find((x) => x.theme_packs.includes(pack.id) && x.theme_packs.length > 1)
+    if (shared) {
+      const later = gameData.themePacks.filter((p) => p.id !== pack.id && p.gift_pool.includes(shared.id))
+      const reachable = later.some((p) => [2, 3, 4, 5, 6, 7, 8, 9, 10].some((f) => p.floors?.hard && f >= p.floors.hard[0] && f <= p.floors.hard[1]))
+      expect(lastChanceGifts(ctx, pack).has(shared.id)).toBe(!reachable)
+    }
   })
 
   it('forecasts a tier and chance from the gifts put in', () => {

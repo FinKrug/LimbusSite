@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { costPlan, floorCostFrom } from '../lib/costplan'
 import {
-  EXTREME_FROM, RUN_LENGTHS, defaultFloors, packOnFloor, type Difficulty, type GiftScore, type RunContext, type RunSettings,
+  EXTREME_FROM, RUN_LENGTHS, defaultFloors, packOnFloor, withPack, type Difficulty, type GiftScore, type RunContext, type RunSettings,
 } from '../lib/scoring'
 import type { ThemePack } from '../lib/types'
 
@@ -31,7 +31,10 @@ export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun }: Prop
     [packs, run.difficulty, run.floor],
   )
   const set = (patch: Partial<RunSettings>) => onChange({ ...run, ...patch })
-  const setFloor = (floor: number | null) => set({ floor, pack: null })
+  // Going back to a floor brings back the pack you picked there; starting a run clears the old picks.
+  const setFloor = (floor: number | null) => run.floor === null
+    ? set({ floor, pack: null, visited: {} })
+    : set({ floor, pack: floor === null ? null : run.visited?.[floor] ?? null })
   const phase = run.difficulty === 'extreme' && run.floor !== null
     ? run.floor < EXTREME_FROM ? 'Hard floor' : 'EXTREME floor' : null
 
@@ -61,7 +64,7 @@ export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun }: Prop
           <span>Difficulty</span>
           <select value={run.difficulty} onChange={(e) => {
             const d = e.target.value as Difficulty
-            onChange({ ...run, difficulty: d, floors: defaultFloors(d), floor: run.floor === null ? null : Math.min(run.floor, defaultFloors(d)), pack: null })
+            onChange({ ...run, difficulty: d, floors: defaultFloors(d), floor: run.floor === null ? null : Math.min(run.floor, defaultFloors(d)), pack: null, visited: {} })
           }}>
             {(Object.keys(DIFFICULTY) as Difficulty[]).map((d) => <option key={d} value={d}>{DIFFICULTY[d]}</option>)}
           </select>
@@ -91,7 +94,7 @@ export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun }: Prop
       {run.floor !== null && (
         <label className="run-field">
           <span>Theme pack on this floor</span>
-          <select value={run.pack ?? ''} onChange={(e) => set({ pack: e.target.value || null })}>
+          <select value={run.pack ?? ''} onChange={(e) => onChange(withPack(run, e.target.value || null))}>
             <option value="">Not picked yet</option>
             {onFloor.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>

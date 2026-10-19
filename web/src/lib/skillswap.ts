@@ -27,11 +27,18 @@
  *        nothing else on the team does (no other multi-target skill or E.G.O);
  *      * its sin lines up Resonance that a gift you own triggers on.
  *    Then S1 -> S2 is the pick even ahead of S3; otherwise it's "go S3 instead".
+ *  - A gift's Resonance only steers swaps when its triggered part matters (`triggerWorth`).
+ *    A part that just adds more of a status (Crown of Roses: 2 Rupture on Gluttony Absolute
+ *    Resonance) is minor when your team doesn't use that status or already has 2+ other
+ *    sources of it (units or gifts): plenty of gifts, and upgrades, give the same. Minor
+ *    triggers are listed, but never make S2 the pick or block Skill 3.
  */
 import { deckCards, skillValue, type Swaps } from './battle'
-import { buildBattle, resonanceTriggers, withBase, type BattleProfile, type Ego, type EgoLoadout } from './ego'
+import { buildBattle, resonanceTriggers, triggerWorth, withBase, type BattleProfile, type Ego, type EgoLoadout, type TriggerWorth } from './ego'
+
+export { triggerWorth, type TriggerWorth }
 import type { RunSettings } from './scoring'
-import type { Gift, Identity, Sin, Skill } from './types'
+import type { DefenseSkill, Gift, Identity, Sin, Skill } from './types'
 
 export { skillValue }
 
@@ -53,6 +60,8 @@ export const SWAP_WEIGHTS = {
   floorsFull: 8,
   floorsMin: 0.25,
   floorsMax: 1.25,
+  /** A swap that costs the team more than this (as a fraction of damage) hurts: never suggest it. */
+  hurtAt: -0.005,
 }
 
 /** Copies of skill 1/2/3 in the deck after the swaps you've made. */
@@ -88,6 +97,8 @@ export interface SwapAdvice {
   worth: boolean
   /** A Skill 2 swap with a reason Skill 3 doesn't cover (multi-target, Resonance for a gift). */
   special: boolean
+  /** It would make the team worse: less damage, or Resonance a gift you own needs. */
+  hurts: boolean
   pros: string[]
   cons: string[]
 }
@@ -96,7 +107,14 @@ export interface IdentityPlan {
   identity: Identity
   deck: Record<1 | 2 | 3, number>
   skills: Skill[]
+  /** Its defense skill (not in the deck; usable in any slot) and the share of turns the
+   *  battle model puts it in a Resonance chain instead of a hand skill. */
+  defense: DefenseSkill | null
+  defenseUse: number
   best: SwapAdvice | null
+  /** When no swap is clearly worth its Cost: the best one that doesn't hurt the team, for runs
+   *  with Cost to spare. Null when there's a `best`, or when every swap would hurt. */
+  spare: SwapAdvice | null
   options: SwapAdvice[]
 }
 
@@ -131,8 +149,10 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
   const keywords = [...new Set(team.flatMap((i) => i.keywords))]
   const giftSins = new Set(owned.flatMap((g) => g.affinities ?? []))
   // Sins whose Resonance a gift you own triggers on ("When activating Wrath Absolute Resonance").
-  const resonGifts = new Map<Sin, Gift[]>()
-  for (const g of owned) for (const t of resonanceTriggers(g)) resonGifts.set(t.sin, [...(resonGifts.get(t.sin) ?? []), g])
+  const resonGifts = new Map<Sin, TriggerWorth[]>()
+  for (const g of owned) {
+    for (const t of resonanceTriggers(g)) resonGifts.set(t.sin, [...(resonGifts.get(t.sin) ?? []), triggerWorth(g, t, team, owned)])
+  }
   // Multi-target damage the team already has: other units' skills and equipped E.G.O.
   const fullLoadout = withBase(loadout, egos)
   const egoById = new Map(egos.map((e) => [e.id, e]))
@@ -142,7 +162,7 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
   const aoeFrom = (except: Identity) => team.filter((m) => m !== except && (m.skills ?? []).some(multiTarget))
   const { floorsLeft, weight } = floorsWeight(opts.run)
 
-  return team.map((i) => {
+  return team.map((i, unit) => {
     const skills = [...(i.skills ?? [])].sort((a, b) => a.slot - b.slot)
     const d = deck(i, swaps[i.id])
     const options: SwapAdvice[] = []
@@ -180,6 +200,10 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
           if (Math.abs(resonPart) >= 0.003) {
             ;(resonPart > 0 ? pros : cons).push(`Resonance overall: ${pct(resonPart)} team damage`)
           }
+          // The defense skill isn't in the deck, so a swap never touches it: it can still fill a chain.
+          if (from.sin && i.defense?.sin === from.sin) {
+            pros.push(`${i.sinner}'s defense skill (${i.defense.name}) is ${cap(from.sin)} too, so it can still fill a ${cap(from.sin)} Resonance chain when needed`)
+          }
           if (from.sin && giftSins.has(from.sin) && d[sw.from] === 1 && !skills.some((s) => s.slot !== from.slot && s.sin === from.sin)) {
             cons.push(`Its last ${cap(from.sin)} skill: gifts that check for ${cap(from.sin)} skills stop counting it`)
           }
@@ -200,15 +224,27 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
         if (floorsLeft <= 3) cons.push(`Only ${floorsLeft} floor${floorsLeft > 1 ? 's' : ''} left to use it`)
 
         // Resonance a gift you own triggers on, gained or lost by this swap.
+        // Only gifts whose triggered part matters steer the pick; minor ones are just noted.
         const resonFor = (sin: Sin | null, dir: 1 | -1) => {
-          if (!sin || !resonGifts.has(sin)) return null
+          if (!sin || !resonGifts.has(sin)) return { major: [], minor: [] }
           const delta = (after.sim.areson[sin] + after.sim.reson[sin]) - (base.sim.areson[sin] + base.sim.reson[sin])
-          return delta * dir >= 0.03 ? resonGifts.get(sin)! : null
+          const hit = delta * dir >= 0.03 ? resonGifts.get(sin)! : []
+          return { major: hit.filter((x) => !x.minor), minor: hit.filter((x) => x.minor) }
         }
-        const losesGiftReson = from.sin !== to.sin ? resonFor(from.sin, -1) : null
-        const gainsGiftReson = from.sin !== to.sin ? resonFor(to.sin, 1) : null
-        if (losesGiftReson) cons.unshift(`Less ${cap(from.sin!)} Resonance, which ${losesGiftReson[0].name} triggers on`)
-        if (gainsGiftReson) pros.unshift(`More ${cap(to.sin!)} Resonance, which ${gainsGiftReson[0].name} triggers on`)
+        const none = { major: [], minor: [] }
+        const loses = from.sin !== to.sin ? resonFor(from.sin, -1) : none
+        const gains = from.sin !== to.sin ? resonFor(to.sin, 1) : none
+        const losesGiftReson = loses.major.length ? loses.major : null
+        const gainsGiftReson = gains.major.length ? gains.major : null
+        const minorText = (m: TriggerWorth) => `it only adds ${m.statuses.join(' and ')} there, and ${m.why}`
+        if (!losesGiftReson && loses.minor.length) {
+          cons.push(`A bit less ${cap(from.sin!)} Resonance for ${loses.minor[0].gift.name}, but ${minorText(loses.minor[0])}`)
+        }
+        if (!gainsGiftReson && gains.minor.length) {
+          pros.push(`A bit more ${cap(to.sin!)} Resonance for ${gains.minor[0].gift.name}, but ${minorText(gains.minor[0])}`)
+        }
+        if (losesGiftReson) cons.unshift(`Less ${cap(from.sin!)} Resonance, which ${losesGiftReson[0].gift.name} triggers on`)
+        if (gainsGiftReson) pros.unshift(`More ${cap(to.sin!)} Resonance, which ${gainsGiftReson[0].gift.name} triggers on`)
 
         let worth: boolean
         let special = false
@@ -235,12 +271,14 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
           }
           worth = special && !losesGiftReson && gain > -0.02 && floorsLeft > 1
         }
-        options.push({ kind: sw.kind, from, to, cost: sw.cost, search: sw.search, gain, score, worth, special, pros, cons })
+        const hurts = gain <= SWAP_WEIGHTS.hurtAt || !!losesGiftReson
+        options.push({ kind: sw.kind, from, to, cost: sw.cost, search: sw.search, gain, score, worth, special, hurts, pros, cons })
       }
     }
     // A Skill 2 swap with a reason Skill 3 can't cover comes first; then Skill 3 swaps.
     options.sort((a, b) => Number(b.special) - Number(a.special) || Number(b.to.slot === 3) - Number(a.to.slot === 3) || b.score - a.score)
     const best = options.find((o) => o.worth) ?? null
-    return { identity: i, deck: d, skills, best, options }
+    const spare = best ? null : options.find((o) => !o.hurts) ?? null
+    return { identity: i, deck: d, skills, defense: i.defense ?? null, defenseUse: base.sim.defenseUse[unit] ?? 0, best, spare, options }
   })
 }

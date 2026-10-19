@@ -140,6 +140,11 @@ class PackPage:
     layout: dict | None = None
     # "All Abnormality Event nodes within ... have a 75% chance to generate as one of the following two Events."
     event_note: str | None = None
+    # "Hidden Theme Pack" with a "hiddenThemeRate" (The B.E.: 0.0002 = 1/5000 per pack generated).
+    hidden: bool = False
+    appear_rate: float | None = None
+    # Gifts always offered after clearing it (The B.E.: Bongy Plush, Lunar Memory, ...).
+    clear_rewards: list[str] = field(default_factory=list)
     unresolved: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
@@ -173,10 +178,32 @@ def parse_event_note(page_html: str) -> str | None:
     return m.group(0).strip() if m else None
 
 
+_HIDDEN_RATE = re.compile(r'hiddenThemeRate"?\s*(?:value\s+)?(?:of|=|:)?\s*([0-9]*\.?[0-9]+)', re.IGNORECASE)
+
+
+def parse_rarity(page_html: str) -> tuple[bool, float | None]:
+    """Is it a Hidden Theme Pack, and its chance to replace any generated pack ("hiddenThemeRate")."""
+    text = html_to_text(page_html)
+    m = _HIDDEN_RATE.search(text)
+    rate = float(m.group(1)) if m else None
+    hidden = rate is not None or bool(re.search(r"\bis an? Hidden Theme Pack\b", text, re.IGNORECASE))
+    return hidden, rate
+
+
+def parse_clear_rewards(page_html: str) -> list[str]:
+    """Gift names from the list after "The E.G.O Gifts offered after clearing ... will always be"."""
+    m = re.search(r"offered after clearing[^<]*", page_html, re.IGNORECASE)
+    if not m:
+        return []
+    ul = re.search(r"<ul>(.*?)</ul>", page_html[m.end():m.end() + 200000], re.IGNORECASE | re.DOTALL)
+    return gift_icons(ul.group(1)) if ul else []
+
+
 def parse_pack_page(title: str, page_html: str, finder: NameFinder) -> PackPage:
     page = PackPage(title)
     page.layout = parse_layout(page_html)
     page.event_note = parse_event_note(page_html)
+    page.hidden, page.appear_rate = parse_rarity(page_html)
     page.floors = parse_floors(page_html)
     if page.floors is None:
         page.warnings.append(f"{title}: no Featured Floors in the infobox")
@@ -206,6 +233,7 @@ def parse_pack_page(title: str, page_html: str, finder: NameFinder) -> PackPage:
                 out.append(gid)
         return out
 
+    page.clear_rewards = resolve_all(parse_clear_rewards(page_html))
     page.unique = resolve_all(gift_icons(blocks.get("unique gifts", "")))
     page.featured = resolve_all(gift_icons(blocks.get("featured gifts", "")))
     page.gift_pool = page.featured + [g for g in page.unique if g not in page.featured]

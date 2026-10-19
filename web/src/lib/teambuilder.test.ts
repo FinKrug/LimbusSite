@@ -58,7 +58,14 @@ describe('theme packs for a faction team (real data)', () => {
     const team = names.map((n) => gameData.identities.find((i) => i.name === n)!)
     expect(team.every(Boolean)).toBe(true)
     const top = rankThemePacks(makeContext(gameData, team, [])).slice(0, 5).map((p) => p.pack.name)
-    expect(top).toEqual(expect.arrayContaining(['Spring Cultivation', 'Nocturnal Sweeping', 'Nocturnal Sweeping BokGak']))
+    // Nocturnal Sweeping BokGak's draw is Heishou Bolus - Mao, which does nothing for a team with no Mao Branch.
+    expect(top).toEqual(expect.arrayContaining(['Spring Cultivation', 'Nocturnal Sweeping']))
+  })
+
+  it('ranks Nocturnal Sweeping BokGak for a Mao Branch team', () => {
+    const team = gameData.identities.filter((i) => i.traits.includes('Heishou Pack - Mao Branch'))
+    const top = rankThemePacks(makeContext(gameData, team, [])).slice(0, 5).map((p) => p.pack.name)
+    expect(top).toContain('Nocturnal Sweeping BokGak')
   })
 
   it("doesn't let huge pools of common gifts win", () => {

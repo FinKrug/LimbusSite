@@ -554,6 +554,11 @@ def export_for_app(
             "gift_pool": pool_ids,      # everything it can give, exclusives included
             "layout": (info or {}).get("layout"),          # {"nodes", "dungeon_nodes", "shop"} or None
             "event_note": (info or {}).get("event_note"),  # how often its own events show up, or None
+            # Hidden packs (The B.E.) replace a generated pack only rarely: chance per pack, or None.
+            "hidden": bool((info or {}).get("hidden")),
+            "appear_rate": (info or {}).get("appear_rate"),
+            # Gifts always offered after clearing it.
+            "clear_rewards": [gid for gid in (info or {}).get("clear_rewards", []) if gid in keep],
             "wiki_url": wiki_url(title) if title else None,
         }
 
@@ -614,6 +619,9 @@ def export_for_app(
             "order_notes": i.get("order_notes", []),
             # Skills 1-3 with sin, power and copies in the deck (see skills.py).
             "skills": i.get("skills", []),
+            # The defense skill (Guard / Evade / Counter): usable in any slot, so it can fill a
+            # Resonance chain (see skills.identity_defense). None if the page has none.
+            "defense": i.get("defense"),
             "wiki_url": wiki_url(i["name"]),
         }
         for i in identities

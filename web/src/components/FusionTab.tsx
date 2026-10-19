@@ -196,6 +196,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
             {Math.round(fc.chance * 100)}% chance of a {keyword} gift ({bench.length} gifts{bench.length < 4 ? '; 4+ gifts make it 99%' : ''}).{' '}
             {fc.pool.length} possible {keyword} gifts; average value for your team {fc.expected.toFixed(1)}.
             {pack && fc.fromPack.length > 0 && <> Your current pack, {pack.name}, adds {fc.fromPack.map((g) => g.gift.name).join(', ')}.</>}
+            {fc.lastChance.length > 0 && <> <b>Last chance</b> at {fc.lastChance.map((g) => g.gift.name).join(', ')}: no later pack this run has {fc.lastChance.length > 1 ? 'them' : 'it'} ({Math.round(fc.lastChanceOdds * 100)}% with these gifts).</>}
             {!pack && run.floor !== null && ' Pick your current theme pack in Your run: its exclusives can come out of random fusions too.'}
           </p>
           <ul className="fuse-pool">
@@ -204,7 +205,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                 {picking
                   ? <button className="fuse-pick" onClick={() => fuseInto(g.gift)}><GiftLabel gift={g.gift} icon={24} link={false} /></button>
                   : <GiftLabel gift={g.gift} icon={24} />}
-                {fc.fromPack.includes(g) && <span className="pill">this pack</span>}
+                {fc.fromPack.includes(g) && <span className={fc.lastChance.includes(g) ? 'pill warn' : 'pill'}>{fc.lastChance.includes(g) ? 'last chance' : 'this pack'}</span>}
                 <span className="muted small grow-right">{g.reasons[0]?.text}</span>
               </li>
             ))}
@@ -228,10 +229,16 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                     <span className="fuse-idea-out">Tier {tierLabel(idea.forecast.tier)} <KeywordChip keyword={idea.keyword} /></span>
                     <button className="btn" onClick={() => load(idea)}>Load</button>
                   </div>
+                  {idea.chase && (
+                    <p className="reason reason-good small">
+                      Last chance at {idea.chase.gift.name}: only {pack?.name} has it this run, and fusing here can roll it
+                      ({Math.round(idea.forecast.lastChanceOdds * 100)}% with these gifts).
+                    </p>
+                  )}
                   <p className="muted small">
                     {Math.round(idea.forecast.chance * 100)}% {idea.keyword}; gives up {idea.ingredients.map((i) => i.gift.name).join(', ')}
                     {idea.ingredients.every((i) => i.value < 1) ? ', which do little for your team' : ''}.
-                    {idea.forecast.fromPack.length > 0 && ` Can roll ${pack?.name}'s ${idea.forecast.fromPack[0].gift.name}.`}
+                    {!idea.chase && idea.forecast.fromPack.length > 0 && ` Can roll ${pack?.name}'s ${idea.forecast.fromPack[0].gift.name}.`}
                     {idea.superShop && ' Super Shop.'}
                     {idea.alsoKeywords.length > 0 && ` Also good as ${idea.alsoKeywords.join(' or ')}.`}
                   </p>

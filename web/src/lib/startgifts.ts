@@ -16,7 +16,7 @@
  * Picks are greedy: after each pick the rest are scored again as if you owned it, so a
  * second gift that applies the same status, or a gift that combos with the first, moves.
  */
-import { isGone, makeContext, packInDifficulty, scoreGift, type GiftScore, type RunContext } from './scoring'
+import { isGone, isHiddenPack, makeContext, packInDifficulty, scoreGift, type GiftScore, type RunContext } from './scoring'
 import type { Gift, ThemePack } from './types'
 
 /** The pre-run purchase as the game offers it. Change these if the game does. */
@@ -49,7 +49,8 @@ function judge(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>)
   const s = { ...scoreGift(g, ctx), rating: 0 }
   if (!(s.fit > 0 || s.synergy) || s.score <= 0) return null
   const W = START_WEIGHTS
-  const packs = (packsForGift.get(g.id) ?? []).filter((p) => packInDifficulty(p, ctx.run.difficulty))
+  // Hidden packs (The B.E.) are too rare to count as a place to find it.
+  const packs = (packsForGift.get(g.id) ?? []).filter((p) => packInDifficulty(p, ctx.run.difficulty) && !isHiddenPack(p))
   const main = g.pools.includes('main')
   const find = main ? W.mainFind : packs.length ? Math.min(1, W.rareAt / packs.length) : 0
   const why: string[] = []
@@ -127,7 +128,7 @@ function together(ctx: RunContext, ids: string[]): string[] {
     }
   }
   for (const p of ctx.data.themePacks) {
-    if (!packInDifficulty(p, ctx.run.difficulty)) continue
+    if (!packInDifficulty(p, ctx.run.difficulty) || isHiddenPack(p)) continue
     const mine = p.gifts.filter((id) => ids.includes(id))
     if (mine.length < 2) continue
     const fitting = p.gifts.filter((id) => !ctx.owned.has(id)).filter((id) => {

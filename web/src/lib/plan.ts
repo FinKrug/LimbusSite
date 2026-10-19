@@ -10,7 +10,7 @@
  *  - fusion results: only by fusing; Super Shop recipes (Lunar Memory) only on Hard floors.
  */
 import {
-  intrinsicScore, isGone, packOnFloor, recipeGiveUp, WEIGHTS, type GiftScore, type Reason, type RunContext,
+  intrinsicScore, isGone, isHiddenPack, packOnFloor, rarityText, recipeGiveUp, WEIGHTS, type GiftScore, type Reason, type RunContext,
 } from './scoring'
 import type { Combo, Fusion, Gift, ThemePack } from './types'
 import { mustHave } from './musthave'
@@ -46,16 +46,26 @@ export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string,
   }
   const { difficulty, floors } = ctx.run
   const floor = ctx.run.floor ?? 1
-  const packs = packsForGift.get(g.id) ?? []
-  const current = ctx.run.pack ? packs.find((p) => p.id === ctx.run.pack) : undefined
+  // Packs you've already played (and this floor's pack, once picked) don't come back.
+  const played = new Set(Object.entries(ctx.run.visited ?? {})
+    .filter(([f]) => ctx.run.floor !== null && Number(f) < ctx.run.floor).map(([, id]) => id))
+  const allPacks = (packsForGift.get(g.id) ?? []).filter((p) => !played.has(p.id))
+  const current = ctx.run.pack ? allPacks.find((p) => p.id === ctx.run.pack) : undefined
   if (current) return { where: 'now', text: `This floor's pack (${current.name})` }
   if (g.pools.includes('main')) return { where: 'now', text: 'Shops and fight rewards' }
-  const here = packs.filter((p) => packOnFloor(p, difficulty, floor))
+  // Hidden packs (The B.E.) almost never show up: their gifts are luck, not a plan.
+  const packs = allPacks.filter((p) => !isHiddenPack(p))
+  const hidden = allPacks.filter(isHiddenPack)
+  if (!packs.length && hidden.length) {
+    return { where: 'luck', text: `Only from ${hidden[0].name}, a rare hidden pack (${rarityText(hidden[0])}): take it if you find it` }
+  }
+  // Once this floor's pack is picked, other packs' gifts wait for a later floor.
+  const here = ctx.run.pack ? [] : packs.filter((p) => packOnFloor(p, difficulty, floor))
   if (here.length) {
     return { where: 'now', text: `Theme pack on this floor: ${here.slice(0, 2).map((p) => p.name).join(', ')}${here.length > 2 ? ', …' : ''}` }
   }
   for (let f = floor + 1; f <= floors; f++) {
-    const later = packs.filter((p) => packOnFloor(p, difficulty, f))
+    const later = packs.filter((p) => p.id !== ctx.run.pack && packOnFloor(p, difficulty, f))
     if (later.length) return { where: 'later', text: `From floor ${f} (${later[0].name}${later.length > 1 ? ', …' : ''})` }
   }
   return { where: 'no', text: packs.length ? 'Not in this run’s packs' : 'Not in any theme pack' }

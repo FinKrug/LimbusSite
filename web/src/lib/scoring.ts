@@ -122,9 +122,6 @@ export const WEIGHTS = {
   packBoostedShown: 3,
   /** Flat bonus per gift in the pool that's built for your team, times its rarity weight. */
   packSynergy: 1.5,
-  /** Synergy credit for a gift built for another branch of your team's faction
-   *  (e.g. a Heishou Pack - You Branch gift for a Heishou Pack team). */
-  familySynergy: 0.35,
   /** Pack verdicts relative to the best pack in the list. */
   packGo: 0.75,
   packSkip: 0.5,
@@ -377,6 +374,17 @@ export interface RunSettings {
   floor: number | null
   /** The current floor's theme pack id, if chosen. */
   pack: string | null
+  /** Packs picked on each floor so far (floor -> pack id), for the pack route. */
+  visited?: Record<number, string>
+}
+
+/** Set the current floor's pack, and remember it for that floor (the pack route skips it later). */
+export function withPack(run: RunSettings, pack: string | null): RunSettings {
+  if (run.floor === null) return { ...run, pack }
+  const visited = { ...(run.visited ?? {}) }
+  if (pack) visited[run.floor] = pack
+  else delete visited[run.floor]
+  return { ...run, pack, visited }
 }
 export const RUN_LENGTHS = [5, 10, 15] as const
 /** Normal runs are 5 floors, Hard 10, EXTREME 15; short Hard/EXTREME runs exist too. */
@@ -590,13 +598,6 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
       })
       .filter((x) => x.who.length > 0)
       .sort((a, b) => b.weight - a.weight)
-    // "Heishou Pack - You Branch" belongs to the "Heishou Pack" family.
-    const family = traits
-      .map((t) => {
-        const parent = [...profile.traitCounts.keys()].find((p) => p !== t && t.startsWith(p + ' '))
-        return parent ? { t, parent, n: profile.traitCounts.get(parent)! } : null
-      })
-      .find((x) => x !== null)
     const most = share >= 0.5 ? 'Most of it' : 'Part of it'
     if (matched.length) {
       const { t, who, weight } = matched[0]
@@ -606,14 +607,18 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
       parts.push({ kind: 'synergy', label: `Built for ${t} identities`, value: WEIGHTS.traitSynergy * traitFit,
         detail: `${who.length} on your team: ${names}` })
       reasons.push({ kind: 'good', text: `Built for ${t} identities (${who.length} on your team: ${names})` })
-    } else if (family) {
-      synergyBonus += WEIGHTS.traitSynergy * WEIGHTS.familySynergy
-      parts.push({ kind: 'synergy', label: `Built for ${family.t}, a branch of your ${family.parent} team`,
-        value: WEIGHTS.traitSynergy * WEIGHTS.familySynergy, detail: 'Counts for a little: your team is the same faction, not that branch' })
-      reasons.push({ kind: 'info', text: `Built for ${family.t}; your team has ${family.n} ${family.parent} identities` })
-      reasons.push({ kind: 'bad', text: `${most} only works for ${family.t} identities` })
     } else {
-      reasons.push({ kind: 'bad', text: `${most} only works for ${traits.join(' / ')} identities, which your team doesn't have` })
+      // Only that exact affiliation counts: a You Branch gift does nothing extra for Mao or Si
+      // Branch units, even though they're all Heishou Pack.
+      const t = traits[0]
+      const benched = ctx.lineup.slice(ctx.deployed).filter((i) => i.traits?.includes(t))
+      const members = [...new Set(ctx.data.identities.filter((i) => i.traits?.includes(t)).map((i) => i.sinner))]
+      const list = members.length && members.length <= 4 ? ` (${members.join(', ')})` : ''
+      if (benched.length) {
+        reasons.push({ kind: 'bad', text: `${most} only works for ${t} identities${list}, and ${benched.length === 1 ? `yours (${benched[0].sinner}) is a backup` : `yours (${benched.map((i) => i.sinner).join(', ')}) are backups`}` })
+      } else {
+        reasons.push({ kind: 'bad', text: `${most} only works for ${traits.join(' / ')} identities${list}, and none are deployed` })
+      }
     }
   }
   const signatureHits = profile.size
@@ -1237,6 +1242,18 @@ export function packOnFloor(pack: ThemePack, difficulty: Difficulty, floor: numb
   return !!range && floor >= range[0] && floor <= range[1]
 }
 
+/** A rare hidden pack (The B.E., 1 in 5,000): take it if it shows up, never plan around it. */
+export function isHiddenPack(pack: ThemePack): boolean {
+  return !!pack.hidden || (pack.appear_rate != null && pack.appear_rate < 0.05)
+}
+
+/** "about 1 in 5,000 times" */
+export function rarityText(pack: ThemePack): string {
+  const r = pack.appear_rate
+  if (!r) return 'very rarely'
+  return `about 1 in ${Math.round(1 / r).toLocaleString('en-US')} times`
+}
+
 /** Can this pack show up at all on this difficulty? Packs with no floor data are kept. */
 export function packInDifficulty(pack: ThemePack, difficulty: Difficulty): boolean {
   if (!pack.floors) return true
@@ -1265,7 +1282,7 @@ export interface PackScore {
 
 export interface PackHighlight {
   gift: GiftScore
-  kind: 'exclusive' | 'boosted'
+  kind: 'exclusive' | 'boosted' | 'clear'
   /** Fits your team (keyword fit or built for it). */
   fits: boolean
   /** "Only in this pack", "Featured in 3 packs". */
@@ -1322,7 +1339,14 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
       p.notes.push(note)
       partOf.set(g.gift.id, p)
     }
-    const best = [...scored].sort((a, b) => weight(b) - weight(a)).slice(0, WEIGHTS.packTopN)
+    // Gifts always offered on clearing it (The B.E.: Lunar Memory among them): you pick one, so
+    // the best one counts like an exclusive, even a recipe result.
+    const clearIds = (pack.clear_rewards ?? []).filter((id) => !ctx.owned.has(id) && ctx.giftsById.has(id))
+    const clear = clearIds.map((id) => scored.find((g) => g.gift.id === id) ?? scoreOf(ctx.giftsById.get(id)!))
+      .sort((a, b) => b.score - a.score)
+    if (clear[0]) credit(clear[0], clear[0].score * WEIGHTS.packExclusive, 'always offered when you clear it')
+    const clearValue = clear[0] ? clear[0].score * WEIGHTS.packExclusive : 0
+    const best = [...scored].filter((g) => !clearIds.includes(g.gift.id)).sort((a, b) => weight(b) - weight(a)).slice(0, WEIGHTS.packTopN)
     best.forEach((g, i) => credit(g, weight(g) * WEIGHTS.packDecay ** i,
       i === 0 ? 'its best gift for you' : `#${i + 1} best here (counts ×${+(WEIGHTS.packDecay ** i).toFixed(2)})`))
     const bestValue = best.reduce((sum, g, i) => sum + weight(g) * WEIGHTS.packDecay ** i, 0)
@@ -1346,13 +1370,17 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
         const n = packCount.get(g.gift.id) ?? 1
         return { gift: g, kind: 'boosted', fits: true, where: n <= 1 ? 'Featured only here' : `Featured in ${n} packs` }
       })
-    const highlights = [...exclusives, ...boosted]
+    const clearShown = clear
+      .filter((g) => !exclusives.some((h) => h.gift.gift.id === g.gift.id))
+      .map((g): PackHighlight => ({ gift: g, kind: 'clear', fits: fits(g), where: 'Clear reward' }))
+    const highlights = [...exclusives, ...clearShown, ...boosted]
     return {
-      pack, score: bestValue + teamValue, top, ownedCount, parts, highlights,
-      split: { best: bestValue, team: teamValue },
+      pack, score: bestValue + teamValue + clearValue, top, ownedCount, parts, highlights,
+      split: { best: bestValue + clearValue, team: teamValue },
     }
   })
-  const max = Math.max(0, ...raw.map((r) => r.score))
+  // Rare hidden packs don't set the bar for the others (you'll almost never see them).
+  const max = Math.max(0, ...raw.filter((r) => !isHiddenPack(r.pack) || raw.length === 1).map((r) => r.score))
   const ranked = raw.map((r): PackScore => {
     const rel = max > 0 ? r.score / max : 0
     const reasons: Reason[] = []
@@ -1370,7 +1398,7 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
         reasons.push({ kind: 'bad', text: "None of its gifts match your team's keywords" })
       } else if (!synergy.length && r.highlights.some((h) => h.fits)) {
         const h = r.highlights.find((x) => x.fits)!
-        reasons.push({ kind: 'good', text: `${h.kind === 'exclusive' ? 'Exclusive' : 'Boosted'} for your team: ${h.gift.gift.name}` })
+        reasons.push({ kind: 'good', text: `${h.kind === 'exclusive' ? 'Exclusive' : h.kind === 'clear' ? 'Clear reward' : 'Boosted'} for your team: ${h.gift.gift.name}` })
       }
     }
     const exclusivesLeft = r.pack.gifts.filter((id) => !ctx.owned.has(id)).length
@@ -1378,6 +1406,13 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
       reasons.push({ kind: 'info', text: `${exclusivesLeft} exclusive gift${exclusivesLeft > 1 ? 's' : ''}` })
     }
     if (r.pack.pool !== 'themed') reasons.push({ kind: 'info', text: `${cap(r.pack.pool)} pack` })
+    if (isHiddenPack(r.pack)) {
+      // Worth taking when it shows up, but nothing to plan or wait for.
+      if (verdict === 'skip' && r.score > 0) verdict = 'maybe'
+      reasons.unshift({ kind: 'info', text: `Rare hidden pack (it shows up in place of a normal pack ${rarityText(r.pack)}): don't plan around it, but take it if you find it` })
+    }
+    const clearNames = (r.pack.clear_rewards ?? []).map((id) => ctx.giftsById.get(id)?.name).filter(Boolean)
+    if (clearNames.length) reasons.push({ kind: 'good', text: `Clearing it always offers ${clearNames.join(', ')}` })
     const rate = (g: GiftScore) => ({ ...g, rating: max > 0 ? Math.round((g.score / max) * 100) : 0 })
     return {
       ...r, rating: Math.round(rel * 100), verdict, reasons, top: r.top.map(rate),

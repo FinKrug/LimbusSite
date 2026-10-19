@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deckCards, levelDamage, offenseLevel, simulate, skillValue } from './battle'
+import { deckCards, defenseCard, levelDamage, offenseLevel, simulate, skillValue } from './battle'
 import type { Identity, Skill } from './types'
 
 const sk = (slot: 1 | 2 | 3, sin: Skill['sin'], base: number, cp = 0, coins = 1): Skill =>
@@ -48,5 +48,29 @@ describe('battle model', () => {
     const mk = (id: string, off: Skill['sin']) => unit(id, [sk(1, 'gloom', 5), sk(2, 'gloom', 6), sk(3, off, 7)])
     const r = simulate([mk('a', 'wrath'), mk('b', 'lust'), mk('c', 'pride'), mk('d', 'envy')].map((u) => deckCards(u)), [], { turns: 2000 })
     expect(r.areson.gloom).toBeGreaterThanOrEqual(0.75)
+  })
+
+  it('puts a defense skill in a chain when the Resonance it completes is worth it, and keeps the hand', () => {
+    // Two wrath attackers and a third unit with only gloom attacks but a wrath Counter.
+    const wrathy = (id: string) => unit(id, [sk(1, 'wrath', 4, 3, 2), sk(2, 'wrath', 5, 3, 2), sk(3, 'wrath', 6, 3, 2)])
+    const third: Identity = { ...unit('c', [sk(1, 'gloom', 4, 3, 2), sk(2, 'gloom', 5, 3, 2), sk(3, 'gloom', 6, 3, 2)]),
+      defense: { name: 'Counter', sin: 'wrath', type: 'Slash', kind: 'counter', base: 5, coin_power: 4, coins: 1, statuses: [] } }
+    const team = [wrathy('a'), wrathy('b'), third]
+    const decks = team.map((u) => deckCards(u))
+    const defenses = team.map(defenseCard)
+    const none = simulate(decks, [], { turns: 2000 })
+    expect(none.areson.wrath).toBe(0)
+    // A gift that triggers on Wrath Absolute Resonance makes completing the chain worth it.
+    const triggers = { absolute: { wrath: 15, lust: 0, sloth: 0, gluttony: 0, gloom: 0, pride: 0, envy: 0 },
+      plain: { wrath: 0, lust: 0, sloth: 0, gluttony: 0, gloom: 0, pride: 0, envy: 0 } }
+    const withDef = simulate(decks, [], { turns: 2000, defenses, triggers })
+    expect(withDef.areson.wrath).toBeGreaterThan(0.9)
+    expect(withDef.defenseUse[2]).toBeGreaterThan(0.9)
+    expect(withDef.defenseUse[0]).toBe(0)
+    // Without anything riding on it, a weak defense skill isn't worth an attack.
+    const plain = simulate(decks, [], { turns: 2000, defenses })
+    expect(plain.defenseUse[2]).toBeLessThan(0.2)
+    // No defense data: no defense card.
+    expect(defenseCard(wrathy('x'))).toBeNull()
   })
 })

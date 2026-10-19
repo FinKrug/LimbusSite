@@ -50,6 +50,7 @@ src/
     traitparts.ts    how much of an affiliation gift only works for that affiliation
     holder.ts        conditions on the unit in a slot (Family Hierarch Candidate at #6, ...)
     fusion.ts        fusion rules (tier points, keyword chance, recipes, random pools) and suggestions
+    packroute.ts     Pack route (internal): which pack to aim for on each floor; orders the Theme packs tab
     evaluate.ts      the Evaluate tab's pros and cons for one gift or theme pack
     skillswap.ts     the Skill swaps planner (plays each swap out with battle.ts)
     battle.ts        battle model: decks, hands, (Absolute) Resonance, Offense Level, E.G.O resources
@@ -113,7 +114,10 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   its "5 Burn and 8 SP" part is scored as a normal Burn gift, and the rest (and the flat
   bonus) scales with how many You Branch identities you deploy, weighted by their tier.
   Benched members don't count. With You Heathcliff and You Sinclair deployed it ranks around
-  #25; on a Burn team with no You Branch it's around #237.
+  #25; on a Burn team with no You Branch it's around #237. Only that exact affiliation counts:
+  other Heishou branches (Mao, Si, Wu, Wei) get nothing from a You Branch gift, and the reason
+  names who it's for ("only works for Heishou Pack - You Branch identities (Heathcliff, Sinclair),
+  and yours (Sinclair, Heathcliff) are backups").
 - **Beyond the keyword:** fit is the best of several routes, not just the keyword:
   - *Attack type:* the gift's effect is about Blunt/Slash/Pierce skills (e.g. Oil-gunked
     Spanner is a Tremor gift, but it's really a Blunt gift). Fit = share of your team with
@@ -186,7 +190,11 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   gifts in (5 in a Super Shop, Hard floors only), and it forecasts the tier (points: I 3, II 6,
   III 10, IV 15, V 30; ≥25 is Tier IV, ≥22 in a Super Shop) and the keyword chance (60/90/99%
   for 2/3/4+ gifts), or the recipe result. It lists the gifts a random fusion can give, including
-  your current pack's exclusives. Fuse removes the ingredients from your gifts and adds what you
+  your current pack's exclusives. **Last chance:** a current-pack exclusive you don't have that no
+  later pack this run gives (and that fits your team: fit 0.35+ or built for it) counts ×1.6 in a
+  fusion's expected value, and for each one the suggestions put first the spare gifts that make its
+  keyword and tier with the best odds of rolling it ("Last chance at Virtue - Yong: only Spring
+  Cultivation has it this run … 30% with these gifts"). Fuse removes the ingredients from your gifts and adds what you
   got. Below: suggested fusions from the gifts you'd miss least (vestiges first; never recipe or
   combo pieces), recipes to work on (ones you've started, plus Lunar Memory on Hard: the three
   Memories + any 2 Sin Fragments, Super Shop only), and gifts to sell or fuse. A gift worth under
@@ -226,6 +234,15 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   Resonance follows the wiki: index = same-sin skills to the left, or the block size for 3+ in a
   row (Absolute Resonance); index → Offense Level 1/3/3/5/5/7/7/9/9/11/13; Offense Level x adds
   x/(|x|+25) damage and 1 Clash Power per 3. Each skill used gives 1 E.G.O resource of its sin.
+  **Defense skills** (`identity.defense` from the scraper; Guard, Evade or Counter) aren't in the deck:
+  after picking the best hand skills, the model tries putting one or two units on their defense skill
+  instead (it has a sin, so it counts for Resonance; the hand stays as it was). It keeps that when the
+  turn is worth more by a margin (0.2 × the unit's average card, since nothing cycles). A defense skill
+  counts 0.45 (Counter) or 0.25 (Guard, Evade) of an attack with its numbers. Gifts you own that trigger
+  on a sin's (Absolute) Resonance add 2.5 × tier per activation (× share of the gift, × 0.35 if the
+  trigger is minor) to the turn, so a defense skill gets slotted in when it completes a chain such a
+  gift needs (Crown of Roses: Gluttony Absolute Resonance on about 62% of turns instead of 53% for the
+  demo Heishou team, with Faust's Counter used on 11%).
 - **E.G.O** (`src/lib/ego.ts`, `data/egos.json`): pick each deployed sinner's E.G.O per grade on the
   Team tab (`limbussite.egos.v1`). Resources from skills (and owned resource gifts) pay for them;
   the model works out how often they come out and what they add. **E.G.O lean** (0–1) goes up
@@ -244,7 +261,8 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   started count more, as before.
 - **Your plan** (Best gifts, `src/lib/plan.ts`, `PlanPanel.tsx`): for the floor you're on, **Get
   now** (best gifts you can get here: main pool from shops/rewards, theme-pack gifts only when one
-  of their packs can show up on this floor, your picked pack first), **Later this run** (top gifts
+  of their packs can show up on this floor, your picked pack first; once you've picked this floor's
+  pack, other packs' gifts move to Later, and packs you've played don't count), **Later this run** (top gifts
   from later floors' packs), **Fusions to work toward** (result worth ≥0.45× what it uses up,
   pieces reachable this run; progress and pieces on this floor first; Lunar Memory's "any 2 Sin
   Fragments" and Super Shop rule included) and **Gift sets to build** (the hand-picked sets in
@@ -267,9 +285,41 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   Skill 2 gives something Skill 3 doesn't: it can hit several targets (Atk Weight > 1, or "Atk
   Weight +N" in its text, `weight_bonus` from `scraper/skills.py`, like Dawn Office Fixer
   Sinclair) while Skill 1 and 3 hit one and no other unit or equipped E.G.O does, or it lines up
-  Resonance a gift you own triggers on. Press Did it to record a swap; decks update.
+  Resonance a gift you own triggers on. That Resonance only counts when the triggered part matters
+  (`triggerWorth`): a part that only adds more of a status (Crown of Roses: 2 Rupture on Gluttony
+  Absolute Resonance) is minor when your team doesn't use that status or 2+ deployed units or other
+  owned gifts already apply it; minor triggers are noted on the swap ("A bit more Gluttony Resonance
+  for Crown of Roses, but it only adds Rupture there, and Faust, Ryōshū and Outis already apply
+  Rupture") but never make S1 → S2 the pick or block Skill 3. Buffs (Power, Offense Level, damage,
+  healing) always count. Swaps are played out with defense skills in play, so losing a sin's last skill
+  matters less when the unit's defense skill has that sin ("its defense skill … is Gluttony too, so it
+  can still fill a Gluttony Resonance chain when needed"); each card has a **Def** row with how often
+  the model uses it. When no swap is clearly worth it (last floor, small
+  gains), the card still shows "If you have Cost to spare" with the best swap that doesn't hurt the
+  team; only when every swap would hurt (team damage down more than 0.5%, or Resonance a gift you
+  own needs) does it say to skip. Press Did it to record a swap; decks update.
 - **Removed content:** `scraper/removed.py` drops the Pilgrimage of Compassion pack and its gifts,
   which are gone from the game.
+- **Pack route** (`src/lib/packroute.ts`; internal, not shown as a timeline): packs only show up on
+  some floors (Hell's Chicken only on floor 2 on Hard, Nocturnal Sweeping on 4–10), so a route is
+  planned for the whole run: one pack per floor, each pack once, the best total of pack scores (an
+  assignment, Hungarian algorithm), with packs on earlier floors worth ×(1 + 0.03 × floors after it).
+  It only decides the **order and verdicts on the Theme packs tab** once a floor is set
+  (`prioritizePacks`): each pack in view is forced on this floor and the rest of the run re-planned, so
+  a pack that won't show up again comes before a stronger one that will still be around. Go = within
+  15% of the best pack's score of the best route, Skip = 50%+ lost (a strong pack that can wait is
+  Maybe, not Skip). Each card gets one line: "Best pick now: X is stronger, but it also shows up on
+  floors 6–10", "Last floor it shows up on (floors 2–3)" or "Can wait: it also shows up on floors
+  6–10". Score comparisons with neighbouring cards are hidden then, since the order isn't by score.
+  Packs you pick are remembered per floor (`run.visited`) and aren't planned again; going back a floor
+  brings back that floor's pick.
+- **Hidden packs** (`isHiddenPack`; The B.E., the wiki's "Hidden Theme Pack" with a `hiddenThemeRate`
+  of 0.0002 = about 1 in 5,000 generated packs; scraped as `hidden`, `appear_rate`, `clear_rewards`):
+  never planned around. On the floor list they come last, marked **If found** with no rating bar, and
+  don't set the bar for other packs' ratings. Added as an offered pack (you found one), they're judged
+  like any pack: The B.E.'s clear rewards (Bongy Plush, Lunar Memory, Piece of Relationship, Faith;
+  the best one counts like an exclusive) make it a Go. Its gifts are "luck" in Your plan, it doesn't
+  count as a second chance for last-chance fusions, and pre-run picks ignore it.
 - **Theme packs:** a pack is worth the best gifts in its pool, weighted by how rare each gift
   is across packs: an exclusive counts ×1.5, while a gift in 60 packs counts ×0.1 (it's no
   reason to pick any one of them), and fusion-only gifts (Lunar Memory) count for nothing even

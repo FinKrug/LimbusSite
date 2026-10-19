@@ -9,6 +9,7 @@ import { PlanPanel } from './components/PlanPanel'
 import { LineupTools, PresetBox } from './components/PresetBox'
 import { availability } from './lib/plan'
 import { PackList } from './components/PackList'
+import { prioritizePacks, routeScores } from './lib/packroute'
 import { FormationBar } from './components/FormationBar'
 import { RunPanel } from './components/RunPanel'
 import { SkillsTab } from './components/SkillsTab'
@@ -16,7 +17,7 @@ import { TeamTab } from './components/TeamTab'
 import { KeywordChip } from './components/bits'
 import { gameData } from './lib/data'
 import {
-  DEFAULT_RUN, defaultFloors, makeContext, packInDifficulty, packOnFloor, packsByGift, rankGifts, rankThemePacks, teamFocus,
+  DEFAULT_RUN, defaultFloors, makeContext, withPack, packInDifficulty, packOnFloor, packsByGift, rankGifts, rankThemePacks, teamFocus,
   type Difficulty, type RunSettings,
 } from './lib/scoring'
 import { DEFAULT_DEPLOYED } from './lib/lineup'
@@ -171,14 +172,17 @@ export default function App() {
   const focus = teamFocus(ctx.profile)
   const traitsOnTeam = [...ctx.profile.traitCounts].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1])
   const rankedGifts = useMemo(() => rankGifts(ctx), [ctx])
-  const rankedPacks = useMemo(() => {
+  // The route over the whole run (packroute.ts) is internal: it orders the packs in view so one
+  // that's about to stop showing up comes before one that will still be around later.
+  const routeScoresAll = useMemo(() => (tab === 'packs' && ctx.profile.size && run.floor !== null ? routeScores(ctx) : []), [ctx, tab, run.floor])
+  const { order: rankedPacks, advice: packAdvice } = useMemo(() => {
     const offeredPacks = offered.map((id) => packsById.get(id)).filter((p) => !!p)
     const inView = offeredPacks.length ? offeredPacks
       : run.floor !== null
         ? gameData.themePacks.filter((p) => packOnFloor(p, run.difficulty, run.floor!))
         : gameData.themePacks.filter((p) => packInDifficulty(p, run.difficulty))
-    return rankThemePacks(ctx, inView)
-  }, [ctx, offered, packsById, run.difficulty, run.floor])
+    return prioritizePacks(routeScoresAll, rankThemePacks(ctx, inView), run, offeredPacks.length > 0)
+  }, [ctx, offered, packsById, run, routeScoresAll])
   const currentPack = run.pack ? packsById.get(run.pack) ?? null : null
   // Gifts you can get on the floor you're on (shops, rewards, this floor's packs).
   const availableNow = useMemo(
@@ -275,7 +279,7 @@ export default function App() {
               setOwned([])
               setOffered([])
               setDismissed([])
-              setRun({ ...run, floor: null, pack: null })
+              setRun({ ...run, floor: null, pack: null, visited: {} })
             }} />
           <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={setOwned} />
         </aside>
@@ -318,9 +322,9 @@ export default function App() {
                 onOwn={own} giftsById={ctx.giftsById} owned={ctx.owned} />
             )}
             {tab === 'packs' && (
-              <PackList allPacks={gameData.themePacks} ranked={rankedPacks}
+              <PackList advice={packAdvice} allPacks={gameData.themePacks} ranked={rankedPacks}
                 offered={offered.filter((id) => packsById.has(id))} onOfferedChange={setOffered}
-                run={run} onPickPack={(id) => setRun({ ...run, pack: id })}
+                run={run} onPickPack={(id) => setRun(withPack(run, id))}
                 packsForGift={packsForGift} giftsById={ctx.giftsById} owned={ctx.owned} />
             )}
             {tab === 'fusion' && (

@@ -8,8 +8,14 @@
  *   from fusion points (I 3, II 6, III 10, IV 15, V 30); it's of the chosen keyword
  *   with 60% (2 gifts), 90% (3) or 99% (4+) chance, and the pool includes gifts
  *   exclusive to the current floor's theme pack.
+ *
+ * Last chances: a current-pack exclusive you don't have, that no pack later in the run
+ * can give (`lastChanceGifts`), counts x(1 + lastChance) in a fusion's expected value,
+ * and suggestions aim for it: for each one that fits your team, the spare gifts that make
+ * its keyword and tier with the best odds of rolling it come first ("Last chance at X").
+ * Main-pool gifts can still be bought later; these can't.
  */
-import { intrinsicScore, isGone, recipeGiveUp, scoreGift, type GiftScore, type RunContext } from './scoring'
+import { intrinsicScore, isGone, isHiddenPack, packOnFloor, packPool, recipeGiveUp, scoreGift, type GiftScore, type RunContext } from './scoring'
 import { isVestige } from './vestiges'
 import { fusableThisRun, mustHave, mustHaveRecipes, neededPiece } from './musthave'
 import type { Combo, Fusion, Gift, ThemePack } from './types'
@@ -70,24 +76,72 @@ export function randomPool(ctx: RunContext, keyword: string, tier: number, pack:
     && (g.pools.includes('main') || (pack !== null && pack.gifts.includes(g.id))))
 }
 
+export const FUSION_WEIGHTS = {
+  /** A last-chance pack exclusive counts x(1 + this) in a fusion's expected value. */
+  lastChance: 0.6,
+}
+
+/**
+ * The current pack's exclusives you can't get later this run: you don't have them, they
+ * aren't in the main pool, and no pack you haven't played that shows up on a later floor
+ * has them. Fusing here is one more way to roll them before they're gone.
+ */
+export function lastChanceGifts(ctx: RunContext, pack: ThemePack | null): Set<string> {
+  if (!pack) return new Set()
+  const floor = ctx.run.floor ?? 1
+  const visited = new Set(Object.values(ctx.run.visited ?? {}))
+  const laterPacks = ctx.data.themePacks.filter((p) => {
+    // A hidden pack (The B.E.) is no second chance: it almost never shows up.
+    if (p.id === pack.id || visited.has(p.id) || isHiddenPack(p)) return false
+    for (let f = floor + 1; f <= ctx.run.floors; f++) if (packOnFloor(p, ctx.run.difficulty, f)) return true
+    return false
+  })
+  return new Set(pack.gifts.filter((id) => {
+    const g = ctx.giftsById.get(id)
+    if (!g || ctx.owned.has(id) || isGone(ctx, id) || g.pools.includes('main')) return false
+    return !laterPacks.some((p) => packPool(p).includes(id))
+  }))
+}
+
 export interface PoolForecast {
   tier: number
   chance: number
   pool: GiftScore[]
-  /** Average score of the pool for your team. */
+  /** Average score of the pool for your team (last chances count extra). */
   expected: number
   /** Gifts in the pool only because of the current theme pack. */
   fromPack: GiftScore[]
+  /** Pack exclusives in the pool that fit your team (fit 0.35+, or built for it) and won't show up again this run. */
+  lastChance: GiftScore[]
+  /** Chance the fusion gives one of `lastChance`. */
+  lastChanceOdds: number
 }
 
-export function forecast(ctx: RunContext, keyword: string, gifts: Gift[], pack: ThemePack | null, superShop: boolean): PoolForecast {
+/** Scored random pools by keyword and tier (they don't depend on the ingredients). */
+export type PoolCache = Map<string, GiftScore[]>
+
+export function forecast(
+  ctx: RunContext, keyword: string, gifts: Gift[], pack: ThemePack | null, superShop: boolean,
+  last: Set<string> = lastChanceGifts(ctx, pack), cache?: PoolCache,
+): PoolForecast {
   const tier = fusionTier(fusionPoints(gifts), superShop)
-  const pool = randomPool(ctx, keyword, tier, pack)
-    .map((g) => ({ ...scoreGift(g, ctx), rating: 0 }))
-    .sort((a, b) => b.score - a.score)
-  const expected = pool.length ? pool.reduce((s, g) => s + g.score, 0) / pool.length : 0
+  const key = `${keyword}|${tier}`
+  let pool = cache?.get(key)
+  if (!pool) {
+    pool = randomPool(ctx, keyword, tier, pack)
+      .map((g) => ({ ...scoreGift(g, ctx), rating: 0 }))
+      .sort((a, b) => b.score - a.score)
+    cache?.set(key, pool)
+  }
+  // Only chase gifts that do something real for your team.
+  const fits = (g: GiftScore) => g.fit >= KEEP_MIN_FIT || g.synergy
+  const lastChance = pool.filter((g) => last.has(g.gift.id) && fits(g))
+  const value = (g: GiftScore) => g.score * (lastChance.includes(g) ? 1 + FUSION_WEIGHTS.lastChance : 1)
+  const expected = pool.length ? pool.reduce((s, g) => s + value(g), 0) / pool.length : 0
   const fromPack = pack ? pool.filter((g) => pack.gifts.includes(g.gift.id) && !g.gift.pools.includes('main')) : []
-  return { tier, chance: keywordChance(gifts.length), pool, expected, fromPack }
+  const chance = keywordChance(gifts.length)
+  const lastChanceOdds = pool.length ? chance * lastChance.length / pool.length : 0
+  return { tier, chance, pool, expected, fromPack, lastChance, lastChanceOdds }
 }
 
 /** How much a gift you own is worth keeping (vestiges do nothing on their own). */
@@ -154,6 +208,8 @@ export interface FusionIdea {
   /** chance x expected - cost. */
   gain: number
   superShop: boolean
+  /** Aimed at a pack exclusive you won't get another chance at this run. */
+  chase: GiftScore | null
 }
 
 /** The best random fusion for each keyword your team uses, from the gifts you'd miss least. */
@@ -161,30 +217,64 @@ export function fusionIdeas(ctx: RunContext, owned: string[], keywords: string[]
   // Gifts you'd miss least; gifts kept for a recipe or combo are never suggested.
   const pool = fodder(ctx, owned).filter((f) => !f.keepFor).slice(0, superShop ? 14 : 24)
   const max = superShop ? SUPER_SLOTS : REGULAR_SLOTS
+  const last = lastChanceGifts(ctx, pack)
+  const cache: PoolCache = new Map()
+  // Every set of 2..max spare gifts, once.
+  const combos: KeepNote[][] = []
+  const walk = (start: number, combo: KeepNote[]) => {
+    if (combo.length >= 2) combos.push(combo)
+    if (combo.length === max) return
+    for (let k = start; k < pool.length; k++) walk(k + 1, [...combo, pool[k]])
+  }
+  walk(0, [])
+  const idea = (keyword: string, combo: KeepNote[], chase: GiftScore | null = null): FusionIdea | null => {
+    const f = forecast(ctx, keyword, combo.map((c) => c.gift), pack, superShop, last, cache)
+    if (!f.pool.length) return null
+    const cost = combo.reduce((s, c) => s + c.value, 0)
+    return { keyword, alsoKeywords: [], ingredients: combo, forecast: f, cost, gain: f.chance * f.expected - cost, superShop, chase }
+  }
+
+  // Last chances first: for each pack exclusive that fits your team and won't come back this
+  // run, the spare gifts that roll it most often (then give up the least).
+  const chased: FusionIdea[] = []
+  const targets = [...last].map((id) => ctx.giftsById.get(id)!)
+    .filter((g) => g.keyword && (FUSION_KEYWORDS as readonly string[]).includes(g.keyword))
+  for (const g of targets) {
+    let best: FusionIdea | null = null
+    for (const combo of combos) {
+      if (fusionTier(fusionPoints(combo.map((c) => c.gift)), superShop) !== g.tier) continue
+      const i = idea(g.keyword!, combo)
+      const target = i?.forecast.lastChance.find((x) => x.gift.id === g.id)
+      if (!i || !target || i.gain <= 0) continue
+      i.chase = target
+      const odds = i.forecast.lastChanceOdds
+      if (!best || odds > best.forecast.lastChanceOdds + 1e-9
+        || (Math.abs(odds - best.forecast.lastChanceOdds) < 1e-9 && i.cost < best.cost)) best = i
+    }
+    if (best) chased.push(best)
+  }
+
   const ideas: FusionIdea[] = []
   for (const keyword of keywords) {
     let best: FusionIdea | null = null
-    const tryCombo = (combo: KeepNote[]) => {
-      const f = forecast(ctx, keyword, combo.map((c) => c.gift), pack, superShop)
-      if (!f.pool.length) return
-      const cost = combo.reduce((s, c) => s + c.value, 0)
-      const gain = f.chance * f.expected - cost
-      if (!best || gain > best.gain) best = { keyword, alsoKeywords: [], ingredients: combo, forecast: f, cost, gain, superShop }
+    for (const combo of combos) {
+      const i = idea(keyword, combo)
+      if (i && (!best || i.gain > best.gain)) best = i
     }
-    const pick = (start: number, combo: KeepNote[]) => {
-      if (combo.length >= 2) tryCombo(combo)
-      if (combo.length === max) return
-      for (let k = start; k < pool.length; k++) pick(k + 1, [...combo, pool[k]])
-    }
-    pick(0, [])
-    if (best && (best as FusionIdea).gain > 0) ideas.push(best)
+    if (best && best.gain > 0) ideas.push(best)
   }
   // The same gifts suggested for several keywords: one idea, with the others as alternatives.
   const out: FusionIdea[] = []
-  for (const idea of ideas.sort((a, b) => b.gain - a.gain)) {
-    const same = out.find((o) => o.ingredients.map((i) => i.gift.id).join() === idea.ingredients.map((i) => i.gift.id).join())
-    if (same) same.alsoKeywords.push(idea.keyword)
-    else out.push(idea)
+  const sameSet = (a: FusionIdea, b: FusionIdea) =>
+    a.ingredients.map((i) => i.gift.id).join() === b.ingredients.map((i) => i.gift.id).join()
+  for (const i of chased.sort((a, b) => b.chase!.score - a.chase!.score)) {
+    if (!out.some((o) => sameSet(o, i))) out.push(i)
+  }
+  for (const i of ideas.sort((a, b) => b.gain - a.gain)) {
+    const same = out.find((o) => sameSet(o, i))
+    if (same) {
+      if (same.keyword !== i.keyword) same.alsoKeywords.push(i.keyword)
+    } else out.push(i)
   }
   return out
 }

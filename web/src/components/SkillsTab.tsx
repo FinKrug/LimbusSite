@@ -28,6 +28,8 @@ const LABEL: Record<SwapKind, string> = { '1to2': 'S1 → S2', '2to3': 'S2 → S
  * Skill Replacement planner: for each deployed identity, which swap to buy when a
  * shop offers that sinner, and a record of the swaps you've made this run.
  */
+const DEF_KIND = { guard: 'Guard', evade: 'Evade', counter: 'Counter' } as const
+
 export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadout, run, battle, onOpenTeam }: Props) {
   const plans = useMemo(() => planSwaps(team, swaps, owned, { egos, loadout, run }), [team, swaps, owned, egos, loadout, run])
   const { floorsLeft } = floorsWeight(run)
@@ -65,9 +67,12 @@ export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadou
           turn and lining up same-sin skills for Resonance. The gain counts the stronger skill, Resonance
           (Absolute Resonance {sim.anyAreson ? `on ${Math.round(sim.anyAreson * 100)}% of turns now` : 'rare right now'})
           and what your E.G.O can afford (E.G.O lean {lean}{ego.known ? '' : <>, <button className="link-btn" onClick={onOpenTeam}>pick your E.G.O</button></>}).
+          Defense skills count too: when a hand skill is a sin short of a chain (above all one a gift you
+          own triggers on), the model puts a unit's defense skill in instead; the % on each Def row is how often.
           Skill 3 is the default pick, since it's the strongest skill. A swap into Skill 2 is only suggested when it
           gives something Skill 3 doesn't: hitting several targets when nothing else on your team does, or the
-          Resonance a gift you own triggers on. {floorsLeft} floor{floorsLeft === 1 ? '' : 's'} left.
+          Resonance a gift you own triggers on, if that part of the gift matters (a part that only adds more of a
+          status your team already has plenty of, like Crown of Roses' extra Rupture, doesn't count). {floorsLeft} floor{floorsLeft === 1 ? '' : 's'} left.
         </p>
         {anyDone && <button className="link-btn" onClick={() => onSwapsChange({})}>Reset all swaps (new run)</button>}
       </section>
@@ -104,6 +109,21 @@ export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadou
                       <span className="skill-copies" title="Copies in the deck">×{p.deck[s.slot]}</span>
                     </li>
                   ))}
+                  {p.defense && (
+                    <li className={`skill-row skill-def sinborder-${p.defense.sin ?? 'none'}`}
+                      title="Defense skill: not in the deck. You can use it in any slot instead of a hand skill, and it counts for Resonance.">
+                      <span className="skill-slot">Def</span>
+                      <SinDot sin={p.defense.sin} />
+                      <span className="skill-title">
+                        <span className="skill-title-name">{p.defense.name}</span>
+                        <span className="skill-aoe">{DEF_KIND[p.defense.kind]}</span>
+                      </span>
+                      <span className="muted small">{p.defense.base ?? '?'}{(p.defense.coin_power ?? 0) >= 0 ? '+' : ''}{p.defense.coin_power ?? '?'} ×{p.defense.coins ?? '?'}</span>
+                      <span className="skill-copies" title="Turns it fills a Resonance chain instead of a hand skill (battle model)">
+                        {p.defenseUse >= 0.005 ? `${Math.round(p.defenseUse * 100)}%` : '–'}
+                      </span>
+                    </li>
+                  )}
                 </ul>
                 {p.best ? (
                   <div className="skill-best">
@@ -113,8 +133,24 @@ export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadou
                       {p.best.cons.map((t) => <li key={t} className="reason reason-bad"><span className="reason-icon">−</span>{t}</li>)}
                     </ul>
                   </div>
+                ) : p.spare ? (
+                  <div className="skill-best skill-spare">
+                    <div>
+                      <b>If you have Cost to spare:</b> {LABEL[p.spare.kind]}{' '}
+                      <span className="muted small">({p.spare.cost} Cost · {gainText(p.spare.gain)} team damage)</span>
+                    </div>
+                    <ul className="reasons">
+                      {p.spare.pros.slice(0, 2).map((t) => <li key={t} className="reason reason-good"><span className="reason-icon">+</span>{t}</li>)}
+                      {p.spare.cons.slice(0, 1).map((t) => <li key={t} className="reason reason-bad"><span className="reason-icon">−</span>{t}</li>)}
+                    </ul>
+                    <p className="muted small">A small gain for the Cost, but it doesn't hurt your team.</p>
+                  </div>
+                ) : p.options.length ? (
+                  <p className="muted small skill-best">
+                    Skip it: every swap would hurt your team{p.options[0].cons[0] ? ` (${p.options[0].cons[0]})` : ''}.
+                  </p>
                 ) : (
-                  <p className="muted small skill-best">No swap is worth the Cost for this identity right now.</p>
+                  <p className="muted small skill-best">Nothing left to swap.</p>
                 )}
                 <details>
                   <summary>All swaps and your record</summary>

@@ -46,6 +46,18 @@ PAGE = """{{IDPage
 |spower=14
 |amt=0
 }}
+<!--Defense Skill-->
+|defense={{UptieSkills
+|slevel=1
+|sin=Gluttony
+|name=Strider. Unleashed. Heh
+|type=Slash
+|spower=5
+|cpower=+ 8
+|coin=1
+|se={{SkillCon|Clashable Counter}} <br> {{SkillCon|On Use}} Gain 3 {{StatusEffect|Strider -Mao-|b}}
+|ce1={{SkillCon|On Hit}} Inflict +1 {{StatusEffect|Rupture|d}} Count
+}}
 }}"""
 
 
@@ -86,3 +98,21 @@ class SkillTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DefenseTests(unittest.TestCase):
+    def test_counter(self):
+        d = skills.identity_defense(PAGE)
+        self.assertEqual(d["sin"], "gluttony")
+        self.assertEqual(d["kind"], "counter")
+        self.assertEqual((d["base"], d["coin_power"], d["coins"]), (5, 8, 1))
+        self.assertIn("Rupture", d["statuses"])
+        # The defense skill isn't one of the deck's skills.
+        self.assertEqual([x["slot"] for x in skills.identity_skills(PAGE)], [1, 2, 3])
+
+    def test_guard_evade_and_missing(self):
+        guard = "|defense={{UptieSkills\n|sin=Lust\n|name=Hold\n|type=Guard\n|spower=10\n|cpower=+ 5\n|coin=1\n}}"
+        self.assertEqual(skills.identity_defense(guard)["kind"], "guard")
+        self.assertEqual(skills.identity_defense(guard.replace("Guard", "evade"))["kind"], "evade")
+        self.assertEqual(skills.identity_defense(guard.replace("Guard", "Defense"))["kind"], "guard")
+        self.assertIsNone(skills.identity_defense("{{IDPage}}"))

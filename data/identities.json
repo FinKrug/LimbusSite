@@ -79,6 +79,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 7,
+      "coin_power": 3,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Yi_Sang"
   },
   {
@@ -168,6 +178,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Fixated Study",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 12,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Discard",
+        "Aggro"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Yi_Sang"
   },
   {
@@ -261,6 +284,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Yet, the degree to which that attunement and synchronization are achieved may resultantly allow the user to be devoured",
+      "sin": "gluttony",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 10,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Fairy Lure",
+        "Aggro",
+        "Rupture"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Lantern_Yi_Sang"
   },
   {
@@ -348,6 +385,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Discard"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Office_Fixer_Yi_Sang"
   },
   {
@@ -433,6 +482,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 9,
+      "coin_power": 3,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Yi_Sang"
   },
   {
@@ -517,6 +576,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_First_Mate_Yi_Sang"
   },
   {
@@ -594,6 +663,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "pride",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 10,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Yi_Sang"
   },
   {
@@ -681,6 +760,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Scattering Aroma",
+      "sin": "sloth",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Sinking"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Effloresced_E.G.O::Spicebush_Yi_Sang"
   },
   {
@@ -787,6 +878,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Preparation Afore the Charge.",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Strider -Wu-",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Wu_Branch_Adept_Yi_Sang"
   },
   {
@@ -884,6 +989,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Sidestep",
+      "sin": "envy",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Charge Barrier",
+        "Charge",
+        "Dimensional Castaway",
+        "Quadricolor Dimensions",
+        "Haste"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Dimension_Shredder_Yi_Sang"
   },
   {
@@ -962,6 +1083,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Flame Counter",
+      "sin": "wrath",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 3,
+      "coins": 2,
+      "statuses": [
+        "Burn"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_3_Yi_Sang"
   },
   {
@@ -1054,6 +1187,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "FromTheCoffinAButterflyTakesFlight",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Reload (Solemn Lament)",
+        "Butterfly"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Solemn_Lament_Yi_Sang"
   },
   {
@@ -1151,6 +1297,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Front Line Support",
+      "sin": "pride",
+      "type": "Pierce",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 7,
+      "coins": 1,
+      "statuses": [
+        "Poise",
+        "Torn Memory"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._E.G.O::Fell_Bullet_Yi_Sang"
   },
   {
@@ -1272,6 +1431,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "By Unpredictable Whim",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Unlock - III",
+        "Poise",
+        "Unlock - II",
+        "Grace of the Prescript",
+        "Karmic Consequence"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Index_Nursefather_Yi_Sang"
   },
   {
@@ -1374,6 +1549,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Beat the Brush",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Pointillist_Student_Yi_Sang"
   },
   {
@@ -1464,6 +1651,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Hollow Dimension",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Charge",
+        "Rupture"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Yi_Sang"
   },
   {
@@ -1542,6 +1742,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 2,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Faust"
   },
   {
@@ -1626,6 +1836,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "envy",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_Corp._Remnant_Faust"
   },
   {
@@ -1708,6 +1928,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 2,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Faust"
   },
   {
@@ -1790,6 +2020,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Hunting Plans",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 7,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Sinking"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wuthering_Heights_Butler_Faust"
   },
   {
@@ -1872,6 +2114,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 12,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Aggro"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_4_Faust"
   },
   {
@@ -1966,6 +2220,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Redirect",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Faust"
   },
   {
@@ -2069,6 +2335,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Stigmatize",
+      "sin": "wrath",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Fire Butterfly Coffin",
+        "Overheated Coffin",
+        "Burn",
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Fixer_Faust"
   },
   {
@@ -2171,6 +2452,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "It Shall Be Done.",
+      "sin": "gluttony",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Assist Defense",
+        "Strider -Mao-",
+        "Rupture"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Adept_Faust"
   },
   {
@@ -2259,6 +2554,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Resonating by Raising A.B.S Attunement.",
+      "sin": "wrath",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Burn"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::Ardor_Blossom_Star_Faust"
   },
   {
@@ -2348,6 +2655,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Gathering Spite",
+      "sin": "gloom",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 9,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Regret_Faust"
   },
   {
@@ -2431,6 +2750,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Charge",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 12,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/MultiCrack_Office_Rep_Faust"
   },
   {
@@ -2517,6 +2848,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Let's Wrap It Up",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Haste"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_4_Faust"
   },
   {
@@ -2609,6 +2952,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Unfold Bowblade [弓刀]",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 14,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Arrow - Shi",
+        "Ready to Loose",
+        "Target Aim"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._East_Section_3_Faust"
   },
   {
@@ -2721,6 +3078,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Exhibition Arrangements",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 4,
+      "coin_power": 10,
+      "coins": null,
+      "statuses": [
+        "Clashable Guard",
+        "Iron Maiden",
+        "Bleed",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Ring_Apprentice_Faust"
   },
   {
@@ -2818,6 +3190,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Prescript-granted, Prescript-woven Fabric",
+      "sin": "gloom",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 3,
+      "coin_power": 3,
+      "coins": 3,
+      "statuses": [
+        "Grace of the Prescript",
+        "Karmic Consequence",
+        "Poise",
+        "Sinking"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Index_Proselyte:%E3%80%90Paper_Slip%E3%80%91Faust"
   },
   {
@@ -2910,6 +3297,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Such Filth",
+      "sin": "lust",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_One_Who_Grips_Faust"
   },
   {
@@ -2990,6 +3387,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "lust",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 2,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Don_Quixote"
   },
   {
@@ -3071,6 +3478,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Don_Quixote"
   },
   {
@@ -3156,6 +3573,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Chattering Teeth",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 12,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Rupture"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Lantern_Don_Quixote"
   },
   {
@@ -3245,6 +3674,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Mittelhammer_Don_Quixote"
   },
   {
@@ -3323,6 +3762,16 @@
         "statuses": []
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "wrath",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Director_Don_Quixote"
   },
   {
@@ -3412,6 +3861,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Thou'rt in dire need of a lesson in table manners!",
+      "sin": "wrath",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._East_Section_3_Don_Quixote"
   },
   {
@@ -3493,6 +3952,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Défensive",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_5_Director_Don_Quixote"
   },
   {
@@ -3599,6 +4068,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Witness Ye in Silence",
+      "sin": "sloth",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Sanctum of Conservation (Don Quixote)",
+        "Blessing of the Obsidian God (Don Quixote)",
+        "Preservation",
+        "Tremor",
+        "Promised Nail (Don Quixote)"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Le_Noir_Brand_Manager_Don_Quixote"
   },
   {
@@ -3698,6 +4183,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "I shall crush all that standeth in our way!",
+      "sin": "gluttony",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Rupture",
+        "Sinking",
+        "Burgeoning of Horns -發角-"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Wei_Branch_Don_Quixote"
   },
   {
@@ -3795,6 +4294,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Rapid Chant",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 2,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Hysteria",
+        "Love-Hate",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::In_the_Name_of_Love_and_Hate_Don_Quixote"
   },
   {
@@ -3890,6 +4404,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "I Shall Summon the Time",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Borrowed Time",
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_3_Collection_Staff_Don_Quixote"
   },
   {
@@ -3989,6 +4516,23 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Prescript-granted, Prescript-woven Fabric",
+      "sin": "gloom",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 3,
+      "coin_power": 3,
+      "coins": 3,
+      "statuses": [
+        "Unlock",
+        "Karmic Consequence",
+        "Poise",
+        "Unlock - I",
+        "Grace of the Prescript",
+        "Sinking"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Index_Proxy_-_Effloresced_E.G.O::Procuration_Don_Quixote"
   },
   {
@@ -4084,6 +4628,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Laughters Shall Subside",
+      "sin": "lust",
+      "type": "Pierce",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Bloodfeast",
+        "Hardblood (Ally)",
+        "Bleed",
+        "Shimmering -Bloodfiend- (Ally)",
+        "Bloodfeast Consumed (shared)"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Manager_of_La_Manchaland_Don_Quixote"
   },
   {
@@ -4167,6 +4727,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Multifold Retribution",
+      "sin": "envy",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Sister_Don_Quixote"
   },
   {
@@ -4251,6 +4821,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Don_Quixote"
   },
   {
@@ -4328,6 +4908,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "gluttony",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 2,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -4415,6 +5005,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 7,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/District_20_Yurodivy_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -4507,6 +5109,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -4586,6 +5198,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "wrath",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -4670,6 +5292,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "gluttony",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 8,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Slash Fragility"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -4785,6 +5419,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Phantom Step [殘像步]",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "String Severance -絕緣-",
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_of_the_House_of_Spiders_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -4883,6 +5530,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Sentinel",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Protector's Stance",
+        "Poise",
+        "Rupture",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Drifting_Blade_of_Hongyuan_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -4976,6 +5639,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Mediocre",
+      "sin": "lust",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Chief_Butler_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -5078,6 +5753,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Tch. Stupid Customer. You're Wrinkling the Merchandise!",
+      "sin": "sloth",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Le Noir Gabardine Overcoat",
+        "Armure Éveillée",
+        "Preservation",
+        "Unbreakable Coin",
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Le_Noir_Footwear_Hall_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -5164,6 +5855,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Strider. Unleashed. Heh",
+      "sin": "gluttony",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": [
+        "Strider -Mao-",
+        "Rupture"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -5247,6 +5951,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -5347,6 +6061,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "A.A.T.",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Petals",
+        "Fragile",
+        "Attack Power Up"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Faint_Aroma_%26_Solitude_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -5441,6 +6169,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Mealtime, Bedtime",
+      "sin": "lust",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Red Eyes",
+        "Penitence"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Red_Eyes_%26_Penitence_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -5550,6 +6291,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "To Grasp",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Contempt of the Gaze",
+        "Gaze (Ryoshu)",
+        "Contempt (Ryoshu)",
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._E.G.O::Contempt,_Awe_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -5638,6 +6394,18 @@
         "statuses": []
       }
     ],
+    "defense": {
+      "name": "F.I. in Sight",
+      "sin": "lust",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Haste"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R.B._Chef_de_Cuisine_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -5720,6 +6488,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Charged Evade",
+      "sin": "lust",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Ry%C5%8Dsh%C5%AB"
   },
   {
@@ -5801,6 +6581,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 3,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Meursault"
   },
   {
@@ -5883,6 +6673,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "gluttony",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 7,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Rupture"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dead_Rabbits_Boss_Meursault"
   },
   {
@@ -5962,6 +6764,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_6_Meursault"
   },
   {
@@ -6047,6 +6859,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Fixer_Meursault"
   },
   {
@@ -6135,6 +6957,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Multifold Retribution",
+      "sin": "envy",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 4,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Brother_Meursault"
   },
   {
@@ -6226,6 +7060,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Overthrow",
+      "sin": "envy",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 8,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Slash Power Up",
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Mentor_Meursault"
   },
   {
@@ -6312,6 +7159,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Défensive",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._West_Section_3_Meursault"
   },
   {
@@ -6405,6 +7262,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Fixated Study",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Discard",
+        "Aggro"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Director_Meursault"
   },
   {
@@ -6513,6 +7383,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Spore Germination",
+      "sin": "wrath",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Reload -Germination-",
+        "Burn",
+        "Bleed",
+        "Loyalty Pheromone"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Hornet%E3%80%90Alteration%E3%80%91Meursault"
   },
   {
@@ -6602,6 +7487,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Foolishness...!",
+      "sin": "wrath",
+      "type": "Pierce",
+      "kind": "counter",
+      "base": 15,
+      "coin_power": -5,
+      "coins": 1,
+      "statuses": [
+        "Protection"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Gro%C3%9Fhammer_Meursault"
   },
   {
@@ -6685,6 +7582,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Bioelectricity Induction",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Rhino_Meursault"
   },
   {
@@ -6787,6 +7696,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Coagulation",
+      "sin": "lust",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Bleed",
+        "Hardblood Armor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Prince_of_La_Manchaland_Meursault"
   },
   {
@@ -6882,6 +7804,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Coloring Preparations",
+      "sin": "lust",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 4,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Le Fauvisme - Masque de Chien",
+        "Bleed",
+        "Sinking"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Fauvist_Student_Meursault"
   },
   {
@@ -6983,6 +7919,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "I'm Burning Up.",
+      "sin": "sloth",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Burn",
+        "Tremor",
+        "Tigermark Round",
+        "Savage Tigermark Round"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Thumb_East_Capo_IIII_Meursault"
   },
   {
@@ -7068,6 +8019,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 12,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Meursault"
   },
   {
@@ -7153,6 +8116,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "sloth",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 2,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Hong_Lu"
   },
   {
@@ -7234,6 +8207,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Emergency Styptics",
+      "sin": "wrath",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Fanghunt_Office_Fixer_Hong_Lu"
   },
   {
@@ -7317,6 +8302,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Quickness",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Bleed",
+        "Haste"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hook_Office_Fixer_Hong_Lu"
   },
   {
@@ -7397,6 +8395,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 9,
+      "coin_power": 3,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Hong_Lu"
   },
   {
@@ -7475,6 +8483,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_5_Hong_Lu"
   },
   {
@@ -7560,6 +8578,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 12,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Charge Barrier"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L2_Cleanup_Agent_Hong_Lu"
   },
   {
@@ -7651,6 +8681,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Light as a Tuft of Cloud",
+      "sin": "wrath",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._East_Section_3_Hong_Lu"
   },
   {
@@ -7740,6 +8782,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guiding Steps",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Discard"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Hong_Lu"
   },
   {
@@ -7833,6 +8887,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Wait?!",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/District_20_Yurodivy_Hong_Lu"
   },
   {
@@ -7932,6 +8998,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Combat Poise",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Ammo",
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stop_Office_Rep_Hong_Lu"
   },
   {
@@ -8017,6 +9096,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Ampule Injection",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "K Corp Ampule",
+        "Aggro"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/K_Corp._Class_3_Excision_Staff_Hong_Lu"
   },
   {
@@ -8102,6 +9194,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Energy Condensation",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Hong_Lu"
   },
   {
@@ -8208,6 +9312,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Throwing the Ohra Bond",
+      "sin": "pride",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": [
+        "Poise",
+        "Bleed",
+        "Unbreakable Coin",
+        "Trussed -Hong Lu-"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/S_Corp._Ch'unokkun_Hong_Lu"
   },
   {
@@ -8330,6 +9449,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Curating the Exhibition",
+      "sin": "lust",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Assist Defense",
+        "Bind",
+        "Haste"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Ring_Nursefather_Hong_Lu"
   },
   {
@@ -8449,6 +9582,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Heishou Keenclaw [黑獸利爪]",
+      "sin": "gluttony",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 6,
+      "coin_power": 7,
+      "coins": 1,
+      "statuses": [
+        "Slash Power Up",
+        "Your Will Guides My Blade.",
+        "Battlefield Retreat",
+        "Attack Power Up",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Lord_of_Hongyuan_Hong_Lu"
   },
   {
@@ -8532,6 +9681,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "gluttony",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 2,
+      "coin_power": 14,
+      "coins": 1,
+      "statuses": [
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tingtang_Gang_Gangleader_Hong_Lu"
   },
   {
@@ -8613,6 +9774,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "envy",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 7,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Heathcliff"
   },
   {
@@ -8711,6 +9882,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Charge",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 12,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/MultiCrack_Office_Fixer_Heathcliff"
   },
   {
@@ -8793,6 +9976,16 @@
         "statuses": []
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Kleinhammer_Heathcliff"
   },
   {
@@ -8874,6 +10067,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "wrath",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_4_Heathcliff"
   },
   {
@@ -8954,6 +10157,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "wrath",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 8,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Heathcliff"
   },
   {
@@ -9059,6 +10274,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Combat Poise",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Ammo",
+        "Melee Support",
+        "Poise",
+        "Concentration-Sniper-"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stop_Office_Fixer_Heathcliff"
   },
   {
@@ -9166,6 +10396,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "More Grub for Us",
+      "sin": "gluttony",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Bloodflame -血炎-",
+        "Burn",
+        "Rupture"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_You_Branch_Adept_Heathcliff"
   },
   {
@@ -9264,6 +10508,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Rules of the Backstreets",
+      "sin": "lust",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 4,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Unbreakable Coin",
+        "Cumulus Wall",
+        "Bleed",
+        "Dark Cloud Blade",
+        "Battle Ready"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Heathcliff"
   },
   {
@@ -9359,6 +10619,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Warning",
+      "sin": "wrath",
+      "type": "Pierce",
+      "kind": "counter",
+      "base": 10,
+      "coin_power": -5,
+      "coins": 2,
+      "statuses": [
+        "Sinking",
+        "Paralyze",
+        "Rupture"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Sunshower_Heathcliff"
   },
   {
@@ -9447,6 +10721,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "wrath",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Rabbit_Heathcliff"
   },
   {
@@ -9552,6 +10838,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Measuring Blade Reach",
+      "sin": "wrath",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "The Duel Escalates (Heathcliff)",
+        "Burn",
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Thumb_Apprentice_Heathcliff"
   },
   {
@@ -9664,6 +10964,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Payback",
+      "sin": "envy",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Burn",
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Big_Brother_Heathcliff"
   },
   {
@@ -9749,6 +11062,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Payback",
+      "sin": "wrath",
+      "type": "Pierce",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Aggro",
+        "Defense Level Up",
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_Harpooneer_Heathcliff"
   },
   {
@@ -9844,6 +11171,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "CCA Overcharge",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Charge",
+        "Overcharge",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L4_Cleanup_Agent_-_CCA_Heathcliff"
   },
   {
@@ -9942,6 +11284,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "O Dullahan…!",
+      "sin": "lust",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Dullahan",
+        "Sinking",
+        "Offense Level Up"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wild_Hunt_Heathcliff"
   },
   {
@@ -10025,6 +11381,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Do Not Obstruct",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/%C3%96ufi_Assoc._South_Section_3_Heathcliff"
   },
   {
@@ -10106,6 +11474,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "wrath",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 7,
+      "coin_power": 3,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Ishmael"
   },
   {
@@ -10201,6 +11579,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Butler_Ishmael"
   },
   {
@@ -10293,6 +11681,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": [
+        "Aggro",
+        "Ammo"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Ishmael"
   },
   {
@@ -10381,6 +11782,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Aggro"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Sloshing_Ishmael"
   },
   {
@@ -10462,6 +11875,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "envy",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": [
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Shi_Assoc._South_Section_5_Ishmael"
   },
   {
@@ -10584,6 +12009,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Adept Evasion",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Launcher -始-",
+        "Battlefield Retreat",
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Family_Hierarch_Candidate_Ishmael"
   },
   {
@@ -10690,6 +12129,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Of Course… There was Meaning to this World After All",
+      "sin": "lust",
+      "type": "Pierce",
+      "kind": "counter",
+      "base": 4,
+      "coin_power": 5,
+      "coins": 2,
+      "statuses": [
+        "Changing Room (Ishmael)",
+        "Full Makeover",
+        "Aggro",
+        "Pulsation (Ally)",
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Boutique_du_Rouge_Ishmael"
   },
   {
@@ -10793,6 +12248,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Shuffle Hands - Floral Deck",
+      "sin": "pride",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Discard",
+        "Bright -光-",
+        "Sinking",
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Jeong's_Office_Rep_Ishmael"
   },
   {
@@ -10886,6 +12356,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Scattering Slash",
+      "sin": "lust",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Protection",
+        "Defense Power Up"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Captain_Ishmael"
   },
   {
@@ -10987,6 +12470,23 @@
         ]
       }
     ],
+    "defense": {
+      "name": "I'll Light the Path Forward",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 5,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Assist Defense",
+        "Haste",
+        "Poise",
+        "Mook Workshop - Ye -銳- Type II Bladedraw / Thrust Force - Dokkaebi Fire",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCD_OSIR_Team_Ishmael"
   },
   {
@@ -11066,6 +12566,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "wrath",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 9,
+      "coin_power": 7,
+      "coins": 1,
+      "statuses": [
+        "Burn"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Ishmael"
   },
   {
@@ -11152,6 +12664,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Nimble Steps",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Rupture Protection"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Boatworks_Fixer_Ishmael"
   },
   {
@@ -11234,6 +12758,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Ishmael"
   },
   {
@@ -11338,6 +12874,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "I'll Get You Back for This, Man",
+      "sin": "envy",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 4,
+      "coin_power": 5,
+      "coins": 2,
+      "statuses": [
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Middle_Apprentice_Ishmael"
   },
   {
@@ -11440,6 +12988,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Do Not Fear",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Pequod_Captain_Ishmael"
   },
   {
@@ -11533,6 +13091,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Your Shield",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 12,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Defensive Stance",
+        "Tremor",
+        "Tremor Burst",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._West_Section_3_Ishmael"
   },
   {
@@ -11609,6 +13183,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "wrath",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 7,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Rodion"
   },
   {
@@ -11687,6 +13271,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCCB_Assistant_Manager_Rodion"
   },
   {
@@ -11775,6 +13369,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "wrath",
+      "type": "Pierce",
+      "kind": "counter",
+      "base": 7,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Nails"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._Mittelhammer_Rodion"
   },
   {
@@ -11861,6 +13467,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Borrow Time",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Borrowed Time",
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_2_Collection_Staff_Rodion"
   },
   {
@@ -11942,6 +13561,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "wrath",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Aggro"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_5_Rodion"
   },
   {
@@ -12038,6 +13669,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Courier Support & Control Sequence",
+      "sin": "gluttony",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 9,
+      "coin_power": 7,
+      "coins": 1,
+      "statuses": [
+        "Courier Trunk - Rodion"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devyat'_Assoc._North_Section_3_Rodion"
   },
   {
@@ -12125,6 +13768,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Fixated Study",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Discard",
+        "Aggro"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dieci_Assoc._South_Section_4_Rodion"
   },
   {
@@ -12241,6 +13897,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Trimming",
+      "sin": "sloth",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 7,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Inertia of Drifting",
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Alteration_Shop_Rodion"
   },
   {
@@ -12341,6 +14010,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Reversal Kick",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Serpent Arm",
+        "Poise",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Si_Branch_Rodion"
   },
   {
@@ -12423,6 +14107,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "pride",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 9,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Protection",
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Wakashu_Rodion"
   },
   {
@@ -12510,6 +14207,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "wrath",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 9,
+      "coin_power": 7,
+      "coins": 1,
+      "statuses": [
+        "Burn"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_4_Director_Rodion"
   },
   {
@@ -12617,6 +14326,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "The Knight's Faith",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Protecting Sword",
+        "Deep Tears",
+        "Tear-sharpened",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::The_Sword_Sharpened_with_Tears_Rodion"
   },
   {
@@ -12704,6 +14429,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Energy Condensation - 'Haha! Everybody's Sparkling and Glittering!'",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R_Corp._4th_Pack_Reindeer_Rodion"
   },
   {
@@ -12795,6 +14532,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Preheat",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Rep_Rodion"
   },
   {
@@ -12916,6 +14665,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Fuck Off!",
+      "sin": "pride",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 3,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Burn",
+        "Tremor",
+        "Eye of Precognition (Rodion)",
+        "Acceleration Round"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Thumb_Nursefather_Rodion"
   },
   {
@@ -13013,6 +14777,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Don Quixote Hardblood Arts 15: Parasol",
+      "sin": "lust",
+      "type": "Pierce",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Bleed",
+        "Bloodfeast",
+        "Blooming Thorn (Ally)"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Princess_of_La_Manchaland_Rodion"
   },
   {
@@ -13125,6 +14903,23 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Trimming the Medium",
+      "sin": "lust",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Palette Vibrante",
+        "Réflexion",
+        "Bleed",
+        "Sinking",
+        "Mauled Color -Rouge-",
+        "Mauled Color -Bleu-"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Fauvist_Docent_Rodion"
   },
   {
@@ -13201,6 +14996,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Counter",
+      "sin": "pride",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 7,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Sinclair"
   },
   {
@@ -13284,6 +15089,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": [
+        "Talisman"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Red_Sheet_Sinclair"
   },
   {
@@ -13365,6 +15182,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 5,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Los_Mariachis_Jefe_Sinclair"
   },
   {
@@ -13446,6 +15275,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Crab Bastards...!",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": [
+        "Rupture Protection"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Boatworks_Fixer_Sinclair"
   },
   {
@@ -13536,6 +15377,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 12,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Aggro"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_6_Sinclair"
   },
   {
@@ -13629,6 +15482,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Zwei Knight's Greatsword Form - Guard",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 2,
+      "coin_power": 9,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Aggro",
+        "Tremor",
+        "Tremor Burst",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._West_Section_3_Sinclair"
   },
   {
@@ -13716,6 +15585,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Newsprung Counter",
+      "sin": "wrath",
+      "type": "Pierce",
+      "kind": "counter",
+      "base": 9,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Damage Up",
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Sinclair"
   },
   {
@@ -13802,6 +15684,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Défensive",
+      "sin": "gluttony",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_4_Director_Sinclair"
   },
   {
@@ -13893,6 +15785,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Rue",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Burn"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Fixer_Sinclair"
   },
   {
@@ -13989,6 +15893,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Courier Assistance & Crisis Control System",
+      "sin": "gluttony",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 9,
+      "coin_power": 7,
+      "coins": 1,
+      "statuses": [
+        "Courier Trunk - Sinclair"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devyat'_Assoc._North_Section_3_Sinclair"
   },
   {
@@ -14111,6 +16027,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "La Fuite",
+      "sin": "lust",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Uncontrollable Rampage (Sinclair)",
+        "Pulsation (Ally)"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::The_Crimson_God_of_Le_Rouge_Sinclair"
   },
   {
@@ -14214,6 +16143,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Rooster's Deathstrike [鷄窮則殺]",
+      "sin": "gluttony",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Bloodflame -血炎-",
+        "Burn",
+        "Rupture"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_You_Branch_Sinclair"
   },
   {
@@ -14311,6 +16254,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Defend [守]",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": null,
+      "statuses": [
+        "Clashable Guard",
+        "Poise",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Pinky_Apprentice_Sinclair"
   },
   {
@@ -14398,6 +16355,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Warmup in the East",
+      "sin": "envy",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Middle_Little_Brother_Sinclair"
   },
   {
@@ -14490,6 +16459,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Enough…",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 17,
+      "coin_power": -7,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_One_Who_Shall_Grip_Sinclair"
   },
   {
@@ -14600,6 +16579,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Ferrous Guard",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 9,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Thumb_East_Soldato_II_Sinclair"
   },
   {
@@ -14676,6 +16667,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "sloth",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 2,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Outis"
   },
   {
@@ -14755,6 +16756,18 @@
         "statuses": []
       }
     ],
+    "defense": {
+      "name": "Evade",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_Lineage_Salsu_Outis"
   },
   {
@@ -14842,6 +16855,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Retraite",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 5,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Cinq_Assoc._South_Section_4_Outis"
   },
   {
@@ -14929,6 +16954,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 9,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/G_Corp._Head_Manager_Outis"
   },
   {
@@ -15028,6 +17063,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 7,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Ring_Pointillist_Student_Outis"
   },
   {
@@ -15114,6 +17161,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Partial Heishou Mutation",
+      "sin": "gluttony",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 7,
+      "coins": 1,
+      "statuses": [
+        "Strider -Mao-",
+        "Rupture"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Mao_Branch_Outis"
   },
   {
@@ -15223,6 +17283,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Composure",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Sinking",
+        "The Udjat -Vanguard-",
+        "Protection"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCA_Udjat_Vanguard_Team_3_Leader_Outis"
   },
   {
@@ -15313,6 +17387,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "The Price of a Bullet",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": [
+        "Magic Bullet"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Magic_Bullet_Outis"
   },
   {
@@ -15400,6 +17486,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Hangover Cure",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 12,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Discard"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Molar_Office_Fixer_Outis"
   },
   {
@@ -15489,6 +17587,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "I'll Take the Lead",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 13,
+      "coin_power": 7,
+      "coins": 1,
+      "statuses": [
+        "Haste",
+        "Defense Power Up"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Seven_Assoc._South_Section_6_Director_Outis"
   },
   {
@@ -15586,6 +17697,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Borrowed Time - Microcavity",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Borrowed Time",
+        "Tremor",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/T_Corp._Class_3_VDCU_Staff_Outis"
   },
   {
@@ -15678,6 +17804,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Quite Discourteous!",
+      "sin": "gluttony",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 7,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Blood-tinged Scissorblades (Ally)",
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Barber_of_La_Manchaland_Outis"
   },
   {
@@ -15797,6 +17936,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Rule Violation",
+      "sin": "envy",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 4,
+      "coin_power": 6,
+      "coins": 2,
+      "statuses": [
+        "Bleed"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_House_of_Spiders:_The_Middle_Nursefather_Outis"
   },
   {
@@ -15892,6 +18043,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Deploy Plasma",
+      "sin": "pride",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 6,
+      "coins": 1,
+      "statuses": [
+        "Charge"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Captain_Outis"
   },
   {
@@ -15974,6 +18137,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Insolent Fool…!",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Sinking"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wuthering_Heights_Chief_Butler_Outis"
   },
   {
@@ -16055,6 +18230,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 3,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Sinner_Gregor"
   },
   {
@@ -16141,6 +18326,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Kurokumo_Clan_Captain_Gregor"
   },
   {
@@ -16220,6 +18415,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Liu_Assoc._South_Section_6_Gregor"
   },
   {
@@ -16307,6 +18512,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/R.B._Sous-chef_Gregor"
   },
   {
@@ -16398,6 +18613,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gluttony",
+      "type": "Defense",
+      "kind": "guard",
+      "base": 8,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rosespanner_Workshop_Fixer_Gregor"
   },
   {
@@ -16504,6 +18729,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guardian",
+      "sin": "wrath",
+      "type": "Slash",
+      "kind": "counter",
+      "base": 3,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Assist Defense",
+        "Light of Daybreak",
+        "Burn",
+        "Tremor"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dawn_Office_Rep_Gregor"
   },
   {
@@ -16589,6 +18829,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Do You Wish to Weep?",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Sinking"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Edgar_Family_Heir_Gregor"
   },
   {
@@ -16674,6 +18926,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "I have to keep going for big sis",
+      "sin": "gloom",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 9,
+      "coin_power": 7,
+      "coins": 1,
+      "statuses": [
+        "District 12 Fuel",
+        "Burn"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Firefist_Office_Survivor_Gregor"
   },
   {
@@ -16753,6 +19018,16 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Guard",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 10,
+      "coin_power": 4,
+      "coins": 1,
+      "statuses": []
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/G_Corp._Manager_Corporal_Gregor"
   },
   {
@@ -16855,6 +19130,21 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Reversal Kick",
+      "sin": "gluttony",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Serpent Arm",
+        "Poise",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Heishou_Pack_-_Si_Branch_Gregor"
   },
   {
@@ -16967,6 +19257,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "This E.G.O Gift's Defensive Capability is Uniquely Superior",
+      "sin": "envy",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 5,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "High-voltage Exoskeleton",
+        "Charge",
+        "Aggro"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCE_E.G.O::AEDD_Gregor"
   },
   {
@@ -17077,6 +19381,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "The Wick of Burned Feathers",
+      "sin": "gloom",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": null,
+      "statuses": [
+        "Clashable Guard",
+        "Lamp",
+        "Haste",
+        "Bind",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lobotomy_E.G.O::Lamp_Gregor"
   },
   {
@@ -17181,6 +19501,22 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Dire Straits",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Haste",
+        "Bleed",
+        "Tremor",
+        "Unbreakable Coin"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Night_Awls_Capitano_Gregor"
   },
   {
@@ -17277,6 +19613,20 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Faded Patience",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Bleed",
+        "Bloodfeast",
+        "Ailing Heart (Ally)"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Priest_of_La_Manchaland_Gregor"
   },
   {
@@ -17364,6 +19714,18 @@
         ]
       }
     ],
+    "defense": {
+      "name": "Take a Breather",
+      "sin": "gloom",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Poise"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Twinhook_Pirates_First_Mate_Gregor"
   },
   {
@@ -17445,6 +19807,19 @@
         ]
       }
     ],
+    "defense": {
+      "name": "The Best Defense",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 15,
+      "coin_power": 5,
+      "coins": 1,
+      "statuses": [
+        "Defense Level Up",
+        "Aggro"
+      ]
+    },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Zwei_Assoc._South_Section_4_Gregor"
   }
 ]

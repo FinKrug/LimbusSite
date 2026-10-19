@@ -12,7 +12,7 @@
  *  - low when the team resonates easily and has little to spend resources on.
  * With no E.G.O picked it stays near the middle-low and says so.
  */
-import { deckCards, simulate, skillPower, skillValue, type SimResult, type SinMap, type Swaps } from './battle'
+import { deckCards, defenseCard, simulate, skillPower, skillValue, type SimResult, type SinMap, type Swaps } from './battle'
 import { SINS, type Gift, type Identity, type Sin, type Sinner } from './types'
 
 export const GRADES = ['ZAYIN', 'TETH', 'HE', 'WAW', 'ALEPH'] as const
@@ -132,6 +132,8 @@ export interface ResonanceTrigger {
   absolute: boolean
   /** Share of the effect that needs it. */
   share: number
+  /** The sentences that need it. */
+  texts: string[]
 }
 
 /** "When activating Wrath Absolute Resonance, ..." parts of a gift. */
@@ -145,12 +147,71 @@ export function resonanceTriggers(g: Gift): ResonanceTrigger[] {
     const sin = m[1].toLowerCase() as Sin
     const absolute = !!m[2]
     const prev = out.find((x) => x.sin === sin && x.absolute === absolute)
-    if (prev) prev.share += 1 / all.length
-    else out.push({ sin, absolute, share: 1 / all.length })
+    if (prev) {
+      prev.share += 1 / all.length
+      prev.texts.push(s)
+    } else out.push({ sin, absolute, share: 1 / all.length, texts: [s] })
   }
   // A trigger sentence that also has an "or using a Skill that ..." route doesn't fully depend on it.
   for (const t of out) if (/Resonance or /i.test(g.effect)) t.share *= 0.5
   return out
+}
+
+const TRIGGER_STATUS = /\b(Burn|Bleed|Tremor|Rupture|Sinking|Poise|Charge)\b/g
+/** Words that make a triggered part more than "more stacks of a status". */
+const TRIGGER_BUFF = /Power|Offense Level|Defense Level|DMG|Damage|Protection|Haste|heal|\bSP\b|Shield|Clash|Stack|E\.G\.O/i
+
+export interface TriggerWorth {
+  gift: Gift
+  sin: Sin
+  /** The triggered part only adds stacks of statuses the team has plenty of (or doesn't use). */
+  minor: boolean
+  /** Statuses the triggered part adds. */
+  statuses: string[]
+  /** Why it's minor, e.g. "Faust, Outis and Barbed Lasso already apply it". */
+  why: string
+}
+
+/**
+ * Is the Resonance-triggered part of a gift worth steering skill swaps for? A part that only
+ * inflicts a status is minor when the team doesn't use that status, or when 2+ deployed units
+ * or other owned gifts already apply it: plenty of gifts (and upgrades) do the same thing.
+ * Buffs (Power, Offense Level, damage, healing, ...) always count.
+ */
+export function triggerWorth(g: Gift, t: ResonanceTrigger, team: Identity[], owned: Gift[]): TriggerWorth {
+  const statuses = [...new Set(t.texts.flatMap((x) => [...x.matchAll(TRIGGER_STATUS)].map((m) => m[1])))]
+  const statusOnly = statuses.length > 0 && t.texts.every((x) => !TRIGGER_BUFF.test(x))
+  if (!statusOnly) return { gift: g, sin: t.sin, minor: false, statuses, why: '' }
+  const users = team.filter((i) => statuses.some((st) => (i.keywords as string[]).includes(st)))
+  const gifts = owned.filter((o) => o.id !== g.id && (o.applies ?? []).some((a) => statuses.includes(a.status)))
+  const word = statuses.join(' and ')
+  if (!users.length) return { gift: g, sin: t.sin, minor: true, statuses, why: `your team doesn't use ${word}` }
+  const sources = [...users.map((i) => i.sinner as string), ...gifts.map((o) => o.name)]
+  if (sources.length < 2) return { gift: g, sin: t.sin, minor: false, statuses, why: '' }
+  const shown = sources.length > 3 ? [...sources.slice(0, 3), `${sources.length - 3} more`] : sources
+  const list = shown.length > 1 ? `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}` : shown[0]
+  return { gift: g, sin: t.sin, minor: true, statuses, why: `${list} already apply ${word}` }
+}
+
+/** Battle value of one activation of a gift's Resonance-triggered part, per tier (minor parts x0.35). */
+export const TRIGGER_VALUE = 2.5
+
+/**
+ * Value per turn the battle model adds when a Resonance a gift you own triggers on forms:
+ * by sin, for Absolute Resonance (3+ in a row) and plain Resonance (2+). With these, the model
+ * will put a defense skill in a chain when that's what completes it.
+ */
+export function triggerBonus(members: Identity[], owned: Gift[]): { absolute: SinMap; plain: SinMap } {
+  const absolute = Object.fromEntries(SINS.map((x) => [x, 0])) as SinMap
+  const plain = Object.fromEntries(SINS.map((x) => [x, 0])) as SinMap
+  for (const g of owned) {
+    for (const t of resonanceTriggers(g)) {
+      const w = triggerWorth(g, t, members, owned)
+      const v = TRIGGER_VALUE * (g.tier ?? 1) * Math.min(1, t.share * 2) * (w.minor ? 0.35 : 1)
+      ;(t.absolute ? absolute : plain)[t.sin] += v
+    }
+  }
+  return { absolute, plain }
 }
 
 // -- the E.G.O layer ----------------------------------------------------------------
@@ -318,7 +379,7 @@ export function buildBattle(
 ): BattleProfile {
   const keywords = [...new Set(members.flatMap((m) => m.keywords))]
   const decks = members.map((m) => deckCards(m, swaps[m.id]))
-  const sim = simulate(decks, keywords, opts)
+  const sim = simulate(decks, keywords, { ...opts, defenses: members.map(defenseCard), triggers: triggerBonus(members, owned) })
   const unitBest = decks.map((d) => Math.max(0, ...d.map((s) => skillValue(s, keywords))))
   const full = withBase(loadout, egos)
   return { sim, ego: egoProfile(members, sim, unitBest, egos, full, owned), costShare: costShare(members, egos, full) }

@@ -13,12 +13,18 @@
  *  - Offense Level x over the enemy adds x / (|x| + 25) to damage and 1 Clash
  *    Power per 3 levels.
  *  - Each skill used gives 1 E.G.O resource of its sin.
+ *  - Defense skills (Guard, Evade, Counter) aren't in the deck: any unit can use its
+ *    defense skill in a slot instead of a hand skill. It has a sin, so it counts for
+ *    Resonance like any skill, and the hand stays as it was (nothing used, nothing drawn).
  *
  * Each turn the model picks the combination of hand skills (one per identity) with
- * the most total value, placing same-sin skills together. Skill value is a rough
- * power estimate (see skillValue); special skill effects are ignored.
+ * the most total value, placing same-sin skills together. Then it tries putting one or
+ * two units on their defense skill instead, and keeps that when the Resonance it makes
+ * is worth more than the attacks it gives up. Skill value is a rough power estimate
+ * (see skillValue); a defense skill counts DEFENSE_VALUE of that (it hits little or not
+ * at all); special skill effects are ignored.
  */
-import { SINS, type Identity, type Sin, type Skill } from './types'
+import { SINS, type DefenseSkill, type Identity, type Sin, type Skill } from './types'
 
 export type Swaps = Partial<Record<'1to2' | '2to3' | '1to3', number>>
 
@@ -46,6 +52,28 @@ export function skillValue(s: Skill, teamKeywords: string[], ol = 0): number {
   const statuses = s.statuses.filter((x) => teamKeywords.includes(x)).length
   return (power + Math.floor(ol / 3)) * perCoin * (1 + levelDamage(ol)) + 1.5 * statuses + (s.slot === 3 ? 1 : 0)
 }
+
+/** A defense skill's own value as a share of an attack with the same numbers: a Counter only
+ *  hits when the unit is attacked; Guard and Evade deal no damage, they only save HP. */
+/** Margin a defense skill must win by, as a share of the unit's average card (see simulate). */
+export const DEFENSE_TEMPO = 0.2
+
+export const DEFENSE_VALUE: Record<DefenseSkill['kind'], number> = { counter: 0.45, guard: 0.25, evade: 0.25 }
+
+/** The identity's defense skill as a card the model can place (null if unknown or sinless). */
+export function defenseCard(i: Identity): Skill | null {
+  const d = i.defense
+  if (!d || !d.sin) return null
+  let card = defenseCards.get(d)
+  if (!card) {
+    card = { slot: 1, name: d.name, sin: d.sin, type: d.type, base: d.base, coin_power: d.coin_power, coins: d.coins, copies: 0, weight: 1, statuses: d.statuses }
+    defenseCards.set(d, card)
+    defenseKind.set(card, d.kind)
+  }
+  return card
+}
+const defenseCards = new WeakMap<DefenseSkill, Skill>()
+const defenseKind = new WeakMap<Skill, DefenseSkill['kind']>()
 
 /** A generic skill for identities without skill data. */
 const FILLER: Skill = { slot: 1, name: '?', sin: null, type: null, base: 4, coin_power: 3, coins: 2, copies: 3, weight: 1, statuses: [] }
@@ -83,6 +111,8 @@ export interface SimResult {
   gen: SinMap
   /** Share of turns with any Absolute Resonance. */
   anyAreson: number
+  /** Share of turns each identity used its defense skill (team order). */
+  defenseUse: number[]
   turns: number
 }
 
@@ -103,12 +133,22 @@ const SIN_INDEX = new Map<Sin, number>(SINS.map((s, k) => [s, k]))
  * Play `turns` turns with these decks. Same seed + same decks = same result, so
  * two versions of a team (before/after a swap) are compared on the same draws.
  */
-export function simulate(decks: Skill[][], teamKeywords: string[], opts: { turns?: number; seed?: number } = {}): SimResult {
+export function simulate(
+  decks: Skill[][], teamKeywords: string[],
+  opts: {
+    turns?: number; seed?: number
+    /** Each unit's defense skill (defenseCard), usable instead of a hand skill. */
+    defenses?: (Skill | null)[]
+    defenseTempo?: number
+    /** Extra value when a Resonance of that sin forms (gifts you own that trigger on it). */
+    triggers?: { absolute: SinMap; plain: SinMap }
+  } = {},
+): SimResult {
   const turns = opts.turns ?? 1200
   const rand = rng(opts.seed ?? 7)
   const n = decks.length
   if (!n) {
-    return { valuePerTurn: 0, plainPerTurn: 0, unitValue: [], areson: zeroSins(), reson: zeroSins(), gen: zeroSins(), anyAreson: 0, turns }
+    return { valuePerTurn: 0, plainPerTurn: 0, unitValue: [], areson: zeroSins(), reson: zeroSins(), gen: zeroSins(), anyAreson: 0, defenseUse: [], turns }
   }
   // Every distinct card gets a number; its sin (-1 = none) and value at each resonance index.
   const cards: Skill[] = []
@@ -118,10 +158,27 @@ export function simulate(decks: Skill[][], teamKeywords: string[], opts: { turns
     if (id === undefined) { id = cards.length; cards.push(s); cardOf.set(s, id) }
     return id
   }))
+  // Defense skills get card numbers too (-1 = none for that unit).
+  const defId = Int32Array.from({ length: n }, (_, u) => {
+    const d = opts.defenses?.[u]
+    if (!d || !d.sin) return -1
+    let id = cardOf.get(d)
+    if (id === undefined) { id = cards.length; cards.push(d); cardOf.set(d, id) }
+    return id
+  })
   const L = OL_BY_INDEX.length
   const sinOf = Int8Array.from(cards, (s) => (s.sin ? SIN_INDEX.get(s.sin)! : -1))
   const val = new Float64Array(cards.length * L)
-  cards.forEach((s, c) => { for (let idx = 0; idx < L; idx++) val[c * L + idx] = skillValue(s, teamKeywords, offenseLevel(idx)) })
+  cards.forEach((s, c) => {
+    const kind = defenseKind.get(s)
+    const k = kind ? DEFENSE_VALUE[kind] : 1
+    for (let idx = 0; idx < L; idx++) val[c * L + idx] = k * skillValue(s, teamKeywords, offenseLevel(idx))
+  })
+  const hasDefense = defId.some((d) => d >= 0)
+  // Using a defense skill doesn't cycle the hand, so it has to beat the attacks it replaces by
+  // a margin: DEFENSE_TEMPO x the unit's average deck card value.
+  const tempo = Float64Array.from({ length: n }, (_, u) =>
+    (opts.defenseTempo ?? DEFENSE_TEMPO) * deckIds[u].reduce((sum, c) => sum + val[c * L], 0) / Math.max(1, deckIds[u].length))
 
   const shuffle = (a: number[]) => {
     for (let k = a.length - 1; k > 0; k--) {
@@ -155,6 +212,26 @@ export function simulate(decks: Skill[][], teamKeywords: string[], opts: { turns
   const pick = new Int32Array(n)
   const best = new Int32Array(n)
   const opts2 = new Int32Array(n)
+  const trial = new Int32Array(n)
+  const defUse = new Float64Array(n)
+  const trigA = Float64Array.from(SINS, (x) => opts.triggers?.absolute[x] ?? 0)
+  const trigP = Float64Array.from(SINS, (x) => opts.triggers?.plain[x] ?? 0)
+  const hasTriggers = trigA.some((x) => x > 0) || trigP.some((x) => x > 0)
+  /** Value of one dashboard: same-sin skills placed together, 3+ form an Absolute Resonance. */
+  const valueOf = (p: Int32Array): number => {
+    counts.fill(0)
+    for (let u = 0; u < n; u++) { const k = sinOf[p[u]]; if (k >= 0) counts[k]++ }
+    pos.fill(0)
+    let v = 0
+    for (let u = 0; u < n; u++) {
+      const card = p[u]
+      const k = sinOf[card]
+      const idx = k < 0 ? 0 : counts[k] >= 3 ? counts[k] : pos[k]++
+      v += val[card * L + (idx < L ? idx : L - 1)]
+    }
+    if (hasTriggers) for (let k = 0; k < 7; k++) v += (counts[k] >= 3 ? trigA[k] : 0) + (counts[k] >= 2 ? trigP[k] : 0)
+    return v
+  }
 
   for (let t = 0; t < turns; t++) {
     let combos = 1
@@ -162,26 +239,35 @@ export function simulate(decks: Skill[][], teamKeywords: string[], opts: { turns
     let bestValue = -Infinity
     for (let c = 0; c < combos; c++) {
       let rest = c
-      counts.fill(0)
       for (let u = 0; u < n; u++) {
         const o = opts2[u] === 2 ? rest & 1 : 0
         if (opts2[u] === 2) rest >>= 1
-        const card = o ? h1[u] : h0[u]
-        pick[u] = card
-        const k = sinOf[card]
-        if (k >= 0) counts[k]++
+        pick[u] = o ? h1[u] : h0[u]
       }
-      pos.fill(0)
-      let v = 0
-      for (let u = 0; u < n; u++) {
-        const card = pick[u]
-        const k = sinOf[card]
-        const idx = k < 0 ? 0 : counts[k] >= 3 ? counts[k] : pos[k]++
-        v += val[card * L + (idx < L ? idx : L - 1)]
-      }
+      const v = valueOf(pick)
       if (v > bestValue) {
         bestValue = v
         best.set(pick)
+      }
+    }
+    // Defense skills in place of hand skills, one or two units at a time, when the
+    // Resonance they make is worth more than the attacks they replace.
+    if (hasDefense) {
+      const base = Int32Array.from(best)
+      let bestScore = bestValue
+      for (let a = 0; a < n; a++) {
+        if (defId[a] < 0) continue
+        trial.set(base)
+        trial[a] = defId[a]
+        let v = valueOf(trial)
+        if (v - tempo[a] > bestScore + 1e-9) { bestScore = v - tempo[a]; bestValue = v; best.set(trial) }
+        for (let b = a + 1; b < n; b++) {
+          if (defId[b] < 0) continue
+          trial[b] = defId[b]
+          v = valueOf(trial)
+          if (v - tempo[a] - tempo[b] > bestScore + 1e-9) { bestScore = v - tempo[a] - tempo[b]; bestValue = v; best.set(trial) }
+          trial[b] = base[b]
+        }
       }
     }
     // Record the chosen turn.
@@ -203,9 +289,10 @@ export function simulate(decks: Skill[][], teamKeywords: string[], opts: { turns
       if (counts[k] >= 2) resonN[k]++
     }
     if (a) anyAreson++
-    // Use the chosen card, keep the other, draw one.
+    // Use the chosen card, keep the other, draw one (a defense skill leaves the hand as it was).
     for (let u = 0; u < n; u++) {
       const used = best[u]
+      if (used === defId[u]) { defUse[u]++; continue }
       discard[u].push(used)
       const kept = used === h0[u] ? h1[u] : h0[u]
       h0[u] = kept
@@ -226,6 +313,7 @@ export function simulate(decks: Skill[][], teamKeywords: string[], opts: { turns
     unitValue: Array.from(unitTotals, (x) => x / turns),
     areson, reson, gen,
     anyAreson: anyAreson / turns,
+    defenseUse: Array.from(defUse, (x) => x / turns),
     turns,
   }
 }

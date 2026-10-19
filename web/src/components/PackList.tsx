@@ -1,11 +1,12 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { EXTREME_FROM, type Difficulty, type GiftScore, type PackScore, type RunSettings } from '../lib/scoring'
+import { EXTREME_FROM, isHiddenPack, type Difficulty, type GiftScore, type PackScore, type RunSettings } from '../lib/scoring'
 import { type Gift, type ThemePack, floorText } from '../lib/types'
 import { Empty, GiftLabel, Reasons, RatingBar, WikiLink } from './bits'
 import { HowToGet } from './HowToGet'
 import { PACK_GIFTS_FIRST, PACK_GIFTS_STEP, nextShown } from '../lib/format'
 import { PackWhy } from './WhyRank'
 import { neighbourLines, packEdgeReason, packSummary } from '../lib/explain'
+import type { PackAdvice } from '../lib/packroute'
 
 interface Props {
   allPacks: ThemePack[]
@@ -18,13 +19,15 @@ interface Props {
   packsForGift: Map<string, ThemePack[]>
   giftsById: Map<string, Gift>
   owned: Set<string>
+  /** Per pack: what taking it now does for the rest of the run (internal pack route). */
+  advice?: Map<string, PackAdvice>
 }
 
 const VERDICT = { go: 'Go', maybe: 'Maybe', skip: 'Skip' }
 const DIFF: Record<Difficulty, string> = { normal: 'Normal', hard: 'Hard', extreme: 'EXTREME' }
 
 export function PackList({
-  allPacks, ranked, offered, onOfferedChange, run, onPickPack, packsForGift, giftsById, owned,
+  allPacks, ranked, offered, onOfferedChange, run, onPickPack, packsForGift, giftsById, owned, advice = new Map(),
 }: Props) {
   const how = (g: Gift) => <HowToGet gift={g} packsForGift={packsForGift} giftsById={giftsById} owned={owned} />
   const [query, setQuery] = useState('')
@@ -36,16 +39,18 @@ export function PackList({
   }, [allPacks, offered, query])
 
   const visible = ranked
+  // Hidden packs (The B.E.) stay quiet unless you've added one as offered, i.e. found it.
+  const rareUnfound = (p: PackScore) => isHiddenPack(p.pack) && !offered.includes(p.pack.id)
 
   return (
     <div>
       <div className="offered">
         <p className="hint">
           {offered.length
-            ? 'Comparing only the packs you’re being offered.'
+            ? 'Comparing only the packs you’re being offered, best pick for the whole run first.'
             : run.floor !== null
               ? `Packs that can show up on floor ${run.floor} (${DIFF[run.difficulty]}${run.difficulty === 'extreme'
-                ? run.floor < EXTREME_FROM ? ', a Hard floor' : ', an EXTREME floor' : ''}), best for your team first. Change the floor in Your run.`
+                ? run.floor < EXTREME_FROM ? ', a Hard floor' : ', an EXTREME floor' : ''}), best pick first: a pack that won't show up again comes before one that will still be around on later floors. Change the floor in Your run.`
               : `Every ${DIFF[run.difficulty]} pack, best for your team first. Start your run to see just the packs on your floor, or add the packs the game is offering.`}
         </p>
         <div className="search">
@@ -82,21 +87,25 @@ export function PackList({
         <ol className="cards">
           {visible.map((p, k) => {
             const verdict = p.verdict
-            const { above, below } = neighbourLines(p, visible[k - 1], visible[k + 1], (x) => x.pack.name, packEdgeReason)
+            // When the order follows the run (advice), score comparisons with the neighbours would read wrong.
+            const routed = advice.size > 0
+            const { above, below } = neighbourLines(p, routed ? undefined : visible[k - 1], routed ? undefined : visible[k + 1], (x) => x.pack.name, packEdgeReason)
             const summary = packSummary(p)
             const normal = floorText(p.pack.floors?.normal)
             const hard = floorText(p.pack.floors?.hard)
             const extreme = floorText(p.pack.floors?.extreme)
             return (
-              <li key={p.pack.id} className={`card card-${verdict}`}>
+              <li key={p.pack.id} className={`card card-${rareUnfound(p) ? "rare" : verdict}`}>
                 <div className="card-main">
                   <span className="gift-label">
-                    <span className={`verdict verdict-${verdict}`}>{VERDICT[verdict]}</span>
+                    {rareUnfound(p)
+                      ? <span className="verdict verdict-rare" title="A rare hidden pack: don't plan around it, but take it if it shows up">If found</span>
+                      : <span className={`verdict verdict-${verdict}`}>{VERDICT[verdict]}</span>}
                     <WikiLink href={p.pack.wiki_url}>{p.pack.name}</WikiLink>
                     {p.pack.pool !== 'themed' && <span className="tag">{p.pack.pool}</span>}
                     {run.pack === p.pack.id && <span className="pill">Current pack</span>}
                   </span>
-                  <RatingBar rating={p.rating} />
+                  {!rareUnfound(p) && <RatingBar rating={p.rating} />}
                 </div>
                 {(normal || hard || extreme || p.pack.group) && (
                   <div className="pack-meta">
@@ -106,6 +115,9 @@ export function PackList({
                     {extreme && <span>Extreme {extreme}</span>}
                     <span>{p.pack.gift_pool.length} gifts</span>
                   </div>
+                )}
+                {advice.get(p.pack.id)?.note && (
+                  <p className={`offered-advice advice-${advice.get(p.pack.id)!.kind}`}>{advice.get(p.pack.id)!.note}</p>
                 )}
                 <Reasons reasons={p.reasons} />
                 {summary && <p className="why-line">{summary}.</p>}
@@ -145,7 +157,7 @@ function PackGifts({ pack: p, how }: { pack: PackScore; how: (g: Gift) => ReactN
         <ul className="pack-gifts">
           {p.highlights.map((h) => (
             <li key={h.gift.gift.id} className={h.fits ? '' : 'pack-gift-off'}>
-              <span className={`pill ${h.kind === 'exclusive' ? '' : 'pill-boost'}`}>{h.kind === 'exclusive' ? 'Exclusive' : 'Boosted'}</span>
+              <span className={`pill ${h.kind === 'exclusive' ? '' : h.kind === 'clear' ? 'pill-clear' : 'pill-boost'}`}>{h.kind === 'exclusive' ? 'Exclusive' : h.kind === 'clear' ? 'Clear reward' : 'Boosted'}</span>
               <GiftLabel gift={h.gift.gift} icon={28} />{why(h.gift)}{how(h.gift.gift)}
             </li>
           ))}

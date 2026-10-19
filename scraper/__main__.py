@@ -102,6 +102,7 @@ def main(argv: list[str] | None = None) -> int:
                 i["attack_counts"] = counts
                 i["order_notes"] = order.order_notes(sources.get(i["name"], {}).get("content", ""))
                 i["skills"] = skills.identity_skills(sources.get(i["name"], {}).get("content", ""))
+                i["defense"] = skills.identity_defense(sources.get(i["name"], {}).get("content", ""))
             missing = [i["name"] for i in identities if not i["attack_types"] and not i["incomplete"]]
             if missing:
                 warnings.append(f"no attack types found for {len(missing)} identities, e.g. {missing[:5]}")
@@ -249,11 +250,12 @@ def fetch_pack_info(client: WikiClient, gifts: list[dict], packs: list[dict], sk
     info: dict[str, dict] = {}
     for i, (name, title, group) in enumerate(sorted(with_pages), 1):
         entry: dict = {"title": title, "group": group, "floors": None, "gift_pool": [], "unique": [],
-                       "layout": None, "event_note": None}
+                       "layout": None, "event_note": None, "hidden": False, "appear_rate": None, "clear_rewards": []}
         try:
             page = packmod.parse_pack_page(title, _parse_html(client, title, PACK_CACHE_AGE), finder)
             entry.update(floors=page.floors, gift_pool=page.gift_pool, unique=page.unique,
-                         layout=page.layout, event_note=page.event_note)
+                         layout=page.layout, event_note=page.event_note,
+                         hidden=page.hidden, appear_rate=page.appear_rate, clear_rewards=page.clear_rewards)
             warnings += page.warnings
             unresolved.update(page.unresolved)
         except WikiError as e:

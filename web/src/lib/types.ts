@@ -88,6 +88,12 @@ export interface ThemePack {
   layout?: { nodes: number | null; dungeon_nodes: number | null; shop: boolean | null } | null
   /** How often its own events show up ("...have a 75% chance to generate as one of..."). */
   event_note?: string | null
+  /** A Hidden Theme Pack (The B.E.): it only replaces a generated pack now and then. */
+  hidden?: boolean
+  /** Chance it replaces any generated pack ("hiddenThemeRate"; The B.E.: 0.0002 = 1 in 5,000). */
+  appear_rate?: number | null
+  /** Gifts always offered after clearing it (The B.E.: Bongy Plush, Lunar Memory, ...). */
+  clear_rewards?: string[]
   wiki_url: string | null
 }
 
@@ -118,6 +124,19 @@ export interface Skill {
   statuses: string[]
 }
 
+/** An identity's defense skill: not in the deck, usable in any skill slot instead of a hand skill. */
+export interface DefenseSkill {
+  name: string
+  sin: Sin | null
+  /** Guard / Evade, or an attack type for a Counter. */
+  type: string | null
+  kind: 'guard' | 'evade' | 'counter'
+  base: number | null
+  coin_power: number | null
+  coins: number | null
+  statuses: string[]
+}
+
 export interface Identity {
   id: string
   name: string
@@ -135,6 +154,8 @@ export interface Identity {
   /** Lines from its skills and passives about lineup position (scraper/order.py). */
   order_notes?: OrderNote[]
   skills?: Skill[]
+  /** Its defense skill (scraper/skills.py), if known. */
+  defense?: DefenseSkill | null
   wiki_url: string
 }
 

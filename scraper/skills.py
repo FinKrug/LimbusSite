@@ -18,6 +18,11 @@ Identity pages use the {{IDPage}} template with one {{UptieSkills ...}} per skil
 Alternate forms of a skill ("skill3-2") are left out: they replace the skill in
 combat but don't change the deck. The web app's skill-swap planner uses this to
 show what a Skill Replacement (S1 -> S2, S2 -> S3, S1 -> S3) changes.
+
+The defense skill is `|defense={{UptieSkills ...}}` with the same fields. Its `type` is
+Guard or Evade (one page says "Defense": a Guard), or an attack type for a Counter. It
+isn't in the deck: it can be used in any skill slot instead of a hand skill, and it has a
+sin, so it can fill out a Resonance chain (`identity_defense`).
 """
 from __future__ import annotations
 
@@ -26,6 +31,7 @@ import re
 from . import wikitext
 
 _SKILL_PARAM = re.compile(r"\|\s*skill([123])\s*=\s*\{\{\s*UptieSkills", re.IGNORECASE)
+_DEFENSE_PARAM = re.compile(r"\|\s*defense\s*=\s*\{\{\s*UptieSkills", re.IGNORECASE)
 SINS = ("wrath", "lust", "sloth", "gluttony", "gloom", "pride", "envy")
 
 
@@ -123,3 +129,25 @@ def identity_skills(source: str) -> list[dict]:
             "statuses": wikitext.status_effects(effects),
         }
     return [skills[k] for k in sorted(skills)]
+
+
+def identity_defense(source: str) -> dict | None:
+    """{name, sin, type, kind (guard | evade | counter), base, coin_power, coins, statuses} or None."""
+    m = _DEFENSE_PARAM.search(source or "")
+    if not m:
+        return None
+    p = _params(_template_body(source, m.start()))
+    sin = (p.get("sin") or "").strip().lower()
+    typ = (p.get("type") or "").strip().capitalize() or None
+    kind = "evade" if typ == "Evade" else "guard" if typ in ("Guard", "Defense", None) else "counter"
+    effects = " ".join(v for k, v in p.items() if k == "se" or re.fullmatch(r"ce\d+", k))
+    return {
+        "name": wikitext.to_plain(p.get("name", "")).strip(),
+        "sin": sin if sin in SINS else None,
+        "type": typ,
+        "kind": kind,
+        "base": _int(p.get("spower")),
+        "coin_power": _int(p.get("cpower")),
+        "coins": _int(p.get("coin")),
+        "statuses": wikitext.status_effects(effects),
+    }

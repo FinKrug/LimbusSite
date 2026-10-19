@@ -4,6 +4,7 @@
 // general pool, or by fusing.
 import type { EventCheck, EventChoice, EventOutcome, EventVariant, GameEvent } from './events'
 import { floorText, type Gift, type ThemePack } from './types'
+import { isHiddenPack, rarityText } from './scoring'
 
 export interface AcquireLine {
   kind: 'fusion' | 'pack' | 'event' | 'pool' | 'other'
@@ -143,6 +144,8 @@ export function howToGet(
     for (const s of evs) details.push(`Event "${eventName(s)}": ${s.how}`)
     const odds = packEventOdds(p)
     if (evs.length && odds) details.push(cap(odds))
+    if (isHiddenPack(p)) details.push(`A rare hidden pack: it shows up in place of a normal pack ${rarityText(p)}`)
+    if ((p.clear_rewards ?? []).includes(gift.id)) details.push('Always offered when you clear it')
     if (p.gifts.includes(gift.id)) {
       details.push(p.layout?.shop === false ? 'Battle rewards in this pack' : 'Battle rewards in this pack, and its shop before the boss')
     }
