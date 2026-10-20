@@ -97,6 +97,7 @@ _COST = re.compile(r"(?:Cost\s*\+?\s*(\d+)\s*(?:gained|obtained)|(\d+)\s*Cost\s*
 _LOSE_COST = re.compile(r"(?:Cost\s*-?\s*(\d+)\s*(?:lost|spent|consumed)|(?:lose|lost|spend|spent|consume)\s*(\d+)\s*Cost)", re.IGNORECASE)
 _HURT = re.compile(r"\b(damage|lose|loses|lost|hplose|alllose|splose|panic|Panic|corrosion|Fragile|Bind|Paralyze|take \d+|Sinking|Burn|Bleed)\b")
 _LASTING = re.compile(r"start of (?:the |each )?(?:combat|turn|encounter|next)|for the rest|next \d* ?(?:encounter|battle|floor)|until the end|this floor", re.IGNORECASE)
+_WEAKENS = re.compile(r"\b(?:enem(?:y|ies)|cyborgs?|the boss|it)\b[^.!\n]{0,40}\b(?:lost|lose|loses)\b[^.!\n]{0,60}\bPassives?\b", re.IGNORECASE)
 _NOTHING = re.compile(r"^\s*nothing happen", re.IGNORECASE)
 
 
@@ -130,6 +131,10 @@ def outcome(markup: str, gift_ids: dict[str, str], fold) -> dict:
         gid = gift_ids.get(fold(n))
         (gifts if gid else unknown).append(gid or n)
     text = plain(markup)
+    # "All enemies have lost their [Upgrade Factory at Work] Passives!": the boss gets weaker. That's
+    # good for you, so it's not counted as harm.
+    weakens = bool(_WEAKENS.search(text))
+    own_text = "\n".join(l for l in text.split("\n") if not _WEAKENS.search(l))
     cost = sum(int(a or b) for a, b in _COST.findall(text))
     cost -= sum(int(a or b) for a, b in _LOSE_COST.findall(text))
     combat = bool(re.search(r"StatCon\s*\|\s*combat", markup, re.IGNORECASE)) or bool(re.search(r"\b(?:win|lose) the battle\b", text, re.IGNORECASE))
@@ -139,7 +144,8 @@ def outcome(markup: str, gift_ids: dict[str, str], fold) -> dict:
         "unknown_gifts": unknown,
         "cost": cost,
         "combat": combat,
-        "hurts": bool(_HURT.search(text)) and not combat or bool(re.search(r"take[s]? \d+|damage!", text)),
+        "hurts": bool(_HURT.search(own_text)) and not combat or bool(re.search(r"take[s]? \d+|damage!", own_text)),
+        "weakens": weakens,
         "lasting": bool(_LASTING.search(text)),
         "nothing": bool(_NOTHING.match(text)),
     }
@@ -263,6 +269,126 @@ def parse_event_page(title: str, source: str, gift_ids: dict[str, str], fold, sl
         "variants": variants,
         "wiki_url": wiki_url(title),
     }
+
+
+# -- boss fights -------------------------------------------------------------------
+# A theme pack's boss can run its own events mid-fight (Bridle of Infinity's Hurtily: press "No"
+# three times and the cyborgs stop reviving). Bosses are the full {{EnBox|id}} entries in the pack
+# page's Enemies section (other enemies use {{EnMiniBox}}); Module:EnBox/data maps ids to pages.
+
+ENBOX_DATA = "Module:EnBox/data"
+
+
+def boss_ids(pack_source: str) -> list[str]:
+    """Enemy ids of a theme pack's bosses, in order."""
+    src = _COMMENT.sub("", pack_source or "")
+    m = re.search(r"^==\s*Enemies\s*==\s*$(.*?)(?=^==[^=])", src + "\n==End==", re.MULTILINE | re.DOTALL)
+    if not m:
+        return []
+    return list(dict.fromkeys(re.findall(r"\{\{\s*EnBox\s*\|\s*(\d+)", m.group(1))))
+
+
+def enbox_pages(lua: str) -> dict[str, dict]:
+    """Module:EnBox/data -> {id: {"name", "page", "section"}}."""
+    out = {}
+    for m in re.finditer(r'\["(\d+)"\]\s*=\s*\{([^{}]*)\}', lua or ""):
+        f = dict(re.findall(r'(\w+)\s*=\s*"((?:[^"\\]|\\.)*)"', m.group(2)))
+        if f.get("page"):
+            page, _, section = f["page"].partition("#")
+            out[m.group(1)] = {"name": f.get("name", page), "page": page.strip(), "section": section.strip()}
+    return out
+
+
+def parse_boss_page(name: str, source: str, section: str, gift_ids, fold, slugify, wiki_url) -> dict | None:
+    """A boss's own events ({{AbEvent}} on its enemy page), each with the text that explains when it
+    happens and how its choices play out."""
+    src = _COMMENT.sub("", source or "")
+    if section:
+        # Prefer the version on the boss's Mirror Dungeon section when it has its own events.
+        heads = [(h.start(), h.group(1).strip(" '")) for h in re.finditer(r"^==\s*([^=\n]+?)\s*==\s*$", src, re.MULTILINE)]
+        for k, (pos, title) in enumerate(heads):
+            if title.lower() == section.lower():
+                end = heads[k + 1][0] if k + 1 < len(heads) else len(src)
+                if find_templates(src[pos:end], "AbEvent"):
+                    src = src[pos:end]
+                break
+    events = find_templates(src, "AbEvent")
+    if not events:
+        return None
+    variants = []
+    prev_end = 0
+    seen = set()
+    for start, end, inner in events:
+        p = params(inner)
+        before = src[prev_end:start]
+        h = list(re.finditer(r"^=+\s*Events?\s*=+\s*$", before, re.MULTILINE | re.IGNORECASE))
+        if h:
+            before = before[h[-1].end():]
+        elif prev_end == 0:
+            before = ""
+        prev_end = end
+        flat = []
+        for k in sorted((k for k in p if re.fullmatch(r"choice\d+", k)), key=lambda k: int(k[6:])):
+            for _, _, sub in find_templates(p[k], "Choice")[:1]:
+                flat.append(choice(sub, gift_ids, fold))
+        choices = nest(flat)
+        story = plain(p.get("story", ""))
+        if not choices or story in seen:
+            continue
+        seen.add(story)
+        desc = plain(p.get("desc", ""))
+        note = re.sub(r"\s+\n", "\n", plain(before)).strip()
+        variants.append({
+            "name": desc or plain(p.get("eventname", "")) or "Combat Event",
+            "note": note[:900],
+            "story": story[:400],
+            "choices": choices,
+        })
+    if not variants:
+        return None
+    return {
+        "id": slugify(f"{name} boss"),
+        "name": f"{name} (boss)",
+        "gifts": [],
+        "variants": variants,
+        "wiki_url": "",
+        "boss": True,
+    }
+
+
+def build_boss_events(pack_sources: dict[str, str], enbox_lua: str, boss_sources: dict[str, dict],
+                      gifts: list[dict], fold, slugify, wiki_url) -> tuple[list[dict], list[str]]:
+    """pack_sources: pack id -> its page wikitext; boss_sources: page title -> {content}."""
+    gift_ids = {fold(g["name"]): g["id"] for g in gifts}
+    pages = enbox_pages(enbox_lua)
+    by_page: dict[str, dict] = {}
+    for pack_id, src in pack_sources.items():
+        for bid in boss_ids(src):
+            info = pages.get(bid)
+            if not info:
+                continue
+            s = boss_sources.get(info["page"])
+            if not s or s.get("missing"):
+                continue
+            ev = by_page.get(info["page"])
+            if ev is None:
+                ev = parse_boss_page(info["name"], s.get("content", ""), info["section"], gift_ids, fold, slugify, wiki_url) or {}
+                if ev:
+                    ev["wiki_url"] = wiki_url(info["page"])
+                    ev["packs"] = []
+                by_page[info["page"]] = ev
+            if ev and pack_id not in ev["packs"]:
+                ev["packs"].append(pack_id)
+    out = [e for e in by_page.values() if e]
+    for e in out:
+        e["pack"] = e["packs"][0]
+    return out, []
+
+
+def boss_titles(pack_sources: dict[str, str], enbox_lua: str) -> list[str]:
+    """Enemy pages to fetch for the packs' bosses."""
+    pages = enbox_pages(enbox_lua)
+    return sorted({pages[b]["page"] for src in pack_sources.values() for b in boss_ids(src) if b in pages})
 
 
 def build_events(sources: dict[str, dict], gifts: list[dict], fold, slugify, wiki_url) -> tuple[list[dict], list[str]]:

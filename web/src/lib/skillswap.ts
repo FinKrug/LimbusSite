@@ -122,6 +122,17 @@ export interface SwapOptions {
   egos?: Ego[]
   loadout?: EgoLoadout
   run?: RunSettings
+  /** Plan only these identity ids (the rest of `team` still fights in the simulation). */
+  only?: string[]
+}
+
+/**
+ * Plans for your backups: each one is played out in the team in place of your last deployed unit,
+ * since that's roughly when they'd fight (a backup comes in when someone goes down).
+ */
+export function planBackupSwaps(deployed: Identity[], backups: Identity[], swaps: SwapState, owned: Gift[], opts: SwapOptions = {}): IdentityPlan[] {
+  if (!deployed.length) return []
+  return backups.flatMap((b) => planSwaps([...deployed.slice(0, -1), b], swaps, owned, { ...opts, only: [b.id] }))
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
@@ -169,7 +180,7 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
   const aoeFrom = (except: Identity) => team.filter((m) => m !== except && (m.skills ?? []).some(multiTarget))
   const { floorsLeft, weight } = floorsWeight(opts.run)
 
-  return team.map((i, unit) => {
+  const plan = (i: Identity, unit: number): IdentityPlan => {
     const skills = [...(i.skills ?? [])].sort((a, b) => a.slot - b.slot)
     const d = deck(i, swaps[i.id])
     const options: SwapAdvice[] = []
@@ -287,5 +298,7 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
     const best = options.find((o) => o.worth) ?? null
     const spare = best ? null : options.find((o) => !o.hurts) ?? null
     return { identity: i, deck: d, skills, defense: i.defense ?? null, defenseUse: base.sim.defenseUse[unit] ?? 0, best, spare, options }
-  })
+  }
+  // Only these identities' plans (the backups view simulates each backup in the team in turn).
+  return team.flatMap((i, unit) => (opts.only && !opts.only.includes(i.id) ? [] : [plan(i, unit)]))
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { resonanceTriggers } from './ego'
-import { deck, multiTarget, planSwaps, teamSins, triggerWorth } from './skillswap'
+import { deck, multiTarget, planBackupSwaps, planSwaps, teamSins, triggerWorth } from './skillswap'
 import type { Identity, Skill } from './types'
 
 const sk = (slot: 1 | 2 | 3, sin: Skill['sin'], base: number, cp: number, coins: number, statuses: string[] = []): Skill =>
@@ -155,4 +155,16 @@ describe('skill swaps', () => {
     expect(plans).toHaveLength(7)
     expect(plans.every((p) => p.options.length > 0)).toBe(true)
   })
+
+  it('plans backups by playing each one in place of the last deployed unit', () => {
+    const byId = (id: string) => gameData.identities.find((i) => i.id === id)!
+    const deployed = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion', 'heishou-pack-si-branch-gregor'].map(byId)
+    const backups = ['heishou-pack-you-branch-sinclair', 'heishou-pack-wu-branch-adept-yi-sang'].map(byId)
+    const plans = planBackupSwaps(deployed, backups, {}, [])
+    expect(plans.map((p) => p.identity.sinner)).toEqual(['Sinclair', 'Yi Sang'])
+    expect(plans.every((p) => p.options.length > 0)).toBe(true)
+    expect(planSwaps(deployed, {}, [], { only: [deployed[0].id] })).toHaveLength(1)
+  })
 })
+

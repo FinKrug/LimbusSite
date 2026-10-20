@@ -1079,3 +1079,14 @@ p.skill-best { background: none; border-color: var(--line); }
 .pill.pill-fusion { background: #2c3d2a; color: #d4f0c8; }
 .skill-row.skill-def { border-left-style: dashed; background: transparent; outline: 1px dashed var(--line); outline-offset: -1px; }
 .event-followup { margin-left: 14px; padding-left: 8px; border-left: 2px solid var(--line); }
+.event-tip { margin: 8px 0; padding: 8px 10px; border-radius: 6px; background: rgba(127, 196, 122, 0.08); border: 1px solid #3e5a3c; }
+.event-boss-step { margin-top: 10px; }
+.event-boss-step h3 { font-size: 14px; margin: 6px 0 2px; }
+.event-note { white-space: pre-line; }
+.event-row .tag { margin-left: 6px; }
+.event-match { font-style: italic; }
+.event-variant-name { font-size: 14px; margin: 6px 0 2px; }
+.seg-toggle { display: inline-flex; margin-top: 8px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg-toggle button { background: transparent; color: inherit; border: 0; padding: 4px 12px; cursor: pointer; font: inherit; font-size: 13px; }
+.seg-toggle button.on { background: var(--panel-2); font-weight: 700; }
+.seg-toggle button + button { border-left: 1px solid var(--line); }

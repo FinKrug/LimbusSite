@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react'
 import {
-  adviseVariant, eventsForPack, searchEvents,
-  type ChoiceAdvice, type EventOutcome, type GameEvent,
+  adviseVariant, eventsForPack, findEvents,
+  type ChoiceAdvice, type EventChoice, type EventOutcome, type GameEvent,
 } from '../lib/events'
 import type { RunContext } from '../lib/scoring'
 import type { Identity, ThemePack } from '../lib/types'
 import { SinDot } from './bits'
+import bossTips from '../data/boss_tips.json'
 
 interface Props {
   ctx: RunContext
@@ -28,23 +29,27 @@ export function EventsTab({ ctx, events, team, pack }: Props) {
   const [q, setQ] = useState('')
   const [picked, setPicked] = useState<string | null>(null)
   const giftName = (id: string) => ctx.giftsById.get(id)?.name
-  const hits = useMemo(
-    () => searchEvents(events, q, giftName).sort((a, b) => a.name.localeCompare(b.name)),
+  const inPack = useMemo(() => (pack ? eventsForPack(events, pack) : []), [events, pack])
+  // Best match first; among equally good ones, this floor's pack's events (you're likely in one).
+  const hits = useMemo(() => {
+    const here = new Set(inPack.map((e) => e.id))
+    return findEvents(events, q, giftName)
+      .sort((a, b) => a.rank - b.rank || Number(here.has(b.event.id)) - Number(here.has(a.event.id)) || a.event.name.localeCompare(b.event.name))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [events, q],
-  )
-  const inPack = useMemo(() => (pack ? eventsForPack(events, pack.name) : []), [events, pack])
-  const current = events.find((e) => e.id === picked) ?? (q.trim() ? hits[0] : undefined)
+  }, [events, q, inPack])
+  const current = events.find((e) => e.id === picked) ?? (q.trim() ? hits[0]?.event : undefined)
 
   return (
     <div className="events-tab">
       <section className="panel events-search">
         <h2>Events</h2>
         <p className="muted small">
-          Type the name of the event you walked into (the Abnormality's name, like Drunkard) or a gift it gives. Each
-          choice is judged for your team: the gifts it gives (scored like Best gifts), Cost, and how much it hurts.
+          Type one of the choices the event gives you (the first option is quickest), its name, or a gift it gives.
+          Boss fights' own events are listed under the pack they're the boss of. Each choice is judged for your team:
+          the gifts it gives (scored like Best gifts; a duplicate becomes a Vestige for fusing), Cost, how much it
+          hurts, and whether it weakens the boss.
         </p>
-        <input type="search" placeholder="Event name or gift…" value={q} autoFocus
+        <input type="search" placeholder="A choice, the event's name, or a gift…" value={q} autoFocus
           onChange={(e) => { setQ(e.target.value); setPicked(null) }} aria-label="Search events" />
         {inPack.length > 0 && !q && (
           <div className="events-pack">
@@ -55,10 +60,11 @@ export function EventsTab({ ctx, events, team, pack }: Props) {
           </div>
         )}
         <ul className="events-list">
-          {hits.slice(0, q ? 40 : 400).map((e) => (
+          {hits.slice(0, q ? 40 : 400).map(({ event: e, matched }) => (
             <li key={e.id}>
               <button className={current?.id === e.id ? 'event-row on' : 'event-row'} onClick={() => setPicked(e.id)}>
-                {e.name}
+                {e.name}{e.boss && <span className="tag">boss</span>}
+                {q.trim() && matched && <span className="muted small event-match"> · “{matched}”</span>}
               </button>
             </li>
           ))}
@@ -67,21 +73,48 @@ export function EventsTab({ ctx, events, team, pack }: Props) {
       </section>
 
       <section className="panel event-detail" aria-live="polite">
-        {current ? <EventCard key={current.id} event={current} ctx={ctx} team={team} />
+        {current ? <EventCard key={current.id} event={current} ctx={ctx} team={team}
+          focus={hits.find((h) => h.event.id === current.id)?.matched ?? null} />
           : <p className="hint">Pick an event to see what to choose.</p>}
       </section>
     </div>
   )
 }
 
-function EventCard({ event, ctx, team }: { event: GameEvent; ctx: RunContext; team: Identity[] }) {
-  const [main, ...others] = event.variants
+function EventCard({ event, ctx, team, focus = null }: { event: GameEvent; ctx: RunContext; team: Identity[]; focus?: string | null }) {
+  // Open the version whose choice you searched for (a pack page lists several events).
+  const has = (cs: EventChoice[]): boolean => cs.some((c) => c.label === focus || has(c.next ?? []))
+  const k = focus ? event.variants.findIndex((v) => has(v.choices)) : -1
+  const [main, ...others] = k > 0 ? [event.variants[k], ...event.variants.filter((_, j) => j !== k)] : event.variants
+  const tip = (bossTips as Record<string, string>)[event.id]
+  if (event.boss) {
+    // A boss's events happen one after another during the fight: show them all, in order, each
+    // with when it comes up and how its choices play out.
+    return (
+      <article className="event-card">
+        <header className="event-head">
+          <h2>{event.name}</h2>
+          <a href={event.wiki_url} target="_blank" rel="noreferrer" className="small">Wiki ↗</a>
+        </header>
+        {tip && <p className="event-tip"><span className="event-pick-tag">Do this</span> {tip}</p>}
+        {event.variants.map((v, k) => (
+          <section key={k} className="event-boss-step">
+            <h3>{event.variants.length > 1 ? `${k + 1}. ` : ''}{v.name}</h3>
+            <Variant variant={v} ctx={ctx} team={team} open />
+          </section>
+        ))}
+        <p className="muted small">These happen mid-fight; the notes are from the boss's wiki page.</p>
+      </article>
+    )
+  }
   return (
     <article className="event-card">
       <header className="event-head">
         <h2>{event.name}</h2>
         <a href={event.wiki_url} target="_blank" rel="noreferrer" className="small">Wiki ↗</a>
       </header>
+      {tip && <p className="event-tip"><span className="event-pick-tag">Do this</span> {tip}</p>}
+      {others.length > 0 && main.name && <h3 className="event-variant-name">{main.name}</h3>}
       <Variant variant={main} ctx={ctx} team={team} open />
       {others.map((v, k) => (
         <details key={k} className="event-variant-other">
@@ -104,7 +137,7 @@ function Variant({ variant, ctx, team, open = false }: {
   const best = advice.find((a) => a.verdict === 'best')
   return (
     <div className="event-variant">
-      {open && variant.note && <p className="muted small">{variant.note}</p>}
+      {open && variant.note && <p className="muted small event-note">{variant.note}</p>}
       {best && (
         <p className="event-pick">
           <span className="event-pick-tag">Pick</span> <b>{best.choice.label}</b>
@@ -159,6 +192,14 @@ function CheckLine({ a }: { a: ChoiceAdvice }) {
   const c = a.choice.check!
   const o = a.odds!
   if (o.luck) return <p className="event-check small">Chance-based (no sin check): about a coin flip.</p>
+  if ((c.sins as string[]).includes('all')) {
+    return (
+      <p className="event-check small">
+        Any-skill check: needs {c.adv}+.{' '}
+        {o.best ? <>Send <b>{o.best.sinner}</b>: roughly {Math.round(o.chance * 100)}%.</> : 'No one on your team has good odds.'}
+      </p>
+    )
+  }
   const sins = c.sins.map((s) => <span key={s} className="event-sin"><SinDot sin={s} />{cap(s)}</span>)
   return (
     <p className="event-check small">

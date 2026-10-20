@@ -342,7 +342,7 @@ export default function App() {
             )}
             {tab === 'evaluate' && <EvaluateTab ctx={ctx} packsForGift={packsForGift} />}
             {tab === 'skills' && (
-              <SkillsTab team={teamIdentities.slice(0, deployed)} swaps={swaps} onSwapsChange={setSwaps} owned={ownedGifts} art={art}
+              <SkillsTab team={teamIdentities.slice(0, deployed)} backups={teamIdentities.slice(deployed)} swaps={swaps} onSwapsChange={setSwaps} owned={ownedGifts} art={art}
                 egos={gameData.egos ?? []} loadout={loadout} run={run} battle={ctx.battle} onOpenTeam={() => setTab('team')} />
             )}
           </div>

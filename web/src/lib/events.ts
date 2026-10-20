@@ -16,8 +16,9 @@
  * (`adv`), without one the higher (`disadv`). Some checks add a bonus for certain
  * identities. We pick the sinner on your team with the best odds.
  */
+import { FUSION_POINTS } from './fusion'
 import { isGone, scoreGift, type RunContext } from './scoring'
-import type { Identity, Sin } from './types'
+import { tierLabel, type Identity, type Sin } from './types'
 
 export interface EventOutcome {
   text: string
@@ -28,6 +29,8 @@ export interface EventOutcome {
   hurts: boolean
   lasting: boolean
   nothing: boolean
+  /** A boss loses a passive ("All enemies have lost their [Upgrade Factory at Work] Passives!"). */
+  weakens?: boolean
   /** A second roll after this result: Cozy Bed's pass is a 50% roll between Snuffed Lantern and
    *  Snuffed Candlestick; Sign of Roses' fail can be retried while fewer than 3 checks have failed. */
   then?: EventFollowUp
@@ -88,6 +91,9 @@ export interface GameEvent {
   gifts: string[]
   variants: EventVariant[]
   wiki_url: string
+  /** A boss fight's own events (from the enemy's page); `packs` are the theme packs it's the boss of. */
+  boss?: boolean
+  packs?: string[]
 }
 
 export const EVENT_WEIGHTS = {
@@ -111,6 +117,10 @@ export const EVENT_WEIGHTS = {
   unknownGift: 0.6,
   /** The best choice by at least this much is "clearly best"; this far below it, avoid. */
   avoidGap: 1.2,
+  /** A boss loses a passive (no more revives) or gets weak to an attack type. */
+  bossWeaken: 1.5,
+  /** A duplicate becomes a Vestige of its tier: worth this per fusion point it adds. */
+  vestigePoint: 0.06,
 }
 
 export interface Valued {
@@ -128,8 +138,10 @@ export function outcomeValue(o: EventOutcome | undefined, ctx: RunContext): Valu
     const g = ctx.giftsById.get(id)
     if (!g) continue
     if (ctx.owned.has(id)) {
-      value += W.duplicate
-      why.push(`${g.name}: you already have it`)
+      // A duplicate turns into a Vestige of its tier: fusion fuel, not nothing.
+      const points = FUSION_POINTS[g.tier ?? 1] ?? 3
+      value += Math.max(W.duplicate, points * W.vestigePoint)
+      why.push(`${g.name}: you already have it, so it becomes a Tier ${tierLabel(g.tier)} Vestige (${points} fusion points)`)
       continue
     }
     if (isGone(ctx, id)) {
@@ -150,12 +162,21 @@ export function outcomeValue(o: EventOutcome | undefined, ctx: RunContext): Valu
   if (/heal/i.test(t)) value += W.heal
   if (/gain \d+ Levels?/i.test(t)) { value += W.levels; why.push('Levels for your deployed units') }
   if (o.hurts) {
-    const all = /All (?:Allies|Deployed)|Identities without|Allies without|Other Identities/i.test(t)
+    const all = /All (?:Allies|Deployed|Identities|Sinners)|Identities without|Allies without|Other Identities/i.test(t)
     value -= all ? W.hurtAll : W.hurtOne
     why.push(all ? 'Hurts your whole team' : 'Hurts one unit')
   }
   if (o.lasting && o.hurts) { value -= W.lasting; why.push('Leaves a lasting penalty') }
   if (o.combat) { value -= W.fight; why.push('A fight') }
+  if (o.weakens) { value += W.bossWeaken; why.push('Weakens the boss (it loses a passive)') }
+  // "Spiral of Contempt's Slash Resistance becomes 1.5": worth as much as your team hits with Slash.
+  const weak = t.match(/\b(Slash|Pierce|Blunt) Resistance becomes (\d+(?:\.\d+)?)/i)
+  if (weak && Number(weak[2]) > 1 && ctx.profile.attackKnown) {
+    const type = weak[1][0].toUpperCase() + weak[1].slice(1).toLowerCase()
+    const n = ctx.profile.attackCounts.get(type) ?? 0
+    value += W.bossWeaken * n / ctx.profile.attackKnown
+    why.push(`Makes the boss weak to ${type} (${n}/${ctx.profile.attackKnown} of your team use ${type} skills)`)
+  }
   return { value, why }
 }
 
@@ -200,7 +221,8 @@ export function checkOdds(c: EventCheck, team: Identity[]): CheckOdds {
   const withSin: Identity[] = []
   for (const i of team) {
     const skills = (i.skills ?? []).filter((s) => s.base !== null)
-    const sinSkills = skills.filter((s) => s.sin && c.sins.includes(s.sin))
+    // "sin1=All" (Spiral of Contempt's gaze): any skill counts as the checked sin.
+    const sinSkills = skills.filter((s) => s.sin && (c.sins.includes(s.sin) || (c.sins as string[]).includes('all')))
     if (sinSkills.length) withSin.push(i)
     const bonus = bonusFor(i, c)
     const rolls = [
@@ -301,6 +323,8 @@ export function adviseChoice(c: EventChoice, ctx: RunContext, team: Identity[]):
 export function adviseVariant(v: EventVariant, ctx: RunContext, team: Identity[]): ChoiceAdvice[] {
   const raw = v.choices.map((c) => adviseChoice(c, ctx, team))
   const best = Math.max(...raw.map((r) => r.value))
+  // Every choice worth the same (Hurtily's "Investigate" vs "Keep fighting" on paper): don't call one best.
+  if (raw.length > 1 && raw.every((r) => Math.abs(r.value - best) < 0.01)) return raw.map((r) => ({ ...r, verdict: 'ok' as const }))
   return raw
     .map((r) => ({
       ...r,
@@ -309,16 +333,54 @@ export function adviseVariant(v: EventVariant, ctx: RunContext, team: Identity[]
 }
 
 /** Events whose name, gifts or theme pack match a search. */
-export function searchEvents(events: GameEvent[], q: string, giftName: (id: string) => string | undefined): GameEvent[] {
-  const s = q.trim().toLowerCase()
-  if (!s) return events
-  return events.filter((e) => e.name.toLowerCase().includes(s)
-    || e.gifts.some((id) => giftName(id)?.toLowerCase().includes(s))
-    || e.variants.some((v) => v.note.toLowerCase().includes(s) || v.choices.some((c) => c.label.toLowerCase().includes(s))))
+/** Lower case, plain quotes and apostrophes, single spaces: "We can’t…" matches "we can't". */
+export function normText(s: string): string {
+  return s.toLowerCase().replace(/[‘’`´'"“”]/g, '').replace(/[…]/g, '...')
+    .replace(/[^a-z0-9?!.,:;()\-\s]/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
-/** Events tied to a theme pack (their page or a version's note names it). */
-export function eventsForPack(events: GameEvent[], packName: string): GameEvent[] {
-  const p = packName.toLowerCase()
-  return events.filter((e) => e.name.toLowerCase().startsWith(p) || e.variants.some((v) => v.note.toLowerCase().includes(p)))
+export interface EventHit {
+  event: GameEvent
+  /** What matched, best first: a choice ("Investigate the factory."), the event's name, a gift... */
+  matched: string | null
+  /** Lower is better: 0 a choice the event offers, 1 its name, 2 a gift, 3 its story or notes. */
+  rank: number
+}
+
+function allChoices(cs: EventChoice[]): EventChoice[] {
+  return cs.flatMap((c) => [c, ...allChoices(c.next ?? [])])
+}
+
+/**
+ * Find the event you're in by what's on screen: one of its choices (the first option you see is
+ * the quickest thing to type), its name, a gift it gives, or words from its story. Every word typed
+ * has to appear; choices are matched before names and stories.
+ */
+export function findEvents(events: GameEvent[], q: string, giftName: (id: string) => string | undefined): EventHit[] {
+  const words = normText(q).split(' ').filter(Boolean)
+  if (!words.length) return events.map((event) => ({ event, matched: null, rank: 9 }))
+  const has = (text: string) => { const t = normText(text); return words.every((w) => t.includes(w)) }
+  const out: EventHit[] = []
+  for (const e of events) {
+    const choices = e.variants.flatMap((v) => allChoices(v.choices))
+    const c = choices.find((x) => has(x.label)) ?? choices.find((x) => has(`${x.label} ${x.desc}`))
+    if (c) { out.push({ event: e, matched: c.label, rank: 0 }); continue }
+    if (has(e.name)) { out.push({ event: e, matched: null, rank: 1 }); continue }
+    const g = e.gifts.map((id) => giftName(id) ?? '').find((n) => n && has(n))
+    if (g) { out.push({ event: e, matched: g, rank: 2 }); continue }
+    const v = e.variants.find((x) => has(`${x.name} ${x.story} ${x.note}`))
+    if (v) out.push({ event: e, matched: null, rank: 3 })
+  }
+  return out.sort((a, b) => a.rank - b.rank || a.event.name.localeCompare(b.event.name))
+}
+
+export function searchEvents(events: GameEvent[], q: string, giftName: (id: string) => string | undefined): GameEvent[] {
+  return findEvents(events, q, giftName).map((h) => h.event)
+}
+
+/** Events tied to a theme pack: its own events page, a version whose note names it, or its boss. */
+export function eventsForPack(events: GameEvent[], pack: { id: string; name: string }): GameEvent[] {
+  const p = pack.name.toLowerCase()
+  return events.filter((e) => e.packs?.includes(pack.id) || (!e.boss && (e.pack === pack.id
+    || e.name.toLowerCase().startsWith(p) || e.variants.some((v) => v.note.toLowerCase().includes(p)))))
 }

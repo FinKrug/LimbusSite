@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { adviseVariant, checkOdds, eventsForPack, rollChance, searchEvents } from './events'
+import { adviseVariant, checkOdds, eventsForPack, findEvents, rollChance, searchEvents } from './events'
 import { DEFAULT_RUN, defaultFloors, makeContext } from './scoring'
 
 const byId = (id: string) => gameData.identities.find((x) => x.id === id)!
@@ -49,7 +49,7 @@ describe('Mirror Dungeon events', () => {
     const name = (id: string) => gameData.gifts.find((g) => g.id === id)?.name
     expect(searchEvents(gameData.events!, 'drunk', name).map((e) => e.name)).toContain('Drunkard')
     expect(searchEvents(gameData.events!, 'wobbling keg', name).map((e) => e.name)).toContain('Drunkard')
-    expect(eventsForPack(gameData.events!, 'The Dusk of Amber').length).toBeGreaterThan(0)
+    expect(eventsForPack(gameData.events!, gameData.themePacks.find((p) => p.name === 'The Dusk of Amber')!).length).toBeGreaterThan(0)
   })
 
   it("values Cozy Bed's second roll: pass, then 50% Snuffed Lantern or Snuffed Candlestick", () => {
@@ -76,4 +76,33 @@ describe('Mirror Dungeon events', () => {
     expect(a.why.some((w) => /you can try again .* to pass in the end/.test(w))).toBe(true)
     expect(a.unclear).toBe(false)
   })
+
+  it("lists a theme pack's boss events and how to stop Hurtily's revives (Bridle of Infinity)", () => {
+    const bridle = gameData.themePacks.find((p) => p.id === 'bridle-of-infinity')!
+    const boss = eventsForPack(gameData.events!, bridle).find((e) => e.boss)!
+    expect(boss.name).toBe('You Want To Get Beat? Hurtily? (boss)')
+    expect(boss.variants[1].note).toMatch(/If No is selected 3 times/)
+    const ctx = makeContext(gameData, heishou, [], { run: hard })
+    const [yes, no] = adviseVariant(boss.variants[1], ctx, heishou)
+    expect(no.verdict).toBe('best')
+    expect(no.then[0].choice.label).toMatch(/third selection of "No"/)
+    expect(no.value).toBeGreaterThan(yes.value)
+    // The first event's choices are equal on paper: neither is called best.
+    expect(adviseVariant(boss.variants[0], ctx, heishou).every((a) => a.verdict === 'ok')).toBe(true)
+  })
+
+  it('finds an event by the choice on screen, quotes and apostrophes aside', () => {
+    const giftName = (id: string) => gameData.gifts.find((g) => g.id === id)?.name
+    const [hit] = findEvents(gameData.events!, 'we cant walk into', giftName)
+    expect(hit.event.name).toBe('You Want To Get Beat? Hurtily? (boss)')
+    expect(hit.rank).toBe(0)
+    expect(findEvents(gameData.events!, 'pick a rose', giftName)[0]).toMatchObject({ matched: 'Pick a rose.' })
+  })
+
+  it('counts a duplicate gift as a Vestige for fusing', () => {
+    const v = ev('Drenched Gossypium').variants[0]
+    const owning = adviseVariant(v, makeContext(gameData, heishou, ['white-gossypium'], { run: hard }), heishou)
+    expect(owning[0].why.some((w) => /becomes a Tier II Vestige \(6 fusion points\)/.test(w))).toBe(true)
+  })
 })
+

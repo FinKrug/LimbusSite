@@ -122,5 +122,80 @@ class NestedCheckTests(unittest.TestCase):
         self.assertTrue(t["fail"]["combat"])
 
 
+PACK = """==Enemies==
+{| class="lcbtable2"
+! colspan="3"| Bosses (3 Waves)
+|-
+|Wave 1 <br>{{EnBox|8269}}
+|Wave 2 <br>{{EnBox|8230}}
+|Reinforcements {{EnMiniBox|70047}}
+|}
+
+==E.G.O Gift Rates==
+{{EnBox|9999}}
+"""
+
+ENBOX = """return {
+["8269"] = { name = "You Want To Get Beat? Hurtily?", faction = "The Cyborgs", page = "You Want To Get Beat? Hurtily?#Mirror Dungeon"},
+["8230"] = { name = "Shock Centipede", page = "Shock Centipede/Enemy#MD Event"},
+}"""
+
+BOSS = """==Hurtily==
+===Behavior===
+====Events====
+The first event triggers after any 2 cyborgs revive.
+{{AbEvent
+|eventname=Combat Event
+|desc=You defeated the enemy, but now it's back up.
+|story=How do those cyborgs keep coming back?
+|choice1={{Choice|id=1
+|choice=Investigate the factory.
+|result=Investigating the factory...
+}}
+|choice2={{Choice|id=2
+|choice=Keep fighting them.
+|result=We decided against investigating the factory.
+}}}}
+
+The second event: if No is selected 3 times, the factory is shut down.
+{{AbEvent
+|eventname=Combat Event
+|desc=Go for the Big One!
+|story=DO YOU LOVE THE CITY YOU LIVE IN?
+|choice1={{Choice|id=6
+|choice=No.
+|result=Pressed "No".
+}}
+|choice2={{Choice|id=8
+|prev=6|nestlevel=1
+|choice=''(If this is the third selection of "No")''
+|result=All enemies have lost their [Upgrade Factory at Work] Passives!
+}}}}
+"""
+
+
+class BossEventTests(unittest.TestCase):
+    """Finley: boss fights have events too (Bridle of Infinity: which buttons stop the revives)."""
+
+    def test_boss_ids_come_from_the_enemies_section(self):
+        self.assertEqual(events.boss_ids(PACK), ["8269", "8230"])
+        pages = events.enbox_pages(ENBOX)
+        self.assertEqual(pages["8269"], {"name": "You Want To Get Beat? Hurtily?", "page": "You Want To Get Beat? Hurtily?", "section": "Mirror Dungeon"})
+
+    def test_boss_events_with_their_notes(self):
+        evs, _ = events.build_boss_events({"bridle-of-infinity": PACK}, ENBOX,
+                                          {"You Want To Get Beat? Hurtily?": {"content": BOSS}}, [], build.fold, build.slugify, build.wiki_url)
+        self.assertEqual(len(evs), 1)
+        e = evs[0]
+        self.assertTrue(e["boss"])
+        self.assertEqual(e["packs"], ["bridle-of-infinity"])
+        self.assertEqual([v["name"] for v in e["variants"]], ["You defeated the enemy, but now it's back up.", "Go for the Big One!"])
+        self.assertIn("after any 2 cyborgs revive", e["variants"][0]["note"])
+        self.assertIn("No is selected 3 times", e["variants"][1]["note"])
+        shutdown = e["variants"][1]["choices"][0]["next"][0]["result"]
+        self.assertTrue(shutdown["weakens"])
+        self.assertFalse(shutdown["hurts"])
+
+
 if __name__ == "__main__":
     unittest.main()

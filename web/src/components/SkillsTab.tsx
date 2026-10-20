@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { ArtVariant } from '../lib/images'
-import { SWAPS, floorsWeight, multiTarget, planSwaps, teamSins, type SwapKind, type SwapState } from '../lib/skillswap'
+import { SWAPS, floorsWeight, multiTarget, planBackupSwaps, planSwaps, teamSins, type SwapKind, type SwapState } from '../lib/skillswap'
+import { usePersistentState } from '../lib/storage'
 import type { BattleProfile, Ego, EgoLoadout } from '../lib/ego'
 import type { RunSettings } from '../lib/scoring'
 import type { Gift, Identity, Sin } from '../lib/types'
@@ -9,6 +10,8 @@ import { KeywordChip, SinDot } from './bits'
 
 interface Props {
   team: Identity[]
+  /** Your backups (#8 on): planned when you switch the tab to them. */
+  backups?: Identity[]
   swaps: SwapState
   onSwapsChange: (s: SwapState) => void
   owned: Gift[]
@@ -30,8 +33,13 @@ const LABEL: Record<SwapKind, string> = { '1to2': 'S1 → S2', '2to3': 'S2 → S
  */
 const DEF_KIND = { guard: 'Guard', evade: 'Evade', counter: 'Counter' } as const
 
-export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadout, run, battle, onOpenTeam }: Props) {
-  const plans = useMemo(() => planSwaps(team, swaps, owned, { egos, loadout, run }), [team, swaps, owned, egos, loadout, run])
+export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art, egos, loadout, run, battle, onOpenTeam }: Props) {
+  // Deployed units first; once they're done, switch to the backups (remembered across tabs).
+  const [view, setView] = usePersistentState<'deployed' | 'backups'>('limbussite.skillsview.v1', 'deployed')
+  const showBackups = view === 'backups' && backups.length > 0
+  const plans = useMemo(() => showBackups
+    ? planBackupSwaps(team, backups, swaps, owned, { egos, loadout, run })
+    : planSwaps(team, swaps, owned, { egos, loadout, run }), [showBackups, team, backups, swaps, owned, egos, loadout, run])
   const { floorsLeft } = floorsWeight(run)
   const { ego, sim } = battle
   const lean = ego.lean >= 0.55 ? 'high' : ego.lean < 0.35 ? 'low' : 'medium'
@@ -89,6 +97,18 @@ export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadou
           status your team already has plenty of, like Crown of Roses' extra Rupture, doesn't count). {floorsLeft} floor{floorsLeft === 1 ? '' : 's'} left.
         </p>
         {anyDone && <button className="link-btn" onClick={() => onSwapsChange({})}>Reset all swaps (new run)</button>}
+        {backups.length > 0 && (
+          <div className="seg-toggle" role="group" aria-label="Whose swaps to show">
+            <button className={!showBackups ? 'on' : ''} aria-pressed={!showBackups} onClick={() => setView('deployed')}>Deployed ({team.length})</button>
+            <button className={showBackups ? 'on' : ''} aria-pressed={showBackups} onClick={() => setView('backups')}>Backups ({backups.length})</button>
+          </div>
+        )}
+        {showBackups && (
+          <p className="muted small">
+            Backups only fight once they substitute in, so each one is played out in your team in place of your last
+            deployed unit ({team[team.length - 1]?.sinner}). Swap the deployed units first.
+          </p>
+        )}
       </section>
 
       <ol className="skill-cards">

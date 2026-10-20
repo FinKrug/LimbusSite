@@ -256,7 +256,8 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
 - **Events tab** (`src/lib/events.ts`, `EventsTab.tsx`, `data/events.json`): type the event you
   walked into (or a gift it gives; your current pack's events are listed first). Each choice is
   valued for your team: gifts it gives (scored like Best gifts, ×0.9 for a fight you have to win,
-  0.3 for one you already own) + 0.006 per Cost − 0.25 / 0.6 for hurting one / all units − 1.0 for
+  a duplicate counts as the Vestige it turns into, 0.06 per fusion point: Tier I 0.3 … Tier IV 0.9)
+  + 0.006 per Cost − 0.25 / 0.6 for hurting one / all units − 1.0 for
   a lasting penalty − 0.6 for a fight; a check is chance × pass + (1 − chance) × fail; a choice that
   leads to more choices adds its best follow-up. The best one is marked, ones 1.2 below it are
   "Avoid". Check odds are an estimate: the sinner rolls a skill (base + coin power per heads, 50%
@@ -269,6 +270,21 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   odds, the card shows them indented, and how-to-get says "then win the 50% roll". A failed check
   marked "Cumulative Checks Failed < 3" (Sign of Roses, Drenched Gossypium) can be retried: up to 3
   tries, each failed one taking the small hit, and only running out of tries gives the last result.
+  A "sin1=All" check (Spiral of Contempt's gaze) lets any skill count.
+  **Search** goes by what's on screen: type one of the choices (the first option is quickest), the
+  event's name, a gift it gives, or words from its story; every word has to appear, quotes and
+  apostrophes don't matter ("we cant walk" finds "We can’t walk into…"), choices rank above names
+  and stories, this floor's pack's events come first among equals, and the list shows the choice
+  that matched. A pack page with several events opens the one whose choice you typed.
+  **Boss fights' events** (`build_boss_events` in scraper/events.py): a pack's bosses are the full
+  {{EnBox|id}} entries in its Enemies section, Module:EnBox/data maps them to enemy pages, and the
+  {{AbEvent}}s there become one event per boss (`boss`, `packs`) with each step's wiki explanation as
+  its note (12 bosses so far: Hurtily, Spiral of Contempt, The King in Binds, Doomsday Calendar…).
+  They're listed under the pack they're the boss of and shown as numbered steps. Results that make
+  the boss lose a passive (`weakens`) or weak to an attack type ("Slash Resistance becomes 1.5",
+  worth as much as your team uses it) count +1.5. Hand-written tips in `src/data/boss_tips.json`
+  sit on top of the card (Hurtily: investigate, then press No three times). When every choice is
+  worth the same on paper, none is marked best.
 - **Vestiges:** a duplicate of a gift you own becomes a Vestige of its tier, like in game; the
   side panel counts them and fusing uses them up.
 - **Evaluate tab:** type a gift or pack for its pros, cons and a verdict for your team and run:
@@ -347,7 +363,9 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   the model uses it. When no swap is clearly worth it (last floor, small
   gains), the card still shows "If you have Cost to spare" with the best swap that doesn't hurt the
   team; only when every swap would hurt (team damage down more than 0.5%, or Resonance a gift you
-  own needs) does it say to skip. Press **I did this** on the recommendation (or Did it under "All swaps and your record") to record a swap; decks and advice update, and an Undo link takes back the last one.
+  own needs) does it say to skip. A **Deployed / Backups** switch (`limbussite.skillsview.v1`) plans
+  your backups once you're done with the deployed units: each backup is played out in the team in
+  place of your last deployed unit (`planBackupSwaps`). Press **I did this** on the recommendation (or Did it under "All swaps and your record") to record a swap; decks and advice update, and an Undo link takes back the last one.
 - **Removed content:** `scraper/removed.py` drops the Pilgrimage of Compassion pack and its gifts,
   which are gone from the game.
 - **Pack route** (`src/lib/packroute.ts`; internal, not shown as a timeline): packs only show up on
@@ -399,7 +417,9 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   own counts as had when that fused gift switches on with your deployed team (no "N or more
   Identities" gate, or it's met; `ctx.fusedInto`, `setHas`): Enrapturing Trance on a Rupture team
   covers Talisman Bundle and Standard-duty Battery in the Rupture set, and Your plan shows them as
-  "Talisman Bundle (in Enrapturing Trance)". Your plan's Gift sets to build
+  "Talisman Bundle (in Enrapturing Trance)". This follows the whole recipe chain: Lucky Pouch is
+  fused from Reminiscence, which is fused from Pendant of Nostalgia, so owning Lucky Pouch covers
+  Four-leaf Clover, Ornamental Horseshoe and Pendant of Nostalgia in the Poise set. Your plan's Gift sets to build
   shows them with an "Any team · #1" pill and the guide's note.
 - **Lunar Memory pieces later in the run:** the "Builds toward Lunar Memory" bonus grows from ×0.8 on
   floor 1 to ×1.3 on the last floor (`pieceTiming` in musthave.ts): Super Shop odds build up with the

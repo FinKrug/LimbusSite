@@ -193,7 +193,17 @@ def fetch_events(client: WikiClient, gifts: list[dict], packs: list[dict] | None
     for e in evs:
         if e["name"] in pack_titles:
             e["pack"] = pack_titles[e["name"]]
-    return evs, warnings
+    # Boss fights' own events (Bridle of Infinity's Hurtily: which buttons stop the revives).
+    pack_sources = {pid: sources.get(t, {}).get("content", "") for t, pid in pack_titles.items()}
+    try:
+        lua = client.page_sources([eventmod.ENBOX_DATA]).get(eventmod.ENBOX_DATA, {}).get("content", "")
+        boss_sources = client.page_sources(eventmod.boss_titles(pack_sources, lua)) if lua else {}
+    except WikiError as e:
+        warnings.append(f"boss events not fetched ({_why(e, client)})")
+        return evs, warnings
+    bosses, w = eventmod.build_boss_events(pack_sources, lua, boss_sources, gifts, build.fold, build.slugify, build.wiki_url)
+    print(f"  {len(bosses)} bosses with events of their own")
+    return evs + bosses, warnings + w
 
 
 def fetch_pack_info(client: WikiClient, gifts: list[dict], packs: list[dict], skip: bool):

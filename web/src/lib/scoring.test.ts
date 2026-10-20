@@ -768,3 +768,14 @@ describe('keyword in name only', () => {
   })
 })
 
+describe('fused gifts count down the whole recipe chain', () => {
+  it('owning Lucky Pouch covers Reminiscence and its Pendant of Nostalgia in the Poise set', () => {
+    const byId = (id: string) => gameData.identities.find((i) => i.id === id)!
+    const heishou = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion', 'heishou-pack-si-branch-gregor'].map(byId)
+    const ctx = makeContext(gameData, heishou, ['lucky-pouch'])
+    for (const id of ['four-leaf-clover', 'reminiscence', 'pendant-of-nostalgia']) expect(setHas(ctx, id)).toBe(true)
+    expect(ctx.fusedInto.get('pendant-of-nostalgia')?.id).toBe('lucky-pouch')
+  })
+})
+

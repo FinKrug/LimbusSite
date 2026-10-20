@@ -559,11 +559,21 @@ export function makeContext(
   for (const c of combos) for (const id of c.gifts) combosByGift.set(id, [...(combosByGift.get(id) ?? []), c])
 
   // Fused gifts you own that switch on with this team stand in for their ingredients in gift sets.
+  // Down the whole recipe chain: Lucky Pouch is fused from Reminiscence, which is fused from Pendant
+  // of Nostalgia, so owning Lucky Pouch has Pendant of Nostalgia covered too.
   const fusedInto = new Map<string, Gift>()
+  const recipeOf = new Map(data.fusions.map((f) => [f.result, f]))
   for (const f of data.fusions) {
     const result = giftsById.get(f.result)
     if (!result || !ownedSet.has(f.result) || mustHave(f.result) || !activates(result, members)) continue
-    for (const i of f.ingredients) if (!ownedSet.has(i) && !fusedInto.has(i)) fusedInto.set(i, result)
+    const queue = [...f.ingredients]
+    while (queue.length) {
+      const i = queue.shift()!
+      if (ownedSet.has(i) || fusedInto.has(i)) continue
+      fusedInto.set(i, result)
+      const sub = recipeOf.get(i)
+      if (sub && !mustHave(i)) queue.push(...sub.ingredients)
+    }
   }
   const battle = buildBattle(members, swaps, data.egos ?? [], loadout, [...ownedSet].map((id) => giftsById.get(id)!))
 
