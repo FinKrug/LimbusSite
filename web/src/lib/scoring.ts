@@ -177,6 +177,24 @@ export const WEIGHTS = {
 export function isEconomy(g: Gift): boolean {
   return /\bCost\b/.test(g.effect)
 }
+/** Sentences that only help between fights: Cost, shop prices, reward cards, fusion odds. */
+const RUN_ONLY = /\bCost\b|\bShop\b|Encounter Reward Card|Fusion Probability|\bRefresh|Skill Replacement|upon clearing (?:a |the )?(?:Floor|Boss)/i
+const IN_BATTLE = /Offense|Defense|Power|damage|Clash|\bHP\b|\bSP\b|heal|Haste|Protection|Turn Start|Combat Start|Encounter Start|\bCoin|Resist|Speed|Bind|Paralyze/i
+
+/** Share of a gift's sentences that do nothing in battle (Cost, shops, rewards): Golden Urn is half,
+ *  Prestige Card all of it. Wealth's "Offense Level Up for every 500 Cost" is a battle effect. */
+export function runOnlyShare(g: Gift): number {
+  const sentences = g.effect.split(/\n+|(?<=\.)\s+/).map((x) => x.trim())
+    .filter((x) => x.length > 8 && !/^\[Effects apply only to [^\]]*\]$/.test(x))
+  if (!sentences.length) return 0
+  return sentences.filter((x) => RUN_ONLY.test(x) && !IN_BATTLE.test(x)).length / sentences.length
+}
+
+/** On the last floor of the run only battles are left. */
+export function lastFloor(run: RunSettings): boolean {
+  return run.floor !== null && run.floor >= run.floors
+}
+
 /** A gift's effect keeps a unit alive through a lethal hit. */
 export function isSurvival(g: Gift): boolean {
   // Not "revive": the only gift that says it (Spiderweb Entangled in Red) stops revives.
@@ -985,7 +1003,8 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
   const run = ctx.run
   const floorsLeft = Math.max(1, run.floors - (run.floor ?? 1) + 1)
   let runBonus = 0
-  if (isEconomy(gift)) {
+  const final = lastFloor(run)
+  if (isEconomy(gift) && !final) {
     const f = Math.min(1.5, Math.max(0.2, floorsLeft / 10))
     const v = WEIGHTS.economy * tierValue * f
     runBonus += v
@@ -1040,6 +1059,17 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
       : bleedy
         ? { kind: 'info', text: 'Un-staggers enemies, which usually hurts; a Bleed team can still use the Bleed it adds' }
         : { kind: 'bad', text: 'Un-staggers enemies: you want enemies staggered (more damage, no actions), so this usually hurts' })
+  }
+  // Last floor: Cost, shop discounts and reward cards have nothing left to pay off; only winning
+  // the fights does. Those parts count for nothing, so such gifts go to sell or fuse.
+  const runOnly = final ? runOnlyShare(gift) : 0
+  if (runOnly > 0) {
+    const f = 1 - runOnly
+    score *= f
+    for (const p of parts) p.value *= f
+    reasons.unshift({ kind: 'bad', text: runOnly >= 0.99
+      ? "Last floor: it only helps with Cost, shops or rewards, and all that's left is winning fights. Sell or fuse it"
+      : 'Last floor: its Cost / shop part has nothing left to pay off' })
   }
   // A little SP damage on enemies, or a bonus only below 0 SP: rarely changes a fight.
   const weak = profile.size ? weakShare(general) : 0

@@ -168,7 +168,12 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   EXTREME 15), the floor you're on and its theme pack. Cost gifts (Golden Urn, Prestige Card,
   Wealth…) are worth more with more floors left; "survive a lethal hit" gifts (Emergency
   Investigator Badge, Swishing Fuel Tank, Unhatched Embers' "mortal damage, fix HP to 1") are worth
-  most on the last 5 floors of a long run.
+  most on the last 5 floors of a long run. **On the last floor** (`lastFloor`, `runOnlyShare`) only
+  winning fights is left: sentences that just give or save Cost, cut shop prices, or improve reward
+  cards / fusion odds (Prestige Card, Milepost of Survival, Voracious Hammer, Special Catalogue, half
+  of Golden Urn) count for nothing, so those gifts drop out of Best gifts and show up in the Fusion
+  tab's "Sell or fuse these" ("Last floor: it only helps with Cost, shops or rewards…"). Battle
+  parts stay (Wealth's Offense Level per 500 Cost, Bongy Plush's other effects).
 - **Keyword in name only** (`usesKeyword`): a keyword gift whose effect never mentions its keyword
   (or a stand-in: Crit for Poise, SP/Panic for Sinking, Bloodfeast for Bleed) and has no status of
   its own we can't read is scored like a General gift for every team. Unhatched Embers is filed as

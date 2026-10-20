@@ -189,5 +189,15 @@ describe('gifts that only activate with a keyword skill', () => {
     // Short Cane Sword's Slash part works for an all-Slash team even without Seven Association units.
     expect(isSpare(list.find((f) => f.gift.id === 'short-cane-sword')!)).toBe(false)
   })
+
+  it('on the last floor, gifts that only help with Cost, shops or rewards go to sell or fuse', () => {
+    const owned = ['prestige-card', 'milepost-of-survival', 'golden-urn', 'thrill']
+    const at = (floor: number) => makeContext(gameData, heishou, owned, { run: { difficulty: 'hard', floors: 10, floor, pack: null } })
+    const spare = (floor: number) => fodder(at(floor), owned).filter(isSpare).map((f) => f.gift.id)
+    expect(spare(5)).toEqual([])
+    expect(spare(10)).toEqual(expect.arrayContaining(['prestige-card', 'milepost-of-survival', 'golden-urn']))
+    expect(spare(10)).not.toContain('thrill')
+    expect(scoreGift(g('Prestige Card'), at(10)).reasons[0].text).toMatch(/^Last floor: it only helps with Cost/)
+  })
 })
 
