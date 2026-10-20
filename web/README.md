@@ -454,7 +454,11 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
 - **Lineup suggestions** (`src/lib/ordering.ts`): single moves with a reason ("Make Sinclair the
   first backup (#8)"). Press Move to accept one or Dismiss to hide it; nothing is reordered on its
   own, and the list updates as you pick up gifts or swap identities. They come from, in order:
-  slot-limited gifts you own (put a unit that can use it in its slots); player tips in
+  slot-limited gifts you own (put a unit that can use it in its slots; a backup is only brought in
+  when no gift you own switches off, e.g. Reminiscence needs 5 deployed Poise units, your gifts gain
+  at least 0.5 together, and the newcomer isn't weaker than the unit it benches, otherwise it's
+  listed as info: "Yi Sang could use your Snuffed Lantern in #7, but Gregor is the stronger unit to
+  keep deployed"); player tips in
   `src/data/order_tips.json` (The Lord of Hongyuan wants your best Heishou units right after him
   for Exalted Command; You Branch Sinclair wants to be the first backup); and identity skills and
   passives that mention the lineup, pulled out by `scraper/order.py` ("earliest Deployment order",

@@ -80,4 +80,17 @@ describe('lineup suggestions', () => {
       expect(lineupSuggestions(gameData, lineup, 7, owned).suggestions).toEqual([])
     }
   })
+
+  it("won't bench a unit for a small slot gift, or one that switches off a team gift (Snuffed Lantern)", () => {
+    // Finley's Heishou team: Hong Lu, Faust, Ishmael, Rodion and Gregor are the 5 Poise users.
+    const lineup = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion',
+      'heishou-pack-si-branch-gregor', 'heishou-pack-wu-branch-adept-yi-sang'].map(byId)
+    const yiSangTo7 = (owned: string[]) => lineupSuggestions(gameData, lineup, 7, owned).suggestions.find((s) => s.sinner === 'Yi Sang')
+    expect(yiSangTo7(['snuffed-lantern'])).toBeUndefined()
+    const r = lineupSuggestions(gameData, lineup, 7, ['snuffed-lantern', 'reminiscence'])
+    expect(r.suggestions.find((s) => s.sinner === 'Yi Sang')).toBeUndefined()
+    expect(r.info.map((i) => i.title)).toContain(
+      'Yi Sang could use your Snuffed Lantern in #7, but deploying them would bench Gregor and switch off Reminiscence (it needs 5 or more deployed units with Poise skills)')
+  })
 })

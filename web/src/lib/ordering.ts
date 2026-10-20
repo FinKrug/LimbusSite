@@ -23,6 +23,7 @@
  */
 import tipsJson from '../data/order_tips.json'
 import { giftSlots, slotText } from './lineup'
+import { activates, intrinsicScore, makeContext, teamGate } from './scoring'
 import { strength, type TierOverrides } from './strength'
 import { identityGiftFit } from './teambuilder'
 import { CORE_KEYWORDS, type GameData, type Gift, type Identity, type OrderNote, type Sinner } from './types'
@@ -94,6 +95,11 @@ function allTraits(identities: Identity[]): string[] {
   return [...new Set(identities.flatMap((i) => i.traits ?? []))].sort((a, b) => b.length - a.length)
 }
 
+/** Benching a deployed unit for one that can use a slot gift: the gifts you own must gain at least
+ *  this much together, and the newcomer can't be more than BENCH_SWAP_WEAKER weaker (strength.ts). */
+export const BENCH_SWAP_GAIN = 0.5
+export const BENCH_SWAP_WEAKER = 0.02
+
 export function lineupSuggestions(
   data: GameData, lineup: Identity[], deployed: number, owned: Iterable<string>, tiers: TierOverrides = {},
 ): { suggestions: LineupSuggestion[]; info: LineupInfo[] } {
@@ -123,6 +129,14 @@ export function lineupSuggestions(
 
   // 1. Slot-limited gifts you own, best tier first.
   const giftsById = new Map(data.gifts.map((g) => [g.id, g]))
+  const before = lineup.slice(0, dep)
+  let owned_: Gift[] | null = null
+  const ownedGifts = () => owned_ ??= [...ownedSet].map((id) => giftsById.get(id)).filter((g): g is Gift => !!g)
+  /** What the gifts you own are worth with these units deployed. */
+  const giftsValue = (members: Identity[]) => {
+    const ctx = makeContext(data, members, ownedSet, { deployed: members.length, tiers })
+    return ownedGifts().reduce((sum, o) => sum + intrinsicScore(o, ctx).score, 0)
+  }
   const slotGifts = [...ownedSet].map((id) => giftsById.get(id)).filter((g): g is Gift => !!g && !!giftSlots(g))
     .sort((a, b) => (b.tier ?? 0) - (a.tier ?? 0) || Number(giftSlots(b)!.whole) - Number(giftSlots(a)!.whole))
   for (const g of slotGifts) {
@@ -139,8 +153,39 @@ export function lineupSuggestions(
       .map((i) => ({ i, f: fit(i) }))
       .filter((c) => c.f.fit >= 0.8 && c.f.fit > worst.f.fit + 0.3)
       .sort((a, b) => b.f.fit - a.f.fit || power(b.i) - power(a.i))
-    const best = candidates[0]
-    if (!best) continue
+    // Bringing a backup into the slot benches whoever ends up last of the deployed: only worth it
+    // when no gift you own switches off ("5 or more Identities with Poise skills") and your gifts
+    // as a whole do at least as well (a Tier I Tremor gift isn't worth a Poise unit).
+    let blocked: string | null = null
+    const best = candidates.find((c) => {
+      if (pos.get(c.i.sinner)! < dep) return true
+      const after = moveTo(lineup.map((i) => i.sinner), c.i.sinner, worst.k).slice(0, dep)
+        .map((s) => lineup.find((i) => i.sinner === s)!)
+      const benched = before.find((i) => !after.includes(i))
+      if (!benched) return true
+      const off = ownedGifts().find((o) => activates(o, before) && !activates(o, after))
+      if (off) {
+        const gate = teamGate(off)!
+        blocked ??= `${c.i.sinner} could use your ${g.name} in ${slotName(worst.k, dep)}, but deploying them would bench ${benched.sinner}` +
+          ` and switch off ${off.name} (it needs ${gate.n} or more deployed units with ${gate.status} skills)`
+        return false
+      }
+      const gain = giftsValue(after) - giftsValue(before)
+      if (gain < BENCH_SWAP_GAIN) {
+        blocked ??= `${c.i.sinner} could use your ${g.name} in ${slotName(worst.k, dep)}, but deploying them would bench ${benched.sinner}` +
+          (gain < 0 ? `, and your gifts do more with ${benched.sinner} deployed` : `, and it adds too little to be worth that`)
+        return false
+      }
+      if (power(c.i) < power(benched) - BENCH_SWAP_WEAKER) {
+        blocked ??= `${c.i.sinner} could use your ${g.name} in ${slotName(worst.k, dep)}, but ${benched.sinner} is the stronger unit to keep deployed`
+        return false
+      }
+      return true
+    })
+    if (!best) {
+      if (blocked) info.push({ id: `info:gift:${g.id}:bench`, title: blocked, quote: { text: g.effect.split('\n').filter(Boolean).slice(0, 2).join(' '), from: g.name } })
+      continue
+    }
     push({
       id: `gift:${g.id}:${best.i.sinner}`, sinner: best.i.sinner, to: worst.k, source: 'gift',
       title: `Move ${best.i.sinner} to ${slotName(worst.k, dep)}`,
