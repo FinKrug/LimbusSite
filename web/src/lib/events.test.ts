@@ -51,4 +51,29 @@ describe('Mirror Dungeon events', () => {
     expect(searchEvents(gameData.events!, 'wobbling keg', name).map((e) => e.name)).toContain('Drunkard')
     expect(eventsForPack(gameData.events!, 'The Dusk of Amber').length).toBeGreaterThan(0)
   })
+
+  it("values Cozy Bed's second roll: pass, then 50% Snuffed Lantern or Snuffed Candlestick", () => {
+    const v = ev('Cozy Bed').variants[0]
+    const approach = v.choices[0]
+    expect(approach.pass!.then).toMatchObject({ chance: 0.5, retry: false })
+    expect(approach.pass!.then!.pass.gifts).toEqual(['snuffed-lantern'])
+    expect(approach.pass!.then!.fail.gifts).toEqual(['snuffed-candlestick'])
+    const [a] = adviseVariant(v, makeContext(gameData, heishou, [], { run: hard }), heishou)
+    expect(a.why.some((w) => /^Pass: 50%: Snuffed Lantern/.test(w))).toBe(true)
+    expect(a.why.some((w) => /^Pass: 50%: Snuffed Candlestick/.test(w))).toBe(true)
+    expect(a.unclear).toBe(false)
+    // Both gifts count, half each: a Tremor team gets more out of it than a team without Tremor.
+    const tremor = gameData.identities.filter((i) => i.keywords.includes('Tremor')).slice(0, 7)
+    const [t] = adviseVariant(v, makeContext(gameData, tremor, [], { run: hard }), tremor)
+    expect(t.value).toBeGreaterThan(a.value)
+  })
+
+  it('lets a failed check be retried while "Cumulative Checks Failed < 3" (Sign of Roses)', () => {
+    const v = ev('Sign of Roses').variants[0]
+    expect(v.choices[0].fail!.then).toMatchObject({ retry: true, condition: 'Cumulative Checks Failed < 3' })
+    const [a] = adviseVariant(v, makeContext(gameData, heishou, [], { run: hard }), heishou)
+      .filter((x) => x.choice === v.choices[0])
+    expect(a.why.some((w) => /you can try again .* to pass in the end/.test(w))).toBe(true)
+    expect(a.unclear).toBe(false)
+  })
 })

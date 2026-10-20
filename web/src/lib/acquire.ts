@@ -2,7 +2,7 @@
 // which theme pack, and how there (its own events: which choice, which check;
 // battle rewards and the shop), from random "?" events on any floor, from the
 // general pool, or by fusing.
-import type { EventCheck, EventChoice, EventOutcome, EventVariant, GameEvent } from './events'
+import { allOutcomes, RETRY_TRIES, type EventCheck, type EventChoice, type EventOutcome, type EventVariant, type GameEvent } from './events'
 import { floorText, type Gift, type ThemePack } from './types'
 import { isHiddenPack, rarityText } from './scoring'
 
@@ -53,6 +53,23 @@ function checkText(c: EventCheck): string {
   return `a ${sins} check (${c.adv}+ with a ${c.sins.map(cap).join(' or ')} skill, ${c.disadv}+ without)`
 }
 
+/** How a result (and its follow-up roll) leads to the gift: "" when it's right there, a suffix
+ *  like ", then win the 50% roll" for a follow-up, or null when it doesn't give it. */
+function outcomeRoute(o: EventOutcome | undefined, id: string): string | null {
+  if (!o) return null
+  if (o.gifts.includes(id)) return o.combat ? ' and win the fight' : ''
+  const t = o.then
+  if (!t) return null
+  const roll = t.check ? checkText(t.check) : `the ${Math.round((t.chance ?? 0.5) * 100)}% roll`
+  const pass = outcomeRoute(t.pass, id)
+  const fail = outcomeRoute(t.fail, id)
+  if (t.retry) return null  // routes() words retries itself
+  if (pass !== null && fail !== null) return ''
+  if (pass !== null) return `, then ${t.check ? 'pass' : 'win'} ${roll}${pass}`
+  if (fail !== null) return `, then ${t.check ? 'fail' : 'lose'} ${roll}${fail}`
+  return null
+}
+
 /** How to reach a gift through one choice (and its follow-ups). */
 function routes(c: EventChoice, id: string, path: string[]): string[] {
   const here = [...path, `"${c.label}"`]
@@ -60,11 +77,14 @@ function routes(c: EventChoice, id: string, path: string[]): string[] {
   const has = (o?: EventOutcome) => !!o && o.gifts.includes(id)
   const out: string[] = []
   if (c.check) {
-    const pass = has(c.pass)
-    const fail = has(c.fail)
-    if (pass && fail) out.push(`${pick} (you get it either way)`)
-    else if (pass) out.push(`${pick}, then pass ${checkText(c.check)}`)
-    else if (fail) out.push(`${pick} (it comes from failing ${checkText(c.check)})`)
+    const pass = outcomeRoute(c.pass, id)
+    const retry = c.fail?.then?.retry ? c.fail.then : null
+    const outOfTries = retry ? outcomeRoute(retry.fail, id) : null
+    const fail = outcomeRoute(c.fail, id)
+    if (pass === '' && fail === '') out.push(`${pick} (you get it either way)`)
+    else if (pass !== null) out.push(`${pick}, then pass ${checkText(c.check)}${pass}`)
+    else if (fail !== null) out.push(`${pick} (it comes from failing ${checkText(c.check)}${fail})`)
+    if (outOfTries !== null) out.push(`${pick}, then fail ${checkText(c.check)} ${RETRY_TRIES} times${outOfTries}`)
   } else if (has(c.result)) {
     out.push(c.result!.combat ? `${pick} and win the fight` : pick)
   }
@@ -91,7 +111,7 @@ export function eventSources(events: GameEvent[], packs: ThemePack[]): Map<strin
     for (const v of e.variants) {
       const ids = new Set<string>()
       const walk = (c: EventChoice) => {
-        for (const o of [c.result, c.pass, c.fail]) for (const g of o?.gifts ?? []) ids.add(g)
+        for (const o of [c.result, c.pass, c.fail].flatMap(allOutcomes)) for (const g of o.gifts) ids.add(g)
         for (const n of c.next ?? []) walk(n)
       }
       v.choices.forEach(walk)

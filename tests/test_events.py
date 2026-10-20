@@ -76,5 +76,51 @@ class EventTests(unittest.TestCase):
         self.assertEqual(self.ev["gifts"], ["blood-sweat-and-tears", "wobbling-keg"])
 
 
+NESTED = """{{AbEvent
+|eventname=Mirror Dungeon Event
+|choice1={{Choice|id=2-1
+|choice=Approach the bed.
+|story={{SkillCheck|id=2-1
+|sin1=Sloth|sin2=Gluttony
+|adv=12|disadv=24
+|passtext={{SkillCheck|id=2-1
+|passprob=50
+|passtext=Nothing lives under the bed.
+|passresult=E.G.O Gift {{StatCon|giftsloth|Snuffed Lantern}} obtained!
+|failtext=Nothing lives under the bed.
+|failresult=E.G.O Gift {{StatCon|giftgloom|Snuffed Candlestick}} obtained!}}
+|failtext={{SkillCheck|id=2
+|condition=Cumulative Checks Failed < 3
+|passtext=Ouch.
+|passresult=The Sinner who failed the check takes {{StatCon|splose|12}} damage!<br>''(Return to previous choice)''
+|failtext=Run.
+|failresult={{StatCon|combat}}<br>Win the battle to gain E.G.O Gift "{{StatCon|giftgloom|Snuffed Candlestick}}"
+}}}}}}
+}}
+"""
+
+
+class NestedCheckTests(unittest.TestCase):
+    """Finley: Cozy Bed's pass is a second roll: win it for Snuffed Lantern, lose it for Snuffed Candlestick."""
+
+    def setUp(self):
+        gifts = [{"id": "snuffed-lantern", "name": "Snuffed Lantern"}, {"id": "snuffed-candlestick", "name": "Snuffed Candlestick"}]
+        evs, _ = events.build_events({"Cozy Bed": {"content": NESTED}}, gifts, build.fold, build.slugify, build.wiki_url)
+        self.c = evs[0]["variants"][0]["choices"][0]
+
+    def test_coin_flip_after_a_pass(self):
+        t = self.c["pass"]["then"]
+        self.assertEqual((t["chance"], t["check"], t["retry"]), (0.5, None, False))
+        self.assertEqual(t["pass"]["gifts"], ["snuffed-lantern"])
+        self.assertEqual(t["fail"]["gifts"], ["snuffed-candlestick"])
+
+    def test_retry_after_a_fail(self):
+        t = self.c["fail"]["then"]
+        self.assertTrue(t["retry"])
+        self.assertEqual(t["condition"], "Cumulative Checks Failed < 3")
+        self.assertIn("Return to previous choice", t["pass"]["text"])
+        self.assertTrue(t["fail"]["combat"])
+
+
 if __name__ == "__main__":
     unittest.main()

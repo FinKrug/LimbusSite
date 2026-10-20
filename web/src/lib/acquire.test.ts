@@ -55,4 +55,12 @@ describe('how to get a gift', () => {
     expect(e.find((x) => x.kind === 'event')!.text).toBe('Rising Ashes')
     expect(lines('Dark Vestige').some((x) => x.kind === 'other' && /duplicate of a Tier I/.test(x.text))).toBe(true)
   })
+
+  it("says which way Cozy Bed's second roll has to go", () => {
+    const how = (n: string) => eventSources(gameData.events!, gameData.themePacks).get(named(n).id)!
+      .find((x) => x.event.name === 'Cozy Bed' || /Cozy Bed|Event 2/.test(x.variant.name))!.how
+    expect(how('Snuffed Lantern')).toMatch(/then pass a Sloth\/Gluttony check .*, then win the 50% roll/)
+    expect(how('Snuffed Candlestick')).toMatch(/then pass a Sloth\/Gluttony check .*, then lose the 50% roll/)
+  })
 })
+

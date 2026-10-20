@@ -173,10 +173,27 @@ function CheckLine({ a }: { a: ChoiceAdvice }) {
 }
 
 function Outcome({ label, o }: { label?: string; o?: EventOutcome }) {
-  if (!o || !o.text) return null
+  if (!o || (!o.text && !o.then)) return null
+  const t = o.then
+  const sides = t ? (t.retry
+    ? [[`Try again (${t.condition || 'while you have tries left'})`, t.pass], ['Out of tries', t.fail]] as const
+    : t.check
+      ? [[`Then pass the ${t.check.sins.map(cap).join('/')} check`, t.pass], ['Then fail it', t.fail]] as const
+      : [[`Then ${Math.round((t.chance ?? 0.5) * 100)}%`, t.pass], [`Or ${100 - Math.round((t.chance ?? 0.5) * 100)}%`, t.fail]] as const)
+    : []
   return (
-    <p className={`event-outcome small${o.hurts ? ' hurts' : ''}${o.nothing ? ' nothing' : ''}`}>
-      {label && <span className="event-outcome-label">{label}:</span>} {o.text.replace(/\n+/g, ' ')}
-    </p>
+    <>
+      {o.text && (
+        <p className={`event-outcome small${o.hurts ? ' hurts' : ''}${o.nothing ? ' nothing' : ''}`}>
+          {label && <span className="event-outcome-label">{label}:</span>} {o.text.replace(/\n+/g, ' ')}
+        </p>
+      )}
+      {t && (
+        <div className="event-followup">
+          {!o.text && label && <p className="event-outcome small"><span className="event-outcome-label">{label}:</span> a second roll decides what you get.</p>}
+          {sides.map(([l, x]) => <Outcome key={l} label={l} o={x} />)}
+        </div>
+      )}
+    </>
   )
 }

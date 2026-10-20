@@ -1492,7 +1492,37 @@
               "combat": false,
               "hurts": false,
               "lasting": false,
-              "nothing": false
+              "nothing": false,
+              "then": {
+                "check": null,
+                "chance": 0.5,
+                "condition": "",
+                "retry": false,
+                "pass": {
+                  "text": "E.G.O Gift Snuffed Lantern Earned!",
+                  "gifts": [
+                    "snuffed-lantern"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": false,
+                  "lasting": false,
+                  "nothing": false
+                },
+                "fail": {
+                  "text": "E.G.O Gift Snuffed Candlestick Earned!",
+                  "gifts": [
+                    "snuffed-candlestick"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": false,
+                  "lasting": false,
+                  "nothing": false
+                }
+              }
             },
             "fail": {
               "text": "The selected Identity lose 20!\nOther Identities lose 10!",
@@ -2401,7 +2431,36 @@
               "combat": false,
               "hurts": false,
               "lasting": false,
-              "nothing": false
+              "nothing": false,
+              "then": {
+                "check": null,
+                "chance": null,
+                "condition": "Cumulative Checks Failed < 3",
+                "retry": true,
+                "pass": {
+                  "text": "Identities without Glut take 5 damage!\n(Return to previous choice)",
+                  "gifts": [],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": true,
+                  "lasting": false,
+                  "nothing": false
+                },
+                "fail": {
+                  "text": "All Allies without Glut took 10 Damage!\nBattle!\n\nWin the battle to gain E.G.O Gifts \"White Gossypium\" & \"Tangled Bundle\"",
+                  "gifts": [
+                    "white-gossypium",
+                    "tangled-bundle"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": true,
+                  "hurts": false,
+                  "lasting": false,
+                  "nothing": false
+                }
+              }
             }
           },
           {
@@ -6400,7 +6459,37 @@
               "combat": false,
               "hurts": false,
               "lasting": false,
-              "nothing": false
+              "nothing": false,
+              "then": {
+                "check": null,
+                "chance": 0.5,
+                "condition": "",
+                "retry": false,
+                "pass": {
+                  "text": "The Selected Identity takes 30% Damage!\nThe Selected Identity lost 10!\nE.G.O Gift Packaging Box obtained!",
+                  "gifts": [
+                    "packaging-box"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": true,
+                  "lasting": false,
+                  "nothing": false
+                },
+                "fail": {
+                  "text": "The Selected Identity takes 30% Damage!\nThe Selected Identity lost 10!\nE.G.O Gift Packaging Ribbon obtained!",
+                  "gifts": [
+                    "packaging-ribbon"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": true,
+                  "lasting": false,
+                  "nothing": false
+                }
+              }
             },
             "fail": {
               "text": "The selected Identity loses 100%.\nE.G.O Gift Packaging Box obtained!",
@@ -6457,7 +6546,37 @@
               "combat": false,
               "hurts": false,
               "lasting": false,
-              "nothing": false
+              "nothing": false,
+              "then": {
+                "check": null,
+                "chance": 0.5,
+                "condition": "",
+                "retry": false,
+                "pass": {
+                  "text": "E.G.O Gift Snuffed Lantern obtained!",
+                  "gifts": [
+                    "snuffed-lantern"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": false,
+                  "lasting": false,
+                  "nothing": false
+                },
+                "fail": {
+                  "text": "E.G.O Gift Snuffed Candlestick obtained!",
+                  "gifts": [
+                    "snuffed-candlestick"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": false,
+                  "lasting": false,
+                  "nothing": false
+                }
+              }
             },
             "fail": {
               "text": "The selected Identity lose 20!\nOther Identities lose 10!",
@@ -10420,7 +10539,33 @@
               "combat": false,
               "hurts": false,
               "lasting": false,
-              "nothing": false
+              "nothing": false,
+              "then": {
+                "check": null,
+                "chance": null,
+                "condition": "Cumulative Checks Failed < 3",
+                "retry": true,
+                "pass": {
+                  "text": "The Sinner who failed the check takes 12 damage!\n(Return to previous choice)",
+                  "gifts": [],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": true,
+                  "lasting": false,
+                  "nothing": false
+                },
+                "fail": {
+                  "text": "The Sinner who failed the check takes 12 damage!",
+                  "gifts": [],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": true,
+                  "lasting": false,
+                  "nothing": false
+                }
+              }
             }
           },
           {
@@ -14452,7 +14597,43 @@
               "combat": false,
               "hurts": false,
               "lasting": false,
-              "nothing": false
+              "nothing": false,
+              "then": {
+                "check": {
+                  "sins": [
+                    "pride",
+                    "gluttony"
+                  ],
+                  "adv": 15,
+                  "disadv": 30,
+                  "bonuses": []
+                },
+                "chance": null,
+                "condition": "",
+                "retry": false,
+                "pass": {
+                  "text": "E.G.O Gift Tangled Bones obtained!",
+                  "gifts": [
+                    "tangled-bones"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": false,
+                  "lasting": false,
+                  "nothing": false
+                },
+                "fail": {
+                  "text": "All Allies without the Gloom lost 20!",
+                  "gifts": [],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": true,
+                  "lasting": false,
+                  "nothing": false
+                }
+              }
             }
           }
         ]
@@ -14666,7 +14847,37 @@
               "combat": false,
               "hurts": false,
               "lasting": false,
-              "nothing": false
+              "nothing": false,
+              "then": {
+                "check": null,
+                "chance": 0.5,
+                "condition": "",
+                "retry": false,
+                "pass": {
+                  "text": "E.G.O Gift Universal Skeleton obtained!",
+                  "gifts": [
+                    "universal-skeleton"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": false,
+                  "lasting": false,
+                  "nothing": false
+                },
+                "fail": {
+                  "text": "E.G.O Gift Universal Instinct obtained!",
+                  "gifts": [
+                    "universal-instinct"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": false,
+                  "hurts": false,
+                  "lasting": false,
+                  "nothing": false
+                }
+              }
             },
             "fail": {
               "text": "",
@@ -14676,7 +14887,37 @@
               "combat": false,
               "hurts": false,
               "lasting": false,
-              "nothing": false
+              "nothing": false,
+              "then": {
+                "check": null,
+                "chance": 0.5,
+                "condition": "",
+                "retry": false,
+                "pass": {
+                  "text": "Battle!\n\nReinforcements:\n\nWin the battle to gain E.G.O Gift Universal Skeleton!",
+                  "gifts": [
+                    "universal-skeleton"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": true,
+                  "hurts": false,
+                  "lasting": false,
+                  "nothing": false
+                },
+                "fail": {
+                  "text": "Battle!\n\nReinforcements:\n\nWin the battle to gain E.G.O Gift Universal Instinct!",
+                  "gifts": [
+                    "universal-instinct"
+                  ],
+                  "unknown_gifts": [],
+                  "cost": 0,
+                  "combat": true,
+                  "hurts": false,
+                  "lasting": false,
+                  "nothing": false
+                }
+              }
             }
           },
           {

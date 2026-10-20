@@ -161,6 +161,29 @@ def check(inner: str) -> dict:
     return {"sins": sins, "adv": num("adv"), "disadv": num("disadv"), "bonuses": bonuses, "_p": p}
 
 
+def branch(cp: dict, key: str, gift_ids, fold) -> dict:
+    """One side of a check ("pass" / "fail"): its result, plus a second roll when the wiki nests
+    another {{SkillCheck}} in the text. Cozy Bed: pass, then a 50% roll gives Snuffed Lantern or
+    Snuffed Candlestick. Sign of Roses: a failed check can be retried while "Cumulative Checks
+    Failed < 3"."""
+    out = outcome(cp.get(f"{key}result", ""), gift_ids, fold)
+    nested = find_templates(cp.get(f"{key}text", ""), "SkillCheck")
+    if nested:
+        c = check(nested[0][2])
+        np = c.pop("_p")
+        prob = re.search(r"\d+", np.get("passprob", ""))
+        condition = plain(np.get("condition", ""))
+        out["then"] = {
+            "check": c if c["sins"] else None,
+            "chance": int(prob.group(0)) / 100 if prob else None,
+            "condition": condition,
+            "retry": bool(re.search(r"Checks? Failed", condition, re.IGNORECASE)),
+            "pass": branch(np, "pass", gift_ids, fold),
+            "fail": branch(np, "fail", gift_ids, fold),
+        }
+    return out
+
+
 def choice(inner: str, gift_ids, fold) -> dict:
     p = params(inner)
     out: dict = {"label": plain(p.get("choice", "")), "desc": plain(p.get("desc", "")),
@@ -171,8 +194,8 @@ def choice(inner: str, gift_ids, fold) -> dict:
         c = check(checks[0][2])
         cp = c.pop("_p")
         out["check"] = c
-        out["pass"] = outcome(cp.get("passresult", ""), gift_ids, fold)
-        out["fail"] = outcome(cp.get("failresult", ""), gift_ids, fold)
+        out["pass"] = branch(cp, "pass", gift_ids, fold)
+        out["fail"] = branch(cp, "fail", gift_ids, fold)
     else:
         out["check"] = None
         out["result"] = outcome(p.get("result", ""), gift_ids, fold)
@@ -272,4 +295,14 @@ def _all_choices(choices):
 
 
 def _outcomes(c):
-    return [c[k] for k in ("result", "pass", "fail") if c.get(k)]
+    out = []
+
+    def add(o):
+        out.append(o)
+        if o.get("then"):
+            add(o["then"]["pass"])
+            add(o["then"]["fail"])
+    for k in ("result", "pass", "fail"):
+        if c.get(k):
+            add(c[k])
+    return out

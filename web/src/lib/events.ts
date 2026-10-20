@@ -28,6 +28,31 @@ export interface EventOutcome {
   hurts: boolean
   lasting: boolean
   nothing: boolean
+  /** A second roll after this result: Cozy Bed's pass is a 50% roll between Snuffed Lantern and
+   *  Snuffed Candlestick; Sign of Roses' fail can be retried while fewer than 3 checks have failed. */
+  then?: EventFollowUp
+}
+
+export interface EventFollowUp {
+  /** A sin check, or null for a plain roll. */
+  check: EventCheck | null
+  /** Fixed odds of the pass side (0.5), when the wiki gives them. */
+  chance: number | null
+  /** The wiki's condition ("Cumulative Checks Failed < 3"), or "". */
+  condition: string
+  /** Pass = you get to try the check again (after `pass`'s small penalty); fail = out of tries. */
+  retry: boolean
+  pass: EventOutcome
+  fail: EventOutcome
+}
+
+/** Attempts a "Cumulative Checks Failed < 3" retry allows. */
+export const RETRY_TRIES = 3
+
+/** Every result an outcome can lead to (itself and its follow-up rolls). */
+export function allOutcomes(o: EventOutcome | undefined): EventOutcome[] {
+  if (!o) return []
+  return [o, ...(o.then ? [...allOutcomes(o.then.pass), ...allOutcomes(o.then.fail)] : [])]
 }
 
 export interface EventCheck {
@@ -201,10 +226,37 @@ export interface ChoiceAdvice {
   unclear: boolean
 }
 
+/** Odds of the pass side of a follow-up roll. */
+export function followUpChance(t: EventFollowUp, team: Identity[]): number {
+  return t.check ? checkOdds(t.check, team).chance : t.chance ?? 0.5
+}
+
+/** An outcome's value including its follow-up roll (not a retry: adviseChoice handles those). */
+export function resolvedValue(o: EventOutcome | undefined, ctx: RunContext, team: Identity[]): Valued {
+  const base = outcomeValue(o, ctx)
+  const t = o?.then
+  if (!t || t.retry) return base
+  const p = followUpChance(t, team)
+  const pass = resolvedValue(t.pass, ctx, team)
+  const fail = resolvedValue(t.fail, ctx, team)
+  const pct = Math.round(p * 100)
+  return {
+    value: base.value + p * pass.value + (1 - p) * fail.value,
+    why: [...base.why, ...pass.why.map((w) => `${pct}%: ${w}`), ...fail.why.map((w) => `${100 - pct}%: ${w}`)],
+  }
+}
+
+/** Is any part of this result missing on the wiki? */
+function unclearOutcome(o: EventOutcome | undefined): boolean {
+  if (!o) return true
+  if (o.then) return unclearOutcome(o.then.pass) || unclearOutcome(o.then.fail)
+  return !o.text
+}
+
 export function adviseChoice(c: EventChoice, ctx: RunContext, team: Identity[]): Omit<ChoiceAdvice, 'verdict'> {
   const then = (c.next ?? []).map((n) => adviseChoice(n, ctx, team)).sort((a, b) => b.value - a.value)
     .map((a, k) => ({ ...a, verdict: (k === 0 ? 'best' : 'ok') as ChoiceAdvice['verdict'] }))
-  const own = (o: EventOutcome | undefined) => outcomeValue(o, ctx)
+  const own = (o: EventOutcome | undefined) => resolvedValue(o, ctx, team)
   let value: number
   let why: string[]
   let odds: CheckOdds | null = null
@@ -212,10 +264,26 @@ export function adviseChoice(c: EventChoice, ctx: RunContext, team: Identity[]):
   if (c.check) {
     odds = checkOdds(c.check, team)
     const pass = own(c.pass)
-    const fail = own(c.fail)
-    value = odds.chance * pass.value + (1 - odds.chance) * fail.value
-    why = [...pass.why.map((w) => `Pass: ${w}`), ...fail.why.filter((w) => !pass.why.includes(w)).map((w) => `Fail: ${w}`)]
-    unclear = !c.pass?.text || !c.fail?.text
+    const retry = c.fail?.then?.retry ? c.fail.then : null
+    if (retry) {
+      // Failing lets you try again (taking retry.pass's small hit) until you run out of tries.
+      const q = 1 - odds.chance
+      const hit = own(retry.pass)
+      const out = own(retry.fail)
+      const qN = q ** RETRY_TRIES
+      let retries = 0
+      for (let k = 1; k < RETRY_TRIES; k++) retries += q ** k
+      value = (1 - qN) * pass.value + qN * out.value + retries * hit.value
+      why = [...pass.why.map((w) => `Pass: ${w}`),
+        `Fail: you can try again (${retry.condition || `up to ${RETRY_TRIES} tries`}): about ${Math.round((1 - qN) * 100)}% to pass in the end`,
+        ...out.why.filter((w) => !pass.why.includes(w)).map((w) => `Out of tries: ${w}`)]
+      unclear = unclearOutcome(c.pass) || unclearOutcome(retry.pass) || unclearOutcome(retry.fail)
+    } else {
+      const fail = own(c.fail)
+      value = odds.chance * pass.value + (1 - odds.chance) * fail.value
+      why = [...pass.why.map((w) => `Pass: ${w}`), ...fail.why.filter((w) => !pass.why.includes(w)).map((w) => `Fail: ${w}`)]
+      unclear = unclearOutcome(c.pass) || unclearOutcome(c.fail)
+    }
   } else {
     const r = own(c.result)
     value = r.value

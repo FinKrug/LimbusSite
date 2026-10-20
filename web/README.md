@@ -250,7 +250,13 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   "Avoid". Check odds are an estimate: the sinner rolls a skill (base + coin power per heads, 50%
   heads) and needs the lower number with a skill of a checked sin, the higher one without, plus any
   identity bonus the check lists; it suggests the sinner with the best odds. The game shows the
-  exact chance when you pick one.
+  exact chance when you pick one. **Second rolls** (`then` on a result, from a {{SkillCheck}} nested
+  in the wiki's pass/fail text): Cozy Bed's pass is a 50% roll, Snuffed Lantern if you win it and
+  Snuffed Candlestick if you lose it (Miracle in District 20's Gnomes and Twining Threads' gallery
+  work the same way; Tomb of Bone's fail leads to a second sin check). Both sides count by their
+  odds, the card shows them indented, and how-to-get says "then win the 50% roll". A failed check
+  marked "Cumulative Checks Failed < 3" (Sign of Roses, Drenched Gossypium) can be retried: up to 3
+  tries, each failed one taking the small hit, and only running out of tries gives the last result.
 - **Vestiges:** a duplicate of a gift you own becomes a Vestige of its tier, like in game; the
   side panel counts them and fusing uses them up.
 - **Evaluate tab:** type a gift or pack for its pros, cons and a verdict for your team and run:
