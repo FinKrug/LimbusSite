@@ -15,7 +15,7 @@
  * its keyword and tier with the best odds of rolling it come first ("Last chance at X").
  * Main-pool gifts can still be bought later; these can't.
  */
-import { fullTierValue, intrinsicScore, isGone, setKeepValue, isHiddenPack, packOnFloor, packPool, recipeGiveUp, scoreGift, type GiftScore, type RunContext } from './scoring'
+import { fullTierValue, intrinsicScore, isGone, setHas, setKeepValue, isHiddenPack, packOnFloor, packPool, recipeGiveUp, scoreGift, type GiftScore, type RunContext } from './scoring'
 import { isVestige } from './vestiges'
 import { fusableThisRun, mustHave, mustHaveRecipes, neededPiece } from './musthave'
 import type { Combo, Fusion, Gift, ThemePack } from './types'
@@ -122,6 +122,14 @@ export interface PoolForecast {
   targetOdds: number
 }
 
+/** "Bleed set" / "combo with Downpour" when a gift counts as a set or combo piece, else null. */
+export function setOrComboOf(g: GiftScore): string | null {
+  const set = g.parts.find((p) => p.kind === 'set')
+  if (set) return set.label.replace(/^Piece of the /, '')
+  const combo = g.parts.find((p) => p.kind === 'combo')
+  return combo ? combo.label.replace(/^Combos with /, 'combo with ') : null
+}
+
 /** Attack types count as a fusion keyword when at least this share of your deployed units use them. */
 export const FUSION_ATTACK_SHARE = 0.4
 
@@ -132,7 +140,18 @@ export const FUSION_ATTACK_SHARE = 0.4
 export function fusionKeywords(ctx: RunContext, teamKeywords: string[]): string[] {
   const p = ctx.profile
   const attacks = [...p.attackCounts].filter(([, n]) => p.attackKnown && n / p.attackKnown >= FUSION_ATTACK_SHARE).map(([t]) => t)
-  return [...new Set([...teamKeywords, ...attacks])].filter((k) => (FUSION_KEYWORDS as readonly string[]).includes(k))
+  // Combos: the keyword-free sets work for any team, and a hand-picked combo you've started is
+  // worth finishing, so the keywords of their missing pieces are worth fusing toward too.
+  const comboKeywords: string[] = []
+  for (const c of ctx.combos) {
+    const missing = c.gifts.filter((id) => !setHas(ctx, id) && !isGone(ctx, id))
+    if (!missing.length || (!c.any_team && missing.length === c.gifts.length)) continue
+    for (const id of missing) {
+      const k = ctx.giftsById.get(id)?.keyword
+      if (k) comboKeywords.push(k)
+    }
+  }
+  return [...new Set([...teamKeywords, ...attacks, ...comboKeywords])].filter((k) => (FUSION_KEYWORDS as readonly string[]).includes(k))
 }
 
 /** Scored random pools by keyword and tier (they don't depend on the ingredients). */
@@ -151,8 +170,9 @@ export function forecast(
       .sort((a, b) => b.score - a.score)
     cache?.set(key, pool)
   }
-  // Only chase gifts that do something real for your team.
-  const fits = (g: GiftScore) => g.fit >= KEEP_MIN_FIT || g.synergy
+  // Only chase gifts that do something real for your team: ones that fit it, or pieces of a combo
+  // (a keyword-free set works for any team, so its Bleed pieces are worth it on a Rupture team).
+  const fits = (g: GiftScore) => g.fit >= KEEP_MIN_FIT || g.synergy || !!setOrComboOf(g)
   const lastChance = pool.filter((g) => last.has(g.gift.id) && fits(g))
   const value = (g: GiftScore) => g.score * (lastChance.includes(g) ? 1 + FUSION_WEIGHTS.lastChance : 1)
   const expected = pool.length ? pool.reduce((s, g) => s + value(g), 0) / pool.length : 0
@@ -239,6 +259,8 @@ export interface FusionIdea {
   keyword: string
   /** Other keywords the same gifts would fuse into about as well. */
   alsoKeywords: string[]
+  /** What each other keyword would be for (its `targets`). */
+  alsoTargets: Record<string, GiftScore[]>
   ingredients: KeepNote[]
   forecast: PoolForecast
   /** Value given up (sum of the ingredients' keep values). */
@@ -270,7 +292,7 @@ export function fusionIdeas(ctx: RunContext, owned: string[], keywords: string[]
     // Nothing in the pool would do anything for your team: not worth fusing for.
     if (!f.pool.length || !f.targets.length) return null
     const cost = combo.reduce((s, c) => s + c.value, 0)
-    return { keyword, alsoKeywords: [], ingredients: combo, forecast: f, cost, gain: f.chance * f.expected - cost, superShop, chase }
+    return { keyword, alsoKeywords: [], alsoTargets: {}, ingredients: combo, forecast: f, cost, gain: f.chance * f.expected - cost, superShop, chase }
   }
 
   // Last chances first: for each pack exclusive that fits your team and won't come back this
@@ -312,7 +334,10 @@ export function fusionIdeas(ctx: RunContext, owned: string[], keywords: string[]
   for (const i of ideas.sort((a, b) => b.gain - a.gain)) {
     const same = out.find((o) => sameSet(o, i))
     if (same) {
-      if (same.keyword !== i.keyword) same.alsoKeywords.push(i.keyword)
+      if (same.keyword !== i.keyword) {
+        same.alsoKeywords.push(i.keyword)
+        same.alsoTargets[i.keyword] = i.forecast.targets
+      }
     } else out.push(i)
   }
   return out

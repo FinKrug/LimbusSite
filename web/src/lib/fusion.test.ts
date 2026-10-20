@@ -2,11 +2,12 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { makeContext, rankGifts, rankThemePacks, scoreGift } from './scoring'
 import {
-  fodder, forecast, fusionIdeas, fusionKeywords, isSpare, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans,
+  fodder, forecast, fusionIdeas, fusionKeywords, isSpare, setOrComboOf, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans,
 } from './fusion'
 
 const g = (name: string) => gameData.gifts.find((x) => x.name === name)!
 const id = (name: string) => g(name).id
+const g2 = (gid: string) => gameData.gifts.find((x) => x.id === gid)!
 const burners = gameData.identities.filter((i) => i.keywords.length === 1 && i.keywords[0] === 'Burn').slice(0, 7)
 const burnGifts = gameData.gifts.filter((x) => x.keyword === 'Burn' && x.tier === 3 && !x.fusion_recipe).slice(0, 2).map((x) => x.id)
 
@@ -203,13 +204,21 @@ describe('gifts that only activate with a keyword skill', () => {
   it("fuses toward what the team uses and says what for: no Blunt for one Blunt user on Heishou", () => {
     const ctx = makeContext(gameData, heishou, ['respite', 'smokes-and-wires', 'lowest-star', 'pocket-flashcards', 'faint-vestige', 'twinkling-vestige'])
     const kws = fusionKeywords(ctx, ['Rupture', 'Poise'])
-    expect(kws).toEqual(['Rupture', 'Poise', 'Slash'])
+    // Rupture and Poise (the team), Slash (everyone uses it), and the keyword-free sets' keywords; not Blunt or Pierce.
+    expect(kws.slice(0, 3)).toEqual(['Rupture', 'Poise', 'Slash'])
+    expect(kws).not.toContain('Blunt')
+    expect(kws).not.toContain('Pierce')
+    expect(kws).toEqual(expect.arrayContaining(['Bleed', 'Tremor', 'Sinking']))
     const ideas = fusionIdeas(ctx, [...ctx.owned], kws, null, false)
     expect(ideas.length).toBeGreaterThan(0)
     for (const i of ideas) {
       expect(i.forecast.targets.length).toBeGreaterThan(0)
-      expect(i.forecast.targets.every((t) => t.fit >= 0.35 || t.synergy)).toBe(true)
+      expect(i.forecast.targets.every((t) => t.fit >= 0.35 || t.synergy || setOrComboOf(t))).toBe(true)
     }
+    // A Bleed fusion is for the Bleed set's pieces, which work for any team.
+    const bleed = forecast(ctx, 'Bleed', ['faint-vestige', 'twinkling-vestige', 'respite'].map(g2), null, false)
+    expect(bleed.targets.length).toBeGreaterThan(0)
+    expect(bleed.targets.every((t) => t.fit >= 0.35 || setOrComboOf(t) === 'Bleed set')).toBe(true)
   })
 })
 

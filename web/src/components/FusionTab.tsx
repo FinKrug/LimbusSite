@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import {
   FUSE_NOW_SHARE, FUSION_KEYWORDS, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, isSpare, fusionIdeas, fusionPoints, fusionTier, keywordChance,
-  fusionKeywords, matchRecipe, recipePlans, type FusionIdea,
+  fusionKeywords, matchRecipe, recipePlans, setOrComboOf, type FusionIdea,
 } from '../lib/fusion'
 import { mustHave } from '../lib/musthave'
 import { scoreGift, type RunContext, type RunSettings } from '../lib/scoring'
@@ -227,7 +227,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                     <button className="btn" onClick={() => load(idea)}>Load</button>
                   </div>
                   <p className="small fuse-for">
-                    <b>Fusing for:</b> {idea.forecast.targets.slice(0, 3).map((t) => t.gift.name).join(', ')}
+                    <b>Fusing for:</b> {idea.forecast.targets.slice(0, 3).map((t) => setOrComboOf(t) && t.fit < 0.35 ? `${t.gift.name} (${setOrComboOf(t)})` : t.gift.name).join(', ')}
                     {idea.forecast.targets.length > 3 && ` and ${idea.forecast.targets.length - 3} more`}
                     {' '}<span className="muted">(about {Math.round(idea.forecast.targetOdds * 100)}% to get one of the {idea.forecast.targets.length} that suit your team, out of {idea.forecast.pool.length} possible)</span>
                   </p>
@@ -242,7 +242,10 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                     {idea.ingredients.every((i) => i.value < 1) ? ', which do little for your team' : ''}.
                     {!idea.chase && idea.forecast.fromPack.length > 0 && ` Can roll ${pack?.name}'s ${idea.forecast.fromPack[0].gift.name}.`}
                     {idea.superShop && ' Super Shop.'}
-                    {idea.alsoKeywords.length > 0 && ` Also good as ${idea.alsoKeywords.join(' or ')}.`}
+                    {idea.alsoKeywords.length > 0 && ` Also good as ${idea.alsoKeywords.slice(0, 3).map((k) => {
+                      const t = idea.alsoTargets[k]?.[0]
+                      return t ? `${k} (for ${t.gift.name}${setOrComboOf(t) && t.fit < 0.35 ? `, ${setOrComboOf(t)}` : ''})` : k
+                    }).join(', ')}${idea.alsoKeywords.length > 3 ? ` and ${idea.alsoKeywords.length - 3} more` : ''}.`}
                   </p>
                 </li>
               ))}
