@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { EXTREME_FROM, isHiddenPack, type Difficulty, type GiftScore, type PackScore, type RunSettings } from '../lib/scoring'
+import { EXTREME_FROM, isHiddenPack, type Difficulty, type GiftScore, type PackHighlight, type PackScore, type RunSettings } from '../lib/scoring'
 import { type Gift, type ThemePack, floorText } from '../lib/types'
 import { Empty, GiftLabel, Reasons, RatingBar, WikiLink } from './bits'
 import { HowToGet } from './HowToGet'
@@ -141,6 +141,11 @@ export function PackList({
   )
 }
 
+/** Pill class and label per highlight kind. */
+const HIGHLIGHT_PILL: Record<PackHighlight['kind'], [string, string]> = {
+  exclusive: ['', 'Exclusive'], clear: ['pill-clear', 'Clear reward'], fusion: ['pill-fusion', 'Fusion'], boosted: ['pill-boost', 'Boosted'],
+}
+
 /**
  * A pack's card gifts: its exclusives (fitting your team first) and a few strong gifts
  * it features that few other packs do. Gifts most packs give aren't a reason to pick
@@ -157,8 +162,9 @@ function PackGifts({ pack: p, how }: { pack: PackScore; how: (g: Gift) => ReactN
         <ul className="pack-gifts">
           {p.highlights.map((h) => (
             <li key={h.gift.gift.id} className={h.fits ? '' : 'pack-gift-off'}>
-              <span className={`pill ${h.kind === 'exclusive' ? '' : h.kind === 'clear' ? 'pill-clear' : 'pill-boost'}`}>{h.kind === 'exclusive' ? 'Exclusive' : h.kind === 'clear' ? 'Clear reward' : 'Boosted'}</span>
-              <GiftLabel gift={h.gift.gift} icon={28} />{why(h.gift)}{how(h.gift.gift)}
+              <span className={`pill ${HIGHLIGHT_PILL[h.kind][0]}`}>{HIGHLIGHT_PILL[h.kind][1]}</span>
+              <GiftLabel gift={h.gift.gift} icon={28} />
+              {h.kind === 'fusion' ? <span className="pack-gift-why reason-good">{h.where}</span> : why(h.gift)}{how(h.gift.gift)}
             </li>
           ))}
         </ul>

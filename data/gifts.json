@@ -971,9 +971,7 @@
       "Bleed"
     ],
     "traits": [],
-    "needs": [
-      "Bleed"
-    ],
+    "needs": [],
     "applies": [],
     "attack_types": [],
     "affinities": [],
@@ -4372,7 +4370,7 @@
     "applies": [
       {
         "status": "Tremor Burst",
-        "when": "always"
+        "when": "status:Amplitude Conversion|Amplitude Entanglement"
       }
     ],
     "attack_types": [],
@@ -4416,7 +4414,7 @@
     "applies": [
       {
         "status": "Fragile",
-        "when": "always"
+        "when": "status:Amplitude Conversion|Amplitude Entanglement"
       }
     ],
     "attack_types": [],
@@ -9005,12 +9003,7 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [
-      {
-        "status": "Tremor",
-        "when": "always"
-      }
-    ],
+    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -13555,6 +13548,10 @@
       {
         "status": "Fragile",
         "when": "always"
+      },
+      {
+        "status": "Fragile",
+        "when": "status:Amplitude Conversion|Amplitude Entanglement"
       }
     ],
     "attack_types": [],

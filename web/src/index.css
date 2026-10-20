@@ -1073,4 +1073,5 @@ p.skill-best { background: none; border-color: var(--line); }
 .offered-advice.advice-last { color: var(--accent); }
 .offered-advice.advice-wait { color: var(--muted); }
 .pill.pill-clear { background: #3d3418; color: #f3dfa6; }
+.pill.pill-fusion { background: #2c3d2a; color: #d4f0c8; }
 .skill-row.skill-def { border-left-style: dashed; background: transparent; outline: 1px dashed var(--line); outline-offset: -1px; }

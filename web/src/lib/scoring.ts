@@ -133,6 +133,11 @@ export const WEIGHTS = {
   packBoostedShown: 3,
   /** Flat bonus per gift in the pool that's built for your team, times its rarity weight. */
   packSynergy: 1.5,
+  /** A recipe the pack's own gifts can finish (Spring Cultivation's three Virtues -> Cultivation:
+   *  Cut, File, Carve, Polish): the result counts this share toward the pack, x1/(1 + packRecipeStep
+   *  per extra piece you still need), since you have to find every missing piece on that floor. */
+  packRecipe: 0.8,
+  packRecipeStep: 0.35,
   /** Pack verdicts relative to the best pack in the list. */
   packGo: 0.75,
   packSkip: 0.5,
@@ -382,6 +387,8 @@ export function conditionMet(p: TeamProfile, when: string): boolean {
     case 'keyword': return teamSupplies(p, value)
     case 'attack': return (p.attackCounts.get(value) ?? 0) > 0
     case 'sin': return p.sinCounts[value.toLowerCase() as Sin] > 0
+    // "When triggering Amplitude Conversion or Amplitude Entanglement": any of them.
+    case 'status': return value.split('|').some((x) => teamSupplies(p, x))
     default: return false
   }
 }
@@ -779,7 +786,7 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
       const ok = affected.filter((i) => meets(i, c) >= 0.99)
       if (ok.length) {
         const pred = ok.length > 1 ? c.pred.replace(/^is /, 'are ').replace(/^has /, 'have ').replace(/^uses /, 'use ') : c.pred
-        reasons.push({ kind: 'good', text: `${ok.map(named).join(' and ')} ${pred}, which it wants` })
+        reasons.push({ kind: 'good', text: `${ok.map(named).join(' and ')} ${pred}, which it wants${c.team ? ': that part buffs all allies' : ''}` })
         continue
       }
       const how = c.share >= 0.95 ? 'It needs' : c.share >= 0.5 ? 'Most of it needs' : 'Part of it needs'
@@ -791,6 +798,13 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
   } else if (conds.length && ctx.members.length) {
     // No lineup (e.g. while planning the order): assume the best unit takes the slot.
     fit *= Math.max(...ctx.members.map((i) => holderFactor(gift, i, ctx.data.identities).factor))
+  }
+  // A part that buffs all allies once the slot's unit qualifies isn't limited to that slot.
+  if (conds.length && slotFactor < 1) {
+    const holders = ctx.lineup.length && affected.length ? affected : ctx.members
+    for (const c of conds) {
+      if (c.team && holders.some((i) => meets(i, c) >= 0.99)) slotFactor += (1 - slotFactor) * c.share
+    }
   }
   // Parts that only work for units with a mechanic of their own (Ammo, Bloodfeast): a team
   // without it gets nothing from them (Staticky Two-way Radio, Desperado on a non-Ammo team).
@@ -1349,7 +1363,7 @@ export interface PackScore {
 
 export interface PackHighlight {
   gift: GiftScore
-  kind: 'exclusive' | 'boosted' | 'clear'
+  kind: 'exclusive' | 'boosted' | 'clear' | 'fusion'
   /** Fits your team (keyword fit or built for it). */
   fits: boolean
   /** "Only in this pack", "Featured in 3 packs". */
@@ -1372,6 +1386,11 @@ function packRarity(pack: ThemePack, id: string, packCount: Map<string, number>)
   const value = Math.max(WEIGHTS.packCommonFloor, Math.min(1, WEIGHTS.packRareAt / n))
   if (value >= 1) return { value, note: `in ${n} pack${n > 1 ? 's' : ''}` }
   return { value, note: `in ${n} packs, so it counts ×${+value.toFixed(2)}` }
+}
+
+/** "A, B and C" */
+function andList(names: string[]): string {
+  return names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names.join('')
 }
 
 /** Recipe results (Lunar Memory, ...) are only made by fusing, even when a pack page's list names them. */
@@ -1415,6 +1434,25 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
       .sort((a, b) => b.score - a.score)
     if (clear[0]) credit(clear[0], clear[0].score * WEIGHTS.packExclusive, 'always offered when you clear it')
     const clearValue = clear[0] ? clear[0].score * WEIGHTS.packExclusive : 0
+    // Recipes its gifts can finish, with at least one piece only this pack gives: the result is
+    // something you'd otherwise never get (Virtues -> Cultivation: Cut, File, Carve, Polish).
+    const pool = new Set(packPool(pack))
+    const fused: { f: Fusion; result: GiftScore; missing: string[]; value: number }[] = []
+    for (const f of ctx.data.fusions) {
+      if (f.any_of || ctx.owned.has(f.result) || mustHave(f.result) || !fusableThisRun(f, ctx)) continue
+      const result = ctx.giftsById.get(f.result)
+      const missing = f.ingredients.filter((i) => !ctx.owned.has(i))
+      if (!result || !missing.length || !missing.some((i) => pack.gifts.includes(i))) continue
+      if (!missing.every((i) => pool.has(i) && !isGone(ctx, i))) continue
+      const r = scoreOf(result)
+      const value = r.score * WEIGHTS.packRecipe / (1 + WEIGHTS.packRecipeStep * (missing.length - 1))
+      if (value > 0) fused.push({ f, result: r, missing, value })
+    }
+    for (const x of fused) {
+      const names = x.missing.map((i) => ctx.giftsById.get(i)?.name ?? i)
+      credit(x.result, x.value, `fuse ${names.join(' + ')}${x.missing.length < x.f.ingredients.length ? ' (you have the rest)' : ''}: all here`)
+    }
+    const fusedValue = fused.reduce((sum, x) => sum + x.value, 0)
     const best = [...scored].filter((g) => !clearIds.includes(g.gift.id)).sort((a, b) => weight(b) - weight(a)).slice(0, WEIGHTS.packTopN)
     best.forEach((g, i) => credit(g, weight(g) * WEIGHTS.packDecay ** i,
       i === 0 ? 'its best gift for you' : `#${i + 1} best here (counts ×${+(WEIGHTS.packDecay ** i).toFixed(2)})`))
@@ -1442,10 +1480,14 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
     const clearShown = clear
       .filter((g) => !exclusives.some((h) => h.gift.gift.id === g.gift.id))
       .map((g): PackHighlight => ({ gift: g, kind: 'clear', fits: fits(g), where: 'Clear reward' }))
-    const highlights = [...exclusives, ...clearShown, ...boosted]
+    const fusedShown = [...fused].sort((a, b) => b.value - a.value).map((x): PackHighlight => ({
+      gift: x.result, kind: 'fusion', fits: fits(x.result),
+      where: `Fuse ${andList(x.missing.map((i) => ctx.giftsById.get(i)?.name ?? i))}${x.missing.length < x.f.ingredients.length ? ' (you have the rest)' : ''}`,
+    }))
+    const highlights = [...exclusives, ...fusedShown, ...clearShown, ...boosted]
     return {
-      pack, score: bestValue + teamValue + clearValue, top, ownedCount, parts, highlights,
-      split: { best: bestValue + clearValue, team: teamValue },
+      pack, score: bestValue + teamValue + clearValue + fusedValue, top, ownedCount, parts, highlights,
+      split: { best: bestValue + clearValue + fusedValue, team: teamValue },
     }
   })
   // Rare hidden packs don't set the bar for the others (you'll almost never see them).
@@ -1465,10 +1507,12 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
       }
       if (ctx.profile.size && fitting.length === 0) {
         reasons.push({ kind: 'bad', text: "None of its gifts match your team's keywords" })
-      } else if (!synergy.length && r.highlights.some((h) => h.fits)) {
-        const h = r.highlights.find((x) => x.fits)!
+      } else if (!synergy.length && r.highlights.some((h) => h.fits && h.kind !== 'fusion')) {
+        const h = r.highlights.find((x) => x.fits && x.kind !== 'fusion')!
         reasons.push({ kind: 'good', text: `${h.kind === 'exclusive' ? 'Exclusive' : h.kind === 'clear' ? 'Clear reward' : 'Boosted'} for your team: ${h.gift.gift.name}` })
       }
+      const fz = r.highlights.find((h) => h.kind === 'fusion' && h.fits)
+      if (fz) reasons.push({ kind: 'good', text: `${fz.where} into ${fz.gift.gift.name}: every piece you need is in this pack` })
     }
     const exclusivesLeft = r.pack.gifts.filter((id) => !ctx.owned.has(id)).length
     if (exclusivesLeft) {

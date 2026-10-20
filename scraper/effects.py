@@ -126,6 +126,15 @@ def analyze(markup: str) -> dict:
             if u:
                 skill_keyword = u.group(1)
 
+        # "When triggering Amplitude Conversion or Amplitude Entanglement, trigger Tremor Burst":
+        # only units that set off that mechanic get it (status:X|Y; any of them).
+        special_cond = None
+        sm = re.search(r"\b(?:When|Whenever|Upon|After)\s+(?:triggering|inflicting|applying)\s+\{\{\s*StatusEffect\s*\|\s*([^|}]+)"
+                       r"[^}]*\}\}((?:\s*(?:,|or|,\s*or)\s*\{\{\s*StatusEffect\s*\|\s*[^|}]+[^}]*\}\})*)", clause, re.IGNORECASE)
+        if sm and sm.group(1).strip() not in ENEMY_STATUSES:
+            names = [sm.group(1).strip()] + [n.strip() for n in re.findall(r"StatusEffect\s*\|\s*([^|}]+)", sm.group(2) or "")]
+            special_cond = "status:" + "|".join(dict.fromkeys(names))
+
         for start, end, status in _statuses(clause):
             if status not in ENEMY_STATUSES:
                 continue
@@ -143,6 +152,10 @@ def analyze(markup: str) -> dict:
                 if status not in _SELF_KEYWORDS and not re.search(r"\benem(?:y|ies)\b[^,.;]{0,40}$", re.sub(r"\([^)]*\)", "", before), re.IGNORECASE):
                     continue
             else:
+                # "the Identity with the most Tremor Count": a unit of yours carrying it (self-Tremor
+                # identities), not something on enemies. Poise and Charge are different: gifts give allies those.
+                if status not in _SELF_KEYWORDS and re.search(r"\b(?:Identit(?:y|ies)|all(?:y|ies))\s+with\b[^,]{0,25}$", tail, re.IGNORECASE):
+                    continue
                 # "If the target doesn't have Rupture": the opposite of a need.
                 if re.search(r"\b(?:doesn't|does not|don't|do not)\s+have\s*$|\bwithout\s*$", tail, re.IGNORECASE):
                     continue
@@ -157,8 +170,13 @@ def analyze(markup: str) -> dict:
                     if re.search(r"\b(has|have|with)\b[^,]{0,25}$", tail, re.IGNORECASE) and not _GIVEN_WITH.search(tail):
                         add(needs, status)
                     continue
+            # "trigger Amplitude Entanglement to convert their Tremor": a conversion, not a supply.
+            if re.search(r"\bconvert(?:s|ing)?\s+(?:their|its|the|that)?\s*$", tail, re.IGNORECASE):
+                continue
             # It's inflicted/triggered: under what condition?
-            if skill_keyword and skill_keyword != status:
+            if special_cond and not skill_keyword:
+                when = special_cond
+            elif skill_keyword and skill_keyword != status:
                 when = f"keyword:{skill_keyword}"
             elif skill_keyword == status:
                 when = f"keyword:{status}"

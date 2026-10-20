@@ -13,9 +13,12 @@ export type HolderCondition = {
   noun: string
   /** "is a Family Hierarch Candidate", "has 2+ Pierce skills" */
   pred: string
+  /** The part it unlocks buffs all allies, not just the unit in the slot (Cultivation: Cut, File,
+   *  Carve, Polish with a Family Hierarch Candidate in #6). */
+  team?: boolean
 } & (
   | { kind: 'trait'; traits: string[] }
-  | { kind: 'status'; status: string }
+  | { kind: 'status'; status: string; any?: string[] }
   | { kind: 'attackCount'; attack: AttackType; min: number; scaled: boolean }
   | { kind: 'sin'; sin: Sin }
 )
@@ -108,7 +111,8 @@ export function holderConditions(g: Gift, identities: Identity[]): HolderConditi
     // so it never counts for more than half the gift.
     const share = line.startsWith('- ') ? Math.min(0.5, line.length / total) : line.length / total
     const prev = found.get(key)
-    found.set(key, { ...c, share: Math.min(1, (prev?.share ?? 0) + share) } as HolderCondition)
+    const team = prev?.team || /\ball allies\b/i.test(line)
+    found.set(key, { ...c, share: Math.min(1, (prev?.share ?? 0) + share), ...(team ? { team } : {}) } as HolderCondition)
   }
   for (const line of lines) {
     // "If this unit is a Family Hierarch Candidate:", "is a T Corp. employee", "is a Lobotomy Corp. Identity"
@@ -160,7 +164,7 @@ export function holderConditions(g: Gift, identities: Identity[]): HolderConditi
 export function meets(i: Identity, c: HolderCondition): number {
   switch (c.kind) {
     case 'trait': return c.traits.some((t) => i.traits?.includes(t)) ? 1 : 0
-    case 'status': return i.status_effects.includes(c.status) || i.status_effects.includes(`Unique ${c.status}`) ? 1 : 0
+    case 'status': return [c.status, ...(c.any ?? [])].some((x) => i.status_effects.includes(x) || i.status_effects.includes(`Unique ${x}`)) ? 1 : 0
     case 'sin': return i.affinities.includes(c.sin) ? 1 : 0
     case 'attackCount': {
       const known = i.attack_counts && Object.keys(i.attack_counts).length > 0
@@ -228,6 +232,22 @@ export function mechanicGates(g: Gift, identities: Identity[]): HolderCondition[
       const prev = found.get(s)
       const share = Math.min(1, (prev?.share ?? 0) + line.length / total)
       found.set(s, { kind: 'status', status: s, share, noun: `units that use ${s}`, pred: `uses ${s}` })
+    }
+  }
+  // "When triggering Amplitude Conversion or Amplitude Entanglement": only units that set it off.
+  const names = [...counts.keys()].filter((s) => !isCoreKeyword(s) && (counts.get(s) ?? 0) <= MAX_MECHANIC_USERS)
+    .sort((a, b) => b.length - a.length)
+  for (const line of lines) {
+    for (const m of line.matchAll(/\b(?:When|Whenever|Upon|After|when)\s+(?:triggering|inflicting|applying)\s+([^.;:(]+)/g)) {
+      const phrase = m[1]
+      const hits = names.filter((n) => new RegExp(`(?:^|,\\s*|\\bor\\s+)${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(phrase))
+        .sort((a, b) => phrase.indexOf(a) - phrase.indexOf(b))
+      if (!hits.length) continue
+      const [first, ...rest] = hits
+      const prev = found.get(first)
+      const share = Math.min(1, (prev?.share ?? 0) + line.length / total)
+      const list = hits.length > 1 ? `${hits.slice(0, -1).join(', ')} or ${hits[hits.length - 1]}` : first
+      found.set(first, { kind: 'status', status: first, any: rest, share, noun: `units that trigger ${list}`, pred: `triggers ${list}` })
     }
   }
   // A gift that's mostly one mechanic ("This E.G.O Gift's effects are enhanced based on ...") is all about it.

@@ -141,7 +141,11 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   ("an ally with Attack Skills(except E.G.O Skills) that inflict Tremor") are read too, and an
   "... instead" sentence keeps the condition of the one before it (Chalice of Trickle-down's Yurodivy
   line), so Chalice only counts for teams with Tremor skills; "if the target doesn't have X" is not
-  a need.
+  a need. "When triggering Amplitude Conversion or Amplitude Entanglement, ..." makes the effect
+  conditional on a deployed unit with one of them (`when: status:A|B`; Interlinked Time, Interlocked
+  Cogs), and `mechanicGates` (holder.ts) adds "Only works for units that trigger …". "The Identity
+  with the most Tremor Count" / "allies with Bleed" is about your own units, not an enemy need (Poise
+  and Charge excepted, since gifts give allies those).
 - **Hand-picked combos:** `src/data/combos.json` lists combos that the effect text can't
   capture (Midwinter Nightmare + Broken Compass drain SP together). They're automatic: own one
   piece and the rest rank higher with "Combos with Midwinter Nightmare, which you have". The
@@ -334,6 +338,14 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   like any pack: The B.E.'s clear rewards (Bongy Plush, Lunar Memory, Piece of Relationship, Faith;
   the best one counts like an exclusive) make it a Go. Its gifts are "luck" in Your plan, it doesn't
   count as a second chance for last-chance fusions, and pre-run picks ignore it.
+- **Recipes a pack can finish** (`packRecipe`): when every piece of a fusion recipe you still need is
+  in a pack's pool and at least one is only in that pack (Spring Cultivation's Virtue - Zhi, Yong and
+  Ren → Cultivation: Cut, File, Carve, Polish; Yield My Flesh's hilts and blades; Murder on the WARP
+  Express' batteries), the result counts toward the pack: its score × 0.8, ÷ (1 + 0.35 per extra
+  piece still needed), since every missing piece has to turn up on that floor. Owning some pieces
+  makes it worth more. The card shows it with a **Fusion** pill ("Fuse Virtue - Zhi, Virtue - Yong
+  and Virtue - Ren"), and a fitting one adds a reason. Lunar Memory and recipes with "any of" pieces
+  are left to their own rules.
 - **Keyword-free gift sets** (`src/data/combos.json` with `any_team`, from Folmore's Steam guide,
   ranked most to least important): Tremor (Nixie Divergence, Melted Eyeball, Oscillating Bracelet,
   Downpour, Reverberation, Bio-venom Vial), Poise (Cigarette Holder, Four-leaf Clover, Pendant of
@@ -439,7 +451,10 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   a status the unit uses ("a Skill that spends Ammo" on For the Capo, "At 3+ Haste"), or a
   sin ("Pride Pierce Skills"). Each condition gates a share of the gift, by how much of the
   text depends on it. The gift scores lower when the unit in the slot misses it and says
-  who to move there if someone on your team meets it. Build's starting order uses the same check,
+  who to move there if someone on your team meets it. A conditional part that buffs all allies
+  (Cultivation: Cut, File, Carve, Polish with a Family Hierarch Candidate in #6 gives everyone Haste,
+  Protection and Offense Level Up) isn't cut down to the one slot once the unit there qualifies.
+  Build's starting order uses the same check,
   so a Family Hierarch Candidate lands in #6 when you have Cultivation. Skill counts come
   from the scraper (`attack_counts` on each identity). Also read as slots: "the Identity
   with the earliest Deployment order" (#1), "The ally highest in the Deployment order"

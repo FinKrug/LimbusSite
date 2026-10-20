@@ -99,3 +99,21 @@ class TeamConditionTests(unittest.TestCase):
     def test_enemies_gain_with_a_parenthesis(self):
         r = analyze(f"Turn Start: All enemies (for Abnormalities, all Parts) gain 1~2 {S('Burn')} Count")
         self.assertEqual(r["applies"], [{"status": "Burn", "when": "always"}])
+
+
+class MechanicConditionTests(unittest.TestCase):
+    """Finley: Interlinked Time needs a unit that triggers Amplitude Conversion / Entanglement."""
+
+    def test_when_triggering_a_mechanic(self):
+        r = analyze(f"When triggering {S('Amplitude Conversion')} or {S('Amplitude Entanglement')}, trigger "
+                    f"{S('Tremor Burst')} on target (once per turn per Identity)")
+        self.assertEqual(r["applies"], [{"status": "Tremor Burst", "when": "status:Amplitude Conversion|Amplitude Entanglement"}])
+        r = analyze(f"Inflict 1 {S('Fragile')} when triggering {S('Amplitude Conversion')} or {S('Amplitude Entanglement')} (once per turn)")
+        self.assertEqual(r["applies"], [{"status": "Fragile", "when": "status:Amplitude Conversion|Amplitude Entanglement"}])
+
+    def test_ally_carrying_a_status_and_conversions(self):
+        r = analyze(f"At Turn Start, for 1 Identity with the most {S('Tremor')} Count, trigger {S('Amplitude Entanglement')} "
+                    f"to convert their {S('Tremor')} to {S('Tremor - Distribution')}")
+        self.assertEqual((r["needs"], r["applies"]), ([], []))
+        r = analyze(f"Turn Start: allies with {S('Poise')} gain 1 Power Up.")
+        self.assertEqual(r["needs"], ["Poise"])  # gifts can give allies Poise, so this one stays

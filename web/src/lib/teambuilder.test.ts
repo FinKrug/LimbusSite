@@ -214,7 +214,7 @@ describe('conditions on the unit in a slot', () => {
     const good = intrinsicScore(cult, makeContext(real, withHierarch, []))
     const bad = intrinsicScore(cult, makeContext(real, without, []))
     expect(good.score).toBeGreaterThan(bad.score)
-    expect(good.reasons.map((r) => r.text)).toContain('Ishmael (#6) is a Family Hierarch Candidate, which it wants')
+    expect(good.reasons.map((r) => r.text)).toContain('Ishmael (#6) is a Family Hierarch Candidate, which it wants: that part buffs all allies')
     expect(bad.reasons.map((r) => r.text)).toContain('Part of it needs a Family Hierarch Candidate in #6')
     // On the team but in the wrong slot: say where to move them.
     const misplaced = intrinsicScore(cult, makeContext(real, [hierarch, ...rupture], []))

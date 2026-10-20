@@ -591,11 +591,11 @@ describe('theme pack cards', () => {
     for (const p of real.themePacks) for (const id of packPool(p)) count.set(id, (count.get(id) ?? 0) + 1)
     for (const p of ranked) {
       for (const h of p.highlights) {
-        // Fusion-only gifts never, except as a pack's clear reward (The B.E. offers Lunar Memory).
+        // Fusion-only gifts never, except as a pack's clear reward (The B.E. offers Lunar Memory) or a recipe its own gifts finish.
         if (h.kind === 'clear') expect(p.pack.clear_rewards).toContain(h.gift.gift.id)
         else expect(h.gift.gift.id).not.toBe('lunar-memory')
         if (h.kind === 'exclusive') expect(p.pack.gifts).toContain(h.gift.gift.id)
-        else if (h.kind === 'clear') continue
+        else if (h.kind === 'clear' || h.kind === 'fusion') continue
         else expect(count.get(h.gift.gift.id)!).toBeLessThanOrEqual(6)
       }
       expect(p.highlights.filter((h) => h.kind === 'boosted').length).toBeLessThanOrEqual(3)
@@ -697,5 +697,56 @@ describe('team-conditioned gifts (Chalice of Trickle-down)', () => {
     const s = scoreGift(chalice, makeContext(gameData, team, ['downpour', 'melted-eyeball', 'nixie-divergence']))
     expect(s.fit).toBe(0)
     expect(s.reasons.some((r) => /Downpour/.test(r.text))).toBe(false)
+  })
+})
+
+describe('gifts for units that trigger a mechanic (Interlinked Time)', () => {
+  it('only counts for units that trigger Amplitude Conversion or Entanglement', () => {
+    const heishou = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion', 'heishou-pack-si-branch-gregor']
+      .map((id) => gameData.identities.find((i) => i.id === id)!)
+    const amp = gameData.identities.filter((i) => i.status_effects.includes('Amplitude Conversion'))
+      .filter((i, k, a) => a.findIndex((x) => x.sinner === i.sinner) === k).slice(0, 7)
+    const time = gameData.gifts.find((g) => g.id === 'interlinked-time')!
+    const off = scoreGift(time, makeContext(gameData, heishou, ['downpour']))
+    expect(off.fit).toBe(0)
+    expect(off.reasons.some((r) => /Only works for units that trigger Amplitude Conversion or Amplitude Entanglement, and no one on your team does/.test(r.text))).toBe(true)
+    const on = scoreGift(time, makeContext(gameData, amp, []))
+    expect(on.score).toBeGreaterThan(off.score + 1)
+  })
+})
+
+describe('recipes a theme pack can finish', () => {
+  const byId = (id: string) => gameData.identities.find((i) => i.id === id)!
+  // Demo Heishou team with Family Hierarch Candidate Ishmael in #6.
+  const team = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+    'heishou-pack-mao-branch-outis', 'heishou-pack-si-branch-rodion', 'family-hierarch-candidate-ishmael',
+    'heishou-pack-si-branch-gregor'].map(byId)
+  const run = { difficulty: 'hard' as const, floors: 10, floor: 5, pack: null }
+  const spring = gameData.themePacks.find((p) => p.id === 'spring-cultivation')!
+
+  it("counts the fused result toward the pack: Spring Cultivation's Virtues -> Cultivation: Cut, File, Carve, Polish", () => {
+    const [p] = rankThemePacks(makeContext(gameData, team, [], { run }), [spring])
+    const h = p.highlights.find((x) => x.kind === 'fusion')!
+    expect(h.gift.gift.id).toBe('cultivation-cut-file-carve-polish')
+    expect(h.where).toMatch(/^Fuse Virtue - Zhi .* and Virtue - Ren/)
+    expect(p.parts.some((x) => x.gift.gift.id === h.gift.gift.id && x.value > 0)).toBe(true)
+    expect(p.reasons.some((r) => /every piece you need is in this pack/.test(r.text))).toBe(true)
+    // Owning two Virtues makes the last one worth more to the pack's recipe part.
+    const [half] = rankThemePacks(makeContext(gameData, team, ['virtue-zhi', 'virtue-yong'], { run }), [spring])
+    const part = (q: typeof p) => q.parts.find((x) => x.gift.gift.id === 'cultivation-cut-file-carve-polish')!.value
+    expect(part(half)).toBeGreaterThan(part(p))
+    // Once you have the result, nothing more to fuse.
+    const [done] = rankThemePacks(makeContext(gameData, team, ['cultivation-cut-file-carve-polish'], { run }), [spring])
+    expect(done.highlights.some((x) => x.kind === 'fusion')).toBe(false)
+  })
+
+  it("doesn't limit a slot gift's all-allies part to the slot once the unit there qualifies", () => {
+    const cfcp = gameData.gifts.find((g) => g.id === 'cultivation-cut-file-carve-polish')!
+    const withFhc = scoreGift(cfcp, makeContext(gameData, team, [], { run }))
+    const swapped = [...team.slice(0, 4), team[5], team[4], team[6]]
+    const without = scoreGift(cfcp, makeContext(gameData, swapped, [], { run }))
+    expect(withFhc.reasons.some((r) => /Family Hierarch Candidate, which it wants: that part buffs all allies/.test(r.text))).toBe(true)
+    expect(withFhc.score).toBeGreaterThan(without.score * 1.5)
   })
 })
