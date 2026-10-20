@@ -116,6 +116,23 @@ export interface PoolForecast {
   lastChance: GiftScore[]
   /** Chance the fusion gives one of `lastChance`. */
   lastChanceOdds: number
+  /** What this fusion is for: results that do something real for your team (fit 0.35+, or built for it), best first. */
+  targets: GiftScore[]
+  /** Chance the fusion gives one of `targets`. */
+  targetOdds: number
+}
+
+/** Attack types count as a fusion keyword when at least this share of your deployed units use them. */
+export const FUSION_ATTACK_SHARE = 0.4
+
+/**
+ * Keywords worth fusing toward: the status keywords your team uses, plus an attack type most of
+ * your team uses. One Blunt unit (Ishmael on Heishou) doesn't make Blunt gifts worth fusing for.
+ */
+export function fusionKeywords(ctx: RunContext, teamKeywords: string[]): string[] {
+  const p = ctx.profile
+  const attacks = [...p.attackCounts].filter(([, n]) => p.attackKnown && n / p.attackKnown >= FUSION_ATTACK_SHARE).map(([t]) => t)
+  return [...new Set([...teamKeywords, ...attacks])].filter((k) => (FUSION_KEYWORDS as readonly string[]).includes(k))
 }
 
 /** Scored random pools by keyword and tier (they don't depend on the ingredients). */
@@ -142,7 +159,9 @@ export function forecast(
   const fromPack = pack ? pool.filter((g) => pack.gifts.includes(g.gift.id) && !g.gift.pools.includes('main')) : []
   const chance = keywordChance(gifts.length)
   const lastChanceOdds = pool.length ? chance * lastChance.length / pool.length : 0
-  return { tier, chance, pool, expected, fromPack, lastChance, lastChanceOdds }
+  const targets = pool.filter(fits)
+  const targetOdds = pool.length ? chance * targets.length / pool.length : 0
+  return { tier, chance, pool, expected, fromPack, lastChance, lastChanceOdds, targets, targetOdds }
 }
 
 /** How much a gift you own is worth keeping (vestiges do nothing on their own): what it does for
@@ -248,7 +267,8 @@ export function fusionIdeas(ctx: RunContext, owned: string[], keywords: string[]
   walk(0, [])
   const idea = (keyword: string, combo: KeepNote[], chase: GiftScore | null = null): FusionIdea | null => {
     const f = forecast(ctx, keyword, combo.map((c) => c.gift), pack, superShop, last, cache)
-    if (!f.pool.length) return null
+    // Nothing in the pool would do anything for your team: not worth fusing for.
+    if (!f.pool.length || !f.targets.length) return null
     const cost = combo.reduce((s, c) => s + c.value, 0)
     return { keyword, alsoKeywords: [], ingredients: combo, forecast: f, cost, gain: f.chance * f.expected - cost, superShop, chase }
   }

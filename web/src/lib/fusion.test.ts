@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { makeContext, rankGifts, rankThemePacks, scoreGift } from './scoring'
 import {
-  fodder, forecast, fusionIdeas, isSpare, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans,
+  fodder, forecast, fusionIdeas, fusionKeywords, isSpare, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans,
 } from './fusion'
 
 const g = (name: string) => gameData.gifts.find((x) => x.name === name)!
@@ -198,6 +198,18 @@ describe('gifts that only activate with a keyword skill', () => {
     expect(spare(10)).toEqual(expect.arrayContaining(['prestige-card', 'milepost-of-survival', 'golden-urn']))
     expect(spare(10)).not.toContain('thrill')
     expect(scoreGift(g('Prestige Card'), at(10)).reasons[0].text).toMatch(/^Last floor: it only helps with Cost/)
+  })
+
+  it("fuses toward what the team uses and says what for: no Blunt for one Blunt user on Heishou", () => {
+    const ctx = makeContext(gameData, heishou, ['respite', 'smokes-and-wires', 'lowest-star', 'pocket-flashcards', 'faint-vestige', 'twinkling-vestige'])
+    const kws = fusionKeywords(ctx, ['Rupture', 'Poise'])
+    expect(kws).toEqual(['Rupture', 'Poise', 'Slash'])
+    const ideas = fusionIdeas(ctx, [...ctx.owned], kws, null, false)
+    expect(ideas.length).toBeGreaterThan(0)
+    for (const i of ideas) {
+      expect(i.forecast.targets.length).toBeGreaterThan(0)
+      expect(i.forecast.targets.every((t) => t.fit >= 0.35 || t.synergy)).toBe(true)
+    }
   })
 })
 

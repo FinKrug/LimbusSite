@@ -238,7 +238,7 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   keyword and tier with the best odds of rolling it ("Last chance at Virtue - Yong: only Spring
   Cultivation has it this run … 30% with these gifts"). Fuse removes the ingredients from your gifts and adds what you
   got. The Super Shop switch stays on when you change tabs or reload
-  (`limbussite.supershop.v1`, kept in App) until you turn it off or Clear run. Below: suggested fusions from the gifts you'd miss least (vestiges first; never recipe or
+  (`limbussite.supershop.v1`, kept in App) until you turn it off or Clear run. Below: suggested fusions from the gifts you'd miss least, toward the status keywords your team uses plus an attack type at least 40% of your deployed units use (`fusionKeywords`: one Blunt user doesn't make Blunt worth fusing for), each saying what it's for ("Fusing for: Thunderbranch, Standard-duty Battery, Deathseeker (about 90% to get one…)"; `forecast().targets` = results with fit 0.35+ or built for your team; a fusion with none isn't suggested). The fusion screen's forecast says the same, or "None of them suits your team". Ingredients: vestiges first; never recipe or
   combo pieces), recipes to work on (ones you've started, plus Lunar Memory on Hard: the three
   Memories + any 2 Sin Fragments, Super Shop only), and gifts to sell or fuse. Each gift is judged
   on its own (`isSpare`): it's sell-or-fuse when it's worth under 35% of a fitting gift of its tier

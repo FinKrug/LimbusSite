@@ -1090,3 +1090,4 @@ p.skill-best { background: none; border-color: var(--line); }
 .seg-toggle button { background: transparent; color: inherit; border: 0; padding: 4px 12px; cursor: pointer; font: inherit; font-size: 13px; }
 .seg-toggle button.on { background: var(--panel-2); font-weight: 700; }
 .seg-toggle button + button { border-left: 1px solid var(--line); }
+.fuse-for { margin: 4px 0 0; }

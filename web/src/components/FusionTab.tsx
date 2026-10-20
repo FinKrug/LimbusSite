@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import {
   FUSE_NOW_SHARE, FUSION_KEYWORDS, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, isSpare, fusionIdeas, fusionPoints, fusionTier, keywordChance,
-  matchRecipe, recipePlans, type FusionIdea,
+  fusionKeywords, matchRecipe, recipePlans, type FusionIdea,
 } from '../lib/fusion'
 import { mustHave } from '../lib/musthave'
 import { scoreGift, type RunContext, type RunSettings } from '../lib/scoring'
@@ -80,9 +80,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
   }
 
   const ideas = useMemo(() => {
-    const kws = [...new Set([...teamKeywords, ...ctx.profile.attackCounts.keys()])].filter((k) =>
-      (FUSION_KEYWORDS as readonly string[]).includes(k))
-    return fusionIdeas(ctx, owned, kws, pack, isSuper).slice(0, 4)
+    return fusionIdeas(ctx, owned, fusionKeywords(ctx, teamKeywords), pack, isSuper).slice(0, 4)
   }, [ctx, owned, teamKeywords, pack, isSuper])
   const recipes = useMemo(() => recipePlans(ctx, owned), [ctx, owned])
   const spare = useMemo(() => fodder(ctx, [...new Set(owned)]).filter(isSpare), [ctx, owned])
@@ -190,7 +188,10 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
           <h3>{picking ? 'What did you get?' : `Possible results: Tier ${tierLabel(fc.tier)} ${keyword}`}</h3>
           <p className="muted small">
             {Math.round(fc.chance * 100)}% chance of a {keyword} gift ({bench.length} gifts{bench.length < 4 ? '; 4+ gifts make it 99%' : ''}).{' '}
-            {fc.pool.length} possible {keyword} gifts; average value for your team {fc.expected.toFixed(1)}.
+            {fc.pool.length} possible {keyword} gifts; average value for your team {fc.expected.toFixed(1)}.{' '}
+            {fc.targets.length
+              ? <>Worth it for: {fc.targets.slice(0, 3).map((g) => g.gift.name).join(', ')}{fc.targets.length > 3 ? ` and ${fc.targets.length - 3} more` : ''} (about {Math.round(fc.targetOdds * 100)}% to get one).</>
+              : <b>None of them suits your team.</b>}
             {pack && fc.fromPack.length > 0 && <> Your current pack, {pack.name}, adds {fc.fromPack.map((g) => g.gift.name).join(', ')}.</>}
             {fc.lastChance.length > 0 && <> <b>Last chance</b> at {fc.lastChance.map((g) => g.gift.name).join(', ')}: no later pack this run has {fc.lastChance.length > 1 ? 'them' : 'it'} ({Math.round(fc.lastChanceOdds * 100)}% with these gifts).</>}
             {!pack && run.floor !== null && ' Pick your current theme pack in Your run: its exclusives can come out of random fusions too.'}
@@ -225,6 +226,11 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                     <span className="fuse-idea-out">Tier {tierLabel(idea.forecast.tier)} <KeywordChip keyword={idea.keyword} /></span>
                     <button className="btn" onClick={() => load(idea)}>Load</button>
                   </div>
+                  <p className="small fuse-for">
+                    <b>Fusing for:</b> {idea.forecast.targets.slice(0, 3).map((t) => t.gift.name).join(', ')}
+                    {idea.forecast.targets.length > 3 && ` and ${idea.forecast.targets.length - 3} more`}
+                    {' '}<span className="muted">(about {Math.round(idea.forecast.targetOdds * 100)}% to get one of the {idea.forecast.targets.length} that suit your team, out of {idea.forecast.pool.length} possible)</span>
+                  </p>
                   {idea.chase && (
                     <p className="reason reason-good small">
                       Last chance at {idea.chase.gift.name}: only {pack?.name} has it this run, and fusing here can roll it
