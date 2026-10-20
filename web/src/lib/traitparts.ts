@@ -23,10 +23,13 @@ export function traitShare(g: Gift): number {
   const hit = cache.get(g.id)
   if (hit !== undefined) return hit
   const names = g.traits.flatMap(aliases)
-  // "- …" lines belong to the paragraph above them.
+  // "- …" lines belong to the paragraph above them, except an affiliation rider ("- For Seven
+  // Association Identities: above effect applies to Pierce and Blunt as well"): that's its own part,
+  // and the line above still works for anyone (Short Cane Sword's Slash part).
   const paras: string[] = []
   for (const line of g.effect.split(/\n+/).map((l) => l.trim()).filter(Boolean)) {
-    if (line.startsWith('- ') && paras.length) paras[paras.length - 1] += ' ' + line
+    const rider = line.startsWith('- ') && names.some((n) => line.includes(n))
+    if (line.startsWith('- ') && paras.length && !rider) paras[paras.length - 1] += ' ' + line
     else paras.push(line)
   }
   const total = paras.reduce((s, p) => s + p.length, 0)

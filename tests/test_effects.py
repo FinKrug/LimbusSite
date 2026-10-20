@@ -119,6 +119,16 @@ class MechanicConditionTests(unittest.TestCase):
         self.assertEqual(r["needs"], ["Poise"])  # gifts can give allies Poise, so this one stays
 
 
+class AttackTypeTests(unittest.TestCase):
+    """Finley: Pocket Flashcards does nothing for a Heishou team (Blunt skills, Dieci riders)."""
+
+    def test_base_attack_skill_and_affiliation_riders(self):
+        r = analyze(f"When winning a Clash with a Blunt Base Attack Skill, inflict 2 {S('Defense Level Down')} next turn against the target.<br>"
+                    f"- For Dieci Association Identities: above effect applies to Slash and Pierce Base Attack Skills as well; inflict 1 additional {S('Defense Level Down')}")
+        self.assertEqual(r["attack_types"], ["Blunt"])
+        self.assertEqual(r["applies"], [{"status": "Defense Level Down", "when": "attack:Blunt"}])
+
+
 class ActivationConditionTests(unittest.TestCase):
     """Finley: Respite only activates when a skill that inflicts Bleed is used."""
 

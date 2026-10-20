@@ -5512,14 +5512,16 @@
     "applies": [
       {
         "status": "Bind",
-        "when": "always"
+        "when": "attack:Pierce"
       },
       {
         "status": "Poise",
         "when": "always"
       }
     ],
-    "attack_types": [],
+    "attack_types": [
+      "Pierce"
+    ],
     "affinities": [],
     "team_gate": false,
     "effect": "On Hit after winning a Clash with a Pierce Base Attack Skill, inflict 1 Bind against the target next turn. (once per turn per Identity; does not stack against the same enemy)\n- For Cinq Association Identities: gain 1 Haste next turn as well.\n\nWhen a Cinq Association Identity uses a Base Attack Skill to win a Clash against targets(for Abnormalities, Parts) with 'Declared Duel', 'Nerve Strike' or 'Focused Attack', gain 2 Poise Potency On Hit (once per turn per Identity)",
@@ -5558,10 +5560,12 @@
     "applies": [
       {
         "status": "Defense Level Down",
-        "when": "always"
+        "when": "attack:Blunt"
       }
     ],
-    "attack_types": [],
+    "attack_types": [
+      "Blunt"
+    ],
     "affinities": [],
     "team_gate": false,
     "effect": "When winning a Clash with a Blunt Base Attack Skill, inflict 2 Defense Level Down next turn against the target. (once per turn per Identity; effect cannot stack against the same enemy)\n- For Dieci Association Identities: above effect applies to Slash and Pierce Base Attack Skills as well; inflict 1 additional Defense Level Down\n\nIf a Dieci Association Identity Discarded their own Skill using a Discard Skill, gain (rank of the Discarded Skill) Offense Level Up at the next Turn Start. (if multiple are discarded, take the highest value; max 3)",
@@ -6050,10 +6054,12 @@
     "applies": [
       {
         "status": "Defense Level Down",
-        "when": "always"
+        "when": "attack:Slash"
       }
     ],
-    "attack_types": [],
+    "attack_types": [
+      "Slash"
+    ],
     "affinities": [],
     "team_gate": false,
     "effect": "When winning a Clash with a Slash Base Attack Skill, inflict 2 Defense Level Down next turn against the target. (once per turn per Identity; effect cannot stack against the same enemy)\n- For Seven Association Identities: above effect applies to Pierce and Blunt Base Attack Skills as well\n\nEncounter Start: Seven Association Identities gain (# of other Seven Association Identities / 2) Clash Power Up (rounded down; max 2)",
@@ -8295,9 +8301,7 @@
     "attack_types": [
       "Slash"
     ],
-    "affinities": [
-      "lust"
-    ],
+    "affinities": [],
     "team_gate": false,
     "effect": "Slash Attack Type Skill 1: Clash Power +1, inflict 2 Offense Level Down On Hit.\n- For Kurokumo Clan Identities: the above effects apply to all Slash Attack Type Skills instead\n\nTurn Start: Kurokumo Clan Identities gain 1 Power Up; when inflicting Bleed Potency or Count On Hit with a Base Attack Skill, gain 1 Poise Potency (4 times per turn per Identity)",
     "max_level": 2,
@@ -12332,9 +12336,7 @@
     "attack_types": [
       "Pierce"
     ],
-    "affinities": [
-      "gluttony"
-    ],
+    "affinities": [],
     "team_gate": false,
     "effect": "Pierce Attack Type Skill 2: Offense Level +2; if the Skill has 2 Coins or fewer, Offense Level +2 and Clash Power (2/# of Coins) instead.\n- For Technology Liberation Alliance Identities: above effect applies to all Pierce Attack Type Base Attack Skills\n\nTurn Start: Technology Liberation Alliance Identities gain (# of negative effects on self) Offense Level Up. (max 3)",
     "max_level": 2,
@@ -16333,7 +16335,9 @@
     ],
     "needs": [],
     "applies": [],
-    "attack_types": [],
+    "attack_types": [
+      "Slash"
+    ],
     "affinities": [],
     "team_gate": true,
     "effect": "Turn Start: activates when there are 3 or more Kurokumo Clan Identities. (only counts Identities on the field)\n\nOn Hit with Base Attack Skill(except E.G.O Skills)'s Unbreakable Coin: deal +(40/# of Coins)% damage\nKurokumo Clan Identities: deal +(80/# of Coins)% damage instead\n\nKurokumo Clan Identities with Slash Base Attack Skills: gain 2 Slash DMG Up at Turn Start. Kurokumo Clan Identities gain 1 Offense Level Up and 1 Defense Level Up next turn for every 10% missing HP on self at Turn End. (max 5 each)\n\nWhen a Kurokumo Clan Identity dies, all Kurokumo Clan Identities gain 2 Damage Up next turn (once per turn)",
@@ -16570,7 +16574,9 @@
     ],
     "needs": [],
     "applies": [],
-    "attack_types": [],
+    "attack_types": [
+      "Blunt"
+    ],
     "affinities": [],
     "team_gate": false,
     "effect": "Allies' Plus Coin Skills: Gain Coin Power +(8 / # of Coins) (gains at least 1 Coin Power, includes E.G.O Skills; rounded down)\n\nAllies' Minus Coin Skills: Gain Final Power +(8 / # of Coins) (gains at least 1 Final Power, includes E.G.O Skills; rounded down)\n\nEncounter Start: All allies gain 50 Shield for every The Middle-faction allied unit on the field (excluding Backup units; Shield gained via this effect does not expire at Turn End)\n\nAttack End with The Middle-faction allied units' Envy or Blunt Base Skills: Heal 10% of Skill damage dealt\n- If this effect is triggered by a Counter Skill, heal 20% of Skill damage dealt instead\n- Excess HP healed is converted into Shield (Shield gained via this effect does not expire at Turn End)\n\nCombat Start: The Middle-faction allied units gain Offense Level for the turn based on the number of Defense Skills equipped (max 12 Offense Level)\n- If 6+ Defense Skills are equipped, deal +30% damage with Envy Base Skills\n- Deal an additional +10% damage for every Defense Skill equipped beyond 6 (max 60%)",

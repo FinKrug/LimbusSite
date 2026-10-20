@@ -117,13 +117,19 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   #25; on a Burn team with no You Branch it's around #237. Only that exact affiliation counts:
   other Heishou branches (Mao, Si, Wu, Wei) get nothing from a You Branch gift, and the reason
   names who it's for ("only works for Heishou Pack - You Branch identities (Heathcliff, Sinclair),
-  and yours (Sinclair, Heathcliff) are backups").
+  and yours (Sinclair, Heathcliff) are backups"). An affiliation rider ("- For Dieci Association
+  Identities: above effect applies to Slash and Pierce as well") is its own affiliation part; the
+  line above it still works for anyone (Short Cane Sword's Slash part). The small bonuses (sin
+  affinity, "also uses") shrink with the affiliation share you can't use, so Pocket Flashcards on a
+  Heishou team (no Dieci units, one Blunt user) is worth next to nothing and goes to sell or fuse.
 - **Beyond the keyword:** fit is the best of several routes, not just the keyword:
   - *Attack type:* the gift's effect is about Blunt/Slash/Pierce skills (e.g. Oil-gunked
     Spanner is a Tremor gift, but it's really a Blunt gift). Fit = share of your team with
     those skills. Needs identity attack types from the scraper; skipped if unknown. An
-    attack-type gift (keyword Slash/Pierce/Blunt) that no one on your team can set off keeps only
-    40% of its general fit.
+    attack-type gift (keyword Slash/Pierce/Blunt) keeps only 40% of its general fit: the attack
+    route carries it, so it goes off as often as your team uses that type. The scraper reads
+    "Blunt Base Attack Skill" too, and skips "- For X Identities:" riders (the app weighs those by
+    affiliation).
   For a keyword gift, these other routes count ×(0.3 + 0.4 × the share of your team using its
   keyword): "7/7 use Slash skills" no longer makes a Rupture gift as good as a Burn gift for a
   Burn team with one Rupture unit.

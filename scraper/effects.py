@@ -72,7 +72,8 @@ _GRANTED = re.compile(
 )
 _ACTIVATES = re.compile(r"^\s*(?:\[[^\]]*\]\s*)?(?:This (?:E\.G\.O )?Gift )?Activates?\b", re.IGNORECASE)
 _GATE = re.compile(r"activates?\b[^.]{0,60}\bwhen (?:there are )?\d+\s*(?:or more|\+)\s", re.IGNORECASE)
-_ATTACK = re.compile(r"\b(Slash|Pierce|Blunt)\s+(?:Attack\s+)?(?:Skills?|damage|type)\b", re.IGNORECASE)
+_FOR_TRAIT = re.compile(r"^\s*-?\s*For\s+[^:]{3,60}?\s+Identit(?:y|ies)\s*:", re.IGNORECASE)
+_ATTACK = re.compile(r"\b(Slash|Pierce|Blunt)\s+(?:Base\s+)?(?:Attack\s+)?(?:Skills?|damage|type)\b", re.IGNORECASE)
 _SIN = re.compile(r"\b(Wrath|Lust|Sloth|Gluttony|Gloom|Pride|Envy)(?:\s+Affinity|(?=\s+(?:Absolute\s+)?Reson)|(?=\s+(?:Attack\s+)?Skills?\b)|(?=\s+or\s+\w+\s+Affinity))", re.IGNORECASE)
 _SIN_WAS = re.compile(r"Affinity was (Wrath|Lust|Sloth|Gluttony|Gloom|Pride|Envy)", re.IGNORECASE)
 _TIMED = re.compile(r"^\s*(?:\[[^\]]*\]\s*)?(First\s+)?(Turn Start|Turn End|Combat Start|Encounter Start|"
@@ -102,6 +103,11 @@ def analyze(markup: str) -> dict:
         if not clause.strip():
             continue
         plain = _STATUS.sub(lambda m: m.group(1), clause)
+        # "- For Dieci Association Identities: above effect applies to Slash and Pierce Base Attack
+        # Skills as well": a bonus only for that affiliation (the web app weighs those by trait), not
+        # something the gift does for any team.
+        if _FOR_TRAIT.match(plain):
+            continue
         clause_attacks = [a.capitalize() for a in _ATTACK.findall(plain)]
         clause_sins = [s.capitalize() for s in _SIN.findall(plain)] + [s.capitalize() for s in _SIN_WAS.findall(plain)]
         if re.search(r"\baffinit(?:y|ies)\b", plain, re.IGNORECASE):

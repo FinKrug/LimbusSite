@@ -230,6 +230,8 @@ export function weakShare(text: string): number {
   return sentences.filter((x) => WEAK_EFFECT.test(x)).length / sentences.length
 }
 
+const ATTACK_KEYWORDS = new Set(['Slash', 'Pierce', 'Blunt'])
+
 /** A gift's effect un-staggers enemies or staggers your own units. */
 export function staggerHarm(g: Gift): 'unstagger' | 'self' | null {
   if (/un-Stagger enemies|recover(?:s)? enemies from Stagger/i.test(g.effect)) return 'unstagger'
@@ -739,6 +741,11 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
       },
     })
   }
+  // A Slash/Pierce/Blunt gift that's about its attack type (Pocket Flashcards: "winning a Clash with a
+  // Blunt Base Attack Skill") goes off as often as your team uses that type: the attack route below
+  // carries its fit, and the "works with any team" route only keeps its other parts.
+  const attackGift = !!(fp.size && fp.attackKnown && gift.attack_types?.length && gift.keyword && ATTACK_KEYWORDS.has(gift.keyword))
+  if (attackGift && routes[0].fit > 0) routes[0] = { ...routes[0], fit: routes[0].fit * WEIGHTS.noAttackGeneral }
   if (fp.size && fp.attackKnown && gift.attack_types?.length) {
     const best = gift.attack_types
       .map((t) => ({ t, n: fp.attackCounts.get(t) ?? 0 }))
@@ -749,7 +756,7 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
       keywordReason = { kind: 'bad', text: `${cap(who)} don't use ${gift.attack_types.join('/')} skills` }
       routes[0] = { fit: 0 }
     } else if (!isCoreKeyword(gift.keyword)) {
-      routes[0] = { fit: routes[0].fit * WEIGHTS.noAttackGeneral,
+      routes[0] = { fit: routes[0].fit * (attackGift ? 1 : WEIGHTS.noAttackGeneral),
         reason: { kind: 'bad', text: `No one on ${who} uses ${gift.attack_types.join('/')} skills, so most of it won't go off` } }
     }
   }
@@ -933,6 +940,9 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
   // (and how strong) of its members you deploy.
   if (share) fit = (1 - share) * fit + share * traitFit
   if (namedShare > 0) fit *= 1 - namedShare
+  // The affiliation part does nothing without its members: the small bonuses (sin affinity, "also
+  // uses") shrink with it, like for a mechanic your team lacks (Pocket Flashcards without Dieci units).
+  if (share) gateFactor *= 1 - share * (1 - traitFit)
 
   // The run: Cost gifts pay off over the floors left; "survive a lethal hit" gifts matter
   // most on the last floors of a long run.

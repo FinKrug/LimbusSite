@@ -178,4 +178,16 @@ describe('gifts that only activate with a keyword skill', () => {
     expect(spare).toEqual(['respite', 'lowest-star', 'smokes-and-wires'])
     expect(scoreGift(g('Lowest Star'), ctx).reasons.some((r) => /Does very little/.test(r.text))).toBe(true)
   })
+
+  it('fuses an affiliation gift whose members you lack (Pocket Flashcards on Heishou), keeps one whose general part fits', () => {
+    const owned = ['pocket-flashcards', 'short-cane-sword', 'thrill']
+    const ctx = makeContext(gameData, heishou, owned)
+    const list = fodder(ctx, owned)
+    const flash = list.find((f) => f.gift.id === 'pocket-flashcards')!
+    expect(isSpare(flash)).toBe(true)
+    expect(flash.share).toBeLessThan(0.2)
+    // Short Cane Sword's Slash part works for an all-Slash team even without Seven Association units.
+    expect(isSpare(list.find((f) => f.gift.id === 'short-cane-sword')!)).toBe(false)
+  })
 })
+
