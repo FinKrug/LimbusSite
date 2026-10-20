@@ -137,7 +137,11 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   Given, not needed (2026-10-19, after Special Contract read as needing Fragile): "are inflicted with
   2 Fragile", "all allies gain 5 Poise", "enemies ... gain Offense Level Down" and "receive X" count as
   the gift applying it; an ally gaining Fragile/Bind is a drawback, neither; "Skills that gain Charge"
-  and "Identities that inflicted Sinking" stay team conditions.
+  and "Identities that inflicted Sinking" stay team conditions. Team conditions with a parenthesis
+  ("an ally with Attack Skills(except E.G.O Skills) that inflict Tremor") are read too, and an
+  "... instead" sentence keeps the condition of the one before it (Chalice of Trickle-down's Yurodivy
+  line), so Chalice only counts for teams with Tremor skills; "if the target doesn't have X" is not
+  a need.
 - **Hand-picked combos:** `src/data/combos.json` lists combos that the effect text can't
   capture (Midwinter Nightmare + Broken Compass drain SP together). They're automatic: own one
   piece and the rest rank higher with "Combos with Midwinter Nightmare, which you have". The

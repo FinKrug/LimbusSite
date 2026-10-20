@@ -677,12 +677,7 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [
-      {
-        "status": "Sinking",
-        "when": "always"
-      }
-    ],
+    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -4024,15 +4019,13 @@
       "Sinking"
     ],
     "traits": [],
-    "needs": [],
+    "needs": [
+      "Sinking"
+    ],
     "applies": [
       {
         "status": "Sinking",
         "when": "keyword:Sinking"
-      },
-      {
-        "status": "Sinking",
-        "when": "always"
       }
     ],
     "attack_types": [],
@@ -5719,10 +5712,6 @@
       {
         "status": "Rupture",
         "when": "keyword:Rupture"
-      },
-      {
-        "status": "Rupture",
-        "when": "always"
       }
     ],
     "attack_types": [],
@@ -7148,12 +7137,7 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [
-      {
-        "status": "Rupture",
-        "when": "always"
-      }
-    ],
+    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -7186,12 +7170,7 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [
-      {
-        "status": "Rupture",
-        "when": "always"
-      }
-    ],
+    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -7225,12 +7204,7 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [
-      {
-        "status": "Rupture",
-        "when": "always"
-      }
-    ],
+    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -8132,7 +8106,7 @@
     "applies": [
       {
         "status": "Tremor",
-        "when": "always"
+        "when": "keyword:Tremor"
       }
     ],
     "attack_types": [],
@@ -8270,13 +8244,10 @@
       "Tremor"
     ],
     "traits": [],
-    "needs": [],
-    "applies": [
-      {
-        "status": "Tremor",
-        "when": "always"
-      }
+    "needs": [
+      "Tremor"
     ],
+    "applies": [],
     "attack_types": [],
     "affinities": [
       "pride"
@@ -8545,12 +8516,7 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [
-      {
-        "status": "Rupture",
-        "when": "always"
-      }
-    ],
+    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -8912,6 +8878,10 @@
       {
         "status": "Burn",
         "when": "always"
+      },
+      {
+        "status": "Burn",
+        "when": "keyword:Burn"
       }
     ],
     "attack_types": [],
@@ -9303,10 +9273,6 @@
       {
         "status": "Bleed",
         "when": "keyword:Bleed"
-      },
-      {
-        "status": "Bleed",
-        "when": "always"
       }
     ],
     "attack_types": [],
@@ -9418,7 +9384,7 @@
       },
       {
         "status": "Tremor",
-        "when": "always"
+        "when": "keyword:Tremor"
       }
     ],
     "attack_types": [],
@@ -11205,10 +11171,6 @@
       {
         "status": "Bleed",
         "when": "keyword:Bleed"
-      },
-      {
-        "status": "Bleed",
-        "when": "sin:Lust"
       }
     ],
     "attack_types": [],
@@ -11796,10 +11758,6 @@
       {
         "status": "Rupture",
         "when": "keyword:Rupture"
-      },
-      {
-        "status": "Rupture",
-        "when": "always"
       }
     ],
     "attack_types": [],
@@ -12541,15 +12499,13 @@
       "Offense Level Down"
     ],
     "traits": [],
-    "needs": [],
+    "needs": [
+      "Rupture"
+    ],
     "applies": [
       {
-        "status": "Rupture",
-        "when": "always"
-      },
-      {
         "status": "Offense Level Down",
-        "when": "always"
+        "when": "keyword:Rupture"
       },
       {
         "status": "Rupture",
@@ -13746,12 +13702,7 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [
-      {
-        "status": "Rupture",
-        "when": "always"
-      }
-    ],
+    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,

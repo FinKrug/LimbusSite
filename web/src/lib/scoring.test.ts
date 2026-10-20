@@ -686,3 +686,16 @@ describe('fused gifts in gift sets', () => {
     expect(setHas(off, 'talisman-bundle')).toBe(false)
   })
 })
+
+describe('team-conditioned gifts (Chalice of Trickle-down)', () => {
+  it("doesn't count a gift that only works for units with Tremor skills on a team with none", () => {
+    const ids = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion', 'heishou-pack-si-branch-gregor']
+    const team = ids.map((id) => gameData.identities.find((i) => i.id === id)!)
+    const chalice = gameData.gifts.find((g) => g.id === 'chalice-of-trickle-down')!
+    expect(chalice.applies).toEqual([{ status: 'Tremor', when: 'keyword:Tremor' }])
+    const s = scoreGift(chalice, makeContext(gameData, team, ['downpour', 'melted-eyeball', 'nixie-divergence']))
+    expect(s.fit).toBe(0)
+    expect(s.reasons.some((r) => /Downpour/.test(r.text))).toBe(false)
+  })
+})

@@ -79,3 +79,23 @@ class GrantedStatusTests(unittest.TestCase):
         r = analyze(f"Identities that inflicted {S('Sinking')}, {S('Sinking')} Count, or 'Unique Sinking', "
                     f"gain 3 {S('Poise')} or +2 {S('Poise')} Count at Turn Start")
         self.assertEqual(r["applies"], [{"status": "Poise", "when": "keyword:Sinking"}])
+
+
+class TeamConditionTests(unittest.TestCase):
+    """Gifts that only work for units with that keyword's skills (Finley: Chalice of Trickle-down on a Heishou team)."""
+
+    def test_parenthetical_skill_condition_and_instead_variant(self):
+        r = analyze(f"When an ally with Attack Skills(except E.G.O Skills) that inflict {S('Tremor')} Potency, Count, or "
+                    f"'Unique Tremor' wins a Clash, inflict 2 {S('Tremor')} Potency and +2 {S('Tremor')} Count. (2 times per turn)<br><br>"
+                    f"Yurodivy Identities: inflict 3 {S('Tremor')} Potency and +3 {S('Tremor')} Count instead (3 times per turn)")
+        self.assertEqual(r["applies"], [{"status": "Tremor", "when": "keyword:Tremor"}])
+
+    def test_doesnt_have_is_not_a_need(self):
+        r = analyze(f"When winning a Clash using a Skill that inflicts {S('Rupture')} Potency or Count, inflict +2 {S('Rupture')} Count."
+                    f"<br><br>If the target doesn't have {S('Rupture')}, inflict 3 {S('Rupture')} Potency and +2 {S('Rupture')} Count instead.")
+        self.assertEqual(r["needs"], [])
+        self.assertEqual(r["applies"], [{"status": "Rupture", "when": "keyword:Rupture"}])
+
+    def test_enemies_gain_with_a_parenthesis(self):
+        r = analyze(f"Turn Start: All enemies (for Abnormalities, all Parts) gain 1~2 {S('Burn')} Count")
+        self.assertEqual(r["applies"], [{"status": "Burn", "when": "always"}])

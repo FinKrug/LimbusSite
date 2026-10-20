@@ -53,12 +53,12 @@ _INFLICT_BEFORE = re.compile(
 )
 # "gain 5 Poise", "gains +2 Charge Count", "enemies ... gain Offense Level Down", "receive 2 X":
 # the status right after gain/receive (with an optional amount) is given by the gift.
-_GAIN_BEFORE = re.compile(r"\b(?:gains?|gaining|receives?)\s+(?:\+?\d+(?:\.\d+)?\s+)?(?:more\s+)?$", re.IGNORECASE)
+_GAIN_BEFORE = re.compile(r"\b(?:gains?|gaining|receives?)\s+(?:\+?\d+(?:\.\d+)?(?:\s*[~-]\s*\d+)?\s+)?(?:more\s+)?$", re.IGNORECASE)
 # Statuses allies gain on themselves on purpose (an ally gaining Fragile or Bind is a drawback, not a supply).
 _SELF_KEYWORDS = {"Poise", "Charge"}
 # "inflicted with" / "afflicted with" right before the status: it's given, not required.
 _GIVEN_WITH = re.compile(r"\b(?:inflicted|afflicted)\s+with\s+(?:\d+\s*)?$", re.IGNORECASE)
-_SKILL_INFLICTS = re.compile(r"Skills?\s+(?:that|which)\s+(?:inflicts?|gains?|apply|applies|consumes?)\b(?:(?!inflict|apply|trigger)[^.]){0,40}$", re.IGNORECASE)
+_SKILL_INFLICTS = re.compile(r"Skills?(?:\s*\([^)]*\))?\s+(?:that|which)\s+(?:inflicts?|gains?|apply|applies|consumes?)\b(?:(?!inflict|apply|trigger)[^.]){0,40}$", re.IGNORECASE)
 # "Whenever an ally inflicts X", "upon inflicting X", "If the said Skill applies X"
 _TEAM_INFLICTS = re.compile(
     r"(?:\b(?:ally|allies|unit|units|Identit(?:y|ies)|Skill|Skills)\s+(?:that\s+|who\s+)?(?:inflicts?|inflicted|applies|apply|applied)|"
@@ -93,6 +93,7 @@ def analyze(markup: str) -> dict:
         if item not in lst:
             lst.append(item)
 
+    prev_keyword: str | None = None
     for clause in _SPLIT.split(markup or ""):
         if not clause.strip():
             continue
@@ -110,14 +111,18 @@ def analyze(markup: str) -> dict:
         # What makes an "inflict" in this clause conditional?
         skill_keyword = None
         m = re.search(
-            r"(?:Skills?\s+(?:that|which)\s+(?:inflicts?|gains?|apply|applies)|"
+            r"(?:Skills?(?:\s*\([^)]*\))?\s+(?:that|which)\s+(?:inflicts?|gains?|apply|applies)|"
             r"\b(?:ally|allies)\s+(?:inflicts?|applies)|\b(?:when|whenever|upon|after)\s+(?:applying|inflicting)|"
             r"\bIdentit(?:y|ies)\s+(?:that|who)\s+(?:inflicted|inflicts?|applied|apply|applies))"
             r"\s+(?:[^{.]{0,20})?\{\{\s*StatusEffect\s*\|\s*([^|}]+)", clause, re.IGNORECASE)
         if m:
             skill_keyword = m.group(1).strip()
+        elif prev_keyword and re.search(r"\binstead\b", plain, re.IGNORECASE):
+            # "Yurodivy Identities: inflict 3 Tremor ... instead": a variant of the clause before,
+            # under the same condition (an ally with Tremor skills).
+            skill_keyword = prev_keyword
         else:
-            u = re.search(r"Skills?\s+(?:that|which)\s+inflicts?[^.]{0,40}'Unique (\w+)'", plain, re.IGNORECASE)
+            u = re.search(r"Skills?(?:\s*\([^)]*\))?\s+(?:that|which)\s+inflicts?[^.]{0,40}'Unique (\w+)'", plain, re.IGNORECASE)
             if u:
                 skill_keyword = u.group(1)
 
@@ -135,9 +140,12 @@ def analyze(markup: str) -> dict:
                     continue
                 # "all allies gain 5 Poise" gives Poise; "All enemies that have Bleed gain Offense Level
                 # Down" inflicts it; "this unit gains 1 Fragile" is a drawback on your own unit.
-                if status not in _SELF_KEYWORDS and not re.search(r"\benem(?:y|ies)\b[^,.;]{0,40}$", before, re.IGNORECASE):
+                if status not in _SELF_KEYWORDS and not re.search(r"\benem(?:y|ies)\b[^,.;]{0,40}$", re.sub(r"\([^)]*\)", "", before), re.IGNORECASE):
                     continue
             else:
+                # "If the target doesn't have Rupture": the opposite of a need.
+                if re.search(r"\b(?:doesn't|does not|don't|do not)\s+have\s*$|\bwithout\s*$", tail, re.IGNORECASE):
+                    continue
                 if re.search(r"(?:Skills?\s+)?that\s+triggers?\s*$|\btriggering\s*$", tail, re.IGNORECASE):
                     add(needs, status)  # "Attack Skill that triggers Tremor Burst": your skills must trigger it
                     continue
@@ -161,6 +169,8 @@ def analyze(markup: str) -> dict:
             else:
                 when = "always"
             add(applies, {"status": status, "when": when})
+        if _statuses(clause):  # "(2 times per turn)" on its own doesn't reset the condition
+            prev_keyword = skill_keyword
 
     # A status the gift itself reliably applies isn't something it "needs",
     # unless the need is about your own skills triggering it (Bell of Truth).
