@@ -389,3 +389,65 @@ export function recipePlans(ctx: RunContext, owned: string[]): RecipePlan[] {
     || (a.missing.length + a.anyMissing) - (b.missing.length + b.anyMissing)
     || b.resultScore - a.resultScore)
 }
+
+export interface ComboFusion {
+  combo: Combo
+  keyword: string
+  tier: number
+  /** The set's missing pieces this fusion can give. */
+  pieces: Gift[]
+  ingredients: KeepNote[]
+  /** Chance of getting one of `pieces`. */
+  odds: number
+  poolSize: number
+  superShop: boolean
+}
+
+/**
+ * Fusions aimed at your gift sets and combos, made only from gifts that do little for you: for each
+ * set with missing pieces a random fusion can give (keyword + tier), the spare gifts that hit that
+ * tier with the best odds. The keyword-free sets work for any team, so a Rupture team still fuses
+ * Bleed for the Bleed set.
+ */
+export function comboFusions(ctx: RunContext, owned: string[], pack: ThemePack | null, superShop: boolean, n = 4): ComboFusion[] {
+  const spare = fodder(ctx, owned).filter(isSpare).slice(0, superShop ? 14 : 24)
+  const max = superShop ? SUPER_SLOTS : REGULAR_SLOTS
+  const sets: KeepNote[][] = []
+  const walk = (start: number, combo: KeepNote[]) => {
+    if (combo.length >= 2) sets.push(combo)
+    if (combo.length === max) return
+    for (let k = start; k < spare.length; k++) walk(k + 1, [...combo, spare[k]])
+  }
+  walk(0, [])
+  const out: (ComboFusion & { rank: number })[] = []
+  for (const c of ctx.combos) {
+    const missing = c.gifts.filter((id) => !setHas(ctx, id) && !isGone(ctx, id))
+      .map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
+    // A hand-picked combo only once you have a piece; the keyword-free sets always.
+    if (!missing.length || (!c.any_team && missing.length === c.gifts.length)) continue
+    const groups = new Map<string, Gift[]>()
+    for (const g of missing) {
+      if (!g.keyword || !(FUSION_KEYWORDS as readonly string[]).includes(g.keyword) || !g.tier || g.tier > 4) continue
+      const key = `${g.keyword}|${g.tier}`
+      groups.set(key, [...(groups.get(key) ?? []), g])
+    }
+    for (const [key, group] of groups) {
+      const [keyword, t] = key.split('|')
+      const tier = Number(t)
+      const pool = randomPool(ctx, keyword, tier, pack)
+      const pieces = group.filter((g) => pool.some((p) => p.id === g.id))
+      if (!pieces.length) continue
+      let best: { ingredients: KeepNote[]; odds: number; cost: number } | null = null
+      for (const ing of sets) {
+        if (fusionTier(fusionPoints(ing.map((x) => x.gift)), superShop) !== tier) continue
+        const odds = keywordChance(ing.length) * pieces.length / pool.length
+        const cost = ing.reduce((s, x) => s + x.value, 0)
+        if (!best || odds > best.odds + 1e-9 || (Math.abs(odds - best.odds) < 1e-9 && cost < best.cost)) best = { ingredients: ing, odds, cost }
+      }
+      if (!best) continue
+      out.push({ combo: c, keyword, tier, pieces, ingredients: best.ingredients, odds: best.odds, poolSize: pool.length, superShop,
+        rank: (c.any_team ? 1 - 0.1 * ((c.rank ?? 1) - 1) : 1.2) * best.odds })
+    }
+  }
+  return out.sort((a, b) => b.rank - a.rank).slice(0, n).map(({ rank: _r, ...x }) => x)
+}

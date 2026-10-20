@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { makeContext, rankGifts, rankThemePacks, scoreGift } from './scoring'
 import {
-  fodder, forecast, fusionIdeas, fusionKeywords, isSpare, setOrComboOf, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans,
+  comboFusions, fodder, forecast, fusionIdeas, fusionKeywords, isSpare, setOrComboOf, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans,
 } from './fusion'
 
 const g = (name: string) => gameData.gifts.find((x) => x.name === name)!
@@ -219,6 +219,18 @@ describe('gifts that only activate with a keyword skill', () => {
     const bleed = forecast(ctx, 'Bleed', ['faint-vestige', 'twinkling-vestige', 'respite'].map(g2), null, false)
     expect(bleed.targets.length).toBeGreaterThan(0)
     expect(bleed.targets.every((t) => t.fit >= 0.35 || setOrComboOf(t) === 'Bleed set')).toBe(true)
+  })
+
+  it('suggests fusing useless gifts into missing set pieces (Sinking set on a Heishou team)', () => {
+    const owned = ['respite', 'lowest-star', 'pocket-flashcards', 'faint-vestige', 'dark-vestige', 'thrill']
+    const ctx = makeContext(gameData, heishou, owned)
+    const list = comboFusions(ctx, owned, null, false)
+    expect(list.length).toBeGreaterThan(0)
+    const sinking = list.find((c) => c.combo.name === 'Sinking set')!
+    expect(sinking.pieces.map((g) => g.id)).toContain('midwinter-nightmare')
+    expect(sinking.odds).toBeGreaterThan(0.3)
+    // Only gifts that do little for the team go in.
+    expect(sinking.ingredients.map((i) => i.gift.id)).not.toContain('thrill')
   })
 })
 

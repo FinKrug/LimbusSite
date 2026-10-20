@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import {
   FUSE_NOW_SHARE, FUSION_KEYWORDS, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, isSpare, fusionIdeas, fusionPoints, fusionTier, keywordChance,
-  fusionKeywords, matchRecipe, recipePlans, setOrComboOf, type FusionIdea,
+  comboFusions, fusionKeywords, matchRecipe, recipePlans, setOrComboOf, type ComboFusion, type FusionIdea,
 } from '../lib/fusion'
 import { mustHave } from '../lib/musthave'
 import { scoreGift, type RunContext, type RunSettings } from '../lib/scoring'
@@ -64,6 +64,12 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
 
   const add = (id: string) => { if (bench.length < slots && left(id) > 0) setBench([...bench, id]) }
   const removeAt = (k: number) => setBench(bench.filter((_, j) => j !== k))
+  const loadSet = (c: ComboFusion) => {
+    setKeyword(c.keyword)
+    if (c.superShop) setSuperShop(true)
+    setBench(c.ingredients.map((i) => i.gift.id))
+    document.querySelector('.fuse-screen')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
   const load = (idea: FusionIdea) => {
     setKeyword(idea.keyword)
     if (idea.superShop) setSuperShop(true)
@@ -83,6 +89,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
     return fusionIdeas(ctx, owned, fusionKeywords(ctx, teamKeywords), pack, isSuper).slice(0, 4)
   }, [ctx, owned, teamKeywords, pack, isSuper])
   const recipes = useMemo(() => recipePlans(ctx, owned), [ctx, owned])
+  const forSets = useMemo(() => comboFusions(ctx, owned, pack, isSuper), [ctx, owned, pack, isSuper])
   const spare = useMemo(() => fodder(ctx, [...new Set(owned)]).filter(isSpare), [ctx, owned])
 
   const ring = Array.from({ length: SUPER_SLOTS }, (_, k) => k)
@@ -247,6 +254,31 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                       return t ? `${k} (for ${t.gift.name}${setOrComboOf(t) && t.fit < 0.35 ? `, ${setOrComboOf(t)}` : ''})` : k
                     }).join(', ')}${idea.alsoKeywords.length > 3 ? ` and ${idea.alsoKeywords.length - 3} more` : ''}.`}
                   </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section className="panel">
+          <h3>Fuse for your gift sets</h3>
+          {forSets.length === 0 ? (
+            <p className="muted small">No set piece you're missing can come out of a fusion of the gifts you'd give up{isSuper ? '' : ' here (a Super Shop can reach more tiers)'}.</p>
+          ) : (
+            <ul className="fuse-ideas">
+              {forSets.map((c) => (
+                <li key={c.combo.name + c.keyword + c.tier} className="fuse-idea">
+                  <div className="fuse-idea-row">
+                    {c.ingredients.map((i, k) => <GiftIcon key={k} gift={i.gift} size={32} />)}
+                    <span className="fuse-arrow" aria-hidden="true">→</span>
+                    <span className="fuse-idea-out">Tier {tierLabel(c.tier)} <KeywordChip keyword={c.keyword} /></span>
+                    <button className="btn" onClick={() => loadSet(c)}>Load</button>
+                  </div>
+                  <p className="small fuse-for">
+                    <b>{c.combo.name}{c.combo.any_team ? ' (works for any team)' : ''}:</b> {c.pieces.map((g) => g.name).join(', ')}{' '}
+                    <span className="muted">(about {Math.round(c.odds * 100)}%: {c.pieces.length} of {c.poolSize} possible {c.keyword} gifts)</span>
+                  </p>
+                  <p className="muted small">Gives up {c.ingredients.map((i) => i.gift.name).join(', ')}, which do little for your team.{c.superShop ? ' Super Shop.' : ''}</p>
                 </li>
               ))}
             </ul>
