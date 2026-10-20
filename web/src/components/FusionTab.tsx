@@ -305,6 +305,18 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
 
         <section className="panel">
           <h3>Sell or fuse these</h3>
+          {spare.length > 1 && (
+            <button className="link-btn small" disabled={bench.length >= slots} onClick={() => {
+              // Fill the free slots, least useful first (vestiges count once per copy you have).
+              const next = [...bench]
+              for (const f of spare) {
+                const copies = owned.filter((x) => x === f.gift.id).length - next.filter((x) => x === f.gift.id).length
+                for (let c = 0; c < copies && next.length < slots; c++) next.push(f.gift.id)
+              }
+              setBench(next)
+              document.querySelector('.fuse-screen')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }}>Add these to the fuse box</button>
+          )}
           {spare.length === 0 ? (
             <p className="muted small">All your gifts are pulling their weight.</p>
           ) : (
@@ -317,6 +329,11 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                     {isVestige(f.gift.id) ? `×${owned.filter((x) => x === f.gift.id).length} · only good for selling or fusing`
                       : scoreGift(f.gift, ctx).reasons.find((r) => r.kind === 'bad')?.text ?? 'does little for your team'}
                   </span>
+                  <button className="btn small-btn" disabled={bench.length >= slots || left(f.gift.id) <= 0}
+                    title={bench.length >= slots ? 'The fuse box is full' : left(f.gift.id) <= 0 ? 'Already in the fuse box' : 'Put it in the fuse box above'}
+                    onClick={() => add(f.gift.id)}>
+                    {left(f.gift.id) <= 0 ? 'In the box' : '+ Fuse box'}
+                  </button>
                 </li>
               ))}
             </ul>
