@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
   intrinsicScore, isSurvival, makeContext, packInDifficulty, packOnFloor, packPool, packsByGift, planCombos, planFusions, rankGifts, rankThemePacks,
-  activates, scoreGift, setHas, signatureStatuses, teamFocus, teamGate, teamProfile, upgradeMagnitude, upgradeValue,
+  activates, isGone, scoreGift, setHas, signatureStatuses, teamFocus, teamGate, teamProfile, upgradeMagnitude, upgradeValue,
 } from './scoring'
 import { gameData } from './data'
+import { recipePlans } from './fusion'
 import { traitShare } from './traitparts'
 import type { GameData, Gift, Identity, ThemePack } from './types'
 
@@ -776,6 +777,12 @@ describe('fused gifts count down the whole recipe chain', () => {
     const ctx = makeContext(gameData, heishou, ['lucky-pouch'])
     for (const id of ['four-leaf-clover', 'reminiscence', 'pendant-of-nostalgia']) expect(setHas(ctx, id)).toBe(true)
     expect(ctx.fusedInto.get('pendant-of-nostalgia')?.id).toBe('lucky-pouch')
+    // ...and nothing points you at getting or fusing them again (Best gifts, Fusion tab recipes).
+    expect(isGone(ctx, 'pendant-of-nostalgia')).toBe(true)
+    expect(scoreGift(gameData.gifts.find((g) => g.id === 'pendant-of-nostalgia')!, ctx).reasons[0].text).toMatch(/Already part of Lucky Pouch/)
+    expect(rankGifts(ctx).some((g) => ['pendant-of-nostalgia', 'reminiscence'].includes(g.gift.id))).toBe(false)
+    expect(recipePlans(makeContext(gameData, heishou, ['lucky-pouch', 'recollection-of-a-certain-day']), ['lucky-pouch', 'recollection-of-a-certain-day'])
+      .some((r) => r.result.id === 'reminiscence')).toBe(false)
   })
 })
 

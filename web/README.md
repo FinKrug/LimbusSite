@@ -189,7 +189,10 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   its ingredients stop showing up for the rest of the run (Heishou Bolus - Mao, Harestride and
   Shadow Bamboo Hat after Shadowlurking), so they drop out of Best gifts, Your plan ("Gone"),
   theme pack cards, random fusion pools, event choices and the pre-run picks. Lunar Memory
-  (a Super Shop recipe) is the exception: its Memories and Sin Fragments keep dropping.
+  (a Super Shop recipe) is the exception: its Memories and Sin Fragments keep dropping. This goes
+  down the whole recipe chain: with Lucky Pouch, Reminiscence and the Pendant of Nostalgia and
+  Recollection of a Certain Day it's fused from count as already had ("Already part of Lucky
+  Pouch, which you have"), and no recipe plan, fusion idea or pack route aims at them.
 - **How to get** (`src/lib/acquire.ts`, on gift cards): for each theme pack that has the gift,
   how to get it there: the pack's own events that give it (which choice, the check and its
   numbers, or a fight to win), how often its "?" nodes are its own events (from the pack page:

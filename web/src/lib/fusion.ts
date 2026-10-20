@@ -187,7 +187,7 @@ export function isSpare(n: KeepNote): boolean {
 /** Owned gifts (one row per copy), cheapest to give up first, with what they're kept for. */
 export function fodder(ctx: RunContext, owned: string[]): KeepNote[] {
   const recipeIngredient = (id: string) => ctx.data.fusions.find((f) =>
-    !ctx.owned.has(f.result) && !mustHave(f.result) && [...f.ingredients, ...(f.any_of?.from ?? [])].includes(id)
+    !ctx.owned.has(f.result) && !isGone(ctx, f.result) && !mustHave(f.result) && [...f.ingredients, ...(f.any_of?.from ?? [])].includes(id)
     && f.ingredients.some((i) => i !== id && ctx.owned.has(i)) && recipeWorthKeeping(f, ctx))
   const comboWith = (id: string): Combo | undefined => ctx.combos.find((c) =>
     c.gifts.includes(id) && c.gifts.some((o) => o !== id && ctx.owned.has(o)))
@@ -320,7 +320,7 @@ export function recipePlans(ctx: RunContext, owned: string[]): RecipePlan[] {
   const plans: RecipePlan[] = []
   for (const f of ctx.data.fusions) {
     const result = ctx.giftsById.get(f.result)
-    if (!result || ctx.owned.has(f.result)) continue
+    if (!result || ctx.owned.has(f.result) || isGone(ctx, f.result)) continue
     const fixed = f.ingredients.map((i) => ctx.giftsById.get(i)).filter((g): g is Gift => !!g)
     const have = fixed.filter((g) => counts.has(g.id))
     const missing = fixed.filter((g) => !counts.has(g.id))

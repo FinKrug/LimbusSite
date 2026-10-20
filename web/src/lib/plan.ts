@@ -33,7 +33,7 @@ function isRecipeResult(id: string, fusions: Fusion[]): boolean {
 }
 
 export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>): Availability {
-  if (isGone(ctx, g.id)) return { where: 'no', text: `Gone: you have ${ctx.gone.get(g.id)}, which it fuses into` }
+  if (isGone(ctx, g.id)) return { where: 'no', text: `Already part of ${ctx.gone.get(g.id)}, which you have` }
   // EX gifts (Wealth, A Certain Philosophy) don't show up in shops or rewards: only a rare
   // event gamble gives them, so plans never count on them.
   if ((g.tier ?? 0) >= 6) {
@@ -151,7 +151,7 @@ export function fusionTargets(ctx: RunContext, packsForGift: Map<string, ThemePa
   const out: FusionTarget[] = []
   const piece = (g: Gift): Piece => ({ gift: g, have: ctx.owned.has(g.id), where: availability(g, ctx, packsForGift) })
   for (const fusion of ctx.data.fusions) {
-    if (ctx.owned.has(fusion.result)) continue
+    if (ctx.owned.has(fusion.result) || isGone(ctx, fusion.result)) continue
     const result = ctx.giftsById.get(fusion.result)
     const gifts = fusion.ingredients.map((id) => ctx.giftsById.get(id))
     if (!result || gifts.some((g) => !g)) continue

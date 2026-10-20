@@ -3,7 +3,7 @@
  * team and run. Builds on the same scoring as Best gifts and Theme packs, then adds
  * what a list can't show: where it ranks, alternatives, fusions, combos, the floor.
  */
-import { EXTREME_FROM, packOnFloor, packPool, rankGifts, rankThemePacks, scoreGift, type GiftScore, type PackScore, type Reason, type RunContext } from './scoring'
+import { EXTREME_FROM, isGone, packOnFloor, packPool, rankGifts, rankThemePacks, scoreGift, type GiftScore, type PackScore, type Reason, type RunContext } from './scoring'
 import { isVestige } from './vestiges'
 import { type Gift, type ThemePack, floorText, tierLabel } from './types'
 
@@ -58,7 +58,7 @@ export function evaluateGift(gift: Gift, ctx: RunContext, packsForGift: Map<stri
   const recipesUsing = ctx.data.fusions.filter((f) => [...f.ingredients, ...(f.any_of?.from ?? [])].includes(gift.id))
   for (const f of recipesUsing.slice(0, 2)) {
     const result = ctx.giftsById.get(f.result)
-    if (!result || ctx.owned.has(result.id)) continue
+    if (!result || ctx.owned.has(result.id) || isGone(ctx, result.id)) continue
     const r = scoreGift(result, ctx)
     const have = f.ingredients.filter((i) => i !== gift.id && ctx.owned.has(i)).length
     const line = `Ingredient for ${result.name}${have ? ` (you have ${have} of the other ${f.ingredients.length - 1})` : ''}${f.super_shop ? ', a Super Shop recipe' : ''}`
@@ -137,7 +137,7 @@ export function evaluatePack(pack: ThemePack, ctx: RunContext): Evaluation & { s
   const unlocks = ctx.data.fusions.filter((f) => f.ingredients.some((i) => pack.gifts.includes(i)))
   for (const f of unlocks.slice(0, 3)) {
     const r = ctx.giftsById.get(f.result)
-    if (!r || ctx.owned.has(r.id)) continue
+    if (!r || ctx.owned.has(r.id) || isGone(ctx, r.id)) continue
     const val = scoreGift(r, ctx)
     const text = `Its exclusives fuse into ${r.name}`
     if (team && val.fit > 0.5) pros.push(`${text}, a strong gift for your team`)

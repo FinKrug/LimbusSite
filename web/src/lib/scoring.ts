@@ -497,11 +497,21 @@ export function makeContext(
   const { combos: customCombos = [], deployed = DEFAULT_DEPLOYED, tiers = {}, run = DEFAULT_RUN, loadout = {}, swaps = {} } = opts
   const giftsById = new Map(data.gifts.map((g) => [g.id, g]))
   const ownedForGone = new Set([...owned])
+  // Down the whole recipe chain: Lucky Pouch went in from Reminiscence, which came from Pendant of
+  // Nostalgia, so with Lucky Pouch none of them is something to get or fuse for again.
   const gone = new Map<string, string>()
+  const recipeFor = new Map(data.fusions.map((f) => [f.result, f]))
   for (const f of data.fusions) {
     if (!ownedForGone.has(f.result) || f.super_shop || mustHave(f.result)) continue
     const name = giftsById.get(f.result)?.name ?? f.result
-    for (const i of f.ingredients) if (!ownedForGone.has(i) && !gone.has(i)) gone.set(i, name)
+    const queue = [...f.ingredients]
+    while (queue.length) {
+      const i = queue.shift()!
+      if (ownedForGone.has(i) || gone.has(i)) continue
+      gone.set(i, name)
+      const sub = recipeFor.get(i)
+      if (sub && !sub.super_shop && !mustHave(i)) queue.push(...sub.ingredients)
+    }
   }
   const ownedList = [...owned].filter((id) => giftsById.has(id))
   const ownedSet = new Set(ownedList)
@@ -1251,7 +1261,7 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
   const s = intrinsicScore(gift, ctx)
   // Used up by a recipe result you own: it won't show up again this run.
   if (isGone(ctx, gift.id)) {
-    return { ...s, score: 0, reasons: [{ kind: 'bad', text: `You can't get it any more this run: you have ${ctx.gone.get(gift.id)}, which it fuses into` }, ...s.reasons] }
+    return { ...s, score: 0, reasons: [{ kind: 'bad', text: `Already part of ${ctx.gone.get(gift.id)}, which you have: no need to get or fuse for it again` }, ...s.reasons] }
   }
   let score = s.score
   const reasons = [...s.reasons]
@@ -1267,7 +1277,7 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
   // clearly better for your team than this gift (a Poise piece for a payoff you'd use).
   let start: { f: Fusion; result: Gift; value: number; add: number } | null = null
   for (const f of ctx.fusionsByIngredient.get(gift.id) ?? []) {
-    if (ctx.owned.has(f.result) || !f.ingredients.includes(gift.id) || mustHave(f.result)) continue
+    if (ctx.owned.has(f.result) || isGone(ctx, f.result) || !f.ingredients.includes(gift.id) || mustHave(f.result)) continue
     const result = ctx.giftsById.get(f.result)
     if (!result) continue
     const others = f.ingredients.filter((i) => i !== gift.id)
@@ -1316,7 +1326,7 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
     })
   }
   for (const f of ctx.fusionsByIngredient.get(gift.id) ?? []) {
-    if (ctx.owned.has(f.result) || mustHave(f.result)) continue
+    if (ctx.owned.has(f.result) || isGone(ctx, f.result) || mustHave(f.result)) continue
     const result = ctx.giftsById.get(f.result)
     if (!result) continue
     const others = f.ingredients.filter((i) => i !== gift.id)
@@ -1552,7 +1562,7 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
     const pool = new Set(packPool(pack))
     const fused: { f: Fusion; result: GiftScore; missing: string[]; value: number }[] = []
     for (const f of ctx.data.fusions) {
-      if (f.any_of || ctx.owned.has(f.result) || mustHave(f.result) || !fusableThisRun(f, ctx)) continue
+      if (f.any_of || ctx.owned.has(f.result) || isGone(ctx, f.result) || mustHave(f.result) || !fusableThisRun(f, ctx)) continue
       const result = ctx.giftsById.get(f.result)
       const missing = f.ingredients.filter((i) => !ctx.owned.has(i))
       if (!result || !missing.length || !missing.some((i) => pack.gifts.includes(i))) continue
@@ -1696,7 +1706,7 @@ const isVestigeId = (id: string) => /-vestige$/.test(id)
 export function planFusions(ctx: RunContext): FusionPlan[] {
   const plans: FusionPlan[] = []
   for (const fusion of ctx.data.fusions) {
-    if (ctx.owned.has(fusion.result)) continue
+    if (ctx.owned.has(fusion.result) || isGone(ctx, fusion.result)) continue
     const result = ctx.giftsById.get(fusion.result)
     const ingredients = fusion.ingredients.map((i) => ctx.giftsById.get(i))
     if (!result || ingredients.some((g) => !g)) continue

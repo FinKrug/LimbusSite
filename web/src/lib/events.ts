@@ -145,7 +145,7 @@ export function outcomeValue(o: EventOutcome | undefined, ctx: RunContext): Valu
       continue
     }
     if (isGone(ctx, id)) {
-      why.push(`${g.name}: you can't get it any more (you have ${ctx.gone.get(id)})`)
+      why.push(`${g.name}: already part of ${ctx.gone.get(id)}, which you have`)
       continue
     }
     const s = scoreGift(g, ctx)
