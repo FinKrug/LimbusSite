@@ -180,7 +180,7 @@ export function isEconomy(g: Gift): boolean {
 /** A gift's effect keeps a unit alive through a lethal hit. */
 export function isSurvival(g: Gift): boolean {
   // Not "revive": the only gift that says it (Spiderweb Entangled in Red) stops revives.
-  return /lethal damage|does not drop below 1|not take that damage/i.test(g.effect)
+  return /lethal damage|mortal damage|does not drop below 1|fix(?:es)? HP to 1|not take that damage/i.test(g.effect)
 }
 /** Parts of a gift's effect that only work for one named identity:
  *  "[Effects apply only to Blade of the House of Spiders Ryōshū] ...". */
@@ -231,6 +231,20 @@ export function weakShare(text: string): number {
 }
 
 const ATTACK_KEYWORDS = new Set(['Slash', 'Pierce', 'Blunt'])
+
+/** Other words that tie an effect to its keyword: crits come from Poise, low SP from Sinking. */
+const KEYWORD_PROXY: Partial<Record<CoreKeyword, RegExp>> = { Poise: /\bCrit/i, Sinking: /\bSP\b|Panic|Low Morale/i, Bleed: /Bloodfeast/i }
+
+/** Does the effect actually use its keyword? Unhatched Embers is a Burn gift that only revives you,
+ *  so it works for any team. Fusing still treats it as Burn. */
+export function usesKeyword(g: Gift): boolean {
+  const k = g.keyword
+  if (!isCoreKeyword(k)) return false
+  if (!g.effect.trim()) return true  // no text to go by
+  if (new RegExp(`\\b${k}\\b`, 'i').test(g.effect) || KEYWORD_PROXY[k]?.test(g.effect)) return true
+  // A status of its own we can't read (Mark of the King of Needleworks): give the keyword the benefit of the doubt.
+  return g.status_effects.some((s) => !isCoreKeyword(s) && !GENERIC_STATUS.test(s))
+}
 
 /** A gift's effect un-staggers enemies or staggers your own units. */
 export function staggerHarm(g: Gift): 'unstagger' | 'self' | null {
@@ -722,8 +736,8 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
 
   const routes: { fit: number; reason?: Reason }[] = []
   let keywordReason: Reason | undefined
-  if (isCoreKeyword(gift.keyword)) {
-    const k = gift.keyword
+  if (usesKeyword(gift)) {
+    const k = gift.keyword as CoreKeyword
     const count = fp.keywordCounts[k]
     if (profile.size === 0) {
       routes.push({ fit: WEIGHTS.general })
@@ -737,7 +751,9 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
     routes.push({
       fit: WEIGHTS.general,
       reason: synergyBonus ? undefined : {
-        kind: 'info', text: gift.keyword ? `${gift.keyword} damage gift` : 'General gift that works with any team',
+        kind: 'info', text: isCoreKeyword(gift.keyword)
+          ? `A ${gift.keyword} gift in name only: nothing in it uses ${gift.keyword}, so it works for any team`
+          : gift.keyword ? `${gift.keyword} damage gift` : 'General gift that works with any team',
       },
     })
   }
@@ -805,7 +821,7 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
 
   // A keyword gift's other routes only count fully when the team uses the keyword:
   // "7/7 use Slash skills" shouldn't make a Rupture gift as good as a Burn gift for Burn.
-  const kw = isCoreKeyword(gift.keyword) ? gift.keyword : null
+  const kw = usesKeyword(gift) ? gift.keyword as CoreKeyword : null
   const kwShare = kw && fp.size ? keywordShare(fp, kw) : 0
   if (kw && profile.size) {
     const factor = WEIGHTS.altFloor + WEIGHTS.altSlope * kwShare
@@ -977,7 +993,7 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
   let score = tierValue * ((WEIGHTS.base + bonus) * gateFactor + fit) * slotFactor + synergyBonus + enablerBonus + runBonus
   // The core: the gift's tier times how well it fits. Everything else is added on top.
   const fitWhy = best.reason?.text ?? (fit === 0 ? keywordReason?.text
-    : !isCoreKeyword(gift.keyword) ? 'Not tied to a status keyword, so it partly fits any team' : undefined)
+    : !usesKeyword(gift) ? 'Not tied to a status keyword, so it partly fits any team' : undefined)
   parts.unshift({
     kind: 'core',
     label: `Tier ${tierLabel(gift.tier)} gift, ${Math.round(Math.min(1, fit) * 100)}% fit with ${who}`,
@@ -1191,7 +1207,9 @@ export function upgradeValue(gift: Gift, ctx: RunContext, base: number): Upgrade
   ups.forEach((text, k) => {
     const level = k + 1
     if (!text || text === gift.effect || level > costs.length) return
-    const variant: Gift = { ...gift, id: `${gift.id}~${level}`, effect: text, upgrades: [] }
+    // A keyword in name only stays that way upgraded: Unhatched Embers+ heals more for a unit that
+    // has Burn on itself, which doesn't make it a Burn-team gift.
+    const variant: Gift = { ...gift, id: `${gift.id}~${level}`, effect: text, upgrades: [], ...(usesKeyword(gift) ? {} : { keyword: null }) }
     const m = upgradeMagnitude(gift.effect, text)
     const value = intrinsicScore(variant, ctx).score * m.mag
     const cost = costs.slice(0, level).reduce((a, b) => a + b, 0)

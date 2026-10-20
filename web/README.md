@@ -167,7 +167,13 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
 - **The run** (side panel): difficulty, length (5, 10 or 15 floors; defaults Normal 5, Hard 10,
   EXTREME 15), the floor you're on and its theme pack. Cost gifts (Golden Urn, Prestige Card,
   Wealth…) are worth more with more floors left; "survive a lethal hit" gifts (Emergency
-  Investigator Badge, Swishing Fuel Tank) are worth most on the last 5 floors of a long run.
+  Investigator Badge, Swishing Fuel Tank, Unhatched Embers' "mortal damage, fix HP to 1") are worth
+  most on the last 5 floors of a long run.
+- **Keyword in name only** (`usesKeyword`): a keyword gift whose effect never mentions its keyword
+  (or a stand-in: Crit for Poise, SP/Panic for Sinking, Bloodfeast for Bleed) and has no status of
+  its own we can't read is scored like a General gift for every team. Unhatched Embers is filed as
+  Burn but only revives, so it's a survival gift for any team (around #20–40 instead of #300 on
+  non-Burn teams), and its upgrades stay General too. Fusing still treats it as Burn.
 - **Stagger:** you want enemies staggered and your units never staggered. Gifts that un-stagger
   enemies (White Gossypium) count ×0.35, or ×0.85 for a team that's half Bleed; gifts that
   stagger your own units count ×0.5.

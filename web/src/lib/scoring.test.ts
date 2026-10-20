@@ -750,3 +750,21 @@ describe('recipes a theme pack can finish', () => {
     expect(withFhc.score).toBeGreaterThan(without.score * 1.5)
   })
 })
+
+describe('keyword in name only', () => {
+  it('scores Unhatched Embers (a "Burn" gift that only revives) as a general survival gift', () => {
+    const byId = (id: string) => gameData.identities.find((i) => i.id === id)!
+    const heishou = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion', 'heishou-pack-si-branch-gregor'].map(byId)
+    const ranked = rankGifts(makeContext(gameData, heishou, []))
+    const k = ranked.findIndex((g) => g.gift.id === 'unhatched-embers')
+    expect(k).toBeLessThan(80)
+    const r = ranked[k]
+    expect(r.reasons.some((x) => /A Burn gift in name only/.test(x.text))).toBe(true)
+    expect(r.parts.some((p) => p.kind === 'run' && /lethal hit/.test(p.label))).toBe(true)
+    // A gift with a status of its own we can't read keeps its keyword.
+    expect(intrinsicScore(gameData.gifts.find((g) => g.id === 'straight-pin-of-the-king-of-needleworks')!, makeContext(gameData, heishou, [])).reasons
+      .some((x) => /in name only/.test(x.text))).toBe(false)
+  })
+})
+
