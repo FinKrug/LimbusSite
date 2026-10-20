@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { ArtVariant } from '../lib/images'
 import { SWAPS, floorsWeight, multiTarget, planSwaps, teamSins, type SwapKind, type SwapState } from '../lib/skillswap'
 import type { BattleProfile, Ego, EgoLoadout } from '../lib/ego'
@@ -41,6 +41,20 @@ export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadou
     const log = { ...(swaps[id] ?? {}) }
     log[kind] = Math.max(0, (log[kind] ?? 0) + delta)
     onSwapsChange({ ...swaps, [id]: log })
+  }
+  // The swap you last marked done from the recommendation, per identity, so it can be undone in one click.
+  const [justDid, setJustDid] = useState<Record<string, SwapKind>>({})
+  const didIt = (id: string, kind: SwapKind) => {
+    record(id, kind, 1)
+    setJustDid({ ...justDid, [id]: kind })
+  }
+  const undo = (id: string) => {
+    const kind = justDid[id]
+    if (!kind) return
+    record(id, kind, -1)
+    const rest = { ...justDid }
+    delete rest[id]
+    setJustDid(rest)
   }
   const anyDone = Object.values(swaps).some((l) => Object.values(l).some((n) => (n ?? 0) > 0))
 
@@ -125,9 +139,17 @@ export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadou
                     </li>
                   )}
                 </ul>
+                {justDid[p.identity.id] && (swaps[p.identity.id]?.[justDid[p.identity.id]] ?? 0) > 0 && (
+                  <p className="muted small skill-did-note">
+                    Recorded {LABEL[justDid[p.identity.id]]}. <button className="link-btn" onClick={() => undo(p.identity.id)}>Undo</button>
+                  </p>
+                )}
                 {p.best ? (
                   <div className="skill-best">
-                    <div><b>If offered:</b> {LABEL[p.best.kind]} <span className="muted small">({p.best.cost} Cost · {gainText(p.best.gain)} team damage)</span></div>
+                    <div className="skill-best-head">
+                      <span><b>If offered:</b> {LABEL[p.best.kind]} <span className="muted small">({p.best.cost} Cost · {gainText(p.best.gain)} team damage)</span></span>
+                      <button className="btn small-btn" title="Record this swap; the advice updates for what's left" onClick={() => didIt(p.identity.id, p.best!.kind)}>I did this</button>
+                    </div>
                     <ul className="reasons">
                       {p.best.pros.map((t) => <li key={t} className="reason reason-good"><span className="reason-icon">+</span>{t}</li>)}
                       {p.best.cons.map((t) => <li key={t} className="reason reason-bad"><span className="reason-icon">−</span>{t}</li>)}
@@ -135,9 +157,12 @@ export function SkillsTab({ team, swaps, onSwapsChange, owned, art, egos, loadou
                   </div>
                 ) : p.spare ? (
                   <div className="skill-best skill-spare">
-                    <div>
-                      <b>If you have Cost to spare:</b> {LABEL[p.spare.kind]}{' '}
-                      <span className="muted small">({p.spare.cost} Cost · {gainText(p.spare.gain)} team damage)</span>
+                    <div className="skill-best-head">
+                      <span>
+                        <b>If you have Cost to spare:</b> {LABEL[p.spare.kind]}{' '}
+                        <span className="muted small">({p.spare.cost} Cost · {gainText(p.spare.gain)} team damage)</span>
+                      </span>
+                      <button className="btn small-btn" title="Record this swap; the advice updates for what's left" onClick={() => didIt(p.identity.id, p.spare!.kind)}>I did this</button>
                     </div>
                     <ul className="reasons">
                       {p.spare.pros.slice(0, 2).map((t) => <li key={t} className="reason reason-good"><span className="reason-icon">+</span>{t}</li>)}

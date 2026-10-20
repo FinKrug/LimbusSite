@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { makeContext, rankGifts, rankThemePacks, scoreGift } from './scoring'
 import {
-  fodder, forecast, fusionIdeas, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans,
+  fodder, forecast, fusionIdeas, isSpare, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans,
 } from './fusion'
 
 const g = (name: string) => gameData.gifts.find((x) => x.name === name)!
@@ -145,5 +145,37 @@ describe('ingredients used up by a recipe you own', () => {
   it('keeps Lunar Memory\'s pieces available after you have it', () => {
     const ctx = makeContext(gameData, heishou, ['lunar-memory'])
     expect(ctx.gone.size).toBe(0)
+  })
+})
+
+describe('gifts that only activate with a keyword skill', () => {
+  const heishou = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+    'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion', 'heishou-pack-si-branch-gregor']
+    .map((i) => gameData.identities.find((x) => x.id === i)!)
+
+  it('fuses Respite (needs a Bleed skill to activate) before Smokes and Wires on a team without Bleed', () => {
+    const owned = ['thrill', 'respite', 'smokes-and-wires']
+    const ctx = makeContext(gameData, heishou, owned)
+    const order = fodder(ctx, owned).map((f) => f.gift.id)
+    expect(order.indexOf('respite')).toBeLessThan(order.indexOf('smokes-and-wires'))
+    const r = scoreGift(g('Respite'), ctx)
+    expect(r.reasons.some((x) => /Only works for units with skills that use Bleed, and no one on your team does/.test(x.text))).toBe(true)
+    expect(r.reasons.some((x) => /Also uses|affinity is common/.test(x.text))).toBe(false)
+    // A Bleed team still values it.
+    const bleeders = gameData.identities.filter((i) => i.keywords.includes('Bleed')).slice(0, 7)
+    expect(scoreGift(g('Respite'), makeContext(gameData, bleeders, [])).score).toBeGreaterThan(r.score + 1)
+  })
+
+  it("judges each gift on its own, not against your best one: good gifts aren't sell-or-fuse", () => {
+    const owned = ['thrill', 'glyph-of-glass-shards', 'smokes-and-wires', 'lowest-star', 'ebony-brooch-md', 'deathseeker', 'respite', 'lunar-memory']
+    const ctx = makeContext(gameData, heishou, owned)
+    const list = fodder(ctx, owned)
+    const spare = list.filter(isSpare).map((f) => f.gift.id)
+    // Lunar Memory is worth far more than the rest; Ebony Brooch and Deathseeker still pull their weight.
+    expect(spare).not.toContain('ebony-brooch-md')
+    expect(spare).not.toContain('deathseeker')
+    // Nothing (Respite), then next to nothing (Lowest Star), then a little (Smokes and Wires: Bleed set piece).
+    expect(spare).toEqual(['respite', 'lowest-star', 'smokes-and-wires'])
+    expect(scoreGift(g('Lowest Star'), ctx).reasons.some((r) => /Does very little/.test(r.text))).toBe(true)
   })
 })

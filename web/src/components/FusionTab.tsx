@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import {
-  FUSION_KEYWORDS, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, fusionIdeas, fusionPoints, fusionTier, keywordChance,
+  FUSE_NOW_SHARE, FUSION_KEYWORDS, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, isSpare, fusionIdeas, fusionPoints, fusionTier, keywordChance,
   matchRecipe, recipePlans, type FusionIdea,
 } from '../lib/fusion'
 import { mustHave } from '../lib/musthave'
@@ -26,8 +26,6 @@ interface Props {
 
 type Sort = 'tier' | 'value'
 
-/** A gift worth less than this share of your best one does next to nothing: fuse it right away. */
-const FUSE_NOW = 0.15
 
 /**
  * The Fuse E.G.O Gift screen, like in game: pick a keyword, put gifts in the
@@ -87,11 +85,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
     return fusionIdeas(ctx, owned, kws, pack, isSuper).slice(0, 4)
   }, [ctx, owned, teamKeywords, pack, isSuper])
   const recipes = useMemo(() => recipePlans(ctx, owned), [ctx, owned])
-  const { spare, spareBest } = useMemo(() => {
-    const all = fodder(ctx, [...new Set(owned)])
-    const best = Math.max(1, ...all.map((f) => f.value))
-    return { spare: all.filter((f) => !f.keepFor && (isVestige(f.gift.id) || f.value < best * 0.3)), spareBest: best }
-  }, [ctx, owned])
+  const spare = useMemo(() => fodder(ctx, [...new Set(owned)]).filter(isSpare), [ctx, owned])
 
   const ring = Array.from({ length: SUPER_SLOTS }, (_, k) => k)
   const canFuse = bench.length >= 2 && (recipeResult || (keyword && fc && fc.pool.length))
@@ -312,7 +306,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
               {spare.map((f) => (
                 <li key={f.gift.id}>
                   <GiftLabel gift={f.gift} icon={24} link={false} />
-                  {f.value < spareBest * FUSE_NOW && !isVestige(f.gift.id) && <span className="pill warn">Fuse now</span>}
+                  {f.share < FUSE_NOW_SHARE && !isVestige(f.gift.id) && <span className="pill warn">Fuse now</span>}
                   <span className="muted small grow-right">
                     {isVestige(f.gift.id) ? `×${owned.filter((x) => x === f.gift.id).length} · only good for selling or fusing`
                       : scoreGift(f.gift, ctx).reasons.find((r) => r.kind === 'bad')?.text ?? 'does little for your team'}

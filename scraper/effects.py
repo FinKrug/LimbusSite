@@ -70,6 +70,7 @@ _GRANTED = re.compile(
     r"Skills?\s+(?:additionally\s+)?inflicts?\b(?:(?!inflict|apply|trigger)[^.]){0,30}$",
     re.IGNORECASE,
 )
+_ACTIVATES = re.compile(r"^\s*(?:\[[^\]]*\]\s*)?(?:This (?:E\.G\.O )?Gift )?Activates?\b", re.IGNORECASE)
 _GATE = re.compile(r"activates?\b[^.]{0,60}\bwhen (?:there are )?\d+\s*(?:or more|\+)\s", re.IGNORECASE)
 _ATTACK = re.compile(r"\b(Slash|Pierce|Blunt)\s+(?:Attack\s+)?(?:Skills?|damage|type)\b", re.IGNORECASE)
 _SIN = re.compile(r"\b(Wrath|Lust|Sloth|Gluttony|Gloom|Pride|Envy)(?:\s+Affinity|(?=\s+(?:Absolute\s+)?Reson)|(?=\s+(?:Attack\s+)?Skills?\b)|(?=\s+or\s+\w+\s+Affinity))", re.IGNORECASE)
@@ -94,6 +95,9 @@ def analyze(markup: str) -> dict:
             lst.append(item)
 
     prev_keyword: str | None = None
+    # "Activates upon Clash Win using a Skill that inflicts Bleed ...": a condition on the whole gift,
+    # so every later clause only works for units with those skills (Respite).
+    gift_keyword: str | None = None
     for clause in _SPLIT.split(markup or ""):
         if not clause.strip():
             continue
@@ -125,6 +129,10 @@ def analyze(markup: str) -> dict:
             u = re.search(r"Skills?(?:\s*\([^)]*\))?\s+(?:that|which)\s+inflicts?[^.]{0,40}'Unique (\w+)'", plain, re.IGNORECASE)
             if u:
                 skill_keyword = u.group(1)
+        if skill_keyword and _ACTIVATES.search(plain):
+            gift_keyword = skill_keyword
+        elif not skill_keyword and gift_keyword:
+            skill_keyword = gift_keyword
 
         # "When triggering Amplitude Conversion or Amplitude Entanglement, trigger Tremor Burst":
         # only units that set off that mechanic get it (status:X|Y; any of them).

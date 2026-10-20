@@ -15,7 +15,7 @@
  * its keyword and tier with the best odds of rolling it come first ("Last chance at X").
  * Main-pool gifts can still be bought later; these can't.
  */
-import { intrinsicScore, isGone, isHiddenPack, packOnFloor, packPool, recipeGiveUp, scoreGift, type GiftScore, type RunContext } from './scoring'
+import { fullTierValue, intrinsicScore, isGone, setKeepValue, isHiddenPack, packOnFloor, packPool, recipeGiveUp, scoreGift, type GiftScore, type RunContext } from './scoring'
 import { isVestige } from './vestiges'
 import { fusableThisRun, mustHave, mustHaveRecipes, neededPiece } from './musthave'
 import type { Combo, Fusion, Gift, ThemePack } from './types'
@@ -145,15 +145,24 @@ export function forecast(
   return { tier, chance, pool, expected, fromPack, lastChance, lastChanceOdds }
 }
 
-/** How much a gift you own is worth keeping (vestiges do nothing on their own). */
+/** How much a gift you own is worth keeping (vestiges do nothing on their own): what it does for
+ *  your team, plus being a piece of a keyword-free set (Smokes and Wires in the Bleed set). */
 export function keepValue(g: Gift, ctx: RunContext): number {
   if (isVestige(g.id)) return 0
-  return intrinsicScore(g, ctx).score
+  return intrinsicScore(g, ctx).score + setKeepValue(g, ctx)
 }
+
+/** Below this share of a fitting gift of its tier, a gift you own is worth selling or fusing. */
+export const SPARE_SHARE = 0.35
+/** Below this share it does next to nothing: fuse it now. */
+export const FUSE_NOW_SHARE = 0.2
 
 export interface KeepNote {
   gift: Gift
   value: number
+  /** value / what a fitting gift of its tier is worth: Ebony Brooch on a Rupture team is ~1.4,
+   *  Respite with no Bleed users 0. Judged per gift, not against your best gift. */
+  share: number
   /** Why to keep it despite a low value, or null. */
   keepFor: string | null
 }
@@ -170,6 +179,11 @@ export function recipeWorthKeeping(f: Fusion, ctx: RunContext): boolean {
 /** A recipe result must fit your team at least this well to hold its pieces. */
 const KEEP_MIN_FIT = 0.35
 
+/** Worth selling or fusing: a vestige, or a gift that does little for your team (not kept for a recipe or combo). */
+export function isSpare(n: KeepNote): boolean {
+  return !n.keepFor && (isVestige(n.gift.id) || n.share < SPARE_SHARE)
+}
+
 /** Owned gifts (one row per copy), cheapest to give up first, with what they're kept for. */
 export function fodder(ctx: RunContext, owned: string[]): KeepNote[] {
   const recipeIngredient = (id: string) => ctx.data.fusions.find((f) =>
@@ -179,6 +193,10 @@ export function fodder(ctx: RunContext, owned: string[]): KeepNote[] {
     c.gifts.includes(id) && c.gifts.some((o) => o !== id && ctx.owned.has(o)))
   // Pieces of a must-have (Lunar Memory) are always kept on a run that can fuse it.
   const mustPiece = (g: Gift) => mustHaveRecipes(g, ctx).find((f) => fusableThisRun(f, ctx) && neededPiece(f, g, ctx.owned))
+  const valued = (g: Gift) => {
+    const value = keepValue(g, ctx)
+    return { gift: g, value, share: isVestige(g.id) ? 0 : value / fullTierValue(g) }
+  }
   return owned
     .map((id) => ctx.giftsById.get(id))
     .filter((g): g is Gift => !!g)
@@ -186,14 +204,14 @@ export function fodder(ctx: RunContext, owned: string[]): KeepNote[] {
       const m = mustPiece(g)
       if (m) {
         const name = ctx.giftsById.get(m.result)?.name ?? m.result
-        return { gift: g, value: keepValue(g, ctx), keepFor: `piece of ${name}: always build toward it (${mustHave(m.result)!.short})` }
+        return { ...valued(g), keepFor: `piece of ${name}: always build toward it (${mustHave(m.result)!.short})` }
       }
       const r = isVestige(g.id) ? undefined : recipeIngredient(g.id)
       const c = isVestige(g.id) ? undefined : comboWith(g.id)
       const keepFor = r ? `ingredient for ${ctx.giftsById.get(r.result)?.name ?? r.result}`
         : c ? `combo with ${c.gifts.filter((o) => o !== g.id && ctx.owned.has(o)).map((o) => ctx.giftsById.get(o)?.name).join(', ')}`
           : null
-      return { gift: g, value: keepValue(g, ctx), keepFor }
+      return { ...valued(g), keepFor }
     })
     .sort((a, b) => Number(!!a.keepFor) - Number(!!b.keepFor) || a.value - b.value)
 }

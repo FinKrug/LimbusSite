@@ -121,11 +121,15 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
 - **Beyond the keyword:** fit is the best of several routes, not just the keyword:
   - *Attack type:* the gift's effect is about Blunt/Slash/Pierce skills (e.g. Oil-gunked
     Spanner is a Tremor gift, but it's really a Blunt gift). Fit = share of your team with
-    those skills. Needs identity attack types from the scraper; skipped if unknown.
+    those skills. Needs identity attack types from the scraper; skipped if unknown. An
+    attack-type gift (keyword Slash/Pierce/Blunt) that no one on your team can set off keeps only
+    40% of its general fit.
   For a keyword gift, these other routes count ×(0.3 + 0.4 × the share of your team using its
   keyword): "7/7 use Slash skills" no longer makes a Rupture gift as good as a Burn gift for a
   Burn team with one Rupture unit.
-  - *Affinity:* the effect is about a sin affinity ("Gloom Affinity Skill").
+  - *Affinity:* the effect is about a sin affinity ("Gloom Affinity Skill"). Fit = 0.8 × the share
+    of your team's skill copies (S1 ×3, S2 ×2, S3 ×1) of that sin, full at 35%: "When hitting with a
+    Pride Affinity Skill" goes off on that share of your attacks, not whenever a unit has one Pride skill.
   - *Works on its own:* the gift inflicts its status itself, with no team condition
     (Downpour, Thrill, Broken Compass), so it helps any team.
   - *Combos:* a gift that **needs** a status on enemies (Bell of Truth needs Tremor Burst)
@@ -145,7 +149,11 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   conditional on a deployed unit with one of them (`when: status:A|B`; Interlinked Time, Interlocked
   Cogs), and `mechanicGates` (holder.ts) adds "Only works for units that trigger …". "The Identity
   with the most Tremor Count" / "allies with Bleed" is about your own units, not an enemy need (Poise
-  and Charge excepted, since gifts give allies those).
+  and Charge excepted, since gifts give allies those). A first line like "Activates upon Clash Win
+  using a Skill that inflicts Bleed" (Respite, the Fragment of … gifts) is a condition on the whole
+  gift: every later line gets `keyword:Bleed`, and `mechanicGates` marks it `activation`, so with no
+  unit that uses that keyword the gift is worth nothing (sin affinity and other small bonuses
+  included) and the Fusion tab gives it up first. With users, the keyword fit handles the spread.
 - **Hand-picked combos:** `src/data/combos.json` lists combos that the effect text can't
   capture (Midwinter Nightmare + Broken Compass drain SP together). They're automatic: own one
   piece and the rest rank higher with "Combos with Midwinter Nightmare, which you have". The
@@ -163,6 +171,8 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
 - **Ally deaths:** effects that pay off when your own units die (Spiderweb Entangled in Red,
   Value Disposal, Devouring Cube, The Unchosen) count ×(1 − 0.7 × the share of the text that's
   about it), unless your team has the identity the gift is built around.
+- **Weak effects** (`weakShare`): a couple of points of SP damage on enemies, or a bonus only for
+  your own units below 0 SP, count ×(1 − 0.7 × their share of the text). Lowest Star is both.
 - **Used-up ingredients** (`ctx.gone`, `isGone` in scoring.ts): once you own a recipe's result,
   its ingredients stop showing up for the rest of the run (Heishou Bolus - Mao, Harestride and
   Shadow Bamboo Hat after Shadowlurking), so they drop out of Best gifts, Your plan ("Gone"),
@@ -210,8 +220,12 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   got. The Super Shop switch stays on when you change tabs or reload
   (`limbussite.supershop.v1`, kept in App) until you turn it off or Clear run. Below: suggested fusions from the gifts you'd miss least (vestiges first; never recipe or
   combo pieces), recipes to work on (ones you've started, plus Lunar Memory on Hard: the three
-  Memories + any 2 Sin Fragments, Super Shop only), and gifts to sell or fuse. A gift worth under
-  15% of your best one is marked **Fuse now**, with the reason it does nothing for you. A gift is
+  Memories + any 2 Sin Fragments, Super Shop only), and gifts to sell or fuse. Each gift is judged
+  on its own (`isSpare`): it's sell-or-fuse when it's worth under 35% of a fitting gift of its tier
+  (`SPARE_SHARE`), and **Fuse now** under 20%, with the reason it does little for you. Owning a
+  great gift (Lunar Memory) no longer pushes useful ones like Ebony Brooch or Deathseeker onto the
+  list. Keep value includes being a piece of a keyword-free set (Smokes and Wires), so it goes after
+  Lowest Star and Respite. A gift is
   only kept for a recipe whose result fits your team (fit ≥ 0.35), so Staticky Two-way Radio isn't
   held for Desperado on a team with no Ammo users.
 - **Mechanics your team lacks** (`mechanicGates` in `src/lib/holder.ts`): parts of a gift that only
@@ -315,7 +329,7 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   the model uses it. When no swap is clearly worth it (last floor, small
   gains), the card still shows "If you have Cost to spare" with the best swap that doesn't hurt the
   team; only when every swap would hurt (team damage down more than 0.5%, or Resonance a gift you
-  own needs) does it say to skip. Press Did it to record a swap; decks update.
+  own needs) does it say to skip. Press **I did this** on the recommendation (or Did it under "All swaps and your record") to record a swap; decks and advice update, and an Undo link takes back the last one.
 - **Removed content:** `scraper/removed.py` drops the Pilgrimage of Compassion pack and its gifts,
   which are gone from the game.
 - **Pack route** (`src/lib/packroute.ts`; internal, not shown as a timeline): packs only show up on

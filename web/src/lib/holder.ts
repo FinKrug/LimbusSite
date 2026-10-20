@@ -16,6 +16,10 @@ export type HolderCondition = {
   /** The part it unlocks buffs all allies, not just the unit in the slot (Cultivation: Cut, File,
    *  Carve, Polish with a Family Hierarch Candidate in #6). */
   team?: boolean
+  /** The whole gift only activates for units with these skills ("Activates upon Clash Win using a
+   *  Skill that inflicts Bleed": Respite). For a core keyword, keyword fit already scales with how
+   *  many units use it, so this only matters when no one does. */
+  activation?: boolean
 } & (
   | { kind: 'trait'; traits: string[] }
   | { kind: 'status'; status: string; any?: string[] }
@@ -164,7 +168,8 @@ export function holderConditions(g: Gift, identities: Identity[]): HolderConditi
 export function meets(i: Identity, c: HolderCondition): number {
   switch (c.kind) {
     case 'trait': return c.traits.some((t) => i.traits?.includes(t)) ? 1 : 0
-    case 'status': return [c.status, ...(c.any ?? [])].some((x) => i.status_effects.includes(x) || i.status_effects.includes(`Unique ${x}`)) ? 1 : 0
+    case 'status': return [c.status, ...(c.any ?? [])].some((x) => i.status_effects.includes(x) || i.status_effects.includes(`Unique ${x}`)
+      || (i.keywords as string[]).includes(x)) ? 1 : 0
     case 'sin': return i.affinities.includes(c.sin) ? 1 : 0
     case 'attackCount': {
       const known = i.attack_counts && Object.keys(i.attack_counts).length > 0
@@ -248,6 +253,16 @@ export function mechanicGates(g: Gift, identities: Identity[]): HolderCondition[
       const share = Math.min(1, (prev?.share ?? 0) + line.length / total)
       const list = hits.length > 1 ? `${hits.slice(0, -1).join(', ')} or ${hits[hits.length - 1]}` : first
       found.set(first, { kind: 'status', status: first, any: rest, share, noun: `units that trigger ${list}`, pred: `triggers ${list}` })
+    }
+  }
+  // "Activates upon Clash Win using a Skill that inflicts Bleed ...", "Activates when using E.G.O Skills
+  // that apply or gain Poise": nothing in the gift works without such a unit, core keywords included.
+  const act = lines[0]?.match(/^(?:This (?:E\.G\.O )?Gift )?Activates?\b.{0,60}?\bSkills?(?:\s*\([^)]*\))? (?:that|which) (?:(?:inflicts?|applies|apply|gains?|consumes?)(?: or (?:inflicts?|applies|apply|gains?|consumes?))? )+([A-Z][\w-]*(?: [A-Z][\w-]*)?)/)
+  if (act) {
+    const status = [act[1], act[1].split(' ')[0]].find((x) => counts.has(x))
+    if (status) {
+      found.set(status, { kind: 'status', status, share: 1, activation: true,
+        noun: `units with skills that use ${status}`, pred: `uses ${status}` })
     }
   }
   // A gift that's mostly one mechanic ("This E.G.O Gift's effects are enhanced based on ...") is all about it.

@@ -11018,7 +11018,7 @@
     "applies": [
       {
         "status": "Bleed",
-        "when": "always"
+        "when": "keyword:Bleed"
       }
     ],
     "attack_types": [],
@@ -14209,7 +14209,7 @@
     "applies": [
       {
         "status": "Bleed",
-        "when": "always"
+        "when": "keyword:Bleed"
       }
     ],
     "attack_types": [],
@@ -14274,7 +14274,7 @@
     "applies": [
       {
         "status": "Sinking",
-        "when": "always"
+        "when": "keyword:Sinking"
       }
     ],
     "attack_types": [],
@@ -14309,7 +14309,7 @@
     "applies": [
       {
         "status": "Rupture",
-        "when": "always"
+        "when": "keyword:Rupture"
       }
     ],
     "attack_types": [],
@@ -14374,7 +14374,7 @@
     "applies": [
       {
         "status": "Burn",
-        "when": "always"
+        "when": "keyword:Burn"
       }
     ],
     "attack_types": [],
@@ -14409,7 +14409,7 @@
     "applies": [
       {
         "status": "Tremor",
-        "when": "always"
+        "when": "keyword:Tremor"
       }
     ],
     "attack_types": [],

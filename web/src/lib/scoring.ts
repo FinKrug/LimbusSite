@@ -91,6 +91,12 @@ export const WEIGHTS = {
   unmetCap: 0.1,
   /** Affinity-condition fit is the team share times this. */
   affinityFit: 0.8,
+  /** ...where the share is the share of skill copies of that sin, full at this much: "When hitting with a
+   *  Pride Affinity Skill" goes off on that share of your attacks, not whenever a unit has one Pride skill. */
+  affinityDeckFull: 0.35,
+  /** An attack-type gift (Lowest Star: "a Blunt Skill or ...") with no one using that attack type keeps
+   *  this share of its general fit: only its other parts work. */
+  noAttackGeneral: 0.4,
   /** Flat bonus per owned gift this one would make work (max 2). */
   enabler: 1.5,
   /** Flat bonus for a piece of a combo you've started, scaled by how much you have. */
@@ -163,6 +169,8 @@ export const WEIGHTS = {
   selfStagger: 0.5,
   /** Effects that pay off when your own units die: value x (1 - allyDeath x share of the text). */
   allyDeath: 0.7,
+  /** Weak effects (a little enemy SP damage, a bonus below 0 SP): value x (1 - weakEffect x share). */
+  weakEffect: 0.7,
 }
 
 /** A gift's effect gives or saves Cost (Golden Urn, Prestige Card, Wealth ...). */
@@ -208,6 +216,18 @@ export function allyDeathShare(text: string): number {
     .filter((x) => x.length > 8 && !/^\[Effects apply only to [^\]]*\]$/.test(x))
   if (!sentences.length) return 0
   return sentences.filter((x) => ALLY_DEATH.test(x)).length / sentences.length
+}
+
+/** Sentences that do very little in a fight: a couple of points of SP damage on enemies (SP barely
+ *  matters to them), or a bonus for your own units below 0 SP (they almost never are). Lowest Star. */
+const WEAK_EFFECT = /^(?:When[^,]*,\s*)?inflict \d+ (?:fixed )?SP damage(?: on (?:the )?target)?\.?$|\b(?:Allies|ally|units?) with less than 0 SP\b/i
+
+/** Share of a gift's sentences that are weak effects (WEAK_EFFECT). */
+export function weakShare(text: string): number {
+  const sentences = text.split(/\n+|(?<=\.)\s+/).map((x) => x.trim())
+    .filter((x) => x.length > 8 && !/^\[Effects apply only to [^\]]*\]$/.test(x))
+  if (!sentences.length) return 0
+  return sentences.filter((x) => WEAK_EFFECT.test(x)).length / sentences.length
 }
 
 /** A gift's effect un-staggers enemies or staggers your own units. */
@@ -265,6 +285,8 @@ export interface TeamProfile {
   attackCounts: Map<string, number>
   /** Team members whose attack types are known. */
   attackKnown: number
+  /** Share of the team's skill copies (S1 x3, S2 x2, S3 x1) of each sin; null when no skills are known. */
+  sinDeck: Record<Sin, number> | null
 }
 
 export function teamProfile(team: Identity[]): TeamProfile {
@@ -275,6 +297,8 @@ export function teamProfile(team: Identity[]): TeamProfile {
   const traitCounts = new Map<string, number>()
   const attackCounts = new Map<string, number>()
   let attackKnown = 0
+  const deck = { wrath: 0, lust: 0, sloth: 0, gluttony: 0, gloom: 0, pride: 0, envy: 0 } as Record<Sin, number>
+  let deckTotal = 0
   const bump = (m: Map<string, number>, k: string) => m.set(k, (m.get(k) ?? 0) + 1)
   for (const id of team) {
     for (const k of id.keywords) keywordCounts[k] += 1
@@ -286,8 +310,14 @@ export function teamProfile(team: Identity[]): TeamProfile {
     for (const t of id.traits ?? []) bump(traitCounts, t)
     if (id.attack_types?.length) attackKnown += 1
     for (const a of id.attack_types ?? []) bump(attackCounts, a)
+    for (const sk of id.skills ?? []) {
+      if (!sk.sin) continue
+      deck[sk.sin] += sk.copies ?? 1
+      deckTotal += sk.copies ?? 1
+    }
   }
-  return { size: team.length, keywordCounts, sinCounts, statuses, statusCounts, traitCounts, attackCounts, attackKnown }
+  const sinDeck = deckTotal ? Object.fromEntries(Object.entries(deck).map(([k, v]) => [k, v / deckTotal])) as Record<Sin, number> : null
+  return { size: team.length, keywordCounts, sinCounts, statuses, statusCounts, traitCounts, attackCounts, attackKnown, sinDeck }
 }
 
 export function keywordShare(p: TeamProfile, k: CoreKeyword): number {
@@ -709,16 +739,23 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
     } else if (fp !== profile && !isCoreKeyword(gift.keyword)) {
       keywordReason = { kind: 'bad', text: `${cap(who)} don't use ${gift.attack_types.join('/')} skills` }
       routes[0] = { fit: 0 }
+    } else if (!isCoreKeyword(gift.keyword)) {
+      routes[0] = { fit: routes[0].fit * WEIGHTS.noAttackGeneral,
+        reason: { kind: 'bad', text: `No one on ${who} uses ${gift.attack_types.join('/')} skills, so most of it won't go off` } }
     }
   }
   if (fp.size && gift.affinities?.length) {
+    const deckShare = (a: Sin) => fp.sinDeck ? Math.min(1, fp.sinDeck[a] / WEIGHTS.affinityDeckFull) : (fp.sinCounts[a] ?? 0) / fp.size
     const best = gift.affinities
-      .map((a) => ({ a, n: fp.sinCounts[a] ?? 0 }))
-      .sort((x, y) => y.n - x.n)[0]
+      .map((a) => ({ a, n: fp.sinCounts[a] ?? 0, share: deckShare(a) }))
+      .sort((x, y) => y.share - x.share)[0]
     if (best.n > 0) {
+      const pct = fp.sinDeck ? Math.round(fp.sinDeck[best.a] * 100) : null
       routes.push({
-        fit: WEIGHTS.affinityFit * best.n / fp.size,
-        reason: { kind: 'good', text: `Uses ${cap(best.a)} affinity (${best.n}/${fp.size} of ${who} have it)` },
+        fit: WEIGHTS.affinityFit * best.share,
+        reason: { kind: best.share >= 0.5 ? 'good' : 'info', text: pct !== null
+          ? `Uses ${cap(best.a)} affinity: ${pct}% of ${who}'s skills are ${cap(best.a)}`
+          : `Uses ${cap(best.a)} affinity (${best.n}/${fp.size} of ${who} have it)` },
       })
     }
   }
@@ -813,6 +850,9 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
   if (profile.size && !slotInfo?.whole && ctx.members.length) {
     for (const c of mechanicGates(gift, ctx.data.identities)) {
       const users = ctx.members.filter((i) => meets(i, c) >= 0.99)
+      // A core keyword's spread is already in the keyword fit: this only says whether anyone can set it off.
+      const core = c.activation && isCoreKeyword(c.kind === 'status' ? c.status : null)
+      if (core && users.length) continue
       const covered = Math.min(1, (users.length / ctx.members.length) * WEIGHTS.mechanicSpread)
       fit *= 1 - c.share * (1 - covered)
       gateFactor *= 1 - c.share * (1 - covered)
@@ -856,7 +896,7 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
       parts.push({ kind: 'bonus', label: `${cap(gift.sin)} affinity`, value: tierValue * WEIGHTS.sin * share,
         detail: `${profile.sinCounts[gift.sin]}/${profile.size} of your team have it` })
     }
-    if (share >= 0.5) reasons.push({ kind: 'good', text: `${cap(gift.sin)} affinity is common on your team` })
+    if (share >= 0.5 && gateFactor > 0.05) reasons.push({ kind: 'good', text: `${cap(gift.sin)} affinity is common on your team` })
   }
 
   const extras = gift.status_effects.filter(
@@ -866,7 +906,7 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
     bonus += Math.min(WEIGHTS.statusMax, extras.length * WEIGHTS.statusEach)
     parts.push({ kind: 'bonus', label: `Also uses ${extras.slice(0, 3).join(', ')}`,
       value: tierValue * Math.min(WEIGHTS.statusMax, extras.length * WEIGHTS.statusEach), detail: 'Your team applies these too' })
-    reasons.push({ kind: 'good', text: `Also uses ${extras.slice(0, 3).join(', ')}, which your team applies` })
+    if (gateFactor > 0.05) reasons.push({ kind: 'good', text: `Also uses ${extras.slice(0, 3).join(', ')}, which your team applies` })
   }
 
   // Momentum: building a keyword your team uses. Not for a keyword only your gifts provide.
@@ -945,6 +985,16 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
       : bleedy
         ? { kind: 'info', text: 'Un-staggers enemies, which usually hurts; a Bleed team can still use the Bleed it adds' }
         : { kind: 'bad', text: 'Un-staggers enemies: you want enemies staggered (more damage, no actions), so this usually hurts' })
+  }
+  // A little SP damage on enemies, or a bonus only below 0 SP: rarely changes a fight.
+  const weak = profile.size ? weakShare(general) : 0
+  if (weak > 0) {
+    const f = 1 - WEIGHTS.weakEffect * weak
+    score *= f
+    for (const p of parts) p.value *= f
+    reasons.push({ kind: weak >= 0.75 ? 'bad' : 'info', text: weak >= 0.75
+      ? 'Does very little: a bit of SP damage on enemies and a bonus only below 0 SP'
+      : 'Part of it is weak (a bit of SP damage, or a bonus only below 0 SP)' })
   }
   // Effects that pay off when your own units die: you'd rather they didn't, unless the
   // team has the unit it's built around (Blade of the House of Spiders Ryōshū).
@@ -1271,6 +1321,22 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
   }
   parts.sort((a, b) => b.value - a.value)
   return { ...s, score, synergy: s.synergy || parts.some((p) => p.kind === 'combo'), reasons, parts }
+}
+
+/** What owning a piece of keyword-free sets is worth (they work for any team, Folmore's guide). */
+export function setKeepValue(gift: Gift, ctx: RunContext): number {
+  let v = 0
+  for (const c of ctx.combosByGift.get(gift.id) ?? []) {
+    if (!c.any_team) continue
+    const have = c.gifts.filter((id) => id !== gift.id && setHas(ctx, id)).length
+    v += WEIGHTS.setBase * setRankWeight(c) * (WEIGHTS.setStart + (1 - WEIGHTS.setStart) * have / (c.gifts.length - 1))
+  }
+  return v
+}
+
+/** A fitting gift of this tier's intrinsic value: base plus full fit, no bonuses. */
+export function fullTierValue(gift: Gift): number {
+  return (WEIGHTS.tier[gift.tier ?? 1] ?? 1) * (WEIGHTS.base + 1)
 }
 
 /** Weight of a keyword-free set by its rank (1 = most important). */

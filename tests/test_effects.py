@@ -117,3 +117,16 @@ class MechanicConditionTests(unittest.TestCase):
         self.assertEqual((r["needs"], r["applies"]), ([], []))
         r = analyze(f"Turn Start: allies with {S('Poise')} gain 1 Power Up.")
         self.assertEqual(r["needs"], ["Poise"])  # gifts can give allies Poise, so this one stays
+
+
+class ActivationConditionTests(unittest.TestCase):
+    """Finley: Respite only activates when a skill that inflicts Bleed is used."""
+
+    def test_activation_line_covers_the_whole_gift(self):
+        r = analyze(f"Activates upon Clash Win using a Skill that inflicts {S('Bleed')} Potency, Count, or 'Unique Bleed'<br><br>"
+                    f"Inflict +(# of remaining Coins/2) {S('Bleed')} Count to the target, and gain "
+                    f"{S('Offense Level Up')} equal to that value next turn")
+        self.assertEqual(r["applies"], [{"status": "Bleed", "when": "keyword:Bleed"}])
+        # Without the activation line, the same inflict line works for anyone.
+        r = analyze(f"Inflict +(# of remaining Coins/2) {S('Bleed')} Count to the target")
+        self.assertEqual(r["applies"], [{"status": "Bleed", "when": "always"}])

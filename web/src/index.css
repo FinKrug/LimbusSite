@@ -1067,6 +1067,9 @@ p.skill-best { background: none; border-color: var(--line); }
 .start-together { margin: 0; padding: 8px 10px 8px 26px; border-left: 3px solid var(--good); border-radius: 0 8px 8px 0; background: rgba(127, 196, 122, 0.08); color: #cfe9cb; font-size: 13px; }
 .skill-best.skill-spare { border-style: dashed; }
 .skill-spare p { margin: 4px 0 0; }
+.skill-best-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.skill-best-head .btn { flex: none; }
+.skill-did-note { margin: 0 0 4px; }
 
 .offered-advice { margin: 2px 0 0; font-size: 13px; }
 .offered-advice.advice-best { color: var(--good); }
