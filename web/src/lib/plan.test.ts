@@ -37,6 +37,11 @@ describe('where a gift can come from', () => {
       run: run({ floor: 5, pack: 'spring-cultivation', visited: { 4: 'nocturnal-sweeping-bokgak', 5: 'spring-cultivation' } }),
     })
     expect(availability(bolus, played, pfg).where).toBe('no')
+    // An exclusive of a pack you've played: say why it's gone.
+    const unchanging = gameData.themePacks.find((p) => p.id === 'the-unchanging')!
+    const excl = gameData.gifts.find((g) => g.id === unchanging.gifts[0])!
+    const after = makeContext(gameData, team, [], { run: run({ floor: 6, visited: { 4: 'the-unchanging' } }) })
+    expect(availability(excl, after, pfg)).toMatchObject({ where: 'no', text: expect.stringMatching(/Only in The Unchanging, which you played on floor 4/) })
   })
 
   it("treats a hidden pack's exclusive as luck, not something to plan for", () => {

@@ -10,7 +10,7 @@
  *  - fusion results: only by fusing; Super Shop recipes (Lunar Memory) only on Hard floors.
  */
 import {
-  intrinsicScore, isGone, isHiddenPack, setHas, setRankWeight, packOnFloor, rarityText, recipeGiveUp, WEIGHTS, type GiftScore, type Reason, type RunContext,
+  intrinsicScore, isGone, isHiddenPack, playedPacks, setHas, setRankWeight, packOnFloor, rarityText, recipeGiveUp, WEIGHTS, type GiftScore, type Reason, type RunContext,
 } from './scoring'
 import { fusableKeyword, type Combo, type Fusion, type Gift, type ThemePack } from './types'
 import { mustHave } from './musthave'
@@ -47,9 +47,9 @@ export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string,
   const { difficulty, floors } = ctx.run
   const floor = ctx.run.floor ?? 1
   // Packs you've already played (and this floor's pack, once picked) don't come back.
-  const played = new Set(Object.entries(ctx.run.visited ?? {})
-    .filter(([f]) => ctx.run.floor !== null && Number(f) < ctx.run.floor).map(([, id]) => id))
-  const allPacks = (packsForGift.get(g.id) ?? []).filter((p) => !played.has(p.id))
+  const played = playedPacks(ctx.run)
+  const inPacks = packsForGift.get(g.id) ?? []
+  const allPacks = inPacks.filter((p) => !played.has(p.id))
   const current = ctx.run.pack ? allPacks.find((p) => p.id === ctx.run.pack) : undefined
   if (current) return { where: 'now', text: `This floor's pack (${current.name})` }
   if (g.pools.includes('main')) return { where: 'now', text: 'Shops and fight rewards' }
@@ -67,6 +67,10 @@ export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string,
   for (let f = floor + 1; f <= floors; f++) {
     const later = packs.filter((p) => p.id !== ctx.run.pack && packOnFloor(p, difficulty, f))
     if (later.length) return { where: 'later', text: `From floor ${f} (${later[0].name}${later.length > 1 ? ', …' : ''})` }
+  }
+  const gone = inPacks.filter((p) => played.has(p.id) && p.gifts.includes(g.id))
+  if (!packs.length && gone.length) {
+    return { where: 'no', text: `Only in ${gone[0].name}, which you played on floor ${played.get(gone[0].id)}: a pack can't be picked twice` }
   }
   return { where: 'no', text: packs.length ? 'Not in this run’s packs' : 'Not in any theme pack' }
 }

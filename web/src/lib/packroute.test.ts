@@ -72,6 +72,16 @@ describe('pack route', () => {
     expect(prioritizePacks(scores, inView, run(), false).order.map((p) => p.pack.id)).toEqual(['big', 'short'])
   })
 
+  it("drops a pack you've already played: you can't pick a theme pack twice (The Unchanging)", () => {
+    const scores = [scored(pack('big', [1, 4]), 10), scored(pack('other', [1, 4]), 5)]
+    const r = run({ floor: 3, visited: { 1: 'big', 2: 'x' } })
+    const { order, advice } = prioritizePacks(scores, scores, r, false)
+    expect(order.map((p) => p.pack.id)).toEqual(['other'])
+    expect(advice.has('big')).toBe(false)
+    // Back on floor 1, it's that floor's pick again.
+    expect(prioritizePacks(scores, scores, run({ floor: 1, visited: { 1: 'big' } }), false).order.map((p) => p.pack.id)).toContain('big')
+  })
+
   it('never plans around a hidden pack, but takes one you find', () => {
     const be = { ...pack('be', [1, 4]), hidden: true, appear_rate: 0.0002 }
     const scores = [scored(be, 50), scored(pack('a', [1, 4]), 5), scored(pack('b', [1, 4]), 4)]

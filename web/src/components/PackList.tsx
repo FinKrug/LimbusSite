@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { EXTREME_FROM, isHiddenPack, type Difficulty, type GiftScore, type PackHighlight, type PackScore, type RunSettings } from '../lib/scoring'
+import { EXTREME_FROM, isHiddenPack, packOnFloor, playedPacks, type Difficulty, type GiftScore, type PackHighlight, type PackScore, type RunSettings } from '../lib/scoring'
 import { type Gift, type ThemePack, floorText } from '../lib/types'
 import { Empty, GiftLabel, Reasons, RatingBar, WikiLink } from './bits'
 import { HowToGet } from './HowToGet'
@@ -31,12 +31,16 @@ export function PackList({
 }: Props) {
   const how = (g: Gift) => <HowToGet gift={g} packsForGift={packsForGift} giftsById={giftsById} owned={owned} />
   const [query, setQuery] = useState('')
+  const played = useMemo(() => playedPacks(run), [run])
   const byId = useMemo(() => new Map(allPacks.map((p) => [p.id, p])), [allPacks])
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return []
-    return allPacks.filter((p) => !offered.includes(p.id) && p.name.toLowerCase().includes(q)).slice(0, 8)
-  }, [allPacks, offered, query])
+    return allPacks.filter((p) => !offered.includes(p.id) && !played.has(p.id) && p.name.toLowerCase().includes(q)).slice(0, 8)
+  }, [allPacks, offered, played, query])
+  // Packs that can show up on this floor but that you've already played: you can't pick them again.
+  const playedHere = run.floor === null || offered.length ? []
+    : allPacks.filter((p) => played.has(p.id) && packOnFloor(p, run.difficulty, run.floor!))
 
   const visible = ranked
   // Hidden packs (The B.E.) stay quiet unless you've added one as offered, i.e. found it.
@@ -83,6 +87,11 @@ export function PackList({
         ) : null}
       </div>
 
+      {playedHere.length > 0 && (
+        <p className="muted small">
+          Not listed: {playedHere.map((p) => `${p.name} (played on floor ${played.get(p.id)})`).join(', ')}. Once you've picked a pack, you can't pick it again this run.
+        </p>
+      )}
       {visible.length === 0 ? <Empty>No theme packs match.</Empty> : (
         <ol className="cards">
           {visible.map((p, k) => {

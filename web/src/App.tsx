@@ -17,7 +17,7 @@ import { TeamTab } from './components/TeamTab'
 import { KeywordChip } from './components/bits'
 import { gameData } from './lib/data'
 import {
-  DEFAULT_RUN, defaultFloors, makeContext, withPack, packInDifficulty, packOnFloor, packsByGift, rankGifts, rankThemePacks, teamFocus,
+  DEFAULT_RUN, defaultFloors, makeContext, withPack, packInDifficulty, playedPacks, packOnFloor, packsByGift, rankGifts, rankThemePacks, teamFocus,
   type Difficulty, type RunSettings,
 } from './lib/scoring'
 import { DEFAULT_DEPLOYED } from './lib/lineup'
@@ -179,9 +179,11 @@ export default function App() {
   const routeScoresAll = useMemo(() => (tab === 'packs' && ctx.profile.size && run.floor !== null ? routeScores(ctx) : []), [ctx, tab, run.floor])
   const { order: rankedPacks, advice: packAdvice } = useMemo(() => {
     const offeredPacks = offered.map((id) => packsById.get(id)).filter((p) => !!p)
+    // Packs you've played on earlier floors can't be picked again this run.
+    const played = playedPacks(run)
     const inView = offeredPacks.length ? offeredPacks
       : run.floor !== null
-        ? gameData.themePacks.filter((p) => packOnFloor(p, run.difficulty, run.floor!))
+        ? gameData.themePacks.filter((p) => packOnFloor(p, run.difficulty, run.floor!) && !played.has(p.id))
         : gameData.themePacks.filter((p) => packInDifficulty(p, run.difficulty))
     return prioritizePacks(routeScoresAll, rankThemePacks(ctx, inView), run, offeredPacks.length > 0)
   }, [ctx, offered, packsById, run, routeScoresAll])

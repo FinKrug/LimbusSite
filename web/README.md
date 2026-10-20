@@ -344,7 +344,10 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   floors 6–10", "Last floor it shows up on (floors 2–3)" or "Can wait: it also shows up on floors
   6–10". Score comparisons with neighbouring cards are hidden then, since the order isn't by score.
   Packs you pick are remembered per floor (`run.visited`) and aren't planned again; going back a floor
-  brings back that floor's pick.
+  brings back that floor's pick. Once picked, a theme pack can't be picked again this run
+  (`playedPacks`): on later floors it's left off the list ("Not listed: The Unchanging (played on
+  floor 4)"), out of the "Add an offered pack" search, and Your plan says its exclusives are gone
+  ("Only in The Unchanging, which you played on floor 4").
 - **Hidden packs** (`isHiddenPack`; The B.E., the wiki's "Hidden Theme Pack" with a `hiddenThemeRate`
   of 0.0002 = about 1 in 5,000 generated packs; scraped as `hidden`, `appear_rate`, `clear_rewards`):
   never planned around. On the floor list they come last, marked **If found** with no rating bar, and

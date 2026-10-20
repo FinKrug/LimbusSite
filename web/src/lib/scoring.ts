@@ -440,6 +440,15 @@ export interface RunSettings {
   visited?: Record<number, string>
 }
 
+/** Packs picked on floors before this one (pack id -> floor). Once you've entered a theme pack you
+ *  can't pick it again this run, so these are gone for good. */
+export function playedPacks(run: RunSettings): Map<string, number> {
+  const out = new Map<string, number>()
+  if (run.floor === null) return out
+  for (const [f, id] of Object.entries(run.visited ?? {})) if (Number(f) < run.floor) out.set(id, Number(f))
+  return out
+}
+
 /** Set the current floor's pack, and remember it for that floor (the pack route skips it later). */
 export function withPack(run: RunSettings, pack: string | null): RunSettings {
   if (run.floor === null) return { ...run, pack }

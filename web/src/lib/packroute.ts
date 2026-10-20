@@ -19,7 +19,7 @@
  * aren't planned again. Hidden packs (The B.E., 1 in 5,000) are never planned: they're
  * only taken when one actually shows up.
  */
-import { isHiddenPack, packInDifficulty, packOnFloor, rankThemePacks, type PackScore, type RunContext, type RunSettings } from './scoring'
+import { isHiddenPack, packInDifficulty, packOnFloor, playedPacks, rankThemePacks, type PackScore, type RunContext, type RunSettings } from './scoring'
 import type { ThemePack } from './types'
 
 export const ROUTE_WEIGHTS = {
@@ -287,8 +287,10 @@ export function prioritizePacks(
   const byId = new Map(scores.map((s) => [s.pack.id, s]))
   const all = [...scores, ...inView.filter((p) => !byId.has(p.pack.id))]
   const routeRun = { ...run, pack: null }
+  // A pack you've already played can't be picked again: never plan it (planRoute can't place it).
+  const played = playedPacks(run)
   const rows = inView
-    .filter((p) => offered || !isHiddenPack(p.pack))
+    .filter((p) => (offered || !isHiddenPack(p.pack)) && !played.has(p.pack.id))
     .map((p) => ({ p, total: planRoute({ scores: all, run: routeRun, pickNow: p.pack.id }).total }))
   if (!rows.length) return { order: hiddenLast(inView), advice }
   const top = Math.max(...rows.map((r) => r.total))
@@ -327,6 +329,6 @@ export function prioritizePacks(
     order.push(isHiddenPack(r.p.pack) ? { ...r.p, rating: rate(r.p) } : { ...r.p, rating: rate(r.p), verdict })
   }
   // Hidden packs you haven't found: last, and no bigger than the best pack here.
-  const rest = inView.filter((p) => !advice.has(p.pack.id)).map((p) => ({ ...p, rating: Math.min(100, p.rating) }))
+  const rest = inView.filter((p) => !advice.has(p.pack.id) && !played.has(p.pack.id)).map((p) => ({ ...p, rating: Math.min(100, p.rating) }))
   return { order: [...order, ...rest], advice }
 }
