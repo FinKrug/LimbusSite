@@ -34,6 +34,7 @@ import {
   type Combo,
   type Sin,
   type ThemePack,
+  fusableKeyword,
   isCoreKeyword,
   tierLabel,
 } from './types'
@@ -41,7 +42,7 @@ import { DEFAULT_DEPLOYED, giftSlots, slotText } from './lineup'
 import { strength, type TierOverrides } from './strength'
 import { traitShare } from './traitparts'
 import { holderConditions, holderFactor, mechanicGates, meets } from './holder'
-import { MUST_HAVE_MULT, PIECE_SHARE, fusableThisRun, mustHave, mustHaveRecipes, neededPiece, recipeProgress } from './musthave'
+import { MUST_HAVE_MULT, PIECE_SHARE, fusableThisRun, pieceTiming, mustHave, mustHaveRecipes, neededPiece, recipeProgress } from './musthave'
 import { egoNeeds, recommendEgos, type EgoNeed } from './egorec'
 import { buildBattle, EGO_WEIGHTS, egoGiftInfo, resonanceTriggers, type BattleProfile, type EgoLoadout } from './ego'
 import type { Swaps } from './battle'
@@ -94,6 +95,12 @@ export const WEIGHTS = {
   enabler: 1.5,
   /** Flat bonus for a piece of a combo you've started, scaled by how much you have. */
   comboPiece: 1.8,
+  /** Keyword-free sets (any_team in combos.json): every piece gets setBase x rank weight x
+   *  (setStart + (1 - setStart) x share of the rest you own), even before you own any, since
+   *  they work for any team. Rank weight: 1 for the top set, setRankStep less per rank below. */
+  setBase: 3,
+  setStart: 0.3,
+  setRankStep: 0.1,
   /** Share of a fusion result's value passed to its ingredients. */
   fusionShare: 0.5,
   /** Starting a recipe you have no pieces of counts this much of a piece you'd have with one
@@ -116,6 +123,10 @@ export const WEIGHTS = {
    *  exclusive = packExclusive, otherwise min(1, packRareAt / packsWithIt), at least packCommonFloor.
    *  A gift in 60 packs is no reason to pick any particular one of them. */
   packExclusive: 1.5,
+  /** A theme-pack gift with no fusion keyword (General) counts x(1 + this) toward its pack:
+   *  random fusions can't give it, so the pack is the only way to get it. Keyword gifts can
+   *  also be rolled by fusing. */
+  packUnfusable: 0.3,
   packRareAt: 6,
   packCommonFloor: 0.1,
   /** Pack cards: up to this many boosted (featured, in few packs) gifts besides the exclusives. */
@@ -491,7 +502,7 @@ export interface Reason {
 }
 
 /** Where a gift's score comes from, for "why this rank". */
-export type PartKind = 'core' | 'bonus' | 'synergy' | 'enabler' | 'fusion' | 'combo' | 'run' | 'upgrade'
+export type PartKind = 'core' | 'bonus' | 'synergy' | 'enabler' | 'fusion' | 'combo' | 'set' | 'run' | 'upgrade'
 export interface ScorePart {
   kind: PartKind
   label: string
@@ -1154,10 +1165,11 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
       reasons.push({ kind: 'info', text: `Piece of ${result.name} (${must.short}), but that needs a Super Shop, which only appears on Hard` })
       continue
     }
-    const add = intrinsicScore(result, ctx).score * PIECE_SHARE * (0.6 + 0.4 * prog.have / prog.total)
+    const timing = pieceTiming(ctx.run)
+    const add = intrinsicScore(result, ctx).score * PIECE_SHARE * (0.6 + 0.4 * prog.have / prog.total) * timing
     score += add
     parts.push({ kind: 'fusion', label: `Builds toward ${result.name}`, value: add,
-      detail: `${prog.have}/${prog.total} pieces with this one; ${must.why}` })
+      detail: `${prog.have}/${prog.total} pieces with this one${timing > 1.05 ? `; worth more late in the run, when the Super Shop that fuses it usually shows up (×${timing.toFixed(2)})` : ''}; ${must.why}` })
     reasons.unshift({
       kind: 'good',
       text: `Builds toward ${result.name} (${must.short}): ${prog.have}/${prog.total} pieces with this one. Take it even if it doesn't fit your team`,
@@ -1186,6 +1198,21 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
   }
   for (const c of ctx.combosByGift.get(gift.id) ?? []) {
     const have = c.gifts.filter((id) => id !== gift.id && ctx.owned.has(id)).length
+    if (c.any_team && !ctx.owned.has(gift.id)) {
+      // Keyword-free sets work for any team: worth something from the first piece, more as you build it.
+      const add = WEIGHTS.setBase * setRankWeight(c) * (WEIGHTS.setStart + (1 - WEIGHTS.setStart) * have / (c.gifts.length - 1))
+      score += add
+      const of = ctx.combos.filter((x) => x.any_team).length
+      parts.push({ kind: 'set', label: `Piece of the ${c.name}`, value: add,
+        detail: `${have}/${c.gifts.length - 1} of the rest owned; #${c.rank ?? '?'} of ${of} keyword-free sets` })
+      reasons.push({
+        kind: have ? 'good' : 'info',
+        text: have
+          ? `Piece of the ${c.name} (works for any team): you have ${have} of the other ${c.gifts.length - 1}`
+          : `Piece of the ${c.name}, #${c.rank ?? '?'} of ${of} sets that work for any team`,
+      })
+      continue
+    }
     if (!have || ctx.owned.has(gift.id)) continue
     score += WEIGHTS.comboPiece * have / (c.gifts.length - 1)
     const partners = c.gifts.filter((id) => id !== gift.id && ctx.owned.has(id)).map((id) => ctx.giftsById.get(id)?.name ?? id)
@@ -1193,8 +1220,17 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
       detail: c.why || `"${c.name}" (you have ${have}/${c.gifts.length})` })
     reasons.unshift({ kind: 'good', text: `Combos with ${partners.join(' and ')}, which you have ("${c.name}")` })
   }
+  // General (keywordless) theme-pack gifts: a random fusion can't give them, so the pack is the only way.
+  if (!gift.pools.includes('main') && gift.pools.includes('themed') && !fusableKeyword(gift) && (gift.tier ?? 0) < 6) {
+    reasons.push({ kind: 'info', text: "No keyword, so fusing can't give it: take it when its theme pack offers it" })
+  }
   parts.sort((a, b) => b.value - a.value)
   return { ...s, score, synergy: s.synergy || parts.some((p) => p.kind === 'combo'), reasons, parts }
+}
+
+/** Weight of a keyword-free set by its rank (1 = most important). */
+export function setRankWeight(c: Combo): number {
+  return Math.max(0.3, 1 - WEIGHTS.setRankStep * ((c.rank ?? 1) - 1))
 }
 
 function withRatings<T extends { score: number }>(items: T[]): (T & { rating: number })[] {
@@ -1331,10 +1367,12 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
       .map(scoreOf)
       .sort((a, b) => b.score - a.score)
     const rarity = (g: GiftScore) => packRarity(pack, g.gift.id, packCount).value
-    const weight = (g: GiftScore) => g.score * rarity(g)
+    const unfusable = (g: GiftScore) => !g.gift.pools.includes('main') && !fusableKeyword(g.gift)
+    const weight = (g: GiftScore) => g.score * rarity(g) * (unfusable(g) ? 1 + WEIGHTS.packUnfusable : 1)
     const partOf = new Map<string, PackPart>()
     const credit = (g: GiftScore, value: number, note: string) => {
-      const p = partOf.get(g.gift.id) ?? { gift: g, value: 0, notes: [packRarity(pack, g.gift.id, packCount).note] }
+      const p = partOf.get(g.gift.id) ?? { gift: g, value: 0, notes: [packRarity(pack, g.gift.id, packCount).note,
+        ...(unfusable(g) ? [`no keyword, so fusing can't give it (×${1 + WEIGHTS.packUnfusable})`] : [])] }
       p.value += value
       p.notes.push(note)
       partOf.set(g.gift.id, p)

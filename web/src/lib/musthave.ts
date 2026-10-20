@@ -36,6 +36,17 @@ export const MUST_HAVE_MULT = 3.5
 /** Each piece is worth this share of the result, scaled up as you collect pieces. */
 export const PIECE_SHARE = 0.2
 
+/**
+ * Pieces are worth more later in the run (Finley: get Punctured Memory and the like later in
+ * the game, so you have them when you need them): Super Shop odds build up with the Cost you
+ * spend (3% + 1% per 20 Cost since the last one), so the shop that can fuse it usually comes
+ * late. x0.8 on floor 1 up to x1.3 on the last floor.
+ */
+export function pieceTiming(run: { floors: number; floor: number | null }): number {
+  if (run.floor === null || run.floors <= 1) return 1
+  return 0.8 + 0.5 * (run.floor - 1) / (run.floors - 1)
+}
+
 export interface RecipeProgress {
   total: number
   have: number

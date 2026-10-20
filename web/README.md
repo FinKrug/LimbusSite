@@ -320,6 +320,31 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   like any pack: The B.E.'s clear rewards (Bongy Plush, Lunar Memory, Piece of Relationship, Faith;
   the best one counts like an exclusive) make it a Go. Its gifts are "luck" in Your plan, it doesn't
   count as a second chance for last-chance fusions, and pre-run picks ignore it.
+- **Keyword-free gift sets** (`src/data/combos.json` with `any_team`, from Folmore's Steam guide,
+  ranked most to least important): Tremor (Nixie Divergence, Melted Eyeball, Oscillating Bracelet,
+  Downpour, Reverberation, Bio-venom Vial), Poise (Cigarette Holder, Four-leaf Clover, Pendant of
+  Nostalgia, Nebulizer, Clear Mirror Calm Water, Ornamental Horseshoe, Devil's Share, Old Wooden Doll,
+  Finifugality, Angel's Cut), Sinking (Midwinter Nightmare, Melted Spring, Skeletal Crumbs, Broken
+  Compass, Artistic Sense, Blue Starshard), Charge (Portable Battery Socket, Nightvision Goggles,
+  Curriculum Vitae, Wrist Guards, Lightning Rod, Charge-type Gloves, Material Interference Force Field,
+  UPS System), Bleed (Little and To-be-Naughty Plushie, Red-stained Gossypium, Rusted Muzzle, Arrested
+  Hymn, Ruptured Blood Sac, Smokes and Wires; not White Gossypium), Rupture (Talisman Bundle,
+  Standard-duty Battery, Broken Revolver, Fluorescent Lamp, Crown of Roses, Barbed Lasso, Thrill), Burn
+  (Ashes to Ashes, Dust to Dust, Charred Disk, Pinpoint Logic Circuit, Fiery Down, Hellterfly's Dream;
+  Glimpse of Flames only with Burn identities). They work for any team, so every piece gets
+  `setBase` 3 × rank weight (1 for #1, −0.1 per rank) × (0.3 + 0.7 × share of the rest you own), even
+  before you own one ("Piece of the Tremor set, #1 of 7 sets that work for any team"). It's a `set`
+  part, not team synergy, so it doesn't inflate theme pack scores. Your plan's Gift sets to build
+  shows them with an "Any team · #1" pill and the guide's note.
+- **Lunar Memory pieces later in the run:** the "Builds toward Lunar Memory" bonus grows from ×0.8 on
+  floor 1 to ×1.3 on the last floor (`pieceTiming` in musthave.ts): Super Shop odds build up with the
+  Cost you spend, so the shop that fuses it usually comes late.
+- **General gifts in theme packs** (`fusableKeyword` in types.ts): a random fusion only gives gifts of a
+  keyword (Burn … Blunt), so a General (keywordless) gift that only drops in theme packs can't be fused
+  for; a keyword one can. Such gifts count ×1.3 toward their pack's score (`WEIGHTS.packUnfusable`;
+  "no keyword, so fusing can't give it" in Why this rank), go ×1.2 higher in Your plan's Get now /
+  Later this run (`pickPriority`, among the top candidates), and say "No keyword, so fusing can't give
+  it: take it when its theme pack offers it" on their card. Their value for your team is unchanged.
 - **Theme packs:** a pack is worth the best gifts in its pool, weighted by how rare each gift
   is across packs: an exclusive counts ×1.5, while a gift in 60 packs counts ×0.1 (it's no
   reason to pick any one of them), and fusion-only gifts (Lunar Memory) count for nothing even

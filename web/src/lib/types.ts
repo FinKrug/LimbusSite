@@ -29,6 +29,14 @@ export interface Combo {
   gifts: string[]
   why: string
   source?: string
+  /** Keyword-free sets (Folmore's guide): they work for any team, whatever its keywords. */
+  any_team?: boolean
+  /** 1 = most important set; lower sets are worth less to a run. */
+  rank?: number
+  /** The keyword its gifts share (they apply it themselves). */
+  keyword?: string
+  /** Advice that goes with it ("Don't bring White Gossypium"). */
+  note?: string
 }
 
 export type Pool = 'main' | 'themed' | 'extreme' | 'cursed' | 'fusion'
@@ -197,4 +205,12 @@ export function tierLabel(tier: number | null): string {
 export function floorText(range: FloorRange | undefined): string | null {
   if (!range) return null
   return range[0] === range[1] ? `${range[0]}F` : `${range[0]}–${range[1]}F`
+}
+
+/** Keyword categories on the fusion screen: a random fusion only gives gifts of one of these. */
+export const FUSION_KEYWORDS = ['Burn', 'Bleed', 'Tremor', 'Rupture', 'Sinking', 'Poise', 'Charge', 'Slash', 'Pierce', 'Blunt'] as const
+
+/** Can a random fusion give this gift? Only gifts with a fusion keyword (not General ones). */
+export function fusableKeyword(g: Pick<Gift, 'keyword'>): boolean {
+  return !!g.keyword && (FUSION_KEYWORDS as readonly string[]).includes(g.keyword)
 }

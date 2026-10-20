@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   intrinsicScore, isSurvival, makeContext, packInDifficulty, packOnFloor, packPool, packsByGift, planCombos, planFusions, rankGifts, rankThemePacks,
-  signatureStatuses, teamFocus, teamGate, teamProfile, upgradeMagnitude, upgradeValue,
+  scoreGift, signatureStatuses, teamFocus, teamGate, teamProfile, upgradeMagnitude, upgradeValue,
 } from './scoring'
 import { gameData } from './data'
 import { traitShare } from './traitparts'
@@ -617,5 +617,53 @@ describe('owned status sources', () => {
     expect(intrinsicScore(applier, after).score).toBeLessThan(intrinsicScore(applier, before).score)
     expect(intrinsicScore(applier, after).reasons.some((r) => /Downpour, which you have, already does/.test(r.text))).toBe(true)
     expect(intrinsicScore(g('bell-of-truth'), after).score).toBeGreaterThan(intrinsicScore(g('bell-of-truth'), before).score)
+  })
+})
+
+describe('General gifts in theme packs', () => {
+  it("count more toward their pack than keyword gifts, since fusing can't give them", () => {
+    const general = gameData.gifts.find((g) => g.pools.includes('themed') && !g.pools.includes('main') && g.keyword === null && g.theme_packs.length === 1)!
+    const keyworded = { ...general, id: 'test-keyword-copy', name: 'Keyword copy', keyword: 'Burn' as const }
+    const data = { ...gameData, gifts: [...gameData.gifts, keyworded] }
+    const pack = (id: string, gift: string) => ({ id, name: id, pool: 'themed' as const, group: null, floors: null, gifts: [gift], gift_pool: [gift], wiki_url: null })
+    const team = gameData.identities.filter((i) => i.keywords.includes('Burn')).slice(0, 5)
+    const ctx = makeContext(data, team, [])
+    const ranked = rankThemePacks(ctx, [pack('a', general.id), pack('b', keyworded.id)])
+    const a = ranked.find((p) => p.pack.id === 'a')!
+    const b = ranked.find((p) => p.pack.id === 'b')!
+    const ga = scoreGift(general, ctx).score
+    const gb = scoreGift(keyworded, ctx).score
+    // Same gift text: the General one's pack counts 1.3x its gift score, the keyword one's 1x.
+    expect(a.split.best / ga).toBeCloseTo(1.3 * (b.split.best / gb), 1)
+    expect(a.parts[0].notes.join(' ')).toMatch(/fusing can't give it/)
+    expect(scoreGift(general, ctx).reasons.some((r) => /No keyword, so fusing can't give it/.test(r.text))).toBe(true)
+  })
+})
+
+
+describe('keyword-free gift sets (combos.json, any_team)', () => {
+  const sets = (gameData.combos ?? []).filter((c) => c.any_team)
+  const burn = gameData.identities.filter((i) => i.keywords.includes('Burn'))
+    .filter((i, k, a) => a.findIndex((x) => x.sinner === i.sinner) === k).slice(0, 7)
+  const setPart = (id: string, owned: string[]) =>
+    scoreGift(gameData.gifts.find((g) => g.id === id)!, makeContext(gameData, burn, owned)).parts.find((p) => p.kind === 'set')?.value ?? 0
+
+  it('has the seven ranked sets from the guide, with real gifts', () => {
+    expect(sets.map((c) => c.keyword)).toEqual(['Tremor', 'Poise', 'Sinking', 'Charge', 'Bleed', 'Rupture', 'Burn'])
+    expect(sets.map((c) => c.rank)).toEqual([1, 2, 3, 4, 5, 6, 7])
+    const ids = new Set(gameData.gifts.map((g) => g.id))
+    for (const c of sets) expect(c.gifts.every((id) => ids.has(id))).toBe(true)
+  })
+
+  it('values a piece on any team, more as you build the set and more for higher sets', () => {
+    const alone = setPart('bio-venom-vial', [])
+    expect(alone).toBeGreaterThan(0)
+    expect(setPart('bio-venom-vial', ['downpour', 'melted-eyeball', 'nixie-divergence'])).toBeGreaterThan(2 * alone)
+    // Tremor (#1) vs Rupture (#6), nothing owned.
+    expect(setPart('bio-venom-vial', [])).toBeGreaterThan(setPart('barbed-lasso', []))
+    const s = scoreGift(gameData.gifts.find((g) => g.id === 'bio-venom-vial')!, makeContext(gameData, burn, ['downpour']))
+    expect(s.reasons.some((r) => /Piece of the Tremor set \(works for any team\): you have 1 of the other 5/.test(r.text))).toBe(true)
+    // Set pieces aren't "built for your team" (that would inflate theme pack scores).
+    expect(s.synergy).toBe(false)
   })
 })

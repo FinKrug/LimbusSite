@@ -117,10 +117,12 @@ export function PlanPanel({ ctx, ranked, packsForGift, onOwn, rebuild }: Props) 
                 <li key={t.combo.id} className="plan-target">
                   <div className="plan-target-head">
                     <b>{t.combo.name}</b>
+                    {t.combo.any_team && <span className="pill" title="Works for any team, whatever its keywords. Sets are ranked: #1 is worth the most to a run.">Any team · #{t.combo.rank}</span>}
                     <span className="plan-progress">{t.pieces.filter((p) => p.have).length}/{t.pieces.length}</span>
                   </div>
                   <ul className="pieces">{t.pieces.map((p) => <PieceChip key={p.gift.id} p={p} />)}</ul>
                   {t.combo.why && <p className="muted small">{t.combo.why}</p>}
+                  {t.combo.note && <p className="reason reason-bad small">{t.combo.note}</p>}
                 </li>
               ))}
             </ol>

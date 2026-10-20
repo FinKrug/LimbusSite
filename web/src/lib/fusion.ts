@@ -21,7 +21,8 @@ import { fusableThisRun, mustHave, mustHaveRecipes, neededPiece } from './mustha
 import type { Combo, Fusion, Gift, ThemePack } from './types'
 
 /** Keyword categories on the fusion screen. */
-export const FUSION_KEYWORDS = ['Burn', 'Bleed', 'Tremor', 'Rupture', 'Sinking', 'Poise', 'Charge', 'Slash', 'Pierce', 'Blunt'] as const
+import { FUSION_KEYWORDS } from './types'
+export { FUSION_KEYWORDS }
 export type FusionKeyword = (typeof FUSION_KEYWORDS)[number]
 
 export const FUSION_POINTS: Record<number, number> = { 1: 3, 2: 6, 3: 10, 4: 15, 5: 30, 6: 30 }

@@ -56,6 +56,7 @@ function giftEdge(a: GiftScore, b: GiftScore, kind: PartKind): string {
     }
     case 'upgrade': return `it ${lower(labelOf('upgrade'))}`
     case 'combo': return `it ${lower(labelOf('combo'))}, which you have`
+    case 'set': return `it's a ${lower(labelOf('set'))}, a set that works for any team`
     case 'run': return `it ${lower(labelOf('run'))}, which matters at this point of your run`
     case 'bonus': {
       const labels = a.parts.filter((p) => p.kind === 'bonus').map((p) => lower(p.label))

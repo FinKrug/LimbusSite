@@ -20,6 +20,12 @@ describe('must-have gifts (Lunar Memory)', () => {
     expect(ranked[0].gift.id).toBe('lunar-memory')
   })
 
+  it('values its pieces more later in the run, when the Super Shop usually shows up', () => {
+    const at = (floor: number) => scoreGift(gift('punctured-memory'), makeContext(gameData, team, [], { run: { ...hard, floor } }))
+    expect(at(8).score).toBeGreaterThan(at(1).score)
+    expect(at(10).parts.find((p) => p.label.startsWith('Builds toward'))!.detail).toMatch(/worth more late in the run/)
+  })
+
   it('values its pieces on Hard even when they do nothing for the team, more as you collect them', () => {
     const fresh = scoreGift(gift('punctured-memory'), makeContext(gameData, team, [], { run: hard }))
     expect(fresh.reasons[0].text).toMatch(/^Builds toward Lunar Memory .*1\/5 pieces/)

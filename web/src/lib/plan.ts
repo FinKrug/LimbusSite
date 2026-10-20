@@ -10,9 +10,9 @@
  *  - fusion results: only by fusing; Super Shop recipes (Lunar Memory) only on Hard floors.
  */
 import {
-  intrinsicScore, isGone, isHiddenPack, packOnFloor, rarityText, recipeGiveUp, WEIGHTS, type GiftScore, type Reason, type RunContext,
+  intrinsicScore, isGone, isHiddenPack, setRankWeight, packOnFloor, rarityText, recipeGiveUp, WEIGHTS, type GiftScore, type Reason, type RunContext,
 } from './scoring'
-import type { Combo, Fusion, Gift, ThemePack } from './types'
+import { fusableKeyword, type Combo, type Fusion, type Gift, type ThemePack } from './types'
 import { mustHave } from './musthave'
 
 export type Where = 'now' | 'later' | 'fuse' | 'luck' | 'no'
@@ -76,27 +76,33 @@ export interface Pick {
   where: Availability
 }
 
+/** Which to go for first: a General (keywordless) theme-pack gift beats a keyword one of about the
+ *  same value, since fusing can roll the keyword one but never the General one. */
+export const UNFUSABLE_PRIORITY = 0.2
+export function pickPriority(s: GiftScore): number {
+  const themedOnly = !s.gift.pools.includes('main') && s.gift.pools.includes('themed')
+  return s.score * (themedOnly && !fusableKeyword(s.gift) ? 1 + UNFUSABLE_PRIORITY : 1)
+}
+
+function bestPicks(ranked: GiftScore[], ctx: RunContext, packsForGift: Map<string, ThemePack[]>, where: Where, n: number, look: number): Pick[] {
+  const found: Pick[] = []
+  for (const s of ranked.slice(0, look)) {
+    const w = availability(s.gift, ctx, packsForGift)
+    if (w.where === where) found.push({ score: s, where: w })
+    // Enough candidates that a General gift a little lower down can still move up.
+    if (found.length >= n * 3) break
+  }
+  return found.sort((a, b) => pickPriority(b.score) - pickPriority(a.score)).slice(0, n)
+}
+
 /** The best gifts you can get on this floor. */
 export function getNow(ranked: GiftScore[], ctx: RunContext, packsForGift: Map<string, ThemePack[]>, n = 5): Pick[] {
-  const out: Pick[] = []
-  for (const s of ranked) {
-    const where = availability(s.gift, ctx, packsForGift)
-    if (where.where !== 'now') continue
-    out.push({ score: s, where })
-    if (out.length >= n) break
-  }
-  return out
+  return bestPicks(ranked, ctx, packsForGift, 'now', n, ranked.length)
 }
 
 /** The best gifts that only show up on a later floor of this run (theme packs to aim for). */
 export function comingUp(ranked: GiftScore[], ctx: RunContext, packsForGift: Map<string, ThemePack[]>, n = 3): Pick[] {
-  const out: Pick[] = []
-  for (const s of ranked.slice(0, 60)) {
-    const where = availability(s.gift, ctx, packsForGift)
-    if (where.where === 'later') out.push({ score: s, where })
-    if (out.length >= n) break
-  }
-  return out
+  return bestPicks(ranked, ctx, packsForGift, 'later', n, 60)
 }
 
 export interface Piece {
@@ -180,7 +186,9 @@ export function setTargets(ctx: RunContext, packsForGift: Map<string, ThemePack[
     if (gifts.length < 2) continue
     const pieces = gifts.map((g) => ({ gift: g, have: ctx.owned.has(g.id), where: availability(g, ctx, packsForGift) }))
     if (pieces.every((p) => p.have)) continue
-    const value = gifts.reduce((s, g) => s + intrinsicScore(g, ctx).score, 0) / gifts.length + WEIGHTS.comboPiece
+    // Keyword-free sets: the higher the set, the more it's worth to the run.
+    const value = (gifts.reduce((s, g) => s + intrinsicScore(g, ctx).score, 0) / gifts.length + WEIGHTS.comboPiece)
+      * (combo.any_team ? 0.6 + 0.6 * setRankWeight(combo) : 1)
     const progress = done(pieces) / pieces.length
     const soon = pieces.filter((p) => !p.have && p.where.where === 'now').length / Math.max(1, pieces.length - done(pieces))
     out.push({ combo, value, pieces, progress, rank: value * (0.4 + 0.45 * progress + 0.15 * soon) })

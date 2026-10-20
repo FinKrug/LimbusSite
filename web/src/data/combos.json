@@ -1,16 +1,141 @@
 [
   {
-    "id": "tremor-burst-debuffs",
-    "name": "Turn-start Tremor Burst debuffs",
-    "gifts": ["downpour", "melted-eyeball", "bell-of-truth"],
-    "why": "Downpour inflicts Tremor and triggers Tremor Burst on every enemy each turn. That sets off Melted Eyeball (Offense and Defense Level Down) and Bell of Truth (Fragile) without needing a Tremor team.",
+    "id": "tremor-set",
+    "name": "Tremor set",
+    "gifts": [
+      "nixie-divergence",
+      "melted-eyeball",
+      "oscillating-bracelet",
+      "downpour",
+      "reverberation",
+      "bio-venom-vial"
+    ],
+    "why": "Keyword-free set (works for any team): 5 Bind, 1 Paralyze, 10 Offense Level Down, 14 Defense Level Down, 2 Fragile, and carry-over Sloth damage on kill.",
+    "rank": 1,
+    "any_team": true,
+    "keyword": "Tremor",
     "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378"
   },
   {
-    "id": "sinking-sp-drain",
-    "name": "Sinking SP drain",
-    "gifts": ["midwinter-nightmare", "broken-compass"],
-    "why": "Broken Compass spreads Sinking Count across every enemy at the start of each wave, and Midwinter Nightmare adds Sinking Potency on every hit, so enemies lose SP even if your team doesn't inflict Sinking.",
+    "id": "poise-set",
+    "name": "Poise set",
+    "gifts": [
+      "cigarette-holder",
+      "four-leaf-clover",
+      "pendant-of-nostalgia",
+      "nebulizer",
+      "clear-mirror-calm-water",
+      "ornamental-horseshoe",
+      "devil-s-share",
+      "old-wooden-doll",
+      "finifugality",
+      "angel-s-cut"
+    ],
+    "why": "Keyword-free set (works for any team): 2 Power Up, ×2.5 Crit damage, 17 Offense Level Up, 2 Haste, 5 Damage Up, 6 Defense Level Down, 2 Clash Power.",
+    "rank": 2,
+    "any_team": true,
+    "keyword": "Poise",
+    "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378"
+  },
+  {
+    "id": "sinking-set",
+    "name": "Sinking set",
+    "gifts": [
+      "midwinter-nightmare",
+      "melted-spring",
+      "skeletal-crumbs",
+      "broken-compass",
+      "artistic-sense",
+      "blue-starshard"
+    ],
+    "why": "Keyword-free set (works for any team): 3 Offense Level Down, 6 Defense Level Down, deal 62.5% more damage, take 12.5% less, 3 Final Power Down. Broken Compass spreads Sinking Count across every enemy each wave and Midwinter Nightmare adds Sinking Potency on every hit, so enemies lose SP even if your team doesn't inflict Sinking.",
+    "rank": 3,
+    "any_team": true,
+    "keyword": "Sinking",
+    "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378"
+  },
+  {
+    "id": "charge-set",
+    "name": "Charge set",
+    "gifts": [
+      "portable-battery-socket",
+      "nightvision-goggles",
+      "curriculum-vitae",
+      "wrist-guards",
+      "lightning-rod",
+      "charge-type-gloves",
+      "material-interference-force-field",
+      "ups-system"
+    ],
+    "why": "Keyword-free set (works for any team): 5 Offense Level Up, 3 Haste, 4 Damage Up, and Near-light Superbattery.",
+    "rank": 4,
+    "any_team": true,
+    "keyword": "Charge",
+    "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378"
+  },
+  {
+    "id": "bleed-set",
+    "name": "Bleed set",
+    "gifts": [
+      "little-and-to-be-naughty-plushie",
+      "red-stained-gossypium",
+      "rusted-muzzle",
+      "arrested-hymn",
+      "ruptured-blood-sac",
+      "smokes-and-wires"
+    ],
+    "why": "Keyword-free set (works for any team): Deal 10% more damage, take 20% less, 1 Haste, 1 Damage Up, 2 Offense Level Up, 15 Offense and Defense Level Down, 3 Speed Down.",
+    "rank": 5,
+    "any_team": true,
+    "keyword": "Bleed",
+    "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378",
+    "note": "Don't bring White Gossypium: it isn't worth it"
+  },
+  {
+    "id": "rupture-set",
+    "name": "Rupture set",
+    "gifts": [
+      "talisman-bundle",
+      "standard-duty-battery",
+      "broken-revolver",
+      "fluorescent-lamp",
+      "crown-of-roses",
+      "barbed-lasso",
+      "thrill"
+    ],
+    "why": "Keyword-free set (works for any team): 2 Offense Level Down, 2 Defense Level Down, 1 Damage Up, 1 Haste.",
+    "rank": 6,
+    "any_team": true,
+    "keyword": "Rupture",
+    "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378"
+  },
+  {
+    "id": "burn-set",
+    "name": "Burn set",
+    "gifts": [
+      "ashes-to-ashes",
+      "dust-to-dust",
+      "charred-disk",
+      "pinpoint-logic-circuit",
+      "fiery-down",
+      "hellterfly-s-dream"
+    ],
+    "why": "Keyword-free set (works for any team): 4 Offense Level Down.",
+    "rank": 7,
+    "any_team": true,
+    "keyword": "Burn",
+    "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378",
+    "note": "Don't bring Glimpse of Flame unless you use Burn identities: others can't keep up its Burn Count and Potency, and are limited by their sin affinities"
+  },
+  {
+    "id": "tremor-burst-debuffs",
+    "name": "Turn-start Tremor Burst debuffs",
+    "gifts": [
+      "downpour",
+      "melted-eyeball",
+      "bell-of-truth"
+    ],
+    "why": "Downpour inflicts Tremor and triggers Tremor Burst on every enemy each turn. That sets off Melted Eyeball (Offense and Defense Level Down) and Bell of Truth (Fragile) without needing a Tremor team.",
     "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378"
   }
 ]

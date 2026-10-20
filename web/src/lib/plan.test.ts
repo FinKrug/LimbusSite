@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { availability, comingUp, fusionTargets, getNow } from './plan'
+import { availability, comingUp, fusionTargets, getNow, pickPriority } from './plan'
 import { makeContext, packOnFloor, packsByGift, rankGifts, type RunSettings } from './scoring'
 import type { Identity } from './types'
 
@@ -48,6 +48,15 @@ describe('where a gift can come from', () => {
     // Once you're in it, it's right here.
     const inIt = makeContext(gameData, team, [], { run: run({ floor: 5, pack: 'the-b-e' }) })
     expect(availability(bongy, inIt, pfg).where).toBe('now')
+  })
+
+  it('puts a General theme-pack gift ahead of a keyword one worth about the same', () => {
+    const base = gameData.gifts.find((g) => g.pools.includes('themed') && !g.pools.includes('main') && g.keyword === null)!
+    const score = (keyword: string | null) => ({ gift: { ...base, keyword }, score: 10, rating: 0, fit: 1, synergy: false, reasons: [], parts: [] })
+    expect(pickPriority(score(null))).toBeGreaterThan(pickPriority(score('Burn')) * 1.1)
+    // Main-pool gifts are in shops anywhere: no change.
+    const main = { ...score(null), gift: { ...base, keyword: null, pools: ['main'] as typeof base.pools } }
+    expect(pickPriority(main)).toBe(10)
   })
 
   it('a picked pack makes its pool available', () => {
