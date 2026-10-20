@@ -46,13 +46,22 @@ _NEEDS_BEFORE = re.compile(
     r"that triggers?|triggering|when triggering|on)\s*(?:\d+\+?\s*|at least \d+\s*|(?:or more|\d+ or more)\s*)?$",
     re.IGNORECASE,
 )
+# "inflict 3 X", "are inflicted with 2 Fragile": the gift gives the status itself.
 _INFLICT_BEFORE = re.compile(
-    r"(inflicts?|inflicting|apply|applies|trigger|triggers)\b[^.]{0,60}$", re.IGNORECASE,
+    r"(inflicts?|inflicting|inflicted|apply|applies|applied|trigger|triggers)\b[^.]{0,60}$",
+    re.IGNORECASE,
 )
+# "gain 5 Poise", "gains +2 Charge Count", "enemies ... gain Offense Level Down", "receive 2 X":
+# the status right after gain/receive (with an optional amount) is given by the gift.
+_GAIN_BEFORE = re.compile(r"\b(?:gains?|gaining|receives?)\s+(?:\+?\d+(?:\.\d+)?\s+)?(?:more\s+)?$", re.IGNORECASE)
+# Statuses allies gain on themselves on purpose (an ally gaining Fragile or Bind is a drawback, not a supply).
+_SELF_KEYWORDS = {"Poise", "Charge"}
+# "inflicted with" / "afflicted with" right before the status: it's given, not required.
+_GIVEN_WITH = re.compile(r"\b(?:inflicted|afflicted)\s+with\s+(?:\d+\s*)?$", re.IGNORECASE)
 _SKILL_INFLICTS = re.compile(r"Skills?\s+(?:that|which)\s+(?:inflicts?|gains?|apply|applies|consumes?)\b(?:(?!inflict|apply|trigger)[^.]){0,40}$", re.IGNORECASE)
 # "Whenever an ally inflicts X", "upon inflicting X", "If the said Skill applies X"
 _TEAM_INFLICTS = re.compile(
-    r"(?:\b(?:ally|allies|unit|units|Identit(?:y|ies)|Skill|Skills)\s+(?:inflicts?|applies|apply)|"
+    r"(?:\b(?:ally|allies|unit|units|Identit(?:y|ies)|Skill|Skills)\s+(?:that\s+|who\s+)?(?:inflicts?|inflicted|applies|apply|applied)|"
     r"\b(?:upon|when|whenever|after)\s+(?:inflicting|applying))\b(?:(?!inflict|apply|trigger)[^.]){0,30}$",
     re.IGNORECASE,
 )
@@ -102,7 +111,8 @@ def analyze(markup: str) -> dict:
         skill_keyword = None
         m = re.search(
             r"(?:Skills?\s+(?:that|which)\s+(?:inflicts?|gains?|apply|applies)|"
-            r"\b(?:ally|allies)\s+(?:inflicts?|applies)|\b(?:when|whenever|upon|after)\s+(?:applying|inflicting))"
+            r"\b(?:ally|allies)\s+(?:inflicts?|applies)|\b(?:when|whenever|upon|after)\s+(?:applying|inflicting)|"
+            r"\bIdentit(?:y|ies)\s+(?:that|who)\s+(?:inflicted|inflicts?|applied|apply|applies))"
             r"\s+(?:[^{.]{0,20})?\{\{\s*StatusEffect\s*\|\s*([^|}]+)", clause, re.IGNORECASE)
         if m:
             skill_keyword = m.group(1).strip()
@@ -119,17 +129,26 @@ def analyze(markup: str) -> dict:
             granted = _GRANTED.search(tail)  # "Blunt Skills inflict X": the gift adds X to those skills
             if not granted and (_SKILL_INFLICTS.search(tail) or _TEAM_INFLICTS.search(tail)):
                 continue  # "Skills that inflict Bleed" / "an ally inflicts Sinking": a team condition
-            if re.search(r"(?:Skills?\s+)?that\s+triggers?\s*$|\btriggering\s*$", tail, re.IGNORECASE):
-                add(needs, status)  # "Attack Skill that triggers Tremor Burst": your skills must trigger it
-                continue
-            if _NEEDS_BEFORE.search(tail.rstrip()) and not _INFLICT_BEFORE.search(tail[-25:]):
-                add(needs, status)
-                continue
-            if not _INFLICT_BEFORE.search(tail):
-                # e.g. "if the enemy has 15+ X" phrased differently, or a mention
-                if re.search(r"\b(has|have|with)\b[^,]{0,25}$", tail, re.IGNORECASE):
+            if _GAIN_BEFORE.search(tail):
+                # "Skills that gain Charge", "when gaining Poise": a team condition, not a supply.
+                if re.search(r"\b(?:that|who|which)\s+(?:can\s+)?(?:apply\s+or\s+)?gains?\s+(?:\+?\d+\s+)?$|\bgaining\s+$", tail, re.IGNORECASE):
+                    continue
+                # "all allies gain 5 Poise" gives Poise; "All enemies that have Bleed gain Offense Level
+                # Down" inflicts it; "this unit gains 1 Fragile" is a drawback on your own unit.
+                if status not in _SELF_KEYWORDS and not re.search(r"\benem(?:y|ies)\b[^,.;]{0,40}$", before, re.IGNORECASE):
+                    continue
+            else:
+                if re.search(r"(?:Skills?\s+)?that\s+triggers?\s*$|\btriggering\s*$", tail, re.IGNORECASE):
+                    add(needs, status)  # "Attack Skill that triggers Tremor Burst": your skills must trigger it
+                    continue
+                if _NEEDS_BEFORE.search(tail.rstrip()) and not _INFLICT_BEFORE.search(tail[-25:]):
                     add(needs, status)
-                continue
+                    continue
+                if not _INFLICT_BEFORE.search(tail):
+                    # e.g. "if the enemy has 15+ X" phrased differently, or a mention
+                    if re.search(r"\b(has|have|with)\b[^,]{0,25}$", tail, re.IGNORECASE) and not _GIVEN_WITH.search(tail):
+                        add(needs, status)
+                    continue
             # It's inflicted/triggered: under what condition?
             if skill_keyword and skill_keyword != status:
                 when = f"keyword:{skill_keyword}"

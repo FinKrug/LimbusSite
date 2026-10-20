@@ -147,7 +147,14 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
   const base = buildBattle(team, swaps, egos, loadout, owned, sim)
   const baseTotal = total(base) || 1
   const keywords = [...new Set(team.flatMap((i) => i.keywords))]
-  const giftSins = new Set(owned.flatMap((g) => g.affinities ?? []))
+  // Sins that gifts you own check skills for ("Sloth Affinity Skills"); a sin named only in a
+  // Resonance trigger ("When activating Sloth Absolute Resonance") is handled below, not here.
+  const giftSins = new Set(owned.flatMap((g) => (g.affinities ?? []).filter((sin) => {
+    const word = new RegExp(`\\b${sin}\\b`, 'gi')
+    const all = (g.effect.match(word) ?? []).length
+    const inTriggers = resonanceTriggers(g).filter((t) => t.sin === sin).flatMap((t) => t.texts).reduce((n, x) => n + (x.match(word) ?? []).length, 0)
+    return all > inTriggers
+  })))
   // Sins whose Resonance a gift you own triggers on ("When activating Wrath Absolute Resonance").
   const resonGifts = new Map<Sin, TriggerWorth[]>()
   for (const g of owned) {
@@ -236,7 +243,7 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
         const gains = from.sin !== to.sin ? resonFor(to.sin, 1) : none
         const losesGiftReson = loses.major.length ? loses.major : null
         const gainsGiftReson = gains.major.length ? gains.major : null
-        const minorText = (m: TriggerWorth) => `it only adds ${m.statuses.join(' and ')} there, and ${m.why}`
+        const minorText = (m: TriggerWorth) => m.kind === 'status' || !m.kind ? `it only adds ${m.statuses.join(' and ')} there, and ${m.why}` : m.why
         if (!losesGiftReson && loses.minor.length) {
           cons.push(`A bit less ${cap(from.sin!)} Resonance for ${loses.minor[0].gift.name}, but ${minorText(loses.minor[0])}`)
         }

@@ -170,6 +170,29 @@ export interface TriggerWorth {
   statuses: string[]
   /** Why it's minor, e.g. "Faust, Outis and Barbed Lasso already apply it". */
   why: string
+  /** Why it's minor: it only adds a status you have plenty of; it also switches on another way your
+   *  team covers ("or using a Skill with 2+ Atk Weight"); or the team can't line it up at all. */
+  kind?: 'status' | 'alternative' | 'unreachable'
+}
+
+const listNames = (names: string[]) => names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0]
+
+/** "...Resonance or using a Skill with 2+ Atk Weight" / "...or using a Skill that gains or applies Charge":
+ *  the deployed units that set it off without the Resonance. */
+export function alternativeRoute(text: string, team: Identity[]): { who: Identity[]; how: string } | null {
+  const weight = /Reson(?:ance|\.)\s+or\s+(?:when\s+)?using\s+a\s+Skill\s+with\s+(\d+)\+\s+Atk\s+Weight/i.exec(text)
+  if (weight) {
+    const n = Number(weight[1])
+    const who = team.filter((i) => (i.skills ?? []).some((s) => (s.weight ?? 1) >= n || (s.weight ?? 1) + (s.weight_bonus ?? 0) >= n))
+    return { who, how: `skills with ${n}+ Atk Weight` }
+  }
+  const status = /Reson(?:ance|\.)\s+or\s+(?:when\s+)?using\s+a\s+Skill\s+that\s+(?:gains\s+or\s+applies|applies\s+or\s+gains|gains|applies|inflicts)\s+(Burn|Bleed|Tremor|Rupture|Sinking|Poise|Charge)/i.exec(text)
+  if (status) {
+    const k = status[1]
+    const who = team.filter((i) => (i.keywords as string[]).includes(k) || (i.skills ?? []).some((s) => s.statuses.includes(k)))
+    return { who, how: `${k} skills` }
+  }
+  return null
 }
 
 /**
@@ -180,17 +203,35 @@ export interface TriggerWorth {
  */
 export function triggerWorth(g: Gift, t: ResonanceTrigger, team: Identity[], owned: Gift[]): TriggerWorth {
   const statuses = [...new Set(t.texts.flatMap((x) => [...x.matchAll(TRIGGER_STATUS)].map((m) => m[1])))]
+  const sin = t.sin.charAt(0).toUpperCase() + t.sin.slice(1)
+  // It also switches on another way, and your team has that covered: no reason to keep a sin for it.
+  const alt = alternativeRoute(t.texts.join(' '), team)
+  if (alt && alt.who.length) {
+    return { gift: g, sin: t.sin, minor: true, statuses, kind: 'alternative',
+      why: `it also switches on from ${listNames(alt.who.map((i) => i.sinner))}'s ${alt.how}` }
+  }
+  // Absolute Resonance needs 3+ same-sin skills in a row: with fewer than 3 deployed units that have
+  // a skill (or defense skill) of that sin, it almost never forms, so it's not worth keeping skills for.
+  if (t.absolute) {
+    const users = team.filter((i) => (i.skills ?? []).some((s) => s.sin === t.sin) || i.defense?.sin === t.sin)
+    if (users.length < 3) {
+      return { gift: g, sin: t.sin, minor: true, statuses, kind: 'unreachable',
+        why: users.length
+          ? `only ${listNames(users.map((i) => i.sinner))} ${users.length > 1 ? 'have' : 'has'} ${sin} skills, so ${sin} Absolute Resonance (3 in a row) almost never forms`
+          : `no one on your team has ${sin} skills, so ${sin} Absolute Resonance never forms` }
+    }
+  }
   const statusOnly = statuses.length > 0 && t.texts.every((x) => !TRIGGER_BUFF.test(x))
   if (!statusOnly) return { gift: g, sin: t.sin, minor: false, statuses, why: '' }
   const users = team.filter((i) => statuses.some((st) => (i.keywords as string[]).includes(st)))
   const gifts = owned.filter((o) => o.id !== g.id && (o.applies ?? []).some((a) => statuses.includes(a.status)))
   const word = statuses.join(' and ')
-  if (!users.length) return { gift: g, sin: t.sin, minor: true, statuses, why: `your team doesn't use ${word}` }
+  if (!users.length) return { gift: g, sin: t.sin, minor: true, statuses, kind: 'status', why: `your team doesn't use ${word}` }
   const sources = [...users.map((i) => i.sinner as string), ...gifts.map((o) => o.name)]
   if (sources.length < 2) return { gift: g, sin: t.sin, minor: false, statuses, why: '' }
   const shown = sources.length > 3 ? [...sources.slice(0, 3), `${sources.length - 3} more`] : sources
   const list = shown.length > 1 ? `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}` : shown[0]
-  return { gift: g, sin: t.sin, minor: true, statuses, why: `${list} already apply ${word}` }
+  return { gift: g, sin: t.sin, minor: true, statuses, kind: 'status', why: `${list} already apply ${word}` }
 }
 
 /** Battle value of one activation of a gift's Resonance-triggered part, per tier (minor parts x0.35). */
@@ -207,6 +248,8 @@ export function triggerBonus(members: Identity[], owned: Gift[]): { absolute: Si
   for (const g of owned) {
     for (const t of resonanceTriggers(g)) {
       const w = triggerWorth(g, t, members, owned)
+      // Covered another way (or out of reach): lining up the Resonance adds nothing.
+      if (w.kind === 'alternative' || w.kind === 'unreachable') continue
       const v = TRIGGER_VALUE * (g.tier ?? 1) * Math.min(1, t.share * 2) * (w.minor ? 0.35 : 1)
       ;(t.absolute ? absolute : plain)[t.sin] += v
     }

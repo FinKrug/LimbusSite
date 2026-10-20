@@ -720,7 +720,16 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      },
+      {
+        "status": "Poise",
+        "when": "sin:Envy"
+      }
+    ],
     "attack_types": [],
     "affinities": [
       "envy"
@@ -1317,7 +1326,16 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      },
+      {
+        "status": "Poise",
+        "when": "sin:Gloom"
+      }
+    ],
     "attack_types": [],
     "affinities": [
       "gloom"
@@ -1460,7 +1478,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -2050,7 +2073,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -2213,10 +2241,13 @@
       "Poise"
     ],
     "traits": [],
-    "needs": [
-      "Poise"
+    "needs": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
     ],
-    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -3772,7 +3803,12 @@
       "Blade Lineage"
     ],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -4505,6 +4541,10 @@
       {
         "status": "Rupture",
         "when": "always"
+      },
+      {
+        "status": "Charge",
+        "when": "always"
       }
     ],
     "attack_types": [],
@@ -5047,7 +5087,16 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      },
+      {
+        "status": "Poise",
+        "when": "sin:Pride"
+      }
+    ],
     "attack_types": [],
     "affinities": [
       "pride"
@@ -5473,6 +5522,10 @@
       {
         "status": "Bind",
         "when": "always"
+      },
+      {
+        "status": "Poise",
+        "when": "always"
       }
     ],
     "attack_types": [],
@@ -5549,7 +5602,16 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      },
+      {
+        "status": "Charge",
+        "when": "sin:Sloth"
+      }
+    ],
     "attack_types": [],
     "affinities": [
       "sloth"
@@ -6394,7 +6456,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "sin:Sloth"
+      }
+    ],
     "attack_types": [],
     "affinities": [
       "sloth"
@@ -6508,7 +6575,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": true,
@@ -8245,7 +8317,12 @@
       "Kurokumo Clan"
     ],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "keyword:Bleed"
+      }
+    ],
     "attack_types": [
       "Slash"
     ],
@@ -8357,7 +8434,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -8424,7 +8506,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
+    ],
     "attack_types": [
       "Pierce"
     ],
@@ -8858,7 +8945,16 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      },
+      {
+        "status": "Poise",
+        "when": "sin:Envy"
+      }
+    ],
     "attack_types": [],
     "affinities": [
       "envy"
@@ -9118,6 +9214,10 @@
       {
         "status": "Rupture",
         "when": "always"
+      },
+      {
+        "status": "Poise",
+        "when": "always"
       }
     ],
     "attack_types": [],
@@ -9150,10 +9250,17 @@
       "Poise"
     ],
     "traits": [],
-    "needs": [
-      "Poise"
+    "needs": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      },
+      {
+        "status": "Poise",
+        "when": "sin:Gluttony"
+      }
     ],
-    "applies": [],
     "attack_types": [],
     "affinities": [
       "gluttony"
@@ -9652,7 +9759,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": true,
@@ -9754,7 +9866,12 @@
     "needs": [
       "Bleed"
     ],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -9820,7 +9937,16 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      },
+      {
+        "status": "Charge",
+        "when": "sin:Envy"
+      }
+    ],
     "attack_types": [],
     "affinities": [
       "envy"
@@ -10074,7 +10200,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -10142,7 +10273,12 @@
     "needs": [
       "Rupture"
     ],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -10177,12 +10313,19 @@
     ],
     "traits": [],
     "needs": [
-      "Bleed",
-      "Offense Level Down"
+      "Bleed"
     ],
     "applies": [
       {
         "status": "Bind",
+        "when": "always"
+      },
+      {
+        "status": "Poise",
+        "when": "always"
+      },
+      {
+        "status": "Offense Level Down",
         "when": "always"
       }
     ],
@@ -10452,7 +10595,12 @@
       "W Corp."
     ],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -10484,7 +10632,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -10613,7 +10766,12 @@
     "needs": [
       "Poise"
     ],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "keyword:Sinking"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -10825,7 +10983,16 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      },
+      {
+        "status": "Poise",
+        "when": "sin:Gloom"
+      }
+    ],
     "attack_types": [],
     "affinities": [
       "gloom"
@@ -11478,10 +11645,13 @@
       "Fragile"
     ],
     "traits": [],
-    "needs": [
-      "Fragile"
+    "needs": [],
+    "applies": [
+      {
+        "status": "Fragile",
+        "when": "always"
+      }
     ],
-    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -13143,10 +13313,13 @@
       "Discard"
     ],
     "traits": [],
-    "needs": [
-      "Poise"
+    "needs": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
     ],
-    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": true,
@@ -13182,10 +13355,14 @@
     ],
     "traits": [],
     "needs": [
-      "Bleed",
-      "Poise"
+      "Bleed"
     ],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -13251,7 +13428,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -13330,7 +13512,12 @@
       "W Corp."
     ],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -14426,10 +14613,13 @@
     "traits": [
       "The Pequod"
     ],
-    "needs": [
-      "Poise"
+    "needs": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
     ],
-    "applies": [],
     "attack_types": [],
     "affinities": [],
     "team_gate": false,
@@ -14792,13 +14982,15 @@
       "Poise"
     ],
     "traits": [],
-    "needs": [
-      "Poise"
-    ],
+    "needs": [],
     "applies": [
       {
         "status": "Poise",
-        "when": "sin:Gloom"
+        "when": "always"
+      },
+      {
+        "status": "Poise",
+        "when": "keyword:Poise"
       }
     ],
     "attack_types": [],
@@ -15149,10 +15341,13 @@
       "Envy Fragility"
     ],
     "traits": [],
-    "needs": [
-      "Charge"
+    "needs": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      }
     ],
-    "applies": [],
     "attack_types": [],
     "affinities": [
       "envy"
@@ -16225,7 +16420,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": true,
@@ -16262,7 +16462,12 @@
     ],
     "traits": [],
     "needs": [],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Charge",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": true,
@@ -16460,7 +16665,12 @@
     "needs": [
       "Bleed"
     ],
-    "applies": [],
+    "applies": [
+      {
+        "status": "Poise",
+        "when": "always"
+      }
+    ],
     "attack_types": [],
     "affinities": [],
     "team_gate": true,

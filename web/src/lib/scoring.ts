@@ -44,7 +44,7 @@ import { traitShare } from './traitparts'
 import { holderConditions, holderFactor, mechanicGates, meets } from './holder'
 import { MUST_HAVE_MULT, PIECE_SHARE, fusableThisRun, pieceTiming, mustHave, mustHaveRecipes, neededPiece, recipeProgress } from './musthave'
 import { egoNeeds, recommendEgos, type EgoNeed } from './egorec'
-import { buildBattle, EGO_WEIGHTS, egoGiftInfo, resonanceTriggers, type BattleProfile, type EgoLoadout } from './ego'
+import { alternativeRoute, buildBattle, EGO_WEIGHTS, egoGiftInfo, resonanceTriggers, type BattleProfile, type EgoLoadout } from './ego'
 import type { Swaps } from './battle'
 
 export const WEIGHTS = {
@@ -1020,10 +1020,18 @@ export function egoAdjust(gift: Gift, ctx: RunContext): { factor: number; reason
     factor += info.resourceShare * (resF - 1)
   }
   for (const t of resonanceTriggers(gift)) {
-    const chance = t.absolute ? sim.areson[t.sin] : sim.reson[t.sin]
+    const reson = t.absolute ? sim.areson[t.sin] : sim.reson[t.sin]
+    // "...Resonance or using a Skill with 2+ Atk Weight": units that set it off another way.
+    const alt = alternativeRoute(t.texts.join(' '), ctx.members)
+    const altChance = alt && alt.who.length ? Math.min(1, 0.3 * alt.who.length) : 0
+    const chance = Math.max(reson, altChance)
     const tf = Math.min(1.2, 0.15 + (t.absolute ? 1.5 : 1.2) * chance)
     factor *= 1 - t.share + t.share * tf
     const what = `${cap(t.sin)} ${t.absolute ? 'Absolute Resonance' : 'Resonance'}`
+    if (altChance > reson) {
+      reasons.push({ kind: 'good', text: `Switches on from ${alt!.who.map((i) => i.sinner).join(', ')}'s ${alt!.how}, even without ${what}` })
+      continue
+    }
     reasons.push(chance >= 0.35
       ? { kind: 'good', text: `Triggers on ${what}: your team lines it up on about ${pct(chance)} of turns` }
       : chance >= 0.1

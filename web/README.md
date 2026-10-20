@@ -134,6 +134,10 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
     Truth work" if you own Bell of Truth first.
   The scraper derives `needs` / `applies` / `attack_types` / `affinities` / `team_gate` for each
   gift from its effect text (`scraper/effects.py`). It's a heuristic, so check odd cases there.
+  Given, not needed (2026-10-19, after Special Contract read as needing Fragile): "are inflicted with
+  2 Fragile", "all allies gain 5 Poise", "enemies ... gain Offense Level Down" and "receive X" count as
+  the gift applying it; an ally gaining Fragile/Bind is a drawback, neither; "Skills that gain Charge"
+  and "Identities that inflicted Sinking" stay team conditions.
 - **Hand-picked combos:** `src/data/combos.json` lists combos that the effect text can't
   capture (Midwinter Nightmare + Broken Compass drain SP together). They're automatic: own one
   piece and the rest rank higher with "Combos with Midwinter Nightmare, which you have". The
@@ -291,7 +295,12 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   Absolute Resonance) is minor when your team doesn't use that status or 2+ deployed units or other
   owned gifts already apply it; minor triggers are noted on the swap ("A bit more Gluttony Resonance
   for Crown of Roses, but it only adds Rupture there, and Faust, Ryōshū and Outis already apply
-  Rupture") but never make S1 → S2 the pick or block Skill 3. Buffs (Power, Offense Level, damage,
+  Rupture") but never make S1 → S2 the pick or block Skill 3. A trigger is also minor when the gift
+  switches on another way your team covers (`alternativeRoute`: Sunshower's "Sloth Absolute Resonance
+  or using a Skill with 2+ Atk Weight" with Rodion's and Ishmael's multi-target Skill 3s; Employee
+  Card's "or a Skill that gains or applies Charge"), or when fewer than 3 deployed units have a skill
+  or defense skill of that sin, since Absolute Resonance needs 3 in a row. Those triggers add no
+  Resonance value in the battle model, and gift scores count the other route as switching it on. Buffs (Power, Offense Level, damage,
   healing) always count. Swaps are played out with defense skills in play, so losing a sin's last skill
   matters less when the unit's defense skill has that sin ("its defense skill … is Gluttony too, so it
   can still fill a Gluttony Resonance chain when needed"); each card has a **Def** row with how often

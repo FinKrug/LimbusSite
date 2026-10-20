@@ -61,10 +61,11 @@ describe('skill swaps', () => {
     const s1to2 = plan.options.find((o) => o.kind === '1to2')!
     expect(s1to2.special).toBe(false)
     // A gift whose Resonance part is a real buff still steers the pick.
-    const phantom = gameData.gifts.find((g) => g.id === 'dreaming-electric-sheep')!
+    const phantom = gameData.gifts.find((g) => g.id === 'ardent-flower')!
     expect(triggerWorth(phantom, resonanceTriggers(phantom)[0], team, [phantom]).minor).toBe(false)
     // With no other Rupture source the extra Rupture is worth it.
-    const lone = [ruptureUnit('a', 'gluttony'), { ...unit('x', [sk(1, 'gloom', 4, 3, 2), sk(2, 'gluttony', 5, 3, 2), sk(3, 'envy', 9, 5, 3)]), keywords: ['Burn'] as Identity['keywords'] }]
+    const burnUnit = (id: string) => ({ ...unit(id, [sk(1, 'gloom', 4, 3, 2), sk(2, 'gluttony', 5, 3, 2), sk(3, 'envy', 9, 5, 3)]), keywords: ['Burn'] as Identity['keywords'] })
+    const lone = [ruptureUnit('a', 'gluttony'), burnUnit('x'), burnUnit('y')]
     expect(triggerWorth(crown, t, lone, [crown]).minor).toBe(false)
   })
 
@@ -80,6 +81,26 @@ describe('skill swaps', () => {
     expect(withDef.defense?.sin).toBe('wrath')
     expect(loss(withDef).pros.some((x) => /defense skill \(Wrath Guard\) is Wrath too/.test(x))).toBe(true)
     expect(loss(withDef).gain).toBeGreaterThanOrEqual(loss(plain).gain)
+  })
+
+  it("doesn't keep skills for a Resonance the team can't line up, or that switches on another way", () => {
+    const byId = (id: string) => gameData.identities.find((i) => i.id === id)!
+    // Demo Heishou team: only Faust and Outis have Sloth skills; Rodion and Ishmael have multi-target Skill 3s.
+    const team = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion',
+      'heishou-pack-si-branch-gregor'].map(byId)
+    const sunshower = gameData.gifts.find((g) => g.id === 'sunshower')!
+    const w = triggerWorth(sunshower, resonanceTriggers(sunshower)[0], team, [sunshower])
+    expect(w).toMatchObject({ minor: true, kind: 'alternative' })
+    expect(w.why).toMatch(/Ishmael and Rodion's skills with 2\+ Atk Weight/)
+    const faust = planSwaps(team, {}, [sunshower]).find((p) => p.identity.sinner === 'Faust')!
+    expect(faust.best?.kind).toBe('1to3')
+    expect(faust.options.every((o) => !o.hurts || !o.cons.some((c) => /Sunshower triggers on/.test(c)))).toBe(true)
+    // Without the multi-target units, two Sloth users still can't make Sloth Absolute Resonance.
+    const noAoe = team.filter((i) => i.sinner !== 'Rodion' && i.sinner !== 'Ishmael')
+    const w2 = triggerWorth(sunshower, resonanceTriggers(sunshower)[0], noAoe, [sunshower])
+    expect(w2).toMatchObject({ minor: true, kind: 'unreachable' })
+    expect(w2.why).toMatch(/only Faust and Outis have Sloth skills/)
   })
 
   it('takes Skill 3 by default, and Skill 2 only for something Skill 3 lacks', () => {
