@@ -19,6 +19,9 @@ interface Props {
   pack: ThemePack | null
   teamKeywords: string[]
   packsForGift: Map<string, ThemePack[]>
+  /** Super Shop on or off: kept in App (and localStorage) so it stays when you switch tabs. */
+  superShop: boolean
+  onSuperShopChange: (on: boolean) => void
 }
 
 type Sort = 'tier' | 'value'
@@ -31,9 +34,8 @@ const FUSE_NOW = 0.15
  * slots, see the forecast, then Fuse (which updates the gifts you have). Below it:
  * suggested fusions, recipes you've started, and gifts worth selling or fusing.
  */
-export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, packsForGift }: Props) {
+export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, packsForGift, superShop, onSuperShopChange: setSuperShop }: Props) {
   const canSuper = run.difficulty !== 'normal'
-  const [superShop, setSuperShop] = useState(false)
   const isSuper = canSuper && superShop
   const slots = isSuper ? SUPER_SLOTS : REGULAR_SLOTS
   const [keyword, setKeyword] = useState<string | null>(teamKeywords[0] ?? null)

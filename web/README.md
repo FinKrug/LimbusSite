@@ -195,7 +195,8 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   fusion's expected value, and for each one the suggestions put first the spare gifts that make its
   keyword and tier with the best odds of rolling it ("Last chance at Virtue - Yong: only Spring
   Cultivation has it this run … 30% with these gifts"). Fuse removes the ingredients from your gifts and adds what you
-  got. Below: suggested fusions from the gifts you'd miss least (vestiges first; never recipe or
+  got. The Super Shop switch stays on when you change tabs or reload
+  (`limbussite.supershop.v1`, kept in App) until you turn it off or Clear run. Below: suggested fusions from the gifts you'd miss least (vestiges first; never recipe or
   combo pieces), recipes to work on (ones you've started, plus Lunar Memory on Hard: the three
   Memories + any 2 Sin Fragments, Super Shop only), and gifts to sell or fuse. A gift worth under
   15% of your best one is marked **Fuse now**, with the reason it does nothing for you. A gift is
@@ -334,7 +335,11 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   Glimpse of Flames only with Burn identities). They work for any team, so every piece gets
   `setBase` 3 × rank weight (1 for #1, −0.1 per rank) × (0.3 + 0.7 × share of the rest you own), even
   before you own one ("Piece of the Tremor set, #1 of 7 sets that work for any team"). It's a `set`
-  part, not team synergy, so it doesn't inflate theme pack scores. Your plan's Gift sets to build
+  part, not team synergy, so it doesn't inflate theme pack scores. A piece you fused into a gift you
+  own counts as had when that fused gift switches on with your deployed team (no "N or more
+  Identities" gate, or it's met; `ctx.fusedInto`, `setHas`): Enrapturing Trance on a Rupture team
+  covers Talisman Bundle and Standard-duty Battery in the Rupture set, and Your plan shows them as
+  "Talisman Bundle (in Enrapturing Trance)". Your plan's Gift sets to build
   shows them with an "Any team · #1" pill and the guide's note.
 - **Lunar Memory pieces later in the run:** the "Builds toward Lunar Memory" bonus grows from ×0.8 on
   floor 1 to ×1.3 on the last floor (`pieceTiming` in musthave.ts): Super Shop odds build up with the

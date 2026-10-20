@@ -98,6 +98,8 @@ export default function App() {
   // v2: threadspun became the default (v1 defaulted to base).
   const [art, setArt] = usePersistentState<ArtVariant>('limbussite.art.v2', 'uptie')
   const [dismissed, setDismissed] = usePersistentState<string[]>('limbussite.dismissed.v1', [])
+  // Fusion tab: are you at a Super Shop? Stays on across tabs and reloads until you turn it off.
+  const [superShop, setSuperShop] = usePersistentState<boolean>('limbussite.supershop.v1', false)
   // Equipped E.G.O per sinner and grade (Team tab).
   const [loadout, setLoadout] = usePersistentState<EgoLoadout>('limbussite.egos.v1', {})
   // Saved lineups (strip above the lineup; Manage opens the full list) and the one last loaded or saved.
@@ -279,6 +281,7 @@ export default function App() {
               setOwned([])
               setOffered([])
               setDismissed([])
+              setSuperShop(false)
               setRun({ ...run, floor: null, pack: null, visited: {} })
             }} />
           <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={setOwned} />
@@ -329,7 +332,8 @@ export default function App() {
             )}
             {tab === 'fusion' && (
               <FusionTab ctx={ctx} owned={owned} onOwnedChange={setOwned} run={run} pack={currentPack}
-                teamKeywords={focus.map((f) => f.keyword)} packsForGift={packsForGift} />
+                teamKeywords={focus.map((f) => f.keyword)} packsForGift={packsForGift}
+                superShop={superShop} onSuperShopChange={setSuperShop} />
             )}
             {tab === 'events' && (
               <EventsTab ctx={ctx} events={gameData.events ?? []} team={teamIdentities.length ? teamIdentities : ctx.members} pack={currentPack} />

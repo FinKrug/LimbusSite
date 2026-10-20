@@ -10,7 +10,7 @@
  *  - fusion results: only by fusing; Super Shop recipes (Lunar Memory) only on Hard floors.
  */
 import {
-  intrinsicScore, isGone, isHiddenPack, setRankWeight, packOnFloor, rarityText, recipeGiveUp, WEIGHTS, type GiftScore, type Reason, type RunContext,
+  intrinsicScore, isGone, isHiddenPack, setHas, setRankWeight, packOnFloor, rarityText, recipeGiveUp, WEIGHTS, type GiftScore, type Reason, type RunContext,
 } from './scoring'
 import { fusableKeyword, type Combo, type Fusion, type Gift, type ThemePack } from './types'
 import { mustHave } from './musthave'
@@ -109,6 +109,8 @@ export interface Piece {
   gift: Gift
   have: boolean
   where: Availability
+  /** Gift sets: you don't have it, but a gift you own that it fused into covers it. */
+  via?: Gift
 }
 
 export interface FusionTarget {
@@ -184,7 +186,11 @@ export function setTargets(ctx: RunContext, packsForGift: Map<string, ThemePack[
   for (const combo of ctx.combos) {
     const gifts = combo.gifts.map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
     if (gifts.length < 2) continue
-    const pieces = gifts.map((g) => ({ gift: g, have: ctx.owned.has(g.id), where: availability(g, ctx, packsForGift) }))
+    // A piece you fused into a gift you own that works with your team still counts.
+    const pieces = gifts.map((g): Piece => ({
+      gift: g, have: setHas(ctx, g.id), where: availability(g, ctx, packsForGift),
+      via: !ctx.owned.has(g.id) ? ctx.fusedInto.get(g.id) : undefined,
+    }))
     if (pieces.every((p) => p.have)) continue
     // Keyword-free sets: the higher the set, the more it's worth to the run.
     const value = (gifts.reduce((s, g) => s + intrinsicScore(g, ctx).score, 0) / gifts.length + WEIGHTS.comboPiece)

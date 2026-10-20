@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   intrinsicScore, isSurvival, makeContext, packInDifficulty, packOnFloor, packPool, packsByGift, planCombos, planFusions, rankGifts, rankThemePacks,
-  scoreGift, signatureStatuses, teamFocus, teamGate, teamProfile, upgradeMagnitude, upgradeValue,
+  activates, scoreGift, setHas, signatureStatuses, teamFocus, teamGate, teamProfile, upgradeMagnitude, upgradeValue,
 } from './scoring'
 import { gameData } from './data'
 import { traitShare } from './traitparts'
@@ -665,5 +665,24 @@ describe('keyword-free gift sets (combos.json, any_team)', () => {
     expect(s.reasons.some((r) => /Piece of the Tremor set \(works for any team\): you have 1 of the other 5/.test(r.text))).toBe(true)
     // Set pieces aren't "built for your team" (that would inflate theme pack scores).
     expect(s.synergy).toBe(false)
+  })
+})
+
+describe('fused gifts in gift sets', () => {
+  it('count their ingredients as had when the fused gift switches on with your team', () => {
+    const rupture = gameData.identities.filter((i) => i.keywords.includes('Rupture'))
+      .filter((i, k, a) => a.findIndex((x) => x.sinner === i.sinner) === k).slice(0, 7)
+    const burn = gameData.identities.filter((i) => i.keywords.includes('Burn') && !i.keywords.includes('Rupture'))
+      .filter((i, k, a) => a.findIndex((x) => x.sinner === i.sinner) === k).slice(0, 7)
+    const trance = gameData.gifts.find((g) => g.id === 'enrapturing-trance')!
+    const on = makeContext(gameData, rupture, ['enrapturing-trance'])
+    expect(activates(trance, on.members)).toBe(true)
+    expect(setHas(on, 'talisman-bundle') && setHas(on, 'standard-duty-battery')).toBe(true)
+    const thrill = scoreGift(gameData.gifts.find((g) => g.id === 'thrill')!, on)
+    expect(thrill.reasons.some((r) => /Piece of the Rupture set \(works for any team\): you have 2 of the other 6/.test(r.text))).toBe(true)
+    // A Burn team can't switch Enrapturing Trance on, so it doesn't stand in for its pieces.
+    const off = makeContext(gameData, burn, ['enrapturing-trance'])
+    expect(activates(trance, off.members)).toBe(false)
+    expect(setHas(off, 'talisman-bundle')).toBe(false)
   })
 })

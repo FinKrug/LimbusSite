@@ -347,6 +347,20 @@ export interface RunContext {
    *  Once you have a recipe's result, its ingredients stop showing up (Heishou Bolus - Mao after
    *  Shadowlurking). Not for Lunar Memory: its Memories and Sin Fragments keep dropping. */
   gone: Map<string, string>
+  /** Gift sets: an ingredient you fused into a gift you own that switches on with this team
+   *  counts as had (ingredient id -> the fused gift). */
+  fusedInto: Map<string, Gift>
+}
+
+/** Does this gift switch on with the deployed team? (No "N or more Identities" gate, or it's met.) */
+export function activates(g: Gift, members: Identity[]): boolean {
+  const gate = teamGate(g)
+  return !gate || members.filter((i) => hasSkillStatus(i, gate.status)).length >= gate.n
+}
+
+/** For gift sets: you have it, or a gift you own that it fused into does its job. */
+export function setHas(ctx: RunContext, id: string): boolean {
+  return ctx.owned.has(id) || ctx.fusedInto.has(id)
 }
 
 /** Can't be had any more this run (see RunContext.gone). */
@@ -482,6 +496,13 @@ export function makeContext(
   const combosByGift = new Map<string, Combo[]>()
   for (const c of combos) for (const id of c.gifts) combosByGift.set(id, [...(combosByGift.get(id) ?? []), c])
 
+  // Fused gifts you own that switch on with this team stand in for their ingredients in gift sets.
+  const fusedInto = new Map<string, Gift>()
+  for (const f of data.fusions) {
+    const result = giftsById.get(f.result)
+    if (!result || !ownedSet.has(f.result) || mustHave(f.result) || !activates(result, members)) continue
+    for (const i of f.ingredients) if (!ownedSet.has(i) && !fusedInto.has(i)) fusedInto.set(i, result)
+  }
   const battle = buildBattle(members, swaps, data.egos ?? [], loadout, [...ownedSet].map((id) => giftsById.get(id)!))
 
   return {
@@ -489,7 +510,7 @@ export function makeContext(
     fusionsByIngredient, ownedKeywordCounts, signature: signatureStatuses(data.identities),
     giftSupply, unmetOwned, enablers, combos, combosByGift, lineup: team, deployed, members, tiers, battle,
     egoNeeds: egoNeeds(recommendEgos(members, data.egos ?? [], loadout, battle, data.gifts, ownedSet)),
-    gone,
+    gone, fusedInto,
   }
 }
 
@@ -1197,7 +1218,7 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
     })
   }
   for (const c of ctx.combosByGift.get(gift.id) ?? []) {
-    const have = c.gifts.filter((id) => id !== gift.id && ctx.owned.has(id)).length
+    const have = c.gifts.filter((id) => id !== gift.id && setHas(ctx, id)).length
     if (c.any_team && !ctx.owned.has(gift.id)) {
       // Keyword-free sets work for any team: worth something from the first piece, more as you build it.
       const add = WEIGHTS.setBase * setRankWeight(c) * (WEIGHTS.setStart + (1 - WEIGHTS.setStart) * have / (c.gifts.length - 1))
@@ -1215,7 +1236,9 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
     }
     if (!have || ctx.owned.has(gift.id)) continue
     score += WEIGHTS.comboPiece * have / (c.gifts.length - 1)
-    const partners = c.gifts.filter((id) => id !== gift.id && ctx.owned.has(id)).map((id) => ctx.giftsById.get(id)?.name ?? id)
+    const partners = c.gifts.filter((id) => id !== gift.id && setHas(ctx, id))
+      .map((id) => ctx.fusedInto.has(id) && !ctx.owned.has(id) ? ctx.fusedInto.get(id)!.name : ctx.giftsById.get(id)?.name ?? id)
+      .filter((n, k, all) => all.indexOf(n) === k)
     parts.push({ kind: 'combo', label: `Combos with ${partners.join(' and ')}`, value: WEIGHTS.comboPiece * have / (c.gifts.length - 1),
       detail: c.why || `"${c.name}" (you have ${have}/${c.gifts.length})` })
     reasons.unshift({ kind: 'good', text: `Combos with ${partners.join(' and ')}, which you have ("${c.name}")` })
@@ -1555,7 +1578,7 @@ export function planCombos(ctx: RunContext): ComboPlan[] {
   return ctx.combos
     .map((combo) => {
       const gifts = combo.gifts.map((id) => ctx.giftsById.get(id)!).filter(Boolean)
-      return { combo, owned: gifts.filter((g) => ctx.owned.has(g.id)), missing: gifts.filter((g) => !ctx.owned.has(g.id)) }
+      return { combo, owned: gifts.filter((g) => setHas(ctx, g.id)), missing: gifts.filter((g) => !setHas(ctx, g.id)) }
     })
     .sort((a, b) =>
       Number(b.owned.length > 0) - Number(a.owned.length > 0)

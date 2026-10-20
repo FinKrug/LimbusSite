@@ -24,10 +24,11 @@ const TITLE: Record<string, string> = {
 function PieceChip({ p }: { p: Piece }) {
   const state = p.have ? 'have' : p.where.where
   return (
-    <li className={`piece piece-${state}`} title={`${p.gift.name}: ${p.have ? TITLE.have : p.where.text}`}>
+    <li className={`piece piece-${state}${p.via ? ' piece-via' : ''}`}
+      title={`${p.gift.name}: ${p.via ? `fused into ${p.via.name}, which you have and which works with your team` : p.have ? TITLE.have : p.where.text}`}>
       <GiftIcon gift={p.gift} size={28} />
       <span className="piece-mark" aria-label={TITLE[state]}>{MARK[state]}</span>
-      <span className="piece-name">{p.gift.name}</span>
+      <span className="piece-name">{p.gift.name}{p.via && <span className="muted"> (in {p.via.name})</span>}</span>
     </li>
   )
 }

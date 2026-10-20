@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { availability, comingUp, fusionTargets, getNow, pickPriority } from './plan'
+import { availability, comingUp, fusionTargets, getNow, pickPriority, setTargets } from './plan'
 import { makeContext, packOnFloor, packsByGift, rankGifts, type RunSettings } from './scoring'
 import type { Identity } from './types'
 
@@ -57,6 +57,17 @@ describe('where a gift can come from', () => {
     // Main-pool gifts are in shops anywhere: no change.
     const main = { ...score(null), gift: { ...base, keyword: null, pools: ['main'] as typeof base.pools } }
     expect(pickPriority(main)).toBe(10)
+  })
+
+  it('shows set pieces you fused into a working gift as had', () => {
+    const rupture = gameData.identities.filter((i) => i.keywords.includes('Rupture'))
+      .filter((i, k, a) => a.findIndex((x) => x.sinner === i.sinner) === k).slice(0, 7)
+    const c = makeContext(gameData, rupture, ['enrapturing-trance', 'thrill'], { run: run({ floor: 4 }) })
+    const set = setTargets(c, pfg, 10).find((t) => t.combo.id === 'rupture-set')!
+    const talisman = set.pieces.find((p) => p.gift.id === 'talisman-bundle')!
+    expect(talisman.have).toBe(true)
+    expect(talisman.via?.id).toBe('enrapturing-trance')
+    expect(set.pieces.filter((p) => p.have)).toHaveLength(3)
   })
 
   it('a picked pack makes its pool available', () => {
