@@ -1,8 +1,9 @@
 # LimbusSite web app
 
 A Vite + React + TypeScript app. All game data is static JSON from `../data` (made by
-the scraper), bundled at build time, so there's no server or database. Your team,
-owned gifts and offered packs are saved in the browser (localStorage).
+the scraper), bundled at build time. Your team, owned gifts and offered packs are saved in
+the browser (localStorage). Signing in with Google (optional) also keeps a copy in the cloud
+(Firebase), so your data follows you between computers; see "Cloud sync" below.
 
 ## Commands
 
@@ -21,11 +22,95 @@ npm run preview    # serve the production build locally
 ## Sharing the site
 
 - **Send a file:** `npm run build:single` packs the whole site, data included, into
-  `dist/LimbusSite.html` (about 1 MB). Your friend double-clicks it; there's nothing to install
+  `dist/LimbusSite.html` (about 2.5 MB). Your friend double-clicks it; there's nothing to install
   and it works offline. Their team and gifts are saved in their own browser. Rebuild and resend
   it after a scrape or an update. (`scripts/single-file.mjs` inlines the build's JS and CSS,
   because browsers won't load separate module scripts from a file opened off disk.)
 - **Same Wi-Fi:** `npm run dev:lan` and send the Network link it prints. Your PC has to stay on.
+- **On the internet:** see "Putting it online" below.
+
+## Screens
+
+The site follows a Mirror Dungeon run, so each screen shows only what that moment needs
+(`App.tsx`, `STAGES`):
+
+1. **Team** (before the run): lineup, identities, E.G.O, saved lineups.
+2. **Pick a pack**: the floor's theme packs, best first (4 shown, then Show more).
+3. **Shop**: **Buy** (your plan for the floor and the ranked gift list), **Fuse**, **Enhance**;
+   Cost to have and Gifts you have on the side.
+4. **Event**: search an event by the choice on screen.
+5. **Battle**: lineup strip and skill swaps.
+
+Every run screen has the run bar on top (difficulty, floor −/+, the floor's pack, Gifts you
+have, **Run settings** for length, Struggling in fights, End / Clear run). **Tools** in the
+header holds Evaluate and Import gifts. Long explanations are folded into "How this works".
+Old saved tabs map onto the screens (`limbussite.tab.v1` keeps the same ids); the Shop
+remembers its last part (`shoptab.v1`, per computer).
+
+## Your data between computers
+
+The cloud button at the top right (and "Played on another computer?" on the welcome screen)
+opens **Your data**:
+
+- **Sync between computers:** Sign in with Google. Everything you change is saved to your
+  cloud copy a second later, and changes from your other computers show up live. The first
+  time you sign in on a computer, or when both this computer and the cloud changed since the
+  last sync, you get a side-by-side preview (team, run, gifts, saved lineups, E.G.O and skill
+  swaps, settings; rows that differ are marked) and pick which copy to keep. Otherwise it
+  syncs on its own: whichever side didn't change takes the other's changes.
+- **Backup file:** Download backup saves everything to a `.json` file; Load a backup shows the
+  same preview before replacing anything. Works without an account and in `LimbusSite.html`.
+- **Undo:** whenever this computer's data is replaced (from the cloud or a backup), what was
+  there before is kept so you can put it back.
+
+What's shared: every `limbussite.*` key except the open tab, the Skill swaps view switch and
+whether you've seen the welcome screen (`lib/transfer.ts`, `isShared`). Code: `lib/storage.ts`
+(hooks re-read when sync writes a key), `lib/transfer.ts` (snapshots, backup files, the
+preview, `planSync`), `lib/sync.ts` (the sync engine), `lib/cloud.ts` (Firebase, loaded only
+once you sign in), `components/SyncPanel.tsx`.
+
+### Cloud sync setup (once)
+
+Cloud sync needs a free Firebase project. Without one the site works as before and Your data
+only offers backup files.
+
+1. Go to https://console.firebase.google.com, **Create a project** (any name, e.g.
+   `limbussite`; Google Analytics not needed).
+2. **Build > Authentication > Get started > Sign-in method > Google**: enable it, pick a support
+   email, Save.
+3. **Build > Firestore Database > Create database**: Standard edition, a location near you,
+   start in **production mode**.
+4. **Project settings (gear) > Your apps > Web (`</>`)**: register an app (no Hosting checkbox
+   needed). Copy `apiKey`, `authDomain`, `projectId` and `appId` from the config it shows into
+   `web/.env` (copy `web/.env.example` to start). These values are public by design.
+5. Install the Firebase CLI and connect the repo to your project (in the repo root):
+   ```
+   npm install -g firebase-tools
+   firebase login
+   firebase use --add          # pick your project, alias "default"
+   firebase deploy --only firestore:rules
+   ```
+   `firestore.rules` lets each account read and write only its own `users/{uid}` document.
+6. Restart `npm run dev`. Sign-in works on `localhost`; for another address (your LAN IP with
+   `dev:lan`, or your own domain) add it under **Authentication > Settings > Authorized
+   domains**.
+
+Testing without a real project: `firebase emulators:start --only auth,firestore --project
+demo-limbussite`, then run the app with `VITE_FIREBASE_EMULATOR=1` (and any placeholder
+values for the other `VITE_FIREBASE_*` settings).
+
+### Putting it online
+
+With the project above set up, from the repo root:
+
+```
+firebase deploy --only hosting
+```
+
+It builds `web/` (`firebase.json` runs `npm --prefix web run build` first) and publishes
+`web/dist` at `https://<project-id>.web.app`, which is already an authorized sign-in domain.
+`dist/LimbusSite.html` is published too, so `https://<project-id>.web.app/LimbusSite.html` is a
+download link for the offline copy (cloud sync is off there; backups work).
 
 Re-run the scraper (`python -m scraper` in the repo root) after a game patch. The app picks
 up the new JSON on the next dev reload or build.
@@ -58,7 +143,11 @@ src/
     ego.ts           E.G.O loadout, E.G.O lean, E.G.O / resource / Resonance-trigger gifts
     giftsearch.ts    Best gifts search (theme pack, sin, keyword, tier or text)
     vestiges.ts      vestiges and duplicates
-    storage.ts       usePersistentState (localStorage with a fallback)
+    run.ts           moving between floors, the floor's packs
+    storage.ts       usePersistentState (localStorage with a fallback; re-reads when sync writes)
+    transfer.ts      snapshots of saved data, backup files, the side-by-side preview, planSync
+    sync.ts          cloud sync engine (sign in, compare, save changes, live updates, Undo)
+    cloud.ts         Firebase: Google sign-in and the users/{uid} Firestore document
     presets.ts       team presets: saved identities and lineup order (Team tab)
     egorec.ts        Suggested E.G.O per deployed sinner and grade (Team tab)
     events.ts        Events tab: value each choice of a Mirror Dungeon event for your team
@@ -81,13 +170,15 @@ src/
     GiftIcon.tsx     gift icon with an offline fallback (Best gifts, Theme packs)
     HowToGet.tsx     "How to get" disclosure on gift cards and theme pack gift rows
     WhyRank.tsx      "Why this rank" breakdown on gift and theme pack cards
-    RunPanel.tsx     "Your run": difficulty, length, floor and the floor's theme pack
+    RunPanel.tsx     Run settings dialog (difficulty, length, floor, pack, Clear run) and the Shop's Cost box
+    RunBar.tsx       the one-line run bar on every run screen (floor −/+, pack, Gifts you have)
     OwnedGifts.tsx   "Gifts you have": search, icons, vestige counters
     GiftList.tsx     "Best gifts" tab
     PackList.tsx     "Theme packs" tab (packs on your floor, or compare the packs you're offered)
     FusionTab.tsx    "Fusion" tab, styled after the in-game Fuse E.G.O Gift screen
     EvaluateTab.tsx  "Evaluate" tab (pros and cons of one gift or pack)
     SkillsTab.tsx    "Skill swaps" tab
+    SyncPanel.tsx    header sync button and "Your data" (cloud sync, backup files, the preview)
     bits.tsx         small shared pieces (tier badge, keyword chip, rating bar, ...)
   App.tsx            layout and state
 ```
@@ -535,8 +626,15 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   it only weighs Build, affiliation gifts and lineup suggestions.
 - **Build** (`src/lib/teambuilder.ts`): picks the best identity per sinner for a keyword or an
   affiliation (branches count partly for their parent faction), preferring stronger units when the
-  fit is equal or close, and gives the new team a starting order: mostly by the ranking, with slot
-  gifts you own placed on units that can use them. After that, only suggestions change the order.
+  fit is equal or close. Fit comes from what the skills do (`keywordFit`): the share of skill copies
+  (S1 ×3, S2 ×2, S3 ×1) that inflict or trigger the keyword on the enemy ("Tremor - Scorch" and
+  "Tremor Burst" count as Tremor; for Poise and Charge, gaining it counts). A unit with the keyword
+  only on paper (Spicebush Yi Sang gains Tremor himself; The Middle Big Brother Heathcliff inflicts
+  Burn and Bleed) scores 0.15, and a skill spreading three or more keywords at once (The Ring
+  Pointillist Student) counts for less of each. For an affiliation, members come first, and the rest
+  of the team pairs with what the members inflict (`traitPartner`: The Thumb → Burn and Tremor,
+  signature Tremor - Scorch). It also gives the new team a starting order: mostly by the ranking,
+  with slot gifts you own placed on units that can use them. After that, only suggestions change the order.
   It doesn't know which identities you own.
 - **How to get** (`src/lib/acquire.ts`): every gift card and theme pack gift row has a "How to
   get" section: its fusion recipe (with ✓ on ingredients you own), the theme packs it's exclusive

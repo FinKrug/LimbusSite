@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { availability } from './plan'
 import { DEFAULT_RUN, defaultFloors, makeContext, packsByGift, scoreGift } from './scoring'
-import { START_RULES, startingPicks } from './startgifts'
+import { START_OPTIONS, START_RULES, startingPicks } from './startgifts'
 
 const byId = (id: string) => gameData.identities.find((x) => x.id === id)!
 const heishou = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
@@ -29,6 +29,17 @@ describe('starting gifts', () => {
     const plan = startingPicks(makeContext(gameData, heishou, [], { run: run('hard') }), pfg)
     expect(plan.picks[0].score.gift.pools).not.toContain('main')
     expect([...plan.picks, ...plan.alternatives].some((p) => p.skips.length > 0)).toBe(true)
+  })
+
+  it('lists plenty of other options, best first, none of them a pick', () => {
+    const plan = startingPicks(makeContext(gameData, heishou, [], { run: run('hard') }), pfg)
+    expect(plan.alternatives.length).toBeGreaterThan(10)
+    expect(plan.alternatives.length).toBeLessThanOrEqual(START_OPTIONS)
+    const picks = new Set(plan.picks.map((p) => p.score.gift.id))
+    expect(plan.alternatives.some((a) => picks.has(a.score.gift.id))).toBe(false)
+    for (let k = 1; k < plan.alternatives.length; k++) {
+      expect(plan.alternatives[k - 1].value).toBeGreaterThanOrEqual(plan.alternatives[k].value)
+    }
   })
 
   it('notices when the picks complete a recipe together', () => {

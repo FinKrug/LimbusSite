@@ -17,7 +17,7 @@
  * identities. We pick the sinner on your team with the best odds.
  */
 import { FUSION_POINTS } from './fusion'
-import { isGone, scoreGift, type RunContext } from './scoring'
+import { isGone, lastFloor, scoreGift, type RunContext } from './scoring'
 import { tierLabel, type Identity, type Sin } from './types'
 
 export interface EventOutcome {
@@ -107,10 +107,16 @@ export const EVENT_WEIGHTS = {
   /** Healing, levels. */
   heal: 0.2,
   levels: 0.9,
-  /** A fight: time, HP and the chance it goes badly. */
-  fight: 0.6,
-  /** Gifts from winning a fight: assume you usually win. */
-  winChance: 0.9,
+  /** A fight: time and HP. Small while your team wins comfortably: an event fight for an extra gift
+   *  is nearly always worth it (Finley). Once you say you're struggling (Your run), fights cost more. */
+  fight: 0.05,
+  fightStruggling: 1.0,
+  /** Gifts from winning a fight. */
+  winChance: 0.97,
+  winChanceStruggling: 0.8,
+  /** A gift that doesn't fit your team is still fusion fuel: worth this per fusion point of its tier
+   *  (like a Vestige), so "the gift you want plus a spare" beats "just the gift you want". */
+  fodderPoint: 0.06,
   /** A gift you already own comes back as a vestige-like duplicate. */
   duplicate: 0.3,
   /** A gift the app doesn't know (story-only). */
@@ -121,6 +127,9 @@ export const EVENT_WEIGHTS = {
   bossWeaken: 1.5,
   /** A duplicate becomes a Vestige of its tier: worth this per fusion point it adds. */
   vestigePoint: 0.06,
+  /** A clash buff for your team (Speed, Final / Clash Power, Attack Power Up) or a clash debuff on the
+   *  enemy, per line of the result; the reverse costs as much. Winning clashes matters most (Finley). */
+  clashEffect: 0.8,
 }
 
 export interface Valued {
@@ -134,6 +143,8 @@ export function outcomeValue(o: EventOutcome | undefined, ctx: RunContext): Valu
   const W = EVENT_WEIGHTS
   let value = 0
   const why: string[] = []
+  const struggling = !!ctx.run.struggling
+  const win = o.combat ? (struggling ? W.winChanceStruggling : W.winChance) : 1
   for (const id of o.gifts) {
     const g = ctx.giftsById.get(id)
     if (!g) continue
@@ -149,7 +160,15 @@ export function outcomeValue(o: EventOutcome | undefined, ctx: RunContext): Valu
       continue
     }
     const s = scoreGift(g, ctx)
-    value += s.score * (o.combat ? W.winChance : 1)
+    // Fusion fuel, except on the last floor (no shop after it to fuse at).
+    const points = FUSION_POINTS[g.tier ?? 1] ?? 3
+    const fodder = lastFloor(ctx.run) || g.tier === null || (g.tier ?? 0) >= 5 ? 0 : points * W.fodderPoint
+    if (fodder > s.score) {
+      value += fodder * win
+      why.push(`${g.name}: not for your team, but fusion fuel (Tier ${tierLabel(g.tier)}, ${points} fusion points)`)
+      continue
+    }
+    value += s.score * win
     const reason = s.reasons.find((r) => r.kind === 'good') ?? s.reasons[0]
     why.push(`${g.name}${reason ? `: ${reason.text}` : ''}`)
   }
@@ -167,7 +186,15 @@ export function outcomeValue(o: EventOutcome | undefined, ctx: RunContext): Valu
     why.push(all ? 'Hurts your whole team' : 'Hurts one unit')
   }
   if (o.lasting && o.hurts) { value -= W.lasting; why.push('Leaves a lasting penalty') }
-  if (o.combat) { value -= W.fight; why.push('A fight') }
+  const clash = clashLines(t)
+  if (clash) {
+    value += clash * W.clashEffect
+    why.push(clash > 0 ? 'Helps you win clashes' : 'Makes clashes harder to win')
+  }
+  if (o.combat) {
+    value -= struggling ? W.fightStruggling : W.fight
+    why.push(struggling ? 'A fight (you said fights are going badly)' : 'A fight: worth it while your team is winning comfortably')
+  }
   if (o.weakens) { value += W.bossWeaken; why.push('Weakens the boss (it loses a passive)') }
   // "Spiral of Contempt's Slash Resistance becomes 1.5": worth as much as your team hits with Slash.
   const weak = t.match(/\b(Slash|Pierce|Blunt) Resistance becomes (\d+(?:\.\d+)?)/i)
@@ -178,6 +205,28 @@ export function outcomeValue(o: EventOutcome | undefined, ctx: RunContext): Valu
     why.push(`Makes the boss weak to ${type} (${n}/${ctx.profile.attackKnown} of your team use ${type} skills)`)
   }
   return { value, why }
+}
+
+const CLASH_STAT = /\b(?:Speed|Max Speed|Final Power|Clash Power|Attack Power|Coin Power|Offense Level|Haste|Bind|Paralyze)\b/i
+
+/**
+ * Net clash effect of a result, per line: +1 for each line that helps your team win clashes, -1 for each
+ * that helps the enemy. "Speed +2 for this battle", "All allies have +2 Skill Final Power" (yours, up),
+ * "Skill Final Power -1 at the start of the combat phase" (yours, down), "all enemies gain 3 Attack Power
+ * Down" (theirs, down: good), "Four-hundred Roses gains 2 Attack Power Up" (theirs, up: bad).
+ */
+export function clashLines(text: string): number {
+  let n = 0
+  for (const line of text.split('\n')) {
+    if (!CLASH_STAT.test(line)) continue
+    const theirs = /\benem(?:y|ies)\b|^\[|\bboss\b/i.test(line) || (/\bgains?\b/i.test(line) && !/\ball(?:y|ies)\b/i.test(line))
+    const bindLike = /\b(?:Bind|Paralyze)\b/i.test(line)
+    const down = bindLike || /\bDown\b|-\d/.test(line)
+    const up = !down && (/\bUp\b|\+\d|\bHaste\b/i.test(line))
+    if (!up && !down) continue
+    n += (theirs ? -1 : 1) * (up ? 1 : -1)
+  }
+  return n
 }
 
 /** P(base + heads x coinPower + bonus >= need), heads ~ Binomial(coins, 0.5). */

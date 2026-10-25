@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { bestReasons, comingUp, fusionTargets, getNow, setTargets, type Piece } from '../lib/plan'
-import { START_RULES, startingPicks } from '../lib/startgifts'
+import { START_RULES, startingPicks, type StartPick } from '../lib/startgifts'
 import { tierLabel } from '../lib/types'
 import type { GiftScore, RunContext } from '../lib/scoring'
 import type { ThemePack } from '../lib/types'
@@ -15,6 +15,11 @@ interface Props {
   /** The same context with other gifts owned (for the starting-gift picks). */
   rebuild: (owned: string[]) => RunContext
 }
+
+/** Shown before "Show more". */
+const FUSIONS_SHOWN = 4
+const SETS_SHOWN = 3
+const kwOf = (k: string | null | undefined) => k || 'General'
 
 const MARK: Record<string, string> = { have: '✓', now: '●', later: '○', fuse: '◇', luck: '?', no: '×' }
 const TITLE: Record<string, string> = {
@@ -40,8 +45,22 @@ function PieceChip({ p }: { p: Piece }) {
 export function PlanPanel({ ctx, ranked, packsForGift, onOwn, rebuild }: Props) {
   const now = useMemo(() => getNow(ranked, ctx, packsForGift), [ranked, ctx, packsForGift])
   const later = useMemo(() => comingUp(ranked, ctx, packsForGift), [ranked, ctx, packsForGift])
-  const fusions = useMemo(() => fusionTargets(ctx, packsForGift), [ctx, packsForGift])
-  const sets = useMemo(() => setTargets(ctx, packsForGift), [ctx, packsForGift])
+  // Every target, so you can check other keywords (in a shop: is any other keyword worth starting?).
+  const allFusions = useMemo(() => fusionTargets(ctx, packsForGift, 60), [ctx, packsForGift])
+  const allSets = useMemo(() => setTargets(ctx, packsForGift, 60), [ctx, packsForGift])
+  const [kw, setKw] = useState<string | null>(null)
+  const [moreFusions, setMoreFusions] = useState(false)
+  const [moreSets, setMoreSets] = useState(false)
+  const keywords = useMemo(() => {
+    const n = new Map<string, number>()
+    for (const f of allFusions) n.set(kwOf(f.result.keyword), (n.get(kwOf(f.result.keyword)) ?? 0) + 1)
+    for (const t of allSets) n.set(kwOf(t.combo.keyword), (n.get(kwOf(t.combo.keyword)) ?? 0) + 1)
+    return [...n].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+  }, [allFusions, allSets])
+  const fusionsIn = kw ? allFusions.filter((f) => kwOf(f.result.keyword) === kw) : allFusions
+  const setsIn = kw ? allSets.filter((t) => kwOf(t.combo.keyword) === kw) : allSets
+  const fusions = moreFusions || kw ? fusionsIn : fusionsIn.slice(0, FUSIONS_SHOWN)
+  const sets = moreSets || kw ? setsIn : setsIn.slice(0, SETS_SHOWN)
   const floor = ctx.run.floor ?? 1
   if (!ctx.profile.size) return null
 
@@ -52,10 +71,21 @@ export function PlanPanel({ ctx, ranked, packsForGift, onOwn, rebuild }: Props) 
       <header className="plan-head">
         <h2>Your plan{ctx.run.floor !== null ? ` for floor ${floor}` : ''}</h2>
         <span className="muted small">
-          {ctx.run.floor === null ? 'Start a run in Your run to plan per floor. ' : ''}
+          {ctx.run.floor === null ? 'Press Start run at the top to plan per floor. ' : ''}
           ✓ have · ● this floor · ○ later floor · ◇ fuse first
         </span>
       </header>
+      {keywords.length > 1 && (
+        <div className="plan-kws" role="group" aria-label="Show fusions and gift sets for a keyword">
+          <span className="muted small">Fusions and sets for:</span>
+          <button className={`chip-btn${kw === null ? ' on' : ''}`} onClick={() => setKw(null)}>All</button>
+          {keywords.map(([k, n]) => (
+            <button key={k} className={`chip-btn${kw === k ? ' on' : ''}`} onClick={() => setKw(kw === k ? null : k)}>
+              {k} <span className="muted">{n}</span>
+            </button>
+          ))}
+        </div>
+      )}
       <div className="plan-grid">
         <div className="plan-col">
           <h3>Get now</h3>
@@ -83,8 +113,8 @@ export function PlanPanel({ ctx, ranked, packsForGift, onOwn, rebuild }: Props) 
           )}
         </div>
         <div className="plan-col">
-          <h3>Fusions to work toward</h3>
-          {fusions.length === 0 ? <p className="muted small">No fusion is worth chasing for this team right now.</p> : (
+          <h3>Fusions to work toward{kw ? ` · ${kw}` : ''}</h3>
+          {fusions.length === 0 ? <p className="muted small">{kw ? `No ${kw} fusion is worth chasing for this team right now.` : 'No fusion is worth chasing for this team right now.'}</p> : (
             <ol className="plan-targets">
               {fusions.map((f) => {
                 const total = f.pieces.length + (f.anyOf?.count ?? 0)
@@ -109,10 +139,15 @@ export function PlanPanel({ ctx, ranked, packsForGift, onOwn, rebuild }: Props) 
               })}
             </ol>
           )}
+          {!kw && fusionsIn.length > FUSIONS_SHOWN && (
+            <button className="link-btn small" onClick={() => setMoreFusions(!moreFusions)}>
+              {moreFusions ? 'Show fewer' : `Show ${fusionsIn.length - FUSIONS_SHOWN} more fusions`}
+            </button>
+          )}
         </div>
         <div className="plan-col">
-          <h3>Gift sets to build</h3>
-          {sets.length === 0 ? <p className="muted small">No gift sets for this team yet.</p> : (
+          <h3>Gift sets to build{kw ? ` · ${kw}` : ''}</h3>
+          {sets.length === 0 ? <p className="muted small">{kw ? `No ${kw} gift set for this team.` : 'No gift sets for this team yet.'}</p> : (
             <ol className="plan-targets">
               {sets.map((t) => (
                 <li key={t.combo.id} className="plan-target">
@@ -127,6 +162,11 @@ export function PlanPanel({ ctx, ranked, packsForGift, onOwn, rebuild }: Props) 
                 </li>
               ))}
             </ol>
+          )}
+          {!kw && setsIn.length > SETS_SHOWN && (
+            <button className="link-btn small" onClick={() => setMoreSets(!moreSets)}>
+              {moreSets ? 'Show fewer' : `Show ${setsIn.length - SETS_SHOWN} more sets`}
+            </button>
           )}
         </div>
       </div>
@@ -169,15 +209,46 @@ function StartPanel({ ctx, packsForGift, onOwn, rebuild }: {
       {plan.together.length > 0 && (
         <ul className="start-together">{plan.together.map((t) => <li key={t}>{t}</li>)}</ul>
       )}
-      {plan.alternatives.length > 0 && (
-        <p className="muted small">
-          Also good: {plan.alternatives.map((a) => a.score.gift.name).join(', ')}.
-        </p>
-      )}
+      <StartOptions options={plan.alternatives} onOwn={onOwn} />
       <p className="muted small">
         Gifts that are most of what a theme pack offers your team come first, so you can skip that pack; then strong
         gifts that only a few packs give. Main-pool gifts count less, since shops sell them anyway.
       </p>
     </section>
+  )
+}
+
+/** How many other options show before "Show more". */
+const OPTIONS_SHOWN = 8
+
+/** Other gifts worth buying up front, best first, so you can pick your own three. */
+function StartOptions({ options, onOwn }: { options: StartPick[]; onOwn: (id: string) => void }) {
+  const [all, setAll] = useState(false)
+  if (!options.length) return null
+  const shown = all ? options : options.slice(0, OPTIONS_SHOWN)
+  return (
+    <div className="start-options">
+      <h3>Other options <span className="muted small">({options.length}, best first)</span></h3>
+      <ol className="start-option-list">
+        {shown.map((p, k) => (
+          <li key={p.score.gift.id} className="start-option">
+            <span className="start-option-rank muted">{START_RULES.count + k + 1}</span>
+            <div className="start-option-body">
+              <div className="plan-now-top">
+                <GiftLabel gift={p.score.gift} icon={24} />
+                {p.skips.length > 0 && <span className="pill">Skip {p.skips[0].name}</span>}
+                <button className="btn small-btn" onClick={() => onOwn(p.score.gift.id)} title="Mark it as bought: the picks update">Got it</button>
+              </div>
+              {p.why[0] && <span className="muted small">{p.why[0]}</span>}
+            </div>
+          </li>
+        ))}
+      </ol>
+      {options.length > OPTIONS_SHOWN && (
+        <button className="btn small-btn start-more" onClick={() => setAll(!all)}>
+          {all ? 'Show fewer' : `Show ${options.length - OPTIONS_SHOWN} more`}
+        </button>
+      )}
+    </div>
   )
 }

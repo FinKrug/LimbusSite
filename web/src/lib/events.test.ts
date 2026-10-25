@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { adviseVariant, checkOdds, eventsForPack, findEvents, rollChance, searchEvents } from './events'
+import { adviseVariant, checkOdds, clashLines, eventsForPack, findEvents, rollChance, searchEvents } from './events'
 import { DEFAULT_RUN, defaultFloors, makeContext } from './scoring'
 
 const byId = (id: string) => gameData.identities.find((x) => x.id === id)!
@@ -106,3 +106,31 @@ describe('Mirror Dungeon events', () => {
   })
 })
 
+
+describe('fighting for an extra gift', () => {
+  it('fights for both gifts unless you say fights are going badly (Shock Centipede)', () => {
+    const team = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion',
+      'heishou-pack-si-branch-gregor'].map((id) => gameData.identities.find((x) => x.id === id)!)
+    const ev = gameData.events!.find((e) => e.name === 'Shock Centipede')!
+    const best = (struggling: boolean) => {
+      const ctx = makeContext(gameData, team, [], { run: { ...DEFAULT_RUN, difficulty: 'hard', floors: defaultFloors('hard'), floor: 3, struggling } })
+      return adviseVariant(ev.variants[0], ctx, team).find((a) => a.verdict === 'best')!.choice.label
+    }
+    expect(best(false)).toMatch(/mash both buttons/)
+    expect(best(true)).not.toMatch(/mash both buttons/)
+  })
+})
+
+describe('clash effects in event results', () => {
+  it('counts buffs for your team and debuffs on the enemy as good, and the reverse as bad', () => {
+    expect(clashLines('Speed +2 for this battle')).toBe(1)
+    expect(clashLines('All allies have +2 Skill Final Power for the next battle')).toBe(1)
+    expect(clashLines('Skill Final Power -1 at the start of the combat phase.')).toBe(-1)
+    expect(clashLines('For the remaining turns, all enemies gain 3 Attack Power Down and 5 Fragile.')).toBe(1)
+    expect(clashLines('For 3 turns, Four-hundred Roses gains 2 Attack Power Up, and 2 Fragile')).toBe(-1)
+    expect(clashLines('All allies gain 1 Clash Power Up for this Encounter')).toBe(1)
+    expect(clashLines('[Hurting Teddy Bear] gains 1 Clash Power Down every turn')).toBe(1)
+    expect(clashLines('E.G.O Gift Rest obtained!')).toBe(0)
+  })
+})

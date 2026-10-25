@@ -125,6 +125,7 @@ def main(argv: list[str] | None = None) -> int:
         include_unobtainable=args.include_unobtainable,
     )
     warnings += w
+    warnings += resolve_icons(client, data["gifts"])
     for name, rows in data.items():
         if name == "identities" and args.skip_identities:
             continue
@@ -298,6 +299,30 @@ def _parse_html(client: WikiClient, title: str, max_age: float | None = None) ->
                       disableeditsection=1, disablelimitreport=1)
     text = data.get("parse", {}).get("text", "")
     return text["*"] if isinstance(text, dict) else text
+
+
+def resolve_icons(client: WikiClient, gifts: list[dict]) -> list[str]:
+    """Point each gift's icon at the real wiki file.
+
+    Some "<name> Gift.png" files are redirects (to "<name> GMS Item.png", or from a curly to
+    a straight apostrophe). Browsers can't load a thumbnail through a redirect, so those
+    icons came up blank; store the redirect's target instead.
+    """
+    files = sorted({g["icon"] for g in gifts if g.get("icon")})
+    try:
+        found = client.existing_titles([f"File:{f}" for f in files])
+    except WikiError as e:
+        return [f"gift icons not checked ({_why(e, client)})"]
+    missing = []
+    for g in gifts:
+        if not g.get("icon"):
+            continue
+        final = found.get(f"File:{g['icon']}")
+        if final is None:
+            missing.append(g["name"])
+        elif final.removeprefix("File:") != g["icon"]:
+            g["icon"] = final.removeprefix("File:")
+    return [f"no icon file on the wiki for {len(missing)} gifts: {missing}"] if missing else []
 
 
 def _why(e: WikiError, client: WikiClient) -> str:

@@ -3,8 +3,8 @@ import { gameData } from './data'
 import { giftSlots, slotText } from './lineup'
 import { holderConditions, holderFactor } from './holder'
 import { intrinsicScore, makeContext, rankGifts, rankThemePacks } from './scoring'
-import { identityTier, strength } from './strength'
-import { buildTeam, suggestOrder, traitOptions } from './teambuilder'
+import { clashRating, identityTier, strength } from './strength'
+import { buildTeam, keywordFit, suggestOrder, traitOptions, traitPartner } from './teambuilder'
 import type { GameData, Gift, Identity } from './types'
 
 function gift(id: string, over: Partial<Gift> = {}): Gift {
@@ -96,6 +96,49 @@ describe('team builder', () => {
     expect(deployed.every((i) => i.traits.includes('H Corp.'))).toBe(true)
   })
 
+  // Finley: a Tremor team got Spicebush Yi Sang (gains Tremor himself, inflicts Sinking) and
+  // The Middle Big Brother Heathcliff (Burn and Bleed; Tremor only on paper).
+  it('builds a keyword team from units that inflict it', () => {
+    const byId = new Map(gameData.identities.map((i) => [i.id, i]))
+    const spicebush = gameData.identities.find((i) => i.name.includes('Spicebush Yi Sang'))!
+    const middle = gameData.identities.find((i) => i.name === 'The Middle Big Brother Heathcliff')!
+    expect(keywordFit(spicebush, 'Tremor')).toBeLessThan(0.2)
+    expect(keywordFit(middle, 'Tremor')).toBeLessThan(0.2)
+    const team = Object.values(buildTeam(gameData, { kind: 'keyword', value: 'Tremor' }).team).map((id) => byId.get(id!)!)
+    expect(team.map((i) => i.id)).not.toContain(spicebush.id)
+    expect(team.map((i) => i.id)).not.toContain(middle.id)
+    expect(team.every((i) => keywordFit(i, 'Tremor') >= 0.6)).toBe(true)
+  })
+
+  // Finley: The Thumb does Tremor - Scorch with Burn and Tremor; the rest should pair with that.
+  it('fills an affiliation team with units that pair with its members', () => {
+    const members = gameData.identities.filter((i) => i.traits.includes('The Thumb'))
+    expect(traitPartner(members)).toEqual({ keywords: ['Burn', 'Tremor'], signature: ['Tremor - Scorch'] })
+    const byId = new Map(gameData.identities.map((i) => [i.id, i]))
+    const team = Object.values(buildTeam(gameData, { kind: 'trait', value: 'The Thumb' }).team).map((id) => byId.get(id!)!)
+    expect(team.filter((i) => i.traits.includes('The Thumb')).length).toBe(members.length)
+    // Every other pick inflicts Burn or Tremor, most of them both.
+    const others = team.filter((i) => !i.traits.includes('The Thumb'))
+    expect(others.every((i) => keywordFit(i, 'Burn') >= 0.4 || keywordFit(i, 'Tremor') >= 0.4)).toBe(true)
+    expect(others.filter((i) => keywordFit(i, 'Tremor') >= 0.4).length).toBeGreaterThanOrEqual(5)
+  })
+
+  it('weighs what skills do over keyword tags, and falls back to tags without skill data', () => {
+    const skill = (slot: 1 | 2 | 3, enemy: string[], self: string[] = []) =>
+      ({ slot, name: '', sin: null, type: null, base: null, coin_power: null, coins: null, copies: [3, 2, 1][slot - 1], weight: 1, statuses: [], enemy, self })
+    const selfOnly = ident('a', 'Yi Sang', { keywords: ['Tremor'], skills: [skill(1, ['Sinking'], ['Tremor']), skill(2, []), skill(3, [])] })
+    const s3only = ident('b', 'Yi Sang', { keywords: ['Tremor'], skills: [skill(1, []), skill(2, []), skill(3, ['Tremor Burst'])] })
+    const all = ident('c', 'Yi Sang', { keywords: ['Tremor'], skills: [skill(1, ['Tremor']), skill(2, ['Tremor']), skill(3, ['Tremor - Scorch'])] })
+    const spread = ident('d', 'Yi Sang', { keywords: ['Tremor'], skills: [1, 2, 3].map((n) => skill(n as 1, ['Burn', 'Bleed', 'Tremor', 'Rupture', 'Sinking'])) })
+    const poise = ident('e', 'Yi Sang', { keywords: ['Poise'], skills: [skill(1, [], ['Poise']), skill(2, []), skill(3, [])] })
+    expect(keywordFit(selfOnly, 'Tremor')).toBe(0.15)
+    expect(keywordFit(s3only, 'Tremor')).toBeCloseTo(0.5)
+    expect(keywordFit(all, 'Tremor')).toBe(1)
+    expect(keywordFit(spread, 'Tremor')).toBeCloseTo(0.64)
+    expect(keywordFit(poise, 'Poise')).toBeCloseTo(0.7) // gaining Poise is the point
+    expect(keywordFit(ident('f', 'Yi Sang', { keywords: ['Tremor'] }), 'Tremor')).toBe(1)
+  })
+
   it('only uses owned identities when given', () => {
     const mine = gameData.identities.filter((i) => i.sinner === 'Yi Sang').slice(0, 1)
     const built = buildTeam(gameData, { kind: 'keyword', value: 'Burn' }, new Set(mine.map((i) => i.id)))
@@ -122,12 +165,22 @@ describe('identity strength', () => {
 
   it('rates from the tier list, falls back to rarity, and lets you override', () => {
     expect(identityTier(heishouFaust)).toMatchObject({ tier: 'SSS', from: 'list' })
-    expect(strength(heishouFaust)).toBe(1)
+    // SSS on the ranking, blended with how well it clashes (clashRating).
+    expect(strength(heishouFaust)).toBeGreaterThan(0.85)
     const plain = ident('x', 'Yi Sang', { rarity: 1 })
     expect(identityTier(plain).tier).toBeNull()
     expect(strength(plain)).toBeLessThan(strength(ident('y', 'Yi Sang', { rarity: 3 })))
     expect(identityTier(heishouFaust, { [heishouFaust.id]: 'B' })).toMatchObject({ tier: 'B', from: 'you' })
     expect(strength(heishouFaust, { [heishouFaust.id]: 'B' })).toBeLessThan(0.5)
+  })
+
+  it('rates how well identities clash from their skill rolls and clash statuses', () => {
+    const byId = (id: string) => gameData.identities.find((i) => i.id === id)!
+    const lcb = clashRating(byId('lcb-sinner-meursault'))!
+    const shi = clashRating(byId('shi-assoc-south-section-5-director-don-quixote'))!
+    expect(lcb).toBeLessThan(0.3)
+    expect(shi).toBeGreaterThan(0.9)
+    expect(clashRating(ident('z', 'Yi Sang', { rarity: 1 }))).toBeNull()
   })
 
   it('puts Heishou Mao Faust in a buffed slot on a Heishou team', () => {
@@ -241,10 +294,12 @@ describe('suggested order on a real roster', () => {
   ]
   const team = ids.map((id) => gameData.identities.find((i) => i.id === id)!)
 
-  it("doesn't deploy a D-tier unit over a stronger one just for sharing the team's keyword", () => {
+  it("doesn't deploy a weak unit over a stronger one just for sharing the team's keyword", () => {
     const { order } = suggestOrder(gameData, team, 7)
     const deployed = order.slice(0, 7).map((s) => team.find((i) => i.sinner === s)!)
-    expect(deployed.map((i) => identityTier(i).tier)).not.toContain('D')
+    // D-tier units that also clash badly stay benched; Shi Director Don Quixote (D, but some of the
+    // highest rolls in the game) can make it, since winning clashes matters most.
+    expect(deployed.filter((i) => identityTier(i).tier === 'D').every((i) => (clashRating(i) ?? 0) > 0.8)).toBe(true)
     expect(order.slice(0, 2).sort()).toEqual(['Outis', 'Ryōshū']) // the two SS units take the buffed slots
   })
 

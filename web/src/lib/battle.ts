@@ -46,11 +46,16 @@ export function skillPower(s: Pick<Skill, 'base' | 'coin_power' | 'coins'>): { p
   return { power: cp >= 0 ? base + coins * cp * 0.5 : base, perCoin: 0.8 + 0.2 * coins }
 }
 
+/** Extra value per point of Clash Power from resonance, on top of its damage: winning clashes is what
+ *  matters most in Mirror Dungeon (Finley), so (Absolute) Resonance is worth lining up for that alone. */
+export const CLASH_EDGE = 2
+
 /** Value of one use of a skill with this Offense Level from resonance. */
 export function skillValue(s: Skill, teamKeywords: string[], ol = 0): number {
   const { power, perCoin } = skillPower(s)
   const statuses = s.statuses.filter((x) => teamKeywords.includes(x)).length
-  return (power + Math.floor(ol / 3)) * perCoin * (1 + levelDamage(ol)) + 1.5 * statuses + (s.slot === 3 ? 1 : 0)
+  const clash = Math.floor(ol / 3)
+  return (power + clash) * perCoin * (1 + levelDamage(ol)) + CLASH_EDGE * clash + 1.5 * statuses + (s.slot === 3 ? 1 : 0)
 }
 
 /** A defense skill's own value as a share of an attack with the same numbers: a Counter only

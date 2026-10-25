@@ -29,6 +29,7 @@ Needs Python 3.10+ and no extra packages.
 python -m scraper                  # fetch from the wiki -> data/
 python -m scraper --offline        # rebuild from cached responses (no network)
 python -m scraper.tiers            # rebuild the Mirror Dungeon identity ranking from data/tiers/*.txt
+python -m scraper.icons            # rebuild the gift icon atlas for Import gifts (needs: pip install pillow)
 python -m scraper --skip-identities
 python -m scraper --skip-egos        # don't fetch E.G.O pages
 python -m scraper --skip-events      # don't fetch Mirror Dungeon event pages
@@ -46,7 +47,7 @@ Re-run it after each game patch, once the wiki has caught up.
 | `data/fusions.json` | Module:EgoGiftList/data (fusion recipes), plus the Super Shop recipe for Lunar Memory (`scraper/build.py`, `SPECIAL_FUSIONS`) |
 | `data/egos.json` | Pages in [Category:E.G.O](https://limbuscompany.wiki.gg/wiki/Category:E.G.O): sinner, grade, sin and statuses from categories; resource cost, Sanity and skill numbers from the page (`scraper/egos.py`, read loosely; missing costs fall back to typical ones for the grade) |
 | `data/events.json` | Pages in [Category:Mirror Dungeon Events](https://limbuscompany.wiki.gg/wiki/Category:Mirror_Dungeon_Events): each event's choices, sin checks (`adv`/`disadv` thresholds, identity bonuses) and what each result gives (gifts, Cost, fights, damage), with follow-up choices nested and second rolls (a check inside a result: Cozy Bed's 50% roll, retries) as `then`, plus theme-pack bosses' own combat events from their enemy pages (`boss`, `packs`; `scraper/events.py`) |
-| `data/identities.json` | Pages in [Category:Identities](https://limbuscompany.wiki.gg/wiki/Category:Identities) and their categories; skills 1-3 (sin, power, copies) and the defense skill (Guard / Evade / Counter, its sin and power) from each page (`scraper/skills.py`) |
+| `data/identities.json` | Pages in [Category:Identities](https://limbuscompany.wiki.gg/wiki/Category:Identities) and their categories; skills 1-3 (sin, power, copies, and which statuses land on the enemy vs. the unit itself) and the defense skill (Guard / Evade / Counter, its sin and power) from each page (`scraper/skills.py`) |
 | `data/meta.json` | Timestamp, wiki revision IDs and counts for this run |
 | `data/report.txt` | Warnings: names that didn't match, theme packs with no wiki page, etc. |
 
@@ -96,7 +97,8 @@ text is stored, for tooltips and scoring.
 { "id": "lcb-sinner-yi-sang", "name": "LCB Sinner Yi Sang", "sinner": "Yi Sang", "rarity": 1,
   "affinities": ["envy", "gloom", "sloth"], "keywords": ["Sinking"], "status_effects": [...],
   "traits": ["LCB"], "skills": [{ "slot": 1, "name": "...", "sin": "gloom", "type": "Blunt", "base": 4,
-  "coin_power": 3, "coins": 2, "copies": 3, "weight": 1, "statuses": ["Sinking"] }, ...], "wiki_url": "..." }
+  "coin_power": 3, "coins": 2, "copies": 3, "weight": 1, "statuses": ["Sinking"],
+  "enemy": ["Sinking"], "self": [] }, ...], "wiki_url": "..." }
 ```
 
 Gifts have no wiki pages of their own, so `wiki_url` links to the gift list page and

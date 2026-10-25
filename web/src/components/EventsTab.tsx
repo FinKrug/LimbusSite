@@ -1,11 +1,12 @@
-import { useMemo, useState } from 'react'
+import { createContext, useContext, useMemo, useState } from 'react'
 import {
   adviseVariant, eventsForPack, findEvents,
   type ChoiceAdvice, type EventChoice, type EventOutcome, type GameEvent,
 } from '../lib/events'
 import type { RunContext } from '../lib/scoring'
 import type { Identity, ThemePack } from '../lib/types'
-import { SinDot } from './bits'
+import { HowItWorks, SinDot } from './bits'
+import { VESTIGE_BY_TIER, addGift, isVestige, removeOne } from '../lib/vestiges'
 import bossTips from '../data/boss_tips.json'
 
 interface Props {
@@ -14,7 +15,18 @@ interface Props {
   /** Everyone you can send on a check (your whole lineup). */
   team: Identity[]
   pack: ThemePack | null
+  /** Gifts you have, so a result's "Got it" can add its gifts. */
+  owned?: string[]
+  onOwnedChange?: (owned: string[]) => void
 }
+
+/** Adds a result's gifts to Gifts you have; returns what was added (a gift you have becomes a Vestige). */
+interface GiftAdder {
+  add: (ids: string[]) => string[]
+  undo: (added: string[]) => void
+  name: (id: string) => string
+}
+const AdderContext = createContext<GiftAdder | null>(null)
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 const others = (xs: Identity[]) => xs.length > 4
@@ -25,7 +37,22 @@ const others = (xs: Identity[]) => xs.length > 4
  * Events tab: type the name of the "?" event you walked into and see which choice
  * is best for your team, which to avoid, and who to send on a check.
  */
-export function EventsTab({ ctx, events, team, pack }: Props) {
+export function EventsTab({ ctx, events, team, pack, owned, onOwnedChange }: Props) {
+  const adder = useMemo<GiftAdder | null>(() => (owned && onOwnedChange ? {
+    add: (ids) => {
+      let next = owned
+      const added: string[] = []
+      for (const id of ids) {
+        const tier = ctx.giftsById.get(id)?.tier ?? null
+        added.push(!isVestige(id) && next.includes(id) ? VESTIGE_BY_TIER[tier ?? 1] ?? id : id)
+        next = addGift(next, id, tier)
+      }
+      onOwnedChange(next)
+      return added
+    },
+    undo: (added) => onOwnedChange(added.reduce((o, id) => removeOne(o, id), owned)),
+    name: (id) => ctx.giftsById.get(id)?.name ?? id,
+  } : null), [owned, onOwnedChange, ctx.giftsById])
   const [q, setQ] = useState('')
   const [picked, setPicked] = useState<string | null>(null)
   const giftName = (id: string) => ctx.giftsById.get(id)?.name
@@ -40,15 +67,17 @@ export function EventsTab({ ctx, events, team, pack }: Props) {
   const current = events.find((e) => e.id === picked) ?? (q.trim() ? hits[0]?.event : undefined)
 
   return (
+    <AdderContext.Provider value={adder}>
     <div className="events-tab">
       <section className="panel events-search">
         <h2>Events</h2>
-        <p className="muted small">
-          Type one of the choices the event gives you (the first option is quickest), its name, or a gift it gives.
+        <p className="muted small">Type one of the choices on screen (quickest), the event's name, or a gift it gives.</p>
+        <HowItWorks>
           Boss fights' own events are listed under the pack they're the boss of. Each choice is judged for your team:
-          the gifts it gives (scored like Best gifts; a duplicate becomes a Vestige for fusing), Cost, how much it
-          hurts, and whether it weakens the boss.
-        </p>
+          the gifts it gives (scored like the Shop's; a duplicate becomes a Vestige and a gift your team can't use is
+          fusion fuel), Cost, how much it hurts, and whether it weakens the boss. Fights for an extra gift are worth
+          it unless you tick "Struggling in fights" in Run settings.
+        </HowItWorks>
         <input type="search" placeholder="A choice, the event's name, or a gift…" value={q} autoFocus
           onChange={(e) => { setQ(e.target.value); setPicked(null) }} aria-label="Search events" />
         {inPack.length > 0 && !q && (
@@ -78,6 +107,7 @@ export function EventsTab({ ctx, events, team, pack }: Props) {
           : <p className="hint">Pick an event to see what to choose.</p>}
       </section>
     </div>
+    </AdderContext.Provider>
   )
 }
 
@@ -227,6 +257,7 @@ function Outcome({ label, o }: { label?: string; o?: EventOutcome }) {
       {o.text && (
         <p className={`event-outcome small${o.hurts ? ' hurts' : ''}${o.nothing ? ' nothing' : ''}`}>
           {label && <span className="event-outcome-label">{label}:</span>} {o.text.replace(/\n+/g, ' ')}
+          {o.gifts.length > 0 && <GotIt gifts={o.gifts} />}
         </p>
       )}
       {t && (
@@ -235,6 +266,30 @@ function Outcome({ label, o }: { label?: string; o?: EventOutcome }) {
           {sides.map(([l, x]) => <Outcome key={l} label={l} o={x} />)}
         </div>
       )}
+    </>
+  )
+}
+
+/** "Got it": adds the result's gifts to Gifts you have, with an undo. */
+function GotIt({ gifts }: { gifts: string[] }) {
+  const adder = useContext(AdderContext)
+  const [added, setAdded] = useState<string[] | null>(null)
+  if (!adder) return null
+  if (added) {
+    return (
+      <span className="event-got">
+        {' '}✓ Added {gifts.map((id, k) => added[k] === id ? adder.name(id) : `${adder.name(id)} (as a ${adder.name(added[k])}, since you had it)`).join(', ')}{' '}
+        <button className="link-btn" onClick={() => { adder.undo(added); setAdded(null) }}>Undo</button>
+      </span>
+    )
+  }
+  return (
+    <>
+      {' '}
+      <button className="btn small-btn event-got-btn" onClick={() => setAdded(adder.add(gifts))}
+        title="You got this result: add its gifts to Gifts you have (one you already have becomes a Vestige, like in game)">
+        Got it
+      </button>
     </>
   )
 }

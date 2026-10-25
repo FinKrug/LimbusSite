@@ -215,3 +215,23 @@ class BuildTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ResolveIconsTest(unittest.TestCase):
+    def test_redirected_icons_point_at_the_real_file(self):
+        from scraper.__main__ import resolve_icons
+
+        class Fake:
+            offline = False
+
+            def existing_titles(self, titles):
+                return {"File:Soda Pop Gift.png": "File:Soda Pop GMS Item.png",
+                        "File:Twigs Gift.png": "File:Twigs Gift.png",
+                        "File:Gone Gift.png": None}
+
+        gifts = [{"name": "Soda Pop", "icon": "Soda Pop Gift.png"}, {"name": "Twigs", "icon": "Twigs Gift.png"},
+                 {"name": "Gone", "icon": "Gone Gift.png"}]
+        warnings = resolve_icons(Fake(), gifts)
+        self.assertEqual([g["icon"] for g in gifts], ["Soda Pop GMS Item.png", "Twigs Gift.png", "Gone Gift.png"])
+        self.assertEqual(len(warnings), 1)
+        self.assertIn("Gone", warnings[0])

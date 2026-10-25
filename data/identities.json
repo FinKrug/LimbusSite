@@ -45,7 +45,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -60,7 +64,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -76,7 +84,12 @@
         "statuses": [
           "Sinking",
           "Fragile"
-        ]
+        ],
+        "enemy": [
+          "Sinking",
+          "Fragile"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -140,6 +153,13 @@
           "Insight",
           "Discard",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking",
+          "Insight"
+        ],
+        "self": [
+          "Insight"
         ]
       },
       {
@@ -158,6 +178,14 @@
           "Discard",
           "Sinking",
           "Aggro"
+        ],
+        "enemy": [
+          "Sinking",
+          "Insight"
+        ],
+        "self": [
+          "Insight",
+          "Aggro"
         ]
       },
       {
@@ -175,6 +203,13 @@
           "Insight",
           "Aggro",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Insight",
+          "Aggro"
         ]
       }
     ],
@@ -246,6 +281,15 @@
           "Aggro",
           "Rupture",
           "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Rupture",
+          "Unbreakable Coin"
+        ],
+        "self": [
+          "Aggro",
+          "Rupture",
+          "Unbreakable Coin"
         ]
       },
       {
@@ -260,6 +304,14 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Aggro",
+          "Rupture",
+          "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
           "Aggro",
           "Rupture",
           "Unbreakable Coin"
@@ -281,6 +333,14 @@
           "Aggro",
           "Rupture",
           "Bind"
+        ],
+        "enemy": [
+          "Rupture",
+          "Bind"
+        ],
+        "self": [
+          "Fairy Lure",
+          "Aggro"
         ]
       }
     ],
@@ -347,6 +407,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -364,6 +430,13 @@
           "Tremor",
           "Discard",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -382,6 +455,14 @@
           "Tremor",
           "Tremor Burst",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Tremor"
         ]
       }
     ],
@@ -446,7 +527,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -463,7 +548,13 @@
           "Paralyze",
           "Rupture",
           "Fragile"
-        ]
+        ],
+        "enemy": [
+          "Paralyze",
+          "Rupture",
+          "Fragile"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -479,7 +570,12 @@
         "statuses": [
           "Pierce Fragility",
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Pierce Fragility",
+          "Rupture"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -541,6 +637,13 @@
           "Poise",
           "Bind",
           "Bleed"
+        ],
+        "enemy": [
+          "Bind",
+          "Bleed"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -557,6 +660,12 @@
         "statuses": [
           "Poise",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -573,6 +682,12 @@
         "statuses": [
           "Poise",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise"
         ]
       }
     ],
@@ -630,6 +745,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -645,6 +764,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -659,6 +782,10 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Poise"
+        ],
+        "enemy": [],
+        "self": [
           "Poise"
         ]
       }
@@ -724,6 +851,12 @@
         "statuses": [
           "Tremor",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -740,6 +873,12 @@
         "statuses": [
           "Tremor",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -757,6 +896,13 @@
           "Tremor",
           "Sinking",
           "Sinking Deluge"
+        ],
+        "enemy": [
+          "Sinking",
+          "Sinking Deluge"
+        ],
+        "self": [
+          "Tremor"
         ]
       }
     ],
@@ -833,7 +979,13 @@
           "Rupture",
           "Tremor",
           "Bind"
-        ]
+        ],
+        "enemy": [
+          "Rupture",
+          "Tremor",
+          "Bind"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -853,6 +1005,16 @@
           "Haste",
           "Tremor Burst",
           "Concussion"
+        ],
+        "enemy": [
+          "Rupture",
+          "Tremor",
+          "Tremor Burst",
+          "Concussion"
+        ],
+        "self": [
+          "Linebreaker",
+          "Haste"
         ]
       },
       {
@@ -875,6 +1037,17 @@
           "Bind",
           "Tremor Burst",
           "Concussion"
+        ],
+        "enemy": [
+          "Rupture",
+          "Tremor",
+          "Bind",
+          "Tremor Burst",
+          "Concussion"
+        ],
+        "self": [
+          "Linebreaker",
+          "Strider -Wu-"
         ]
       }
     ],
@@ -950,6 +1123,15 @@
           "Rupture",
           "Dimensional Rift",
           "Dimensional Castaway"
+        ],
+        "enemy": [
+          "Dimensional Rift",
+          "Rupture"
+        ],
+        "self": [
+          "Charge",
+          "Rupture",
+          "Dimensional Castaway"
         ]
       },
       {
@@ -966,6 +1148,13 @@
         "statuses": [
           "Rupture",
           "Dimensional Rift",
+          "Charge"
+        ],
+        "enemy": [
+          "Dimensional Rift",
+          "Rupture"
+        ],
+        "self": [
           "Charge"
         ]
       },
@@ -984,6 +1173,15 @@
           "Charge",
           "Rupture",
           "Dimensional Rift",
+          "Dimensional Castaway",
+          "Quadricolor Dimensions"
+        ],
+        "enemy": [
+          "Dimensional Rift",
+          "Rupture"
+        ],
+        "self": [
+          "Charge",
           "Dimensional Castaway",
           "Quadricolor Dimensions"
         ]
@@ -1050,7 +1248,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -1065,7 +1267,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -1080,7 +1286,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -1148,6 +1358,14 @@
           "The Living & The Departed",
           "Sinking",
           "Butterfly"
+        ],
+        "enemy": [
+          "Sinking",
+          "Butterfly",
+          "The Living & The Departed"
+        ],
+        "self": [
+          "The Living & The Departed"
         ]
       },
       {
@@ -1166,6 +1384,14 @@
           "Sinking",
           "Butterfly",
           "Reload (Solemn Lament)"
+        ],
+        "enemy": [
+          "Sinking",
+          "Butterfly",
+          "The Living & The Departed"
+        ],
+        "self": [
+          "The Living & The Departed"
         ]
       },
       {
@@ -1184,6 +1410,14 @@
           "Sinking",
           "Butterfly",
           "Reload (Solemn Lament)"
+        ],
+        "enemy": [
+          "Sinking",
+          "Butterfly",
+          "The Living & The Departed"
+        ],
+        "self": [
+          "The Living & The Departed"
         ]
       }
     ],
@@ -1258,6 +1492,13 @@
           "Torn Memory",
           "Poise",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Torn Memory",
+          "Poise"
         ]
       },
       {
@@ -1276,6 +1517,14 @@
           "Poise",
           "Bleed",
           "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Bleed",
+          "Unbreakable Coin"
+        ],
+        "self": [
+          "Torn Memory",
+          "Poise"
         ]
       },
       {
@@ -1294,6 +1543,15 @@
           "Poise",
           "Unbreakable Coin",
           "Bleed"
+        ],
+        "enemy": [
+          "Torn Memory",
+          "Bleed"
+        ],
+        "self": [
+          "Torn Memory",
+          "Poise",
+          "Unbreakable Coin"
         ]
       }
     ],
@@ -1387,6 +1645,12 @@
           "Sinking",
           "Unlock",
           "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -1407,6 +1671,12 @@
           "Sinking",
           "Unlock",
           "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -1428,6 +1698,14 @@
           "Sinking",
           "Unlock",
           "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Sinking",
+          "Unlock"
+        ],
+        "self": [
+          "Poise",
+          "Unlock"
         ]
       }
     ],
@@ -1508,7 +1786,15 @@
           "Rupture",
           "Tremor",
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Burn",
+          "Rupture",
+          "Tremor",
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -1527,7 +1813,15 @@
           "Rupture",
           "Tremor",
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Burn",
+          "Rupture",
+          "Tremor",
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -1546,7 +1840,15 @@
           "Rupture",
           "Tremor",
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Burn",
+          "Rupture",
+          "Tremor",
+          "Sinking"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -1613,6 +1915,12 @@
         "statuses": [
           "Charge",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -1630,6 +1938,13 @@
           "Charge",
           "Bind",
           "Rupture"
+        ],
+        "enemy": [
+          "Bind",
+          "Rupture"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -1647,6 +1962,15 @@
           "Charge",
           "Rupture",
           "Dimensional Rift",
+          "Charge Barrier"
+        ],
+        "enemy": [
+          "Rupture",
+          "Charge",
+          "Dimensional Rift"
+        ],
+        "self": [
+          "Charge",
           "Charge Barrier"
         ]
       }
@@ -1709,7 +2033,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Paralyze"
-        ]
+        ],
+        "enemy": [
+          "Paralyze"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -1724,7 +2052,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Offense Level Down"
-        ]
+        ],
+        "enemy": [
+          "Offense Level Down"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -1739,7 +2071,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Attack Power Down"
-        ]
+        ],
+        "enemy": [
+          "Attack Power Down"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -1802,6 +2138,12 @@
         "statuses": [
           "Poise",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -1816,6 +2158,11 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Poise",
+          "Haste"
+        ],
+        "enemy": [],
+        "self": [
           "Poise",
           "Haste"
         ]
@@ -1833,7 +2180,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -1892,6 +2243,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Charge"
+        ],
+        "enemy": [],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -1908,6 +2263,12 @@
         "statuses": [
           "Charge",
           "Bind"
+        ],
+        "enemy": [
+          "Bind"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -1925,6 +2286,13 @@
           "Charge",
           "Attack Power Down",
           "Paralyze"
+        ],
+        "enemy": [
+          "Attack Power Down",
+          "Paralyze"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -1986,7 +2354,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -2001,7 +2373,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -2017,7 +2393,12 @@
         "statuses": [
           "Sinking",
           "Echoes of the Manor"
-        ]
+        ],
+        "enemy": [
+          "Sinking",
+          "Echoes of the Manor"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -2080,6 +2461,11 @@
         "statuses": [
           "Aggro",
           "Defense Level Up"
+        ],
+        "enemy": [],
+        "self": [
+          "Aggro",
+          "Defense Level Up"
         ]
       },
       {
@@ -2094,6 +2480,12 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Defense Level Up"
+        ],
+        "enemy": [
+          "Defense Level Up"
+        ],
+        "self": [
           "Defense Level Up"
         ]
       },
@@ -2111,7 +2503,12 @@
         "statuses": [
           "Defense Level Up",
           "Haste"
-        ]
+        ],
+        "enemy": [
+          "Haste",
+          "Defense Level Up"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -2183,6 +2580,12 @@
         "statuses": [
           "Poise",
           "Red Plum Blossom"
+        ],
+        "enemy": [
+          "Red Plum Blossom"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -2200,6 +2603,13 @@
           "Poise",
           "Bind",
           "Red Plum Blossom"
+        ],
+        "enemy": [
+          "Bind",
+          "Red Plum Blossom"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -2217,6 +2627,14 @@
           "Red Plum Blossom",
           "Poise",
           "Slash Fragility"
+        ],
+        "enemy": [
+          "Red Plum Blossom",
+          "Slash Fragility"
+        ],
+        "self": [
+          "Poise",
+          "Red Plum Blossom"
         ]
       }
     ],
@@ -2294,6 +2712,13 @@
           "Burn",
           "Tremor",
           "Fire Butterfly Coffin"
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor"
+        ],
+        "self": [
+          "Fire Butterfly Coffin"
         ]
       },
       {
@@ -2312,6 +2737,14 @@
           "Tremor",
           "Fire Butterfly Coffin",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Fire Butterfly Coffin"
         ]
       },
       {
@@ -2332,6 +2765,16 @@
           "Amplitude Conversion",
           "Tremor - Scorch",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor",
+          "Amplitude Conversion",
+          "Tremor - Scorch",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Fire Butterfly Coffin"
         ]
       }
     ],
@@ -2411,7 +2854,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -2430,6 +2877,15 @@
           "Haste",
           "Deathrite -Haste-",
           "Deathrite -Fissure-"
+        ],
+        "enemy": [
+          "Rupture",
+          "Deathrite -Haste-",
+          "Deathrite -Fissure-"
+        ],
+        "self": [
+          "Tianjiu Star's Blade",
+          "Haste"
         ]
       },
       {
@@ -2449,6 +2905,14 @@
           "Tianjiu Star's Blade",
           "Strider -Mao-",
           "Deathrite -Haste-"
+        ],
+        "enemy": [
+          "Rupture",
+          "Deathrite -Haste-"
+        ],
+        "self": [
+          "Assist Defense",
+          "Strider -Mao-"
         ]
       }
     ],
@@ -2520,6 +2984,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": [
+          "Burn"
         ]
       },
       {
@@ -2536,6 +3006,13 @@
         "statuses": [
           "Burn",
           "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Burn",
+          "Unbreakable Coin"
+        ],
+        "self": [
+          "Burn"
         ]
       },
       {
@@ -2550,6 +3027,12 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Burn"
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": [
           "Burn"
         ]
       }
@@ -2619,6 +3102,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -2636,6 +3125,14 @@
           "Tremor",
           "Offense Level Down",
           "Plus Coin Drop"
+        ],
+        "enemy": [
+          "Offense Level Down",
+          "Tremor",
+          "Plus Coin Drop"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -2652,6 +3149,12 @@
         "statuses": [
           "Tremor",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor Burst"
+        ],
+        "self": [
+          "Tremor"
         ]
       }
     ],
@@ -2716,6 +3219,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Charge"
+        ],
+        "enemy": [],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -2730,6 +3237,10 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Charge"
+        ],
+        "enemy": [],
+        "self": [
           "Charge"
         ]
       },
@@ -2747,6 +3258,12 @@
         "statuses": [
           "Charge",
           "Envy Fragility"
+        ],
+        "enemy": [
+          "Envy Fragility"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -2812,7 +3329,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -2828,7 +3349,12 @@
         "statuses": [
           "Rupture",
           "Weakness Analyzed"
-        ]
+        ],
+        "enemy": [
+          "Rupture",
+          "Weakness Analyzed"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -2843,6 +3369,13 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture",
+          "Haste",
+          "Slash Power Up"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
           "Haste",
           "Slash Power Up"
         ]
@@ -2914,6 +3447,12 @@
         "statuses": [
           "Poise",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -2931,6 +3470,12 @@
           "Poise",
           "Bleed",
           "Arrow - Shi"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -2949,6 +3494,13 @@
           "Bleed",
           "Arrow - Shi",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Bleed",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Poise"
         ]
       }
     ],
@@ -3037,6 +3589,13 @@
           "Bleed",
           "Defense Level Down",
           "Defense Level Up"
+        ],
+        "enemy": [
+          "Bleed",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Defense Level Up"
         ]
       },
       {
@@ -3056,6 +3615,13 @@
           "Corpus Ingredient (Ally)",
           "Unbreakable Coin",
           "Bind"
+        ],
+        "enemy": [
+          "Bleed",
+          "Bind"
+        ],
+        "self": [
+          "Corpus Ingredient (Ally)"
         ]
       },
       {
@@ -3075,6 +3641,14 @@
           "Corpus Ingredient (Ally)",
           "Bind",
           "Damage Down"
+        ],
+        "enemy": [
+          "Bleed",
+          "Bind",
+          "Damage Down"
+        ],
+        "self": [
+          "Corpus Ingredient (Ally)"
         ]
       }
     ],
@@ -3151,6 +3725,12 @@
           "Mark of the Prescript",
           "Poise",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -3168,6 +3748,12 @@
           "Mark of the Prescript",
           "Poise",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -3187,6 +3773,14 @@
           "Sinking",
           "Grace of the Prescript",
           "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Sinking",
+          "Grace of the Prescript"
+        ],
+        "self": [
+          "Poise",
+          "Grace of the Prescript"
         ]
       }
     ],
@@ -3260,7 +3854,12 @@
         "statuses": [
           "Nails",
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Nails",
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -3277,7 +3876,13 @@
           "Nails",
           "Paralyze",
           "Gaze"
-        ]
+        ],
+        "enemy": [
+          "Nails",
+          "Paralyze",
+          "Gaze"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -3294,7 +3899,13 @@
           "Pierce DMG Up",
           "Blunt DMG Up",
           "Nails"
-        ]
+        ],
+        "enemy": [
+          "Pierce DMG Up",
+          "Blunt DMG Up",
+          "Nails"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -3353,6 +3964,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Haste"
+        ],
+        "enemy": [],
+        "self": [
+          "Haste"
         ]
       },
       {
@@ -3369,6 +3984,12 @@
         "statuses": [
           "Attack Power Up",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Attack Power Up"
         ]
       },
       {
@@ -3384,7 +4005,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -3444,6 +4069,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -3459,6 +4088,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [
+          "Poise"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -3473,6 +4108,13 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Poise",
+          "Slash DMG Up"
+        ],
+        "enemy": [
+          "Poise"
+        ],
+        "self": [
           "Poise",
           "Slash DMG Up"
         ]
@@ -3538,6 +4180,12 @@
         "statuses": [
           "Aggro",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -3554,6 +4202,12 @@
         "statuses": [
           "Aggro",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -3570,6 +4224,12 @@
         "statuses": [
           "Aggro",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Aggro"
         ]
       }
     ],
@@ -3637,7 +4297,12 @@
         "statuses": [
           "Nails",
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Nails",
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -3653,7 +4318,12 @@
         "statuses": [
           "Tremor Burst",
           "Nails"
-        ]
+        ],
+        "enemy": [
+          "Tremor Burst",
+          "Nails"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -3671,7 +4341,14 @@
           "Tremor",
           "Attack Power Down",
           "Paralyze"
-        ]
+        ],
+        "enemy": [
+          "Nails",
+          "Tremor",
+          "Attack Power Down",
+          "Paralyze"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -3730,6 +4407,11 @@
         "statuses": [
           "Haste",
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Haste",
+          "Poise"
         ]
       },
       {
@@ -3746,6 +4428,11 @@
         "statuses": [
           "Haste",
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Haste",
+          "Poise"
         ]
       },
       {
@@ -3759,7 +4446,9 @@
         "copies": 1,
         "weight": 1,
         "weight_bonus": 0,
-        "statuses": []
+        "statuses": [],
+        "enemy": [],
+        "self": []
       }
     ],
     "defense": {
@@ -3822,6 +4511,12 @@
         "statuses": [
           "Poise",
           "Burn"
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -3840,6 +4535,15 @@
           "Nerve Strike - Don Quixote",
           "Burn",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Burn",
+          "Defense Level Down",
+          "Nerve Strike - Don Quixote"
+        ],
+        "self": [
+          "Poise",
+          "Nerve Strike - Don Quixote"
         ]
       },
       {
@@ -3858,6 +4562,15 @@
           "Poise",
           "Burn",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Nerve Strike - Don Quixote",
+          "Burn",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Poise",
+          "Burn"
         ]
       }
     ],
@@ -3918,6 +4631,12 @@
         "statuses": [
           "Haste",
           "Bind"
+        ],
+        "enemy": [
+          "Bind"
+        ],
+        "self": [
+          "Haste"
         ]
       },
       {
@@ -3934,6 +4653,12 @@
         "statuses": [
           "Haste",
           "Bind"
+        ],
+        "enemy": [
+          "Bind"
+        ],
+        "self": [
+          "Haste"
         ]
       },
       {
@@ -3949,7 +4674,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Declared Duel - Don Quixote"
-        ]
+        ],
+        "enemy": [
+          "Declared Duel - Don Quixote"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -4024,6 +4753,15 @@
           "Promised Nail (Don Quixote)",
           "Preservation",
           "Charge"
+        ],
+        "enemy": [
+          "Promised Nail (Don Quixote)",
+          "Charge",
+          "Tremor"
+        ],
+        "self": [
+          "Charge",
+          "Preservation"
         ]
       },
       {
@@ -4042,6 +4780,14 @@
           "Promised Nail (Don Quixote)",
           "Preservation",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Promised Nail (Don Quixote)",
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Preservation"
         ]
       },
       {
@@ -4065,6 +4811,19 @@
           "Amplitude Conversion",
           "Tremor - Conservation",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Offense Level Up",
+          "Promised Nail (Don Quixote)",
+          "Tremor",
+          "Amplitude Conversion",
+          "Tremor - Conservation",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Sanctum of Conservation (Don Quixote)",
+          "Defense Level Up",
+          "Preservation"
         ]
       }
     ],
@@ -4143,7 +4902,13 @@
           "Shattermark",
           "Rupture",
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Shattermark",
+          "Rupture",
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -4159,6 +4924,14 @@
         "statuses": [
           "Rupture",
           "Sinking",
+          "Burgeoning of Horns -發角-",
+          "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Rupture",
+          "Sinking"
+        ],
+        "self": [
           "Burgeoning of Horns -發角-",
           "Unbreakable Coin"
         ]
@@ -4180,6 +4953,15 @@
           "Burgeoning of Horns -發角-",
           "Unbreakable Coin",
           "Shattermark"
+        ],
+        "enemy": [
+          "Rupture",
+          "Sinking",
+          "Shattermark"
+        ],
+        "self": [
+          "Burgeoning of Horns -發角-",
+          "Unbreakable Coin"
         ]
       }
     ],
@@ -4256,6 +5038,12 @@
         "statuses": [
           "Love-Hate",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Love-Hate"
         ]
       },
       {
@@ -4273,6 +5061,13 @@
           "Love-Hate",
           "Rupture",
           "Mark of Villainy"
+        ],
+        "enemy": [
+          "Rupture",
+          "Mark of Villainy"
+        ],
+        "self": [
+          "Love-Hate"
         ]
       },
       {
@@ -4291,6 +5086,15 @@
           "Love-Hate",
           "Unbreakable Coin",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture",
+          "Unbreakable Coin"
+        ],
+        "self": [
+          "Magical Arcana",
+          "Love-Hate",
+          "Unbreakable Coin"
         ]
       }
     ],
@@ -4363,6 +5167,13 @@
         "statuses": [
           "Tremor",
           "Aggro"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Tremor",
+          "Aggro"
         ]
       },
       {
@@ -4380,6 +5191,14 @@
           "Tremor",
           "Bind",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Bind",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -4401,6 +5220,18 @@
           "Tremor Burst",
           "Amplitude Conversion",
           "Tremor - Chain"
+        ],
+        "enemy": [
+          "Tremor",
+          "Bind",
+          "Time Moratorium",
+          "Tremor Burst",
+          "Amplitude Conversion",
+          "Tremor - Chain"
+        ],
+        "self": [
+          "Tremor",
+          "Borrowed Time"
         ]
       }
     ],
@@ -4477,6 +5308,12 @@
           "Mark of the Prescript",
           "Poise",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -4494,6 +5331,12 @@
           "Mark of the Prescript",
           "Poise",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -4513,6 +5356,13 @@
           "Sinking",
           "Unlock",
           "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Poise",
+          "Unlock"
         ]
       }
     ],
@@ -4589,6 +5439,14 @@
           "Bloodfeast",
           "Hardblood (Ally)",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Bloodfeast",
+          "Hardblood (Ally)",
+          "Bleed"
         ]
       },
       {
@@ -4607,6 +5465,14 @@
           "Hardblood (Ally)",
           "Bleed",
           "Bloodfeast Consumed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Bloodfeast",
+          "Hardblood (Ally)",
+          "Bleed"
         ]
       },
       {
@@ -4625,6 +5491,15 @@
           "Bleed",
           "Bloodfeast",
           "Bloodfeast Consumed"
+        ],
+        "enemy": [
+          "Bleed",
+          "Bloodfeast"
+        ],
+        "self": [
+          "Bloodfeast",
+          "Hardblood (Ally)",
+          "Bleed"
         ]
       }
     ],
@@ -4693,7 +5568,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -4709,7 +5588,12 @@
         "statuses": [
           "Bleed",
           "Damage Down"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Damage Down"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -4724,7 +5608,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -4786,6 +5674,12 @@
         "statuses": [
           "Charge",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -4802,6 +5696,12 @@
         "statuses": [
           "Charge",
           "Fragile"
+        ],
+        "enemy": [
+          "Fragile"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -4818,6 +5718,12 @@
         "statuses": [
           "Charge",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -4876,6 +5782,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -4889,7 +5799,9 @@
         "copies": 2,
         "weight": 1,
         "weight_bonus": 0,
-        "statuses": []
+        "statuses": [],
+        "enemy": [],
+        "self": []
       },
       {
         "slot": 3,
@@ -4903,6 +5815,11 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Slash DMG Up",
+          "Poise"
+        ],
+        "enemy": [],
+        "self": [
           "Slash DMG Up",
           "Poise"
         ]
@@ -4971,6 +5888,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -4985,6 +5908,12 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
           "Tremor"
         ]
       },
@@ -5002,6 +5931,13 @@
         "statuses": [
           "Tremor",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Tremor"
         ]
       }
     ],
@@ -5071,6 +6007,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -5087,6 +6027,12 @@
         "statuses": [
           "Poise",
           "Offense Level Down"
+        ],
+        "enemy": [
+          "Offense Level Down"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -5106,6 +6052,15 @@
           "Tremor",
           "Rupture",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Rupture",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Poise",
+          "Ammo"
         ]
       }
     ],
@@ -5165,7 +6120,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -5180,7 +6139,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -5195,7 +6158,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -5257,7 +6224,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -5274,6 +6245,12 @@
           "Slash Fragility",
           "Attack Power Up",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Defense Level Down"
+        ],
+        "self": [
+          "Attack Power Up"
         ]
       },
       {
@@ -5289,7 +6266,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Slash Fragility"
-        ]
+        ],
+        "enemy": [
+          "Slash Fragility"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -5379,6 +6360,15 @@
           "Bleed",
           "Bladetrail -Afterimage-",
           "Entanglement"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed",
+          "Bladetrail -Afterimage-"
+        ],
+        "self": [
+          "Poise",
+          "Entanglement"
         ]
       },
       {
@@ -5397,6 +6387,13 @@
           "Burn",
           "Bleed",
           "Entanglement"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -5416,6 +6413,17 @@
           "Bleed",
           "Entanglement",
           "Bladetrail -Afterimage-"
+        ],
+        "enemy": [
+          "Bleed",
+          "Bladetrail -Afterimage-",
+          "Burn"
+        ],
+        "self": [
+          "Poise",
+          "Entanglement",
+          "Burn",
+          "Bleed"
         ]
       }
     ],
@@ -5494,6 +6502,12 @@
         "statuses": [
           "Poise",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -5508,6 +6522,13 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Poise",
+          "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
           "Poise",
           "Rupture"
         ]
@@ -5527,6 +6548,13 @@
           "Protector's Stance",
           "Poise",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Protector's Stance",
+          "Poise"
         ]
       }
     ],
@@ -5603,6 +6631,12 @@
         "statuses": [
           "Poise",
           "B.M."
+        ],
+        "enemy": [
+          "B.M."
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -5619,6 +6653,12 @@
         "statuses": [
           "Poise",
           "B.M."
+        ],
+        "enemy": [
+          "B.M."
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -5636,6 +6676,13 @@
           "B.M.",
           "Poise",
           "Bind"
+        ],
+        "enemy": [
+          "B.M.",
+          "Bind"
+        ],
+        "self": [
+          "Poise"
         ]
       }
     ],
@@ -5713,6 +6760,13 @@
           "Le Noir Gabardine Overcoat",
           "Armure Éveillée",
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Preservation",
+          "Armure Éveillée"
         ]
       },
       {
@@ -5732,6 +6786,15 @@
           "Armure Éveillée",
           "Tremor",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Preservation",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Preservation",
+          "Armure Éveillée"
         ]
       },
       {
@@ -5750,6 +6813,15 @@
           "Preservation",
           "Tremor",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Le Noir Gabardine Overcoat",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Le Noir Gabardine Overcoat",
+          "Preservation"
         ]
       }
     ],
@@ -5819,7 +6891,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -5834,6 +6910,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture",
+          "Haste"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
           "Haste"
         ]
       },
@@ -5852,6 +6934,13 @@
           "Rupture",
           "Strider -Mao-",
           "Deathrite -Haste-"
+        ],
+        "enemy": [
+          "Rupture",
+          "Deathrite -Haste-"
+        ],
+        "self": [
+          "Strider -Mao-"
         ]
       }
     ],
@@ -5916,7 +7005,12 @@
         "statuses": [
           "Bleed",
           "Paralyze"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Paralyze"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -5932,7 +7026,12 @@
         "statuses": [
           "Bleed",
           "Damage Down"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Damage Down"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -5948,7 +7047,12 @@
         "statuses": [
           "Bleed",
           "Offense Level Down"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Offense Level Down"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -6022,6 +7126,13 @@
           "Tremor",
           "Sinking",
           "Bullet - Solitude"
+        ],
+        "enemy": [
+          "Tremor",
+          "Sinking"
+        ],
+        "self": [
+          "Bullet - Solitude"
         ]
       },
       {
@@ -6039,6 +7150,14 @@
           "Tremor",
           "Sinking",
           "Faint Aroma",
+          "Bullet - Solitude"
+        ],
+        "enemy": [
+          "Tremor",
+          "Sinking",
+          "Faint Aroma"
+        ],
+        "self": [
           "Bullet - Solitude"
         ]
       },
@@ -6058,7 +7177,14 @@
           "Sinking",
           "Faint Aroma",
           "Tremor Burst"
-        ]
+        ],
+        "enemy": [
+          "Tremor",
+          "Sinking",
+          "Faint Aroma",
+          "Tremor Burst"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -6131,6 +7257,13 @@
           "Red Eyes",
           "Penitence",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Penitence",
+          "Red Eyes"
         ]
       },
       {
@@ -6147,6 +7280,15 @@
         "statuses": [
           "Red Eyes",
           "Penitence",
+          "Bleed",
+          "Haste"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Penitence",
+          "Red Eyes",
           "Bleed",
           "Haste"
         ]
@@ -6166,6 +7308,13 @@
           "Red Eyes",
           "Penitence",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Red Eyes",
+          "Penitence"
         ]
       }
     ],
@@ -6246,7 +7395,14 @@
           "Contempt (Ryoshu)",
           "Bleed",
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Gaze (Ryoshu)",
+          "Contempt (Ryoshu)",
+          "Bleed",
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -6266,7 +7422,16 @@
           "Tremor",
           "Unbreakable Coin",
           "Tremor Burst"
-        ]
+        ],
+        "enemy": [
+          "Gaze (Ryoshu)",
+          "Contempt (Ryoshu)",
+          "Bleed",
+          "Tremor",
+          "Unbreakable Coin",
+          "Tremor Burst"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -6288,7 +7453,18 @@
           "Amplitude Conversion",
           "Tremor - Hemorrhage",
           "Tremor Burst"
-        ]
+        ],
+        "enemy": [
+          "Gaze (Ryoshu)",
+          "Bleed",
+          "Tremor",
+          "Contempt (Ryoshu)",
+          "Unbreakable Coin",
+          "Amplitude Conversion",
+          "Tremor - Hemorrhage",
+          "Tremor Burst"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -6359,6 +7535,12 @@
         "statuses": [
           "Bleed",
           "Appetite"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Appetite"
         ]
       },
       {
@@ -6378,6 +7560,15 @@
           "Bleed",
           "Paralyze",
           "HP Healing Down"
+        ],
+        "enemy": [
+          "Bind",
+          "Bleed",
+          "Paralyze",
+          "HP Healing Down"
+        ],
+        "self": [
+          "Appetite"
         ]
       },
       {
@@ -6391,7 +7582,9 @@
         "copies": 1,
         "weight": 1,
         "weight_bonus": 0,
-        "statuses": []
+        "statuses": [],
+        "enemy": [],
+        "self": []
       }
     ],
     "defense": {
@@ -6452,6 +7645,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Charge"
+        ],
+        "enemy": [],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -6469,6 +7666,13 @@
           "Charge",
           "Slash Fragility",
           "Haste"
+        ],
+        "enemy": [
+          "Slash Fragility"
+        ],
+        "self": [
+          "Charge",
+          "Haste"
         ]
       },
       {
@@ -6483,6 +7687,11 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Charge",
+          "Charge Barrier"
+        ],
+        "enemy": [],
+        "self": [
           "Charge",
           "Charge Barrier"
         ]
@@ -6546,7 +7755,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -6562,6 +7775,12 @@
         "statuses": [
           "Defense Power Up",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor Burst"
+        ],
+        "self": [
+          "Defense Power Up"
         ]
       },
       {
@@ -6578,6 +7797,12 @@
         "statuses": [
           "Protection",
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Protection"
         ]
       }
     ],
@@ -6638,7 +7863,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -6654,7 +7883,12 @@
         "statuses": [
           "Rupture",
           "Offense Level Down"
-        ]
+        ],
+        "enemy": [
+          "Rupture",
+          "Offense Level Down"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -6670,7 +7904,12 @@
         "statuses": [
           "Rupture",
           "Offense Level Down"
-        ]
+        ],
+        "enemy": [
+          "Rupture",
+          "Offense Level Down"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -6731,7 +7970,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -6746,7 +7989,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -6761,7 +8008,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -6823,7 +8074,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -6839,7 +8094,12 @@
         "statuses": [
           "Tremor",
           "Attack Power Down"
-        ]
+        ],
+        "enemy": [
+          "Tremor",
+          "Attack Power Down"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -6856,6 +8116,13 @@
           "Tremor",
           "Charge",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -6920,6 +8187,12 @@
         "statuses": [
           "Envy DMG Up",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Envy DMG Up"
         ]
       },
       {
@@ -6937,7 +8210,13 @@
           "Envy Power Up",
           "Envy DMG Up",
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Envy Power Up",
+          "Envy DMG Up",
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -6954,7 +8233,13 @@
           "Vengeance Mark",
           "Plus Coin Drop",
           "Envy Fragility"
-        ]
+        ],
+        "enemy": [
+          "Vengeance Mark",
+          "Plus Coin Drop",
+          "Envy Fragility"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -7024,6 +8309,12 @@
         "statuses": [
           "Poise",
           "Sword of the Homeland - Rending"
+        ],
+        "enemy": [
+          "Sword of the Homeland - Rending"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -7041,6 +8332,13 @@
           "Poise",
           "Sword of the Homeland - Penetrating",
           "Slash Power Up"
+        ],
+        "enemy": [
+          "Sword of the Homeland - Penetrating"
+        ],
+        "self": [
+          "Poise",
+          "Slash Power Up"
         ]
       },
       {
@@ -7055,6 +8353,11 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Aggro",
+          "Poise"
+        ],
+        "enemy": [],
+        "self": [
           "Aggro",
           "Poise"
         ]
@@ -7123,6 +8426,13 @@
         "statuses": [
           "Rupture",
           "Poise"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Rupture",
+          "Poise"
         ]
       },
       {
@@ -7137,6 +8447,13 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Rupture",
+          "Poise"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
           "Rupture",
           "Poise"
         ]
@@ -7156,6 +8473,14 @@
           "Rupture",
           "Poise",
           "Focused Attack - Meursault"
+        ],
+        "enemy": [
+          "Rupture",
+          "Focused Attack - Meursault"
+        ],
+        "self": [
+          "Rupture",
+          "Poise"
         ]
       }
     ],
@@ -7224,6 +8549,13 @@
           "Discard",
           "Erudition",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Insight",
+          "Erudition"
         ]
       },
       {
@@ -7242,6 +8574,15 @@
           "Erudition",
           "Discard",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking",
+          "Insight"
+        ],
+        "self": [
+          "Insight",
+          "Erudition",
+          "Discard"
         ]
       },
       {
@@ -7259,6 +8600,14 @@
           "Insight",
           "Sinking",
           "Erudition"
+        ],
+        "enemy": [
+          "Sinking",
+          "Insight"
+        ],
+        "self": [
+          "Erudition",
+          "Insight"
         ]
       }
     ],
@@ -7336,6 +8685,15 @@
           "Pierce Fragility",
           "Burn",
           "Bleed"
+        ],
+        "enemy": [
+          "Spore",
+          "Pierce Fragility",
+          "Burn",
+          "Bleed"
+        ],
+        "self": [
+          "Spore Round -Base-"
         ]
       },
       {
@@ -7357,6 +8715,15 @@
           "Unbreakable Coin",
           "Spore Round -Base-",
           "Reload -Germination-",
+          "Spore Round -Buckshot-"
+        ],
+        "enemy": [
+          "Spore",
+          "Burn",
+          "Bleed"
+        ],
+        "self": [
+          "Loyalty Pheromone",
           "Spore Round -Buckshot-"
         ]
       },
@@ -7380,6 +8747,18 @@
           "Unbreakable Coin",
           "Reload -Germination-",
           "Spore Round -Buckshot-"
+        ],
+        "enemy": [
+          "Spore",
+          "Bleed",
+          "Burn",
+          "Unbreakable Coin"
+        ],
+        "self": [
+          "Spore Round -Base-",
+          "Loyalty Pheromone",
+          "Spore Round -Buckshot-",
+          "Burn"
         ]
       }
     ],
@@ -7450,6 +8829,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Aggro"
+        ],
+        "enemy": [],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -7468,6 +8851,14 @@
           "Nails",
           "Bind",
           "Attack Power Down"
+        ],
+        "enemy": [
+          "Nails",
+          "Bind",
+          "Attack Power Down"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -7484,6 +8875,12 @@
         "statuses": [
           "Aggro",
           "Nails"
+        ],
+        "enemy": [
+          "Nails"
+        ],
+        "self": [
+          "Aggro"
         ]
       }
     ],
@@ -7547,6 +8944,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Charge"
+        ],
+        "enemy": [],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -7562,6 +8963,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed",
+          "Charge"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
           "Charge"
         ]
       },
@@ -7579,6 +8986,12 @@
         "statuses": [
           "Charge",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -7654,6 +9067,16 @@
           "Hardblood Armor",
           "Bleed",
           "Rupture"
+        ],
+        "enemy": [
+          "Hardblood Armor",
+          "Bloodfeast",
+          "Bleed",
+          "Rupture"
+        ],
+        "self": [
+          "Bloodfeast",
+          "Bleed"
         ]
       },
       {
@@ -7673,6 +9096,18 @@
           "Bleed",
           "Rupture",
           "Lust Fragility"
+        ],
+        "enemy": [
+          "Hardblood Armor",
+          "Bloodfeast",
+          "Bleed",
+          "Rupture",
+          "Lust Fragility"
+        ],
+        "self": [
+          "Bloodfeast",
+          "Bleed",
+          "Hardblood Armor"
         ]
       },
       {
@@ -7693,6 +9128,17 @@
           "Rupture",
           "Unbreakable Coin",
           "La Mancha Parade"
+        ],
+        "enemy": [
+          "Bleed",
+          "Hardblood Armor",
+          "Bloodfeast",
+          "Rupture",
+          "Unbreakable Coin",
+          "La Mancha Parade"
+        ],
+        "self": [
+          "Hardblood Armor"
         ]
       }
     ],
@@ -7766,7 +9212,12 @@
         "statuses": [
           "Bleed",
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -7783,7 +9234,13 @@
           "Mauled Color -Rouge-",
           "Bleed",
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Mauled Color -Rouge-",
+          "Bleed",
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -7801,7 +9258,13 @@
           "Sinking",
           "Unbreakable Coin",
           "Mauled Color -Rouge-"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Sinking",
+          "Mauled Color -Rouge-"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -7877,6 +9340,13 @@
           "Burn",
           "Tremor",
           "Tigermark Round"
+        ],
+        "enemy": [
+          "Tremor",
+          "Burn"
+        ],
+        "self": [
+          "Tigermark Round"
         ]
       },
       {
@@ -7895,6 +9365,14 @@
           "Tremor",
           "Tigermark Round",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Burn",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Tigermark Round"
         ]
       },
       {
@@ -7916,6 +9394,17 @@
           "Amplitude Conversion",
           "Tremor - Scorch",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Burn",
+          "Amplitude Conversion",
+          "Tremor - Scorch",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Savage Tigermark Round",
+          "Tigermark Round"
         ]
       }
     ],
@@ -7983,6 +9472,11 @@
         "statuses": [
           "Slash Protection",
           "Charge"
+        ],
+        "enemy": [],
+        "self": [
+          "Slash Protection",
+          "Charge"
         ]
       },
       {
@@ -8000,6 +9494,13 @@
           "Charge",
           "Rupture",
           "Slash Fragility"
+        ],
+        "enemy": [
+          "Rupture",
+          "Slash Fragility"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -8016,6 +9517,12 @@
         "statuses": [
           "Charge",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Defense Level Down"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -8080,7 +9587,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -8096,7 +9607,12 @@
         "statuses": [
           "Sinking",
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Sinking",
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -8113,7 +9629,13 @@
           "Attack Power Down",
           "Sinking",
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Attack Power Down",
+          "Sinking",
+          "Rupture"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -8173,7 +9695,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -8189,7 +9715,12 @@
         "statuses": [
           "Rupture",
           "HP Healing Down"
-        ]
+        ],
+        "enemy": [
+          "Rupture",
+          "HP Healing Down"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -8204,7 +9735,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -8268,7 +9803,11 @@
         "statuses": [
           "Haste",
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -8284,6 +9823,12 @@
         "statuses": [
           "Haste",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Haste"
         ]
       },
       {
@@ -8299,7 +9844,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -8361,7 +9910,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -8376,7 +9929,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -8392,7 +9949,12 @@
         "statuses": [
           "Bleed",
           "Paralyze"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Paralyze"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -8450,7 +10012,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -8465,7 +10031,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -8480,7 +10050,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -8542,6 +10116,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Charge"
+        ],
+        "enemy": [],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -8556,6 +10134,11 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Charge",
+          "Charge Barrier"
+        ],
+        "enemy": [],
+        "self": [
           "Charge",
           "Charge Barrier"
         ]
@@ -8575,6 +10158,15 @@
           "Charge",
           "Charge Barrier",
           "Rupture"
+        ],
+        "enemy": [
+          "Charge",
+          "Charge Barrier",
+          "Rupture"
+        ],
+        "self": [
+          "Charge",
+          "Charge Barrier"
         ]
       }
     ],
@@ -8642,6 +10234,13 @@
           "Poise",
           "Burn",
           "Nerve Strike - Hong Lu"
+        ],
+        "enemy": [
+          "Burn",
+          "Nerve Strike - Hong Lu"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -8660,6 +10259,15 @@
           "Burn",
           "Nerve Strike - Hong Lu",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Burn",
+          "Nerve Strike - Hong Lu",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Poise",
+          "Nerve Strike - Hong Lu"
         ]
       },
       {
@@ -8678,6 +10286,16 @@
           "Burn",
           "Nerve Strike - Hong Lu",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Burn",
+          "Defense Level Down",
+          "Nerve Strike - Hong Lu"
+        ],
+        "self": [
+          "Poise",
+          "Nerve Strike - Hong Lu",
+          "Burn"
         ]
       }
     ],
@@ -8746,7 +10364,11 @@
           "Discard",
           "Insight",
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -8763,7 +10385,11 @@
           "Discard",
           "Insight",
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -8779,6 +10405,12 @@
         "statuses": [
           "Insight",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Insight"
         ]
       }
     ],
@@ -8850,6 +10482,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -8866,6 +10504,13 @@
         "statuses": [
           "Tremor",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -8883,6 +10528,16 @@
           "Tremor",
           "Amplitude Entanglement",
           "Tremor - Reverb",
+          "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Amplitude Entanglement",
+          "Tremor - Reverb",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Tremor",
           "Tremor Burst"
         ]
       }
@@ -8957,6 +10612,11 @@
         "statuses": [
           "Poise",
           "Ammo"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise",
+          "Ammo"
         ]
       },
       {
@@ -8976,6 +10636,15 @@
           "Poise",
           "Bind",
           "Attack Power Down"
+        ],
+        "enemy": [
+          "Bind",
+          "Attack Power Down"
+        ],
+        "self": [
+          "Target Spotted",
+          "Poise",
+          "Ammo"
         ]
       },
       {
@@ -8995,6 +10664,14 @@
           "Poise",
           "Bind",
           "Pierce Fragility"
+        ],
+        "enemy": [
+          "Bind",
+          "Pierce Fragility"
+        ],
+        "self": [
+          "Poise",
+          "Ammo"
         ]
       }
     ],
@@ -9061,6 +10738,12 @@
         "statuses": [
           "Rupture",
           "Aggro"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -9077,6 +10760,12 @@
         "statuses": [
           "Aggro",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -9093,7 +10782,12 @@
         "statuses": [
           "Rupture",
           "K Corp Ampule"
-        ]
+        ],
+        "enemy": [
+          "Rupture",
+          "K Corp Ampule"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -9158,6 +10852,12 @@
         "statuses": [
           "Charge",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -9175,6 +10875,14 @@
           "Charge",
           "Sinking",
           "Unfocused Volley"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Sinking",
+          "Charge",
+          "Unfocused Volley"
         ]
       },
       {
@@ -9191,6 +10899,12 @@
         "statuses": [
           "Charge",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -9268,6 +10982,14 @@
           "Bleed",
           "Trussed -Hong Lu-",
           "Bind"
+        ],
+        "enemy": [
+          "Bleed",
+          "Trussed -Hong Lu-",
+          "Bind"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -9287,6 +11009,17 @@
           "Trussed -Hong Lu-",
           "Avulsion Wound",
           "Haste"
+        ],
+        "enemy": [
+          "Bleed",
+          "Trussed -Hong Lu-",
+          "Avulsion Wound"
+        ],
+        "self": [
+          "Poise",
+          "Trussed -Hong Lu-",
+          "Haste",
+          "Bleed"
         ]
       },
       {
@@ -9309,6 +11042,18 @@
           "Attack Power Down",
           "Bind",
           "Pride Fragility"
+        ],
+        "enemy": [
+          "Bleed",
+          "Avulsion Wound",
+          "Trussed -Hong Lu-",
+          "Unbreakable Coin",
+          "Attack Power Down",
+          "Bind",
+          "Pride Fragility"
+        ],
+        "self": [
+          "Poise"
         ]
       }
     ],
@@ -9406,6 +11151,13 @@
           "Bleed",
           "Defense Level Down",
           "Defense Level Up"
+        ],
+        "enemy": [
+          "Bleed",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Defense Level Up"
         ]
       },
       {
@@ -9424,6 +11176,14 @@
           "Corpus Ingredient (Ally)",
           "Unbreakable Coin",
           "Bind",
+          "Haste"
+        ],
+        "enemy": [
+          "Bleed",
+          "Bind"
+        ],
+        "self": [
+          "Corpus Ingredient (Ally)",
           "Haste"
         ]
       },
@@ -9445,6 +11205,16 @@
           "Bind",
           "Haste",
           "Damage Down",
+          "Slash DMG Up"
+        ],
+        "enemy": [
+          "Bleed",
+          "Bind",
+          "Damage Down"
+        ],
+        "self": [
+          "Corpus Ingredient (Ally)",
+          "Haste",
           "Slash DMG Up"
         ]
       }
@@ -9540,6 +11310,15 @@
           "Assist Defense",
           "Rupture",
           "Poise"
+        ],
+        "enemy": [
+          "Defense Power Up",
+          "Assist Defense",
+          "Rupture"
+        ],
+        "self": [
+          "Rupture",
+          "Poise"
         ]
       },
       {
@@ -9555,6 +11334,16 @@
         "weight_bonus": 0,
         "statuses": [
           "Gluttony DMG Up",
+          "Rupture",
+          "Poise",
+          "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Gluttony DMG Up",
+          "Rupture",
+          "Unbreakable Coin"
+        ],
+        "self": [
           "Rupture",
           "Poise",
           "Unbreakable Coin"
@@ -9579,6 +11368,15 @@
           "Unbreakable Coin",
           "Offense Level Down",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Unrelenting Storm",
+          "Offense Level Down",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Rupture",
+          "Poise"
         ]
       }
     ],
@@ -9648,7 +11446,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -9663,7 +11465,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -9678,7 +11484,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -9739,7 +11549,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -9756,6 +11570,13 @@
           "Attack Power Up",
           "Damage Up",
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Attack Power Up",
+          "Damage Up"
         ]
       },
       {
@@ -9771,7 +11592,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor Burst"
-        ]
+        ],
+        "enemy": [
+          "Tremor Burst"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -9844,6 +11669,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Charge"
+        ],
+        "enemy": [],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -9862,6 +11691,15 @@
           "Defense Level Down",
           "HP Healing Down",
           "Photoelectricity"
+        ],
+        "enemy": [
+          "Defense Level Down",
+          "Charge",
+          "HP Healing Down",
+          "Photoelectricity"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -9879,6 +11717,14 @@
           "Charge",
           "Photoelectricity",
           "Blunt Fragility"
+        ],
+        "enemy": [
+          "Photoelectricity",
+          "Charge",
+          "Blunt Fragility"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -9945,7 +11791,12 @@
         "statuses": [
           "Nails",
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Nails",
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -9960,7 +11811,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Plus Coin Drop"
-        ]
+        ],
+        "enemy": [
+          "Plus Coin Drop"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -9973,7 +11828,9 @@
         "copies": 1,
         "weight": 1,
         "weight_bonus": 0,
-        "statuses": []
+        "statuses": [],
+        "enemy": [],
+        "self": []
       }
     ],
     "defense": {
@@ -10033,7 +11890,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -10049,7 +11910,12 @@
         "statuses": [
           "Rupture",
           "Defense Level Down"
-        ]
+        ],
+        "enemy": [
+          "Rupture",
+          "Defense Level Down"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -10064,7 +11930,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -10124,6 +11994,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -10138,6 +12012,10 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Poise"
+        ],
+        "enemy": [],
+        "self": [
           "Poise"
         ]
       },
@@ -10154,7 +12032,9 @@
         "weight_bonus": 1,
         "statuses": [
           "Poise"
-        ]
+        ],
+        "enemy": [],
+        "self": []
       }
     ],
     "defense": {
@@ -10235,6 +12115,12 @@
           "Poise",
           "Haste",
           "Ammo"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise",
+          "Haste",
+          "Ammo"
         ]
       },
       {
@@ -10253,6 +12139,14 @@
           "Haste",
           "Ammo",
           "Pierce Fragility"
+        ],
+        "enemy": [
+          "Pierce Fragility"
+        ],
+        "self": [
+          "Poise",
+          "Haste",
+          "Ammo"
         ]
       },
       {
@@ -10267,6 +12161,13 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Ammo - Atelier Logic",
+          "Poise",
+          "Concentration-Sniper-",
+          "Ammo"
+        ],
+        "enemy": [],
+        "self": [
           "Ammo - Atelier Logic",
           "Poise",
           "Concentration-Sniper-",
@@ -10356,6 +12257,13 @@
         "statuses": [
           "Burn",
           "Rupture"
+        ],
+        "enemy": [
+          "Burn",
+          "Rupture"
+        ],
+        "self": [
+          "Burn"
         ]
       },
       {
@@ -10372,6 +12280,14 @@
         "statuses": [
           "Burn",
           "Rupture",
+          "Bloodflame -血炎-"
+        ],
+        "enemy": [
+          "Burn",
+          "Rupture"
+        ],
+        "self": [
+          "Burn",
           "Bloodflame -血炎-"
         ]
       },
@@ -10393,6 +12309,15 @@
           "Unbreakable Coin",
           "Battleblood Instinct",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture",
+          "Burn"
+        ],
+        "self": [
+          "Burn",
+          "Bloodflame -血炎-",
+          "Unbreakable Coin"
         ]
       }
     ],
@@ -10468,6 +12393,13 @@
           "Bleed",
           "Defense Power Up",
           "Offense Level Down"
+        ],
+        "enemy": [
+          "Bleed",
+          "Offense Level Down"
+        ],
+        "self": [
+          "Defense Power Up"
         ]
       },
       {
@@ -10486,6 +12418,14 @@
           "Defense Power Up",
           "Slash Fragility",
           "Attack Power Down"
+        ],
+        "enemy": [
+          "Bleed",
+          "Slash Fragility",
+          "Attack Power Down"
+        ],
+        "self": [
+          "Defense Power Up"
         ]
       },
       {
@@ -10505,6 +12445,15 @@
           "Defense Power Up",
           "Dark Cloud Blade",
           "Slash Fragility"
+        ],
+        "enemy": [
+          "Bleed",
+          "Slash Fragility"
+        ],
+        "self": [
+          "Cumulus Wall",
+          "Defense Power Up",
+          "Dark Cloud Blade"
         ]
       }
     ],
@@ -10581,6 +12530,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Sinking"
         ]
       },
       {
@@ -10598,6 +12553,13 @@
           "Rupture",
           "Sinking",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Rupture",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Sinking"
         ]
       },
       {
@@ -10616,6 +12578,14 @@
           "Paralyze",
           "Rupture",
           "Fragile"
+        ],
+        "enemy": [
+          "Paralyze",
+          "Rupture",
+          "Fragile"
+        ],
+        "self": [
+          "Sinking"
         ]
       }
     ],
@@ -10685,6 +12655,11 @@
         "statuses": [
           "Ammo",
           "Charge"
+        ],
+        "enemy": [],
+        "self": [
+          "Ammo",
+          "Charge"
         ]
       },
       {
@@ -10701,6 +12676,12 @@
         "statuses": [
           "Ammo",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Ammo"
         ]
       },
       {
@@ -10718,6 +12699,13 @@
           "Ammo",
           "Fragile",
           "Rupture"
+        ],
+        "enemy": [
+          "Fragile",
+          "Rupture"
+        ],
+        "self": [
+          "Ammo"
         ]
       }
     ],
@@ -10794,7 +12782,12 @@
         "statuses": [
           "Burn",
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -10813,7 +12806,15 @@
           "The Duel Escalates (Heathcliff)",
           "Maturing Textbook",
           "Tremor Burst"
-        ]
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor",
+          "The Duel Escalates (Heathcliff)",
+          "Maturing Textbook",
+          "Tremor Burst"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -10835,6 +12836,20 @@
           "Amplitude Conversion",
           "Tremor - Scorch",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "The Duel Escalates (Heathcliff)",
+          "Burn",
+          "Tremor",
+          "Maturing Textbook",
+          "Unbreakable Coin",
+          "Amplitude Conversion",
+          "Tremor - Scorch",
+          "Tremor Burst"
+        ],
+        "self": [
+          "The Duel Escalates (Heathcliff)",
+          "Maturing Textbook"
         ]
       }
     ],
@@ -10921,6 +12936,14 @@
           "Bleed",
           "Vengeance Mark",
           "Aggro"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed",
+          "Vengeance Mark"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -10941,6 +12964,16 @@
           "Vengeance Mark",
           "Aggro",
           "Paralyze"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed",
+          "Offense Level Up",
+          "Vengeance Mark",
+          "Paralyze"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -10959,6 +12992,15 @@
           "Bleed",
           "Vengeance Mark",
           "Book of Vengeance -Heathcliff-",
+          "Vengeance Tattoo",
+          "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Bleed",
+          "Vengeance Mark",
+          "Burn"
+        ],
+        "self": [
           "Vengeance Tattoo",
           "Unbreakable Coin"
         ]
@@ -11027,6 +13069,13 @@
           "Poise",
           "Aggro",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise",
+          "Aggro"
         ]
       },
       {
@@ -11041,6 +13090,14 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Aggro",
+          "Poise",
+          "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
           "Aggro",
           "Poise",
           "Bleed"
@@ -11059,7 +13116,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -11134,6 +13195,12 @@
         "statuses": [
           "Charge",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -11151,6 +13218,13 @@
           "Charge Barrier",
           "Charge",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Charge Barrier",
+          "Charge"
         ]
       },
       {
@@ -11168,6 +13242,13 @@
           "Charge",
           "Unbreakable Coin",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Charge",
+          "Unbreakable Coin"
         ]
       }
     ],
@@ -11245,7 +13326,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -11263,6 +13348,14 @@
           "Coffin",
           "Dullahan",
           "Impending Ruin"
+        ],
+        "enemy": [
+          "Sinking",
+          "Impending Ruin"
+        ],
+        "self": [
+          "Coffin",
+          "Dullahan"
         ]
       },
       {
@@ -11281,6 +13374,14 @@
           "Sinking",
           "Coffin",
           "Impending Ruin"
+        ],
+        "enemy": [
+          "Sinking",
+          "Impending Ruin"
+        ],
+        "self": [
+          "Dullahan",
+          "Coffin"
         ]
       }
     ],
@@ -11346,7 +13447,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -11361,7 +13466,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -11378,7 +13487,13 @@
           "Tremor",
           "Amplitude Conversion",
           "Tremor - Decay"
-        ]
+        ],
+        "enemy": [
+          "Tremor",
+          "Amplitude Conversion",
+          "Tremor - Decay"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -11439,7 +13554,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -11455,7 +13574,12 @@
         "statuses": [
           "Defense Power Down",
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Defense Power Down",
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -11471,7 +13595,12 @@
         "statuses": [
           "Tremor Burst",
           "Blunt Fragility"
-        ]
+        ],
+        "enemy": [
+          "Tremor Burst",
+          "Blunt Fragility"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -11539,6 +13668,13 @@
           "Poise",
           "Sinking",
           "Haste"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Poise",
+          "Haste"
         ]
       },
       {
@@ -11558,6 +13694,15 @@
           "Bind",
           "Defense Level Down",
           "Sinking"
+        ],
+        "enemy": [
+          "Bind",
+          "Defense Level Down",
+          "Sinking"
+        ],
+        "self": [
+          "Poise",
+          "Haste"
         ]
       },
       {
@@ -11576,6 +13721,14 @@
           "Sinking",
           "Bind",
           "Slash Fragility"
+        ],
+        "enemy": [
+          "Sinking",
+          "Bind",
+          "Slash Fragility"
+        ],
+        "self": [
+          "Poise"
         ]
       }
     ],
@@ -11642,6 +13795,13 @@
           "Aggro",
           "Tremor",
           "Paralyze"
+        ],
+        "enemy": [
+          "Tremor",
+          "Paralyze"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -11659,6 +13819,13 @@
           "Attack Power Down",
           "Ammo",
           "Tremor"
+        ],
+        "enemy": [
+          "Attack Power Down",
+          "Tremor"
+        ],
+        "self": [
+          "Ammo"
         ]
       },
       {
@@ -11678,6 +13845,15 @@
           "Ammo",
           "Rupture",
           "Fragile"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst",
+          "Rupture",
+          "Fragile"
+        ],
+        "self": [
+          "Ammo"
         ]
       }
     ],
@@ -11744,6 +13920,13 @@
           "Aggro",
           "Tremor",
           "Rupture"
+        ],
+        "enemy": [
+          "Tremor",
+          "Rupture"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -11761,6 +13944,13 @@
           "Aggro",
           "Tremor",
           "Rupture"
+        ],
+        "enemy": [
+          "Tremor",
+          "Rupture"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -11779,6 +13969,14 @@
           "Tremor",
           "Rupture",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Rupture",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Aggro"
         ]
       }
     ],
@@ -11842,6 +14040,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -11857,6 +14059,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -11871,6 +14077,10 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Poise"
+        ],
+        "enemy": [],
+        "self": [
           "Poise"
         ]
       }
@@ -11970,6 +14180,13 @@
           "Rupture",
           "Poise",
           "Offense Level Up"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Poise",
+          "Offense Level Up"
         ]
       },
       {
@@ -11987,6 +14204,15 @@
           "Rupture",
           "Defense Level Down",
           "Poise",
+          "Offense Level Up"
+        ],
+        "enemy": [
+          "Rupture",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Poise",
+          "Rupture",
           "Offense Level Up"
         ]
       },
@@ -12006,6 +14232,14 @@
           "Rupture",
           "Poise",
           "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Poise",
+          "Unbreakable Coin",
+          "Launcher -始-"
         ]
       }
     ],
@@ -12090,6 +14324,12 @@
         "statuses": [
           "Pulsation (Ally)",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Pulsation (Ally)"
         ]
       },
       {
@@ -12108,6 +14348,15 @@
           "Bleed",
           "Full Makeover",
           "Lust Fragility"
+        ],
+        "enemy": [
+          "Bleed",
+          "Full Makeover",
+          "Lust Fragility"
+        ],
+        "self": [
+          "Pulsation (Ally)",
+          "Full Makeover"
         ]
       },
       {
@@ -12126,6 +14375,15 @@
           "Full Makeover",
           "Unbreakable Coin",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed",
+          "Full Makeover"
+        ],
+        "self": [
+          "Pulsation (Ally)",
+          "Full Makeover",
+          "Unbreakable Coin"
         ]
       }
     ],
@@ -12207,7 +14465,12 @@
           "Discard",
           "Tremor",
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Tremor",
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -12224,7 +14487,12 @@
           "Discard",
           "Tremor",
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Tremor",
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -12245,6 +14513,16 @@
           "Amplitude Conversion",
           "Amplitude Entanglement",
           "Tremor - Decay"
+        ],
+        "enemy": [
+          "Tremor",
+          "Sinking",
+          "Amplitude Conversion",
+          "Amplitude Entanglement",
+          "Tremor - Decay"
+        ],
+        "self": [
+          "Bright -光-"
         ]
       }
     ],
@@ -12318,7 +14596,12 @@
         "statuses": [
           "Bleed",
           "Offense Level Down"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Offense Level Down"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -12337,6 +14620,15 @@
           "Slash Fragility",
           "Fragile",
           "Slash Power Up"
+        ],
+        "enemy": [
+          "Bleed",
+          "Damage Up",
+          "Slash Fragility",
+          "Fragile"
+        ],
+        "self": [
+          "Slash Power Up"
         ]
       },
       {
@@ -12352,6 +14644,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed",
+          "Slash Power Up"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
           "Slash Power Up"
         ]
       }
@@ -12428,6 +14726,15 @@
           "Haste",
           "Mook Workshop - Ye -銳- Type II Bladedraw / Thrust Force - Dokkaebi Fire",
           "Dokkaebi Arms"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise",
+          "Haste",
+          "Mook Workshop - Ye -銳- Type II Bladedraw / Thrust Force - Dokkaebi Fire",
+          "Dokkaebi Arms"
         ]
       },
       {
@@ -12446,6 +14753,15 @@
           "Bleed",
           "Haste",
           "Mook Workshop - Ye -銳- Type II Bladedraw / Thrust Force - Dokkaebi Fire",
+          "Dokkaebi Arms"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise",
+          "Mook Workshop - Ye -銳- Type II Bladedraw / Thrust Force - Dokkaebi Fire",
+          "Haste",
           "Dokkaebi Arms"
         ]
       },
@@ -12467,6 +14783,15 @@
           "Mook Workshop - Ye -銳- Type II Bladedraw / Thrust Force - Dokkaebi Fire",
           "Unbreakable Coin",
           "Slash Fragility"
+        ],
+        "enemy": [
+          "Bleed",
+          "Slash Fragility"
+        ],
+        "self": [
+          "Poise",
+          "Haste",
+          "Mook Workshop - Ye -銳- Type II Bladedraw / Thrust Force - Dokkaebi Fire"
         ]
       }
     ],
@@ -12532,7 +14857,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -12547,7 +14876,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -12562,6 +14895,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn",
+          "Plus Coin Boost"
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": [
           "Plus Coin Boost"
         ]
       }
@@ -12627,6 +14966,12 @@
         "statuses": [
           "Tremor",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -12644,6 +14989,14 @@
           "Tremor",
           "Sinking",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Tremor",
+          "Sinking",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -12661,6 +15014,13 @@
           "Tremor",
           "Sinking",
           "Fragile"
+        ],
+        "enemy": [
+          "Sinking",
+          "Fragile"
+        ],
+        "self": [
+          "Tremor"
         ]
       }
     ],
@@ -12723,6 +15083,12 @@
         "statuses": [
           "Charge",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -12739,6 +15105,12 @@
         "statuses": [
           "Charge",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -12755,6 +15127,12 @@
         "statuses": [
           "Charge",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -12831,6 +15209,13 @@
           "Burn",
           "Bleed",
           "The Middle Styled Augmentation Tattoos (Ishmael)"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed"
+        ],
+        "self": [
+          "The Middle Styled Augmentation Tattoos (Ishmael)"
         ]
       },
       {
@@ -12852,6 +15237,17 @@
           "The Middle Styled Augmentation Tattoos (Ishmael)",
           "Paralyze",
           "Bind"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed",
+          "Paralyze",
+          "Bind"
+        ],
+        "self": [
+          "Aggro",
+          "Thermal Blades",
+          "The Middle Styled Augmentation Tattoos (Ishmael)"
         ]
       },
       {
@@ -12868,6 +15264,15 @@
         "statuses": [
           "Burn",
           "Bleed",
+          "Thermal Blades",
+          "The Middle - Grudge (Ishmael)",
+          "Blunt DMG Up"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed"
+        ],
+        "self": [
           "Thermal Blades",
           "The Middle - Grudge (Ishmael)",
           "Blunt DMG Up"
@@ -12948,6 +15353,14 @@
           "Aggro",
           "Protection",
           "Bleed"
+        ],
+        "enemy": [
+          "Defense Level Up",
+          "Protection",
+          "Bleed"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -12968,6 +15381,16 @@
           "Pride Power Up",
           "Bleed",
           "Burn"
+        ],
+        "enemy": [
+          "Offense Level Up",
+          "Damage Up",
+          "Pride Power Up",
+          "Bleed",
+          "Burn"
+        ],
+        "self": [
+          "Assist Attack (Ishmael)"
         ]
       },
       {
@@ -12985,6 +15408,13 @@
           "Bleed",
           "Poise",
           "Burn"
+        ],
+        "enemy": [
+          "Bleed",
+          "Burn"
+        ],
+        "self": [
+          "Poise"
         ]
       }
     ],
@@ -13051,6 +15481,14 @@
           "Aggro",
           "Defense Level Up",
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Aggro",
+          "Defense Level Up",
+          "Tremor"
         ]
       },
       {
@@ -13069,6 +15507,15 @@
           "Defense Level Up",
           "Tremor",
           "Attack Power Down"
+        ],
+        "enemy": [
+          "Tremor",
+          "Attack Power Down"
+        ],
+        "self": [
+          "Aggro",
+          "Defense Level Up",
+          "Tremor"
         ]
       },
       {
@@ -13088,6 +15535,16 @@
           "Defensive Stance",
           "Aggro",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Defense Level Up",
+          "Tremor",
+          "Defensive Stance",
+          "Aggro"
         ]
       }
     ],
@@ -13150,7 +15607,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -13165,7 +15626,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -13180,7 +15645,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -13236,7 +15705,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Paralyze"
-        ]
+        ],
+        "enemy": [
+          "Paralyze"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -13251,7 +15724,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Defense Power Down"
-        ]
+        ],
+        "enemy": [
+          "Defense Power Down"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -13268,7 +15745,13 @@
           "Defense Power Down",
           "Defense Level Down",
           "Paralyze"
-        ]
+        ],
+        "enemy": [
+          "Defense Power Down",
+          "Defense Level Down",
+          "Paralyze"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -13333,7 +15816,12 @@
         "statuses": [
           "Bleed",
           "Nails"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Nails"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -13350,6 +15838,13 @@
           "Fanatic",
           "Nails",
           "Paralyze"
+        ],
+        "enemy": [
+          "Nails",
+          "Paralyze"
+        ],
+        "self": [
+          "Fanatic"
         ]
       },
       {
@@ -13366,6 +15861,12 @@
         "statuses": [
           "Fanatic",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Fanatic"
         ]
       }
     ],
@@ -13429,6 +15930,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -13444,6 +15951,13 @@
         "weight_bonus": 0,
         "statuses": [
           "Bind",
+          "Tremor"
+        ],
+        "enemy": [
+          "Bind",
+          "Tremor"
+        ],
+        "self": [
           "Tremor"
         ]
       },
@@ -13464,6 +15978,16 @@
           "Borrowed Time",
           "Time Moratorium",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Bind",
+          "Tremor",
+          "Time Moratorium",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Tremor",
+          "Borrowed Time"
         ]
       }
     ],
@@ -13527,6 +16051,11 @@
         "statuses": [
           "Aggro",
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Aggro",
+          "Poise"
         ]
       },
       {
@@ -13541,6 +16070,11 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Poise",
+          "Aggro"
+        ],
+        "enemy": [],
+        "self": [
           "Poise",
           "Aggro"
         ]
@@ -13558,7 +16092,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Fragile"
-        ]
+        ],
+        "enemy": [
+          "Fragile"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -13631,6 +16169,13 @@
         "statuses": [
           "Courier Trunk - Rodion",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Rupture",
+          "Courier Trunk - Rodion"
         ]
       },
       {
@@ -13649,6 +16194,15 @@
           "Rupture",
           "Haste",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Rupture",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Courier Trunk - Rodion",
+          "Rupture",
+          "Haste"
         ]
       },
       {
@@ -13665,6 +16219,14 @@
         "statuses": [
           "Courier Trunk - Rodion",
           "Rupture",
+          "Haste"
+        ],
+        "enemy": [
+          "Rupture",
+          "Courier Trunk - Rodion"
+        ],
+        "self": [
+          "Courier Trunk - Rodion",
           "Haste"
         ]
       }
@@ -13729,6 +16291,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Insight"
+        ],
+        "enemy": [],
+        "self": [
+          "Insight"
         ]
       },
       {
@@ -13747,6 +16313,13 @@
           "Discard",
           "Aggro",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Insight",
+          "Aggro"
         ]
       },
       {
@@ -13765,6 +16338,13 @@
           "Discard",
           "Aggro",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Insight",
+          "Aggro"
         ]
       }
     ],
@@ -13853,7 +16433,15 @@
           "Second is Welcome-snipping",
           "Charge Identity",
           "Attack Power Up"
-        ]
+        ],
+        "enemy": [
+          "Charge",
+          "Offense Level Up",
+          "Second is Welcome-snipping",
+          "Charge Identity",
+          "Attack Power Up"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -13873,6 +16461,16 @@
           "Inertia of Drifting",
           "Tremor Burst",
           "Sloth Resist Down"
+        ],
+        "enemy": [
+          "Offense Level Up",
+          "Tremor",
+          "Tremor Burst",
+          "Sloth Resist Down"
+        ],
+        "self": [
+          "Charge Identity",
+          "Inertia of Drifting"
         ]
       },
       {
@@ -13894,6 +16492,17 @@
           "Inertia of Drifting",
           "Mark of Shearing",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Second is Welcome-snipping",
+          "Tremor",
+          "Mark of Shearing",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Blossom Scissors",
+          "Charge Identity",
+          "Inertia of Drifting"
         ]
       }
     ],
@@ -13970,6 +16579,13 @@
           "Poise",
           "Rupture",
           "Serpent Arm"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Poise",
+          "Serpent Arm"
         ]
       },
       {
@@ -13987,6 +16603,14 @@
           "Poise",
           "Rupture",
           "Deathrite -Venom-",
+          "Serpent Arm"
+        ],
+        "enemy": [
+          "Rupture",
+          "Deathrite -Venom-"
+        ],
+        "self": [
+          "Poise",
           "Serpent Arm"
         ]
       },
@@ -14007,6 +16631,14 @@
           "Rupture",
           "Serpent Arm",
           "Deathrite -Venom-"
+        ],
+        "enemy": [
+          "Rupture",
+          "Deathrite -Venom-"
+        ],
+        "self": [
+          "Poise",
+          "Serpent Arm"
         ]
       }
     ],
@@ -14072,6 +16704,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -14088,6 +16724,12 @@
         "statuses": [
           "Poise",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -14104,7 +16746,11 @@
         "statuses": [
           "Bleed",
           "Poise"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -14174,7 +16820,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -14189,7 +16839,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -14204,7 +16858,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -14288,6 +16946,13 @@
           "Sinking",
           "Protecting Sword",
           "Deep Tears"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Deep Tears",
+          "Protecting Sword"
         ]
       },
       {
@@ -14305,6 +16970,13 @@
           "Sinking",
           "Protecting Sword",
           "Deep Tears"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Deep Tears",
+          "Protecting Sword"
         ]
       },
       {
@@ -14323,6 +16995,15 @@
           "Protecting Sword",
           "Deep Tears",
           "Tear-sharpened"
+        ],
+        "enemy": [
+          "Sinking",
+          "Deep Tears",
+          "Tear-sharpened",
+          "Protecting Sword"
+        ],
+        "self": [
+          "Deep Tears"
         ]
       }
     ],
@@ -14392,6 +17073,13 @@
         "statuses": [
           "Charge",
           "Sinking"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Charge",
+          "Sinking"
         ]
       },
       {
@@ -14409,6 +17097,14 @@
           "Charge",
           "Sinking",
           "Blunt Fragility"
+        ],
+        "enemy": [
+          "Sinking",
+          "Blunt Fragility"
+        ],
+        "self": [
+          "Charge",
+          "Sinking"
         ]
       },
       {
@@ -14425,6 +17121,14 @@
         "statuses": [
           "Charge",
           "Sinking",
+          "Unfocused Volley"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Sinking",
+          "Charge",
           "Unfocused Volley"
         ]
       }
@@ -14495,6 +17199,12 @@
         "statuses": [
           "Charge",
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -14512,7 +17222,12 @@
           "Tremor",
           "Charge",
           "Tremor Burst"
-        ]
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -14529,6 +17244,13 @@
           "Charge",
           "Tremor",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -14620,6 +17342,13 @@
           "Burn",
           "Tremor",
           "Eye of Precognition (Rodion)"
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor"
+        ],
+        "self": [
+          "Eye of Precognition (Rodion)"
         ]
       },
       {
@@ -14640,6 +17369,15 @@
           "Tremor",
           "Eye of Precognition (Rodion)",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Acceleration Round",
+          "Eye of Precognition (Rodion)"
         ]
       },
       {
@@ -14662,6 +17400,17 @@
           "Amplitude Conversion",
           "Tremor - Scorch",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor",
+          "Amplitude Conversion",
+          "Tremor - Scorch",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Eye of Precognition (Rodion)",
+          "Acceleration Round"
         ]
       }
     ],
@@ -14736,6 +17485,16 @@
           "Blooming Thorn (Ally)",
           "Bleed",
           "Rupture"
+        ],
+        "enemy": [
+          "Blooming Thorn (Ally)",
+          "Bloodfeast",
+          "Bleed",
+          "Rupture"
+        ],
+        "self": [
+          "Bloodfeast",
+          "Bleed"
         ]
       },
       {
@@ -14755,6 +17514,17 @@
           "Blooming Thorn (Ally)",
           "Bleed",
           "Rupture"
+        ],
+        "enemy": [
+          "Attack Power Up",
+          "Blooming Thorn (Ally)",
+          "Bloodfeast",
+          "Bleed",
+          "Rupture"
+        ],
+        "self": [
+          "Bloodfeast",
+          "Bleed"
         ]
       },
       {
@@ -14774,7 +17544,15 @@
           "Bloodfeast Consumed",
           "Festive Fever (Ally)",
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Bloodfeast Consumed",
+          "Festive Fever (Ally)",
+          "Blooming Thorn (Ally)",
+          "Rupture"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -14860,7 +17638,14 @@
           "Bleed",
           "Sinking",
           "Mauled Color -Rouge-"
-        ]
+        ],
+        "enemy": [
+          "Palette Vibrante",
+          "Bleed",
+          "Sinking",
+          "Mauled Color -Rouge-"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -14880,7 +17665,16 @@
           "Mauled Color -Rouge-",
           "Mauled Color -Bleu-",
           "Touche Hardie"
-        ]
+        ],
+        "enemy": [
+          "Palette Vibrante",
+          "Bleed",
+          "Sinking",
+          "Mauled Color -Rouge-",
+          "Mauled Color -Bleu-",
+          "Touche Hardie"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -14900,7 +17694,16 @@
           "Mauled Color -Rouge-",
           "Mauled Color -Bleu-",
           "Touche Hardie"
-        ]
+        ],
+        "enemy": [
+          "Palette Vibrante",
+          "Bleed",
+          "Sinking",
+          "Mauled Color -Rouge-",
+          "Mauled Color -Bleu-",
+          "Touche Hardie"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -14964,7 +17767,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -14977,7 +17784,9 @@
         "copies": 2,
         "weight": 1,
         "weight_bonus": 0,
-        "statuses": []
+        "statuses": [],
+        "enemy": [],
+        "self": []
       },
       {
         "slot": 3,
@@ -14993,6 +17802,12 @@
         "statuses": [
           "Attack Power Up",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Attack Power Up"
         ]
       }
     ],
@@ -15054,6 +17869,12 @@
         "statuses": [
           "Rupture",
           "Talisman"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Talisman"
         ]
       },
       {
@@ -15070,6 +17891,12 @@
         "statuses": [
           "Talisman",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Talisman"
         ]
       },
       {
@@ -15086,6 +17913,13 @@
         "statuses": [
           "Talisman",
           "Rupture"
+        ],
+        "enemy": [
+          "Talisman",
+          "Rupture"
+        ],
+        "self": [
+          "Talisman"
         ]
       }
     ],
@@ -15148,7 +17982,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -15163,6 +18001,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking",
+          "Poise"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
           "Poise"
         ]
       },
@@ -15179,7 +18023,9 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
-        ]
+        ],
+        "enemy": [],
+        "self": []
       }
     ],
     "defense": {
@@ -15241,6 +18087,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -15256,6 +18108,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -15270,6 +18128,13 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
           "Tremor",
           "Tremor Burst"
         ]
@@ -15338,6 +18203,12 @@
         "statuses": [
           "Protection",
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Protection"
         ]
       },
       {
@@ -15355,6 +18226,13 @@
           "Aggro",
           "Tremor",
           "Damage Down"
+        ],
+        "enemy": [
+          "Tremor",
+          "Damage Down"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -15374,6 +18252,15 @@
           "Tremor Burst",
           "Tremor",
           "Blunt Fragility"
+        ],
+        "enemy": [
+          "Tremor Burst",
+          "Tremor",
+          "Blunt Fragility"
+        ],
+        "self": [
+          "Aggro",
+          "Protection"
         ]
       }
     ],
@@ -15444,6 +18331,14 @@
           "Aggro",
           "Defense Level Up",
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Aggro",
+          "Defense Level Up",
+          "Tremor"
         ]
       },
       {
@@ -15462,6 +18357,15 @@
           "Defense Level Up",
           "Tremor",
           "Offense Level Up"
+        ],
+        "enemy": [
+          "Defense Level Up",
+          "Offense Level Up"
+        ],
+        "self": [
+          "Aggro",
+          "Defense Level Up",
+          "Tremor"
         ]
       },
       {
@@ -15479,6 +18383,15 @@
           "Defense Level Up",
           "Tremor",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Defense Level Up",
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Defense Level Up",
+          "Tremor"
         ]
       }
     ],
@@ -15549,6 +18462,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -15563,6 +18480,11 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Attack Power Up",
+          "Poise"
+        ],
+        "enemy": [],
+        "self": [
           "Attack Power Up",
           "Poise"
         ]
@@ -15582,7 +18504,12 @@
           "Poise",
           "Paralyze",
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Paralyze",
+          "Bleed"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -15648,6 +18575,11 @@
         "statuses": [
           "Poise",
           "Haste"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise",
+          "Haste"
         ]
       },
       {
@@ -15662,6 +18594,10 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Poise"
+        ],
+        "enemy": [],
+        "self": [
           "Poise"
         ]
       },
@@ -15681,6 +18617,14 @@
           "Declared Duel - Sinclair",
           "Single Combat",
           "Fragile"
+        ],
+        "enemy": [
+          "Declared Duel - Sinclair",
+          "Single Combat",
+          "Fragile"
+        ],
+        "self": [
+          "Poise"
         ]
       }
     ],
@@ -15752,7 +18696,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -15767,7 +18715,11 @@
         "weight_bonus": 2,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -15782,7 +18734,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -15855,6 +18811,13 @@
           "Courier Trunk - Sinclair",
           "Rupture",
           "Defense Level Down"
+        ],
+        "enemy": [
+          "Rupture",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Courier Trunk - Sinclair"
         ]
       },
       {
@@ -15873,6 +18836,14 @@
           "Rupture",
           "Defense Level Down",
           "Haste"
+        ],
+        "enemy": [
+          "Rupture",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Courier Trunk - Sinclair",
+          "Haste"
         ]
       },
       {
@@ -15889,6 +18860,14 @@
         "statuses": [
           "Courier Trunk - Sinclair",
           "Rupture",
+          "Haste"
+        ],
+        "enemy": [
+          "Rupture",
+          "Courier Trunk - Sinclair"
+        ],
+        "self": [
+          "Courier Trunk - Sinclair",
           "Haste"
         ]
       }
@@ -15981,6 +18960,14 @@
           "Bleed",
           "Power Up",
           "Charge"
+        ],
+        "enemy": [
+          "Bleed",
+          "Power Up"
+        ],
+        "self": [
+          "Pulsation (Ally)",
+          "Charge"
         ]
       },
       {
@@ -16003,6 +18990,17 @@
           "Charge",
           "Offense Level Up",
           "Bleed"
+        ],
+        "enemy": [
+          "Clash Power Up",
+          "Desperate Hunger",
+          "Charge Identity",
+          "Charge",
+          "Offense Level Up",
+          "Bleed"
+        ],
+        "self": [
+          "Pulsation (Ally)"
         ]
       },
       {
@@ -16023,6 +19021,15 @@
           "Pulsation (Ally)",
           "Uncontrollable Rampage (Sinclair)",
           "Unbreakable Coin",
+          "Relentless Hunger"
+        ],
+        "enemy": [
+          "Offense Level Up",
+          "Attack Power Up",
+          "Bleed"
+        ],
+        "self": [
+          "Pulsation (Ally)",
           "Relentless Hunger"
         ]
       }
@@ -16104,7 +19111,12 @@
         "statuses": [
           "Burn",
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Burn",
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -16121,7 +19133,13 @@
           "Burn",
           "Rupture",
           "Bloodflame -血炎-"
-        ]
+        ],
+        "enemy": [
+          "Burn",
+          "Rupture",
+          "Bloodflame -血炎-"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -16140,6 +19158,14 @@
           "Unbreakable Coin",
           "Burn",
           "Rupture"
+        ],
+        "enemy": [
+          "Burn",
+          "Rupture"
+        ],
+        "self": [
+          "Bloodflame -血炎-",
+          "Unbreakable Coin"
         ]
       }
     ],
@@ -16215,6 +19241,13 @@
           "Poise",
           "Bleed",
           "Haste"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise",
+          "Haste"
         ]
       },
       {
@@ -16233,6 +19266,12 @@
           "Poise",
           "Bleed",
           "Moonlit Azure Blade"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -16251,6 +19290,13 @@
           "Unbreakable Coin",
           "Poise",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise",
+          "Moonlit Azure Blade"
         ]
       }
     ],
@@ -16320,6 +19366,12 @@
         "statuses": [
           "Bleed",
           "Aggro"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Aggro"
         ]
       },
       {
@@ -16335,6 +19387,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed",
+          "Aggro"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
           "Aggro"
         ]
       },
@@ -16352,7 +19410,11 @@
         "statuses": [
           "Book of Vengeance -Sinclair-",
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -16421,6 +19483,12 @@
         "statuses": [
           "Fanatic",
           "Burn"
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": [
+          "Fanatic"
         ]
       },
       {
@@ -16438,6 +19506,13 @@
           "Fanatic",
           "Burn",
           "Bleed"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed"
+        ],
+        "self": [
+          "Fanatic"
         ]
       },
       {
@@ -16455,6 +19530,14 @@
           "Fanatic",
           "Bleed",
           "Burn",
+          "Blunt Power Up"
+        ],
+        "enemy": [
+          "Bleed",
+          "Burn"
+        ],
+        "self": [
+          "Fanatic",
           "Blunt Power Up"
         ]
       }
@@ -16537,7 +19620,12 @@
         "statuses": [
           "Burn",
           "Tremor"
-        ]
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -16555,7 +19643,14 @@
           "Tremor",
           "Tremor - Scorch",
           "Tremor Burst"
-        ]
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor",
+          "Tremor - Scorch",
+          "Tremor Burst"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -16576,6 +19671,16 @@
           "Amplitude Conversion",
           "Tremor - Scorch",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor",
+          "Amplitude Conversion",
+          "Tremor - Scorch",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Scorch Propellant Ammo"
         ]
       }
     ],
@@ -16636,7 +19741,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -16649,7 +19758,9 @@
         "copies": 2,
         "weight": 1,
         "weight_bonus": 0,
-        "statuses": []
+        "statuses": [],
+        "enemy": [],
+        "self": []
       },
       {
         "slot": 3,
@@ -16664,7 +19775,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -16724,6 +19839,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -16740,6 +19859,11 @@
         "statuses": [
           "Poise",
           "Slash DMG Up"
+        ],
+        "enemy": [],
+        "self": [
+          "Poise",
+          "Slash DMG Up"
         ]
       },
       {
@@ -16753,7 +19877,9 @@
         "copies": 1,
         "weight": 1,
         "weight_bonus": 0,
-        "statuses": []
+        "statuses": [],
+        "enemy": [],
+        "self": []
       }
     ],
     "defense": {
@@ -16818,6 +19944,12 @@
           "Haste",
           "Aggro",
           "Poise"
+        ],
+        "enemy": [],
+        "self": [
+          "Haste",
+          "Aggro",
+          "Poise"
         ]
       },
       {
@@ -16835,6 +19967,13 @@
           "Poise",
           "Aggro",
           "Bind"
+        ],
+        "enemy": [
+          "Bind"
+        ],
+        "self": [
+          "Poise",
+          "Aggro"
         ]
       },
       {
@@ -16852,6 +19991,13 @@
           "Poise",
           "Declared Duel - Outis",
           "Haste"
+        ],
+        "enemy": [
+          "Declared Duel - Outis",
+          "Haste"
+        ],
+        "self": [
+          "Poise"
         ]
       }
     ],
@@ -16919,7 +20065,12 @@
         "statuses": [
           "Sinking",
           "Protection"
-        ]
+        ],
+        "enemy": [
+          "Sinking",
+          "Protection"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -16935,7 +20086,12 @@
         "statuses": [
           "Attack Power Up",
           "Damage Up"
-        ]
+        ],
+        "enemy": [
+          "Attack Power Up",
+          "Damage Up"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -16951,7 +20107,12 @@
         "statuses": [
           "Sinking",
           "Attack Power Down"
-        ]
+        ],
+        "enemy": [
+          "Sinking",
+          "Attack Power Down"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -17023,7 +20184,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -17038,7 +20203,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -17060,7 +20229,18 @@
           "Sinking",
           "Pierce DMG Up",
           "Pierce Power Up"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Haste",
+          "Burn",
+          "Rupture",
+          "Tremor",
+          "Sinking",
+          "Pierce DMG Up",
+          "Pierce Power Up"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -17125,7 +20305,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -17140,6 +20324,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture",
+          "Haste"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
           "Haste"
         ]
       },
@@ -17158,6 +20348,13 @@
           "Rupture",
           "Strider -Mao-",
           "Deathrite -Haste-"
+        ],
+        "enemy": [
+          "Rupture",
+          "Deathrite -Haste-"
+        ],
+        "self": [
+          "Strider -Mao-"
         ]
       }
     ],
@@ -17235,6 +20432,16 @@
           "The Udjat -Vanguard-",
           "Sheut Fracture",
           "Protection"
+        ],
+        "enemy": [
+          "Sinking",
+          "Tremor",
+          "Sheut Fracture"
+        ],
+        "self": [
+          "Aggro",
+          "The Udjat -Vanguard-",
+          "Protection"
         ]
       },
       {
@@ -17254,6 +20461,16 @@
           "Tremor",
           "The Udjat -Vanguard-",
           "Sheut Fracture",
+          "Protection"
+        ],
+        "enemy": [
+          "Sinking",
+          "Tremor",
+          "Sheut Fracture"
+        ],
+        "self": [
+          "Aggro",
+          "The Udjat -Vanguard-",
           "Protection"
         ]
       },
@@ -17280,6 +20497,20 @@
           "Gloom Resist Down",
           "Tremor Burst",
           "Gloom Fragility"
+        ],
+        "enemy": [
+          "Sinking",
+          "Tremor",
+          "Blue Sand",
+          "Gloom Resist Down",
+          "Tremor Burst",
+          "Gloom Fragility"
+        ],
+        "self": [
+          "The Udjat -Vanguard-",
+          "Aggro",
+          "Protection",
+          "LCA Fracture Round"
         ]
       }
     ],
@@ -17350,7 +20581,12 @@
         "statuses": [
           "Burn",
           "Dark Flame"
-        ]
+        ],
+        "enemy": [
+          "Burn",
+          "Dark Flame"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -17367,6 +20603,14 @@
           "Burn",
           "Magic Bullet",
           "Dark Flame"
+        ],
+        "enemy": [
+          "Burn",
+          "Magic Bullet",
+          "Dark Flame"
+        ],
+        "self": [
+          "Magic Bullet"
         ]
       },
       {
@@ -17384,6 +20628,14 @@
           "Burn",
           "Magic Bullet",
           "Dark Flame"
+        ],
+        "enemy": [
+          "Burn",
+          "Dark Flame",
+          "Magic Bullet"
+        ],
+        "self": [
+          "Magic Bullet"
         ]
       }
     ],
@@ -17448,6 +20700,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
+        ],
+        "enemy": [],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -17466,6 +20722,13 @@
           "Discard",
           "Tremor",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Offense Level Up"
         ]
       },
       {
@@ -17483,6 +20746,13 @@
           "Discard",
           "Tremor",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Tremor"
         ]
       }
     ],
@@ -17551,7 +20821,12 @@
         "statuses": [
           "Paralyze",
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Paralyze",
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -17567,7 +20842,12 @@
         "statuses": [
           "Rupture",
           "Defense Level Down"
-        ]
+        ],
+        "enemy": [
+          "Rupture",
+          "Defense Level Down"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -17584,7 +20864,13 @@
           "Rupture",
           "Offense Level Down",
           "Weakness Analyzed"
-        ]
+        ],
+        "enemy": [
+          "Rupture",
+          "Offense Level Down",
+          "Weakness Analyzed"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -17653,6 +20939,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -17672,6 +20964,16 @@
           "Amplitude Entanglement",
           "Tremor - Chain",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Amplitude Conversion",
+          "Amplitude Entanglement",
+          "Tremor - Chain",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Tremor"
         ]
       },
       {
@@ -17694,6 +20996,19 @@
           "Borrowed Time",
           "Violent Collections",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Amplitude Conversion",
+          "Amplitude Entanglement",
+          "Time Moratorium",
+          "Tremor",
+          "Bind",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Borrowed Time",
+          "Violent Collections",
+          "Tremor"
         ]
       }
     ],
@@ -17765,6 +21080,15 @@
           "Blood-tinged Scissorblades (Ally)",
           "Bleed",
           "Sewing Target (Ally)"
+        ],
+        "enemy": [
+          "Bleed",
+          "Sewing Target (Ally)"
+        ],
+        "self": [
+          "Bloodfeast",
+          "Blood-tinged Scissorblades (Ally)",
+          "Bleed"
         ]
       },
       {
@@ -17783,6 +21107,15 @@
           "Blood-tinged Scissorblades (Ally)",
           "Bleed",
           "Sewing Target (Ally)"
+        ],
+        "enemy": [
+          "Bleed",
+          "Sewing Target (Ally)"
+        ],
+        "self": [
+          "Bloodfeast",
+          "Blood-tinged Scissorblades (Ally)",
+          "Bleed"
         ]
       },
       {
@@ -17801,6 +21134,15 @@
           "Bleed",
           "Bloodfeast",
           "Sewing Target (Ally)"
+        ],
+        "enemy": [
+          "Bleed",
+          "Bloodfeast",
+          "Sewing Target (Ally)",
+          "Blood-tinged Scissorblades (Ally)"
+        ],
+        "self": [
+          "Blood-tinged Scissorblades (Ally)"
         ]
       }
     ],
@@ -17886,6 +21228,16 @@
           "The Middle - Vengeance Tattoo -Great Sister-",
           "Unbreakable Coin",
           "Bind"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed",
+          "Bind"
+        ],
+        "self": [
+          "Lævateinn (Outis)",
+          "The Middle - Vengeance Tattoo -Great Sister-",
+          "Unbreakable Coin"
         ]
       },
       {
@@ -17910,6 +21262,20 @@
           "Aggro",
           "Bind",
           "Paralyze"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed",
+          "Bind",
+          "Paralyze"
+        ],
+        "self": [
+          "Lævateinn (Outis)",
+          "Unbreakable Coin",
+          "First Seal Removed (Outis)",
+          "Second Seal Removed (Outis)",
+          "Aggro",
+          "The Middle - Vengeance Tattoo -Great Sister-"
         ]
       },
       {
@@ -17929,6 +21295,19 @@
           "Lævateinn (Outis)",
           "The Middle - Vengeance Tattoo -Great Sister-",
           "Unbreakable Coin",
+          "First Seal Removed (Outis)",
+          "Second Seal Removed (Outis)",
+          "The Middle - Grudge (Outis)",
+          "Blunt DMG Up"
+        ],
+        "enemy": [
+          "Burn",
+          "Bleed",
+          "Unbreakable Coin"
+        ],
+        "self": [
+          "Lævateinn (Outis)",
+          "The Middle - Vengeance Tattoo -Great Sister-",
           "First Seal Removed (Outis)",
           "Second Seal Removed (Outis)",
           "The Middle - Grudge (Outis)",
@@ -18006,6 +21385,10 @@
         "weight_bonus": 0,
         "statuses": [
           "Charge"
+        ],
+        "enemy": [],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -18023,6 +21406,14 @@
           "Charge",
           "Charge Barrier",
           "Bind"
+        ],
+        "enemy": [
+          "Charge",
+          "Bind"
+        ],
+        "self": [
+          "Charge",
+          "Charge Barrier"
         ]
       },
       {
@@ -18040,6 +21431,14 @@
           "Charge",
           "Load",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture",
+          "Charge"
+        ],
+        "self": [
+          "Charge",
+          "Load"
         ]
       }
     ],
@@ -18103,7 +21502,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -18118,7 +21521,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -18134,7 +21541,12 @@
         "statuses": [
           "Sinking",
           "Echoes of the Manor"
-        ]
+        ],
+        "enemy": [
+          "Sinking",
+          "Echoes of the Manor"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -18196,7 +21608,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -18212,7 +21628,12 @@
         "statuses": [
           "Rupture",
           "Pierce Fragility"
-        ]
+        ],
+        "enemy": [
+          "Rupture",
+          "Pierce Fragility"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -18227,7 +21648,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -18289,7 +21714,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -18306,7 +21735,13 @@
           "Bleed",
           "Offense Level Down",
           "Attack Power Down"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Offense Level Down",
+          "Attack Power Down"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -18323,7 +21758,13 @@
           "Bleed",
           "Offense Level Down",
           "Plus Coin Drop"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Offense Level Down",
+          "Plus Coin Drop"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -18381,7 +21822,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -18396,6 +21841,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn",
+          "Attack Power Up"
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": [
           "Attack Power Up"
         ]
       },
@@ -18412,7 +21863,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -18477,7 +21932,13 @@
           "Bind",
           "Paralyze",
           "Bleed"
-        ]
+        ],
+        "enemy": [
+          "Bind",
+          "Paralyze",
+          "Bleed"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -18493,7 +21954,12 @@
         "statuses": [
           "Bleed",
           "Bind"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Bind"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -18509,7 +21975,12 @@
         "statuses": [
           "Bleed",
           "Paralyze"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Paralyze"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -18575,6 +22046,13 @@
           "Charge",
           "Rupture",
           "Tremor"
+        ],
+        "enemy": [
+          "Rupture",
+          "Tremor"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -18592,6 +22070,13 @@
           "Charge",
           "Tremor",
           "Rupture"
+        ],
+        "enemy": [
+          "Tremor",
+          "Rupture"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -18610,6 +22095,15 @@
           "Tremor Burst",
           "Charge",
           "Rupture"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst",
+          "Rupture",
+          "Charge"
+        ],
+        "self": [
+          "Charge"
         ]
       }
     ],
@@ -18684,6 +22178,13 @@
           "Tremor",
           "Light of Daybreak",
           "Unbreakable Coin"
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor"
+        ],
+        "self": [
+          "Unbreakable Coin"
         ]
       },
       {
@@ -18703,6 +22204,14 @@
           "Light of Daybreak",
           "Unbreakable Coin",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Burn",
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Unbreakable Coin"
         ]
       },
       {
@@ -18726,6 +22235,18 @@
           "Amplitude Conversion",
           "Tremor - Scorch",
           "Tremor Burst"
+        ],
+        "enemy": [
+          "Burn",
+          "Protection",
+          "Tremor",
+          "Dawnherald",
+          "Amplitude Conversion",
+          "Tremor - Scorch",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Burn"
         ]
       }
     ],
@@ -18793,7 +22314,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking"
-        ]
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -18808,6 +22333,12 @@
         "weight_bonus": 0,
         "statuses": [
           "Sinking",
+          "Haste"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
           "Haste"
         ]
       },
@@ -18826,6 +22357,14 @@
           "Sinking",
           "Plus Coin Boost",
           "Damage Up"
+        ],
+        "enemy": [
+          "Sinking"
+        ],
+        "self": [
+          "Plus Coin Boost",
+          "Damage Up",
+          "Sinking"
         ]
       }
     ],
@@ -18888,6 +22427,12 @@
         "statuses": [
           "Burn",
           "District 12 Fuel"
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": [
+          "District 12 Fuel"
         ]
       },
       {
@@ -18905,6 +22450,12 @@
           "Burn",
           "District 12 Fuel",
           "Overheated Fuel"
+        ],
+        "enemy": [
+          "Burn"
+        ],
+        "self": [
+          "District 12 Fuel"
         ]
       },
       {
@@ -18922,6 +22473,14 @@
           "Burn",
           "District 12 Fuel",
           "Overheated Fuel",
+          "Blunt DMG Up"
+        ],
+        "enemy": [
+          "Burn",
+          "District 12 Fuel"
+        ],
+        "self": [
+          "District 12 Fuel",
           "Blunt DMG Up"
         ]
       }
@@ -18985,7 +22544,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 2,
@@ -19000,7 +22563,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -19015,7 +22582,11 @@
         "weight_bonus": 0,
         "statuses": [
           "Rupture"
-        ]
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -19091,6 +22662,13 @@
           "Poise",
           "Rupture",
           "Serpent Arm"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Poise",
+          "Serpent Arm"
         ]
       },
       {
@@ -19108,6 +22686,14 @@
           "Poise",
           "Rupture",
           "Deathrite -Venom-",
+          "Serpent Arm"
+        ],
+        "enemy": [
+          "Rupture",
+          "Deathrite -Venom-"
+        ],
+        "self": [
+          "Poise",
           "Serpent Arm"
         ]
       },
@@ -19127,6 +22713,15 @@
           "Rupture",
           "Serpent Arm",
           "Deathrite -Venom-"
+        ],
+        "enemy": [
+          "Rupture",
+          "Deathrite -Venom-"
+        ],
+        "self": [
+          "Poise",
+          "Serpent Arm",
+          "Rupture"
         ]
       }
     ],
@@ -19216,6 +22811,12 @@
         "statuses": [
           "Charge",
           "Rupture"
+        ],
+        "enemy": [
+          "Rupture"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -19234,6 +22835,13 @@
           "Unbreakable Coin",
           "Rupture",
           "Photoelectricity"
+        ],
+        "enemy": [
+          "Rupture",
+          "Photoelectricity"
+        ],
+        "self": [
+          "Charge"
         ]
       },
       {
@@ -19254,6 +22862,16 @@
           "Rupture",
           "Photoelectricity",
           "Charged Sting"
+        ],
+        "enemy": [
+          "Rupture",
+          "Photoelectricity",
+          "Charged Sting",
+          "Charge"
+        ],
+        "self": [
+          "High-voltage Exoskeleton",
+          "Charge"
         ]
       }
     ],
@@ -19342,6 +22960,14 @@
           "Sinking",
           "Burn",
           "Bind"
+        ],
+        "enemy": [
+          "Dazzle",
+          "Sinking",
+          "Burn"
+        ],
+        "self": [
+          "Bind"
         ]
       },
       {
@@ -19359,7 +22985,13 @@
           "Dazzle",
           "Sinking",
           "Burn"
-        ]
+        ],
+        "enemy": [
+          "Dazzle",
+          "Sinking",
+          "Burn"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -19377,6 +23009,15 @@
           "Sinking",
           "Burn",
           "Unbreakable Coin",
+          "Plus Coin Boost"
+        ],
+        "enemy": [
+          "Dazzle",
+          "Sinking",
+          "Burn",
+          "Unbreakable Coin"
+        ],
+        "self": [
           "Plus Coin Boost"
         ]
       }
@@ -19457,6 +23098,14 @@
           "Bleed",
           "Tremor",
           "Open Wound"
+        ],
+        "enemy": [
+          "Bleed",
+          "Tremor",
+          "Open Wound"
+        ],
+        "self": [
+          "Haste"
         ]
       },
       {
@@ -19476,7 +23125,15 @@
           "Tremor Burst",
           "Open Wound",
           "Fatal Wound"
-        ]
+        ],
+        "enemy": [
+          "Bleed",
+          "Tremor",
+          "Tremor Burst",
+          "Open Wound",
+          "Fatal Wound"
+        ],
+        "self": []
       },
       {
         "slot": 3,
@@ -19498,7 +23155,18 @@
           "Amplitude Conversion",
           "Tremor - Hemorrhage",
           "Fatal Wound"
-        ]
+        ],
+        "enemy": [
+          "Deep Wound",
+          "Bleed",
+          "Tremor",
+          "Tremor Burst",
+          "Open Wound",
+          "Amplitude Conversion",
+          "Tremor - Hemorrhage",
+          "Fatal Wound"
+        ],
+        "self": []
       }
     ],
     "defense": {
@@ -19573,6 +23241,15 @@
           "Bleed",
           "Rupture",
           "Bloodied Hand (Ally)"
+        ],
+        "enemy": [
+          "Bleed",
+          "Rupture"
+        ],
+        "self": [
+          "Aggro",
+          "Bleed",
+          "Bloodied Hand (Ally)"
         ]
       },
       {
@@ -19593,6 +23270,16 @@
           "Bloodfeast",
           "Bloodied Hand (Ally)",
           "Rupture"
+        ],
+        "enemy": [
+          "Bleed",
+          "Rupture"
+        ],
+        "self": [
+          "Aggro",
+          "Bleed",
+          "Bloodfeast",
+          "Bloodied Hand (Ally)"
         ]
       },
       {
@@ -19610,6 +23297,14 @@
           "Bleed",
           "Bloodied Hand (Ally)",
           "Rupture"
+        ],
+        "enemy": [
+          "Bleed",
+          "Rupture"
+        ],
+        "self": [
+          "Bloodied Hand (Ally)",
+          "Bleed"
         ]
       }
     ],
@@ -19677,6 +23372,12 @@
         "statuses": [
           "Poise",
           "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -19693,6 +23394,12 @@
         "statuses": [
           "Bleed",
           "Poise"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Poise"
         ]
       },
       {
@@ -19707,6 +23414,15 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Poise",
+          "Bleed",
+          "Ammo",
+          "Plus Coin Boost"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
           "Poise",
           "Bleed",
           "Ammo",
@@ -19772,6 +23488,11 @@
         "statuses": [
           "Defense Level Up",
           "Haste"
+        ],
+        "enemy": [],
+        "self": [
+          "Defense Level Up",
+          "Haste"
         ]
       },
       {
@@ -19786,6 +23507,11 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
+          "Defense Level Up",
+          "Aggro"
+        ],
+        "enemy": [],
+        "self": [
           "Defense Level Up",
           "Aggro"
         ]
@@ -19804,7 +23530,12 @@
         "statuses": [
           "Defense Power Up",
           "Defense Level Up"
-        ]
+        ],
+        "enemy": [
+          "Defense Power Up",
+          "Defense Level Up"
+        ],
+        "self": []
       }
     ],
     "defense": {

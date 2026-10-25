@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { shortName } from '../lib/format'
 import type { ArtVariant } from '../lib/images'
 import type { LineupInfo, LineupSuggestion } from '../lib/ordering'
-import { identityTier } from '../lib/strength'
+import { clashLabel, identityTier } from '../lib/strength'
 import { type Focus, focusKey, parseFocus, traitOptions } from '../lib/teambuilder'
 import { CORE_KEYWORDS, SINNERS, type Gift, type Identity, type Sin, type Sinner } from '../lib/types'
 import { KeywordChip } from './bits'
@@ -201,6 +201,7 @@ function IdentityCard({ identity: i, slot, isDeployed, art, suggestion, onToggle
 }) {
   const selected = slot >= 0
   const role = identityTier(i).role
+  const clash = clashLabel(i)
   return (
     <div className={`id-card rarity-${i.rarity ?? 1}${selected ? ' selected' : ''}${selected && !isDeployed ? ' backup' : ''}`}>
       <button className="id-card-main" onClick={onToggle} aria-pressed={selected}
@@ -209,7 +210,7 @@ function IdentityCard({ identity: i, slot, isDeployed, art, suggestion, onToggle
         {suggestion && <span className="id-card-suggest" title="There's a lineup suggestion for this sinner">{suggestion}</span>}
         <span className="id-card-info">
           <span className="id-card-name">{shortName(i)}</span>
-          <span className="id-card-sinner">{i.sinner}{role ? <span className="id-card-role"> · {role}</span> : null}</span>
+          <span className="id-card-sinner">{i.sinner}{role ? <span className="id-card-role"> · {role}</span> : null}{clash ? <span className={`id-card-clash${clash.strong ? ' strong' : ''}`} title={clash.title}> · {clash.text}</span> : null}</span>
           <span className="id-card-kws">{i.keywords.map((k) => <KeywordChip key={k} keyword={k} />)}</span>
         </span>
         {selected && (
@@ -256,6 +257,7 @@ function IdentityPicker({ sinner, identities, current, art, onPick, onClose }: {
               <ul className="picker-list">
                 {g.list.map((i) => {
                   const role = identityTier(i).role
+                  const clash = clashLabel(i)
                   return (
                     <li key={i.id}>
                       <button className={i.id === current.id ? 'picker-item current' : 'picker-item'} onClick={() => onPick(i.id)}>
@@ -264,6 +266,7 @@ function IdentityPicker({ sinner, identities, current, art, onPick, onClose }: {
                           <span className="picker-name">{shortName(i)}</span>
                           <span className="picker-meta">
                             {role && <span className="muted small">{role}</span>}
+                            {clash && <span className={`small id-card-clash${clash.strong ? ' strong' : ''}`} title={clash.title}>{clash.text}</span>}
                             {i.keywords.map((k) => <KeywordChip key={k} keyword={k} />)}
                           </span>
                         </span>

@@ -43,18 +43,97 @@ export function traitOptions(identities: Identity[]): { name: string; count: num
     .sort((a, b) => b.sinners - a.sinners || b.count - a.count || a.name.localeCompare(b.name))
 }
 
+/** Statuses a unit puts on itself rather than on the enemy. */
+const SELF_STATUS: ReadonlySet<CoreKeyword> = new Set(['Poise', 'Charge'])
+
+/** "Tremor", "Tremor - Scorch" and "Tremor Burst" all belong to Tremor. */
+function isKeywordStatus(name: string, k: string): boolean {
+  return name === k || name.startsWith(k + ' ')
+}
+
+/**
+ * How much of an identity's deck works with a keyword, 0–1: the share of skill
+ * copies (S1 ×3, S2 ×2, S3 ×1) that inflict or trigger it on the enemy (or gain
+ * it, for Poise and Charge). An identity that only has the keyword on paper (it
+ * gains Tremor itself, like Spicebush Yi Sang, or a passive mentions it, like
+ * The Middle Big Brother Heathcliff) scores a little; one with no skill data
+ * falls back to its keyword list. Skills that spread three or more keywords at
+ * once count for less of each.
+ */
+export function keywordFit(i: Identity, k: CoreKeyword): number {
+  const skills = i.skills?.filter((s) => s.enemy) ?? []
+  if (!skills.length) return i.keywords.includes(k) ? 1 : 0
+  let total = 0
+  let hit = 0
+  for (const s of skills) {
+    const w = s.copies ?? [3, 2, 1][s.slot - 1] ?? 1
+    total += w
+    const names = SELF_STATUS.has(k) ? [...s.enemy!, ...(s.self ?? [])] : s.enemy!
+    if (!names.some((n) => isKeywordStatus(n, k))) continue
+    // A skill that spreads five statuses at once (The Ring Pointillist Student) builds none of them up.
+    const spread = CORE_KEYWORDS.filter((c) => names.some((n) => isKeywordStatus(n, c))).length
+    hit += w * Math.min(1, 2 / spread)
+  }
+  const share = total ? hit / total : 0
+  if (share > 0) return 0.4 + 0.6 * share
+  if (!i.keywords.includes(k)) return 0
+  // Poise and Charge often come from passives (not read here); Tremor on paper only is worth little.
+  return SELF_STATUS.has(k) ? 0.5 : 0.15
+}
+
+/** What an affiliation's members do in battle, so the rest of the team can pair with them. */
+export interface TraitPartner {
+  /** Keywords most members inflict (The Thumb: Burn and Tremor). */
+  keywords: CoreKeyword[]
+  /** Statuses of those keywords that are the affiliation's own (The Thumb: Tremor - Scorch). */
+  signature: string[]
+}
+
+export function traitPartner(members: Identity[]): TraitPartner {
+  if (!members.length) return { keywords: [], signature: [] }
+  const counts = CORE_KEYWORDS
+    .map((k) => ({ k, n: members.filter((i) => keywordFit(i, k) >= 0.4).length }))
+    .filter((x) => x.n > 0)
+    .sort((a, b) => b.n - a.n)
+  const top = counts[0]?.n ?? 0
+  // The main keyword and any other most members also inflict (at most two).
+  const keywords = counts.filter((x) => x.n >= Math.max(1, top * 0.6) && x.n >= members.length * 0.4).slice(0, 2).map((x) => x.k)
+  if (!keywords.length && counts[0]) keywords.push(counts[0].k)
+  // Named variants of those keywords at least a third of the members inflict.
+  const by = new Map<string, number>()
+  for (const i of members) {
+    const mine = new Set((i.skills ?? []).flatMap((s) => s.enemy ?? []))
+    for (const n of mine) {
+      if (keywords.some((k) => n !== k && isKeywordStatus(n, k) && !/ Burst$/.test(n))) by.set(n, (by.get(n) ?? 0) + 1)
+    }
+  }
+  const signature = [...by.entries()].filter(([, n]) => n >= members.length / 3).map(([n]) => n)
+  return { keywords, signature }
+}
+
+/** How well an identity pairs with an affiliation's members, 0–1 (more with their signature status). */
+export function partnerFit(i: Identity, partner: TraitPartner): number {
+  if (!partner.keywords.length) return 0
+  const fit = partner.keywords.reduce((s, k) => s + keywordFit(i, k), 0) / partner.keywords.length
+  const sig = partner.signature.length && (i.skills ?? []).some((s) => s.enemy?.some((n) => partner.signature.includes(n)))
+  return Math.min(1, fit * (sig ? 1 : 0.8))
+}
+
 /** How well an identity fits a focus; 0 = not at all. Stronger units score higher. */
 export function focusScore(
-  i: Identity, focus: Focus, partner?: CoreKeyword | null, tiers: TierOverrides = {},
+  i: Identity, focus: Focus, partner?: TraitPartner | null, tiers: TierOverrides = {},
 ): number {
   let s = 0
   if (focus.kind === 'keyword') {
-    if (i.keywords.includes(focus.value)) s += 3
+    s += 3 * keywordFit(i, focus.value)
   } else {
-    if (i.traits?.includes(focus.value)) s += 3
+    const pair = partner ? partnerFit(i, partner) : 0
+    // Members first; among them, the ones that do what the affiliation does.
+    if (i.traits?.includes(focus.value)) s += 4 + 0.5 * pair
     // Branch identities count a little for their parent faction's focus and vice versa.
-    else if (i.traits?.some((t) => t.startsWith(focus.value + ' ') || focus.value.startsWith(t + ' '))) s += 1.5
-    if (partner && i.keywords.includes(partner)) s += 1
+    else if (i.traits?.some((t) => t.startsWith(focus.value + ' ') || focus.value.startsWith(t + ' '))) s += 1.5 + pair
+    // Everyone else by how well they pair with the members (The Thumb: Burn and Tremor, Tremor - Scorch).
+    else s += 2.5 * pair
   }
   // Strength counts for less than fit: a strong unit that doesn't fit the focus scores 0.
   if (s > 0) s += 2 * strength(i, tiers)
@@ -72,14 +151,10 @@ export function buildTeam(
   data: GameData, focus: Focus, owned?: Set<string>, tiers: TierOverrides = {},
 ): BuiltTeam {
   const pool = owned?.size ? data.identities.filter((i) => owned.has(i.id)) : data.identities
-  // For an affiliation, the keyword most of its members share helps pick the rest.
-  let partner: CoreKeyword | null = null
-  if (focus.kind === 'trait') {
-    const members = pool.filter((i) => i.traits?.includes(focus.value))
-    const counts = CORE_KEYWORDS.map((k) => ({ k, n: members.filter((i) => i.keywords.includes(k)).length }))
-      .sort((a, b) => b.n - a.n)
-    partner = counts[0]?.n ? counts[0].k : null
-  }
+  // For an affiliation, what its members inflict picks the rest (all members, owned or not).
+  const partner = focus.kind === 'trait'
+    ? traitPartner(data.identities.filter((i) => i.traits?.includes(focus.value)))
+    : null
   const team: BuiltTeam['team'] = {}
   const unmatched: Sinner[] = []
   for (const sinner of SINNERS) {
@@ -149,9 +224,12 @@ export function suggestOrder(
   const str = new Map(team.map((i) => [i.id, strength(i, tiers)]))
   const power = (i: Identity) => str.get(i.id)!
 
-  // How central each identity is to the team: shares its keywords and affiliations.
+  // How central each identity is to the team: inflicts what the others inflict, shares their affiliations.
+  // By what skills do, so a unit tagged with five keywords (The Ring Pointillist Student) isn't the most central.
+  const fits = new Map(team.map((i) => [i.id, CORE_KEYWORDS.map((k) => keywordFit(i, k))]))
+  const teamFit = CORE_KEYWORDS.map((_, n) => team.reduce((s, i) => s + fits.get(i.id)![n], 0))
   const core = (i: Identity) =>
-    i.keywords.reduce((s, k) => s + profile.keywordCounts[k] / profile.size, 0)
+    fits.get(i.id)!.reduce((s, f, n) => s + f * (teamFit[n] - f) / profile.size, 0)
     + (i.traits ?? []).reduce((s, t) => s + Math.max(0, (profile.traitCounts.get(t) ?? 0) - 1) / profile.size, 0)
 
   const slotGifts = data.gifts

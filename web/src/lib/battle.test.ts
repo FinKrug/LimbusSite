@@ -67,9 +67,13 @@ describe('battle model', () => {
     expect(withDef.areson.wrath).toBeGreaterThan(0.9)
     expect(withDef.defenseUse[2]).toBeGreaterThan(0.9)
     expect(withDef.defenseUse[0]).toBe(0)
-    // Without anything riding on it, a weak defense skill isn't worth an attack.
+    // Even with nothing riding on it, completing Absolute Resonance is worth a weak Counter: the
+    // whole chain gains Clash Power, and winning clashes matters most (CLASH_EDGE).
     const plain = simulate(decks, [], { turns: 2000, defenses })
-    expect(plain.defenseUse[2]).toBeLessThan(0.2)
+    expect(plain.defenseUse[2]).toBeGreaterThan(0.9)
+    // A weak defense skill that completes nothing isn't worth an attack.
+    const offSin = [...defenses.slice(0, 2), { ...defenses[2]!, sin: 'pride' as const }]
+    expect(simulate(decks, [], { turns: 2000, defenses: offSin }).defenseUse[2]).toBeLessThan(0.2)
     // No defense data: no defense card.
     expect(defenseCard(wrathy('x'))).toBeNull()
   })

@@ -130,6 +130,10 @@ export interface Skill {
   /** The most "Atk Weight +N" its text grants (usually conditional, e.g. in a Volatile E.G.O state). */
   weight_bonus?: number
   statuses: string[]
+  /** Statuses it inflicts on (or triggers/uses on) the enemy: "Tremor", "Tremor - Scorch", "Tremor Burst". */
+  enemy?: string[]
+  /** Statuses it gains or spends on the unit itself (Spicebush Yi Sang's Tremor). */
+  self?: string[]
 }
 
 /** An identity's defense skill: not in the deck, usable in any skill slot instead of a hand skill. */

@@ -80,7 +80,9 @@ describe('skill swaps', () => {
     const loss = (p: typeof plain) => p.options.find((o) => o.kind === '1to3')!
     expect(withDef.defense?.sin).toBe('wrath')
     expect(loss(withDef).pros.some((x) => /defense skill \(Wrath Guard\) is Wrath too/.test(x))).toBe(true)
-    expect(loss(withDef).gain).toBeGreaterThanOrEqual(loss(plain).gain)
+    // Either way the advice is the same: losing a Wrath skill from a Wrath team isn't worth it.
+    expect(loss(withDef).worth).toBe(false)
+    expect(loss(plain).worth).toBe(false)
   })
 
   it("doesn't keep skills for a Resonance the team can't line up, or that switches on another way", () => {

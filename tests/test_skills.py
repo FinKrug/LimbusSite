@@ -116,3 +116,33 @@ class DefenseTests(unittest.TestCase):
         self.assertEqual(skills.identity_defense(guard.replace("Guard", "evade"))["kind"], "evade")
         self.assertEqual(skills.identity_defense(guard.replace("Guard", "Defense"))["kind"], "guard")
         self.assertIsNone(skills.identity_defense("{{IDPage}}"))
+
+
+class StatusTargetTests(unittest.TestCase):
+    """Who a skill's statuses land on (Finley: Spicebush Yi Sang only gains Tremor himself)."""
+
+    def test_inflicted_vs_self(self):
+        enemy, own = skills.status_targets(
+            "{{SkillCon|On Hit}} Inflict 2 {{StatusEffect|Sinking|d}} <br> "
+            "{{SkillCon|On Use}} Gain +3 {{StatusEffect|Tremor|d}} Count")
+        self.assertEqual(enemy, ["Sinking"])
+        self.assertEqual(own, ["Tremor"])
+
+    def test_on_self_and_this_unit(self):
+        enemy, own = skills.status_targets(
+            "Consume 6 {{StatusEffect|Tremor|d}} Count on self. "
+            "If this unit has 10+ {{StatusEffect|Haste|d}}, Clash Power +1")
+        self.assertEqual(enemy, [])
+        self.assertEqual(own, ["Tremor", "Haste"])
+
+    def test_trigger_and_target_mentions(self):
+        enemy, own = skills.status_targets(
+            "{{SkillCon|On Hit}} Trigger {{StatusEffect|Tremor Burst|d}} <br> "
+            "Deal +5% damage for every 4 {{StatusEffect|Burn|d}} on the main target")
+        self.assertEqual(enemy, ["Tremor Burst", "Burn"])
+        self.assertEqual(own, [])
+
+    def test_skills_carry_targets(self):
+        s1 = skills.identity_skills(PAGE)[0]
+        self.assertEqual(s1["enemy"], ["Gaze (Ryoshu)", "Tremor", "Bleed"])
+        self.assertEqual(s1["self"], [])

@@ -76,3 +76,13 @@ export function GiftLabel({ gift, link = true, icon }: { gift: Gift; link?: bool
 export function Empty({ children }: { children: React.ReactNode }) {
   return <div className="empty">{children}</div>
 }
+
+/** Longer explanations, folded away so a screen leads with what to do. */
+export function HowItWorks({ children, label = 'How this works' }: { children: React.ReactNode; label?: string }) {
+  return (
+    <details className="how">
+      <summary>{label}</summary>
+      <div className="how-body">{children}</div>
+    </details>
+  )
+}

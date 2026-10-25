@@ -99,6 +99,34 @@ def _int(value: str | None) -> int | None:
     return -n if m.group(1) == "-" else n
 
 
+_VERB = re.compile(r"\b(inflicts?|apply|applies|triggers?|gains?|consumes?|spends?|loses?)\b", re.IGNORECASE)
+_SELF_VERB = re.compile(r"^(gains?|consumes?|spends?|loses?)$", re.IGNORECASE)
+
+
+def status_targets(markup: str) -> tuple[list[str], list[str]]:
+    """Statuses a skill puts on (or uses on) the enemy vs. ones it gains or spends itself.
+
+    "Inflict 2 Tremor", "Trigger Tremor Burst", "for every 4 (Burn + Tremor) on the main target" are
+    the enemy's; "Gain +3 Tremor Count", "Consume 6 Tremor Count on self", "If this unit has 10+
+    Tremor" are the unit's own (Spicebush Yi Sang's Tremor never reaches an enemy)."""
+    enemy: dict[str, None] = {}
+    own: dict[str, None] = {}
+    for clause in re.split(r"<br\s*/?>|(?<=[.;])\s+", markup or "", flags=re.IGNORECASE):
+        for m in wikitext._STATUS_RE.finditer(clause):
+            name = m.group(1).strip()
+            before = wikitext.to_plain(clause[:m.start()])[-90:]
+            after = wikitext.to_plain(clause[m.end():])[:30]
+            verbs = _VERB.findall(before)
+            verb = verbs[-1] if verbs else ""
+            if re.search(r"\b(?:on|to) self\b", after, re.IGNORECASE) or (verb and _SELF_VERB.match(verb)):
+                own.setdefault(name, None)
+            elif verb or re.search(r"\btarget|\benem", before + after, re.IGNORECASE):
+                enemy.setdefault(name, None)
+            elif re.search(r"\bthis unit\b|\bself\b", before, re.IGNORECASE):
+                own.setdefault(name, None)
+    return list(enemy), list(own)
+
+
 def identity_skills(source: str) -> list[dict]:
     """[{slot, name, sin, type, base, coin_power, coins, copies, weight, weight_bonus, statuses}] for skills 1-3.
 
@@ -128,6 +156,9 @@ def identity_skills(source: str) -> list[dict]:
             "weight_bonus": bonus,
             "statuses": wikitext.status_effects(effects),
         }
+        enemy, own = status_targets(effects)
+        skills[slot]["enemy"] = enemy
+        skills[slot]["self"] = own
     return [skills[k] for k in sorted(skills)]
 
 

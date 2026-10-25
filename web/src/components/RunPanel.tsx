@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import { costPlan, floorCostFrom } from '../lib/costplan'
+import { usePacksOnFloor, withFloor } from '../lib/run'
 import {
-  EXTREME_FROM, RUN_LENGTHS, defaultFloors, packOnFloor, withPack, type Difficulty, type GiftScore, type RunContext, type RunSettings,
+  EXTREME_FROM, RUN_LENGTHS, defaultFloors, withPack, type Difficulty, type GiftScore, type RunContext, type RunSettings,
 } from '../lib/scoring'
 import type { ThemePack } from '../lib/types'
 
@@ -14,6 +15,8 @@ interface Props {
   ctx: RunContext
   /** Start fresh: gifts you have, offered packs, floor and pack (team and saved lineups stay). */
   onClearRun: () => void
+  /** Show "Cost to have at this floor's shop" (the Shop shows it on its own). */
+  showCost?: boolean
 }
 
 const DIFFICULTY: Record<Difficulty, string> = { normal: 'Normal', hard: 'Hard', extreme: 'EXTREME' }
@@ -23,18 +26,11 @@ const DIFFICULTY: Record<Difficulty, string> = { normal: 'Normal', hard: 'Hard',
  * floor's theme pack. Gift scores use the length and floor (Cost gifts early,
  * "survive a lethal hit" gifts late); Theme packs and Fusion use the floor and pack.
  */
-export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun }: Props) {
+export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun, showCost = true }: Props) {
   const [confirmClear, setConfirmClear] = useState(false)
-  const onFloor = useMemo(
-    () => run.floor === null ? [] : packs.filter((p) => packOnFloor(p, run.difficulty, run.floor!))
-      .sort((a, b) => a.name.localeCompare(b.name)),
-    [packs, run.difficulty, run.floor],
-  )
+  const onFloor = usePacksOnFloor(packs, run)
   const set = (patch: Partial<RunSettings>) => onChange({ ...run, ...patch })
-  // Going back to a floor brings back the pack you picked there; starting a run clears the old picks.
-  const setFloor = (floor: number | null) => run.floor === null
-    ? set({ floor, pack: null, visited: {} })
-    : set({ floor, pack: floor === null ? null : run.visited?.[floor] ?? null })
+  const setFloor = (floor: number | null) => onChange(withFloor(run, floor))
   const phase = run.difficulty === 'extreme' && run.floor !== null
     ? run.floor < EXTREME_FROM ? 'Hard floor' : 'EXTREME floor' : null
 
@@ -100,7 +96,11 @@ export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun }: Prop
           </select>
         </label>
       )}
-      <CostBox run={run} ranked={ranked} ctx={ctx} />
+      <label className="run-check small" title="Events normally pick the fight that gives an extra gift (a spare is fusion fuel). Tick this when fights are going badly and they'll play it safe.">
+        <input type="checkbox" checked={!!run.struggling} onChange={(e) => set({ struggling: e.target.checked })} />
+        Struggling in fights (events avoid optional fights)
+      </label>
+      {showCost && <CostBox run={run} ranked={ranked} ctx={ctx} />}
       <p className="muted small run-note">
         {run.floor === null
           ? 'Set your run so gifts are weighed for it: Cost gifts early, survival gifts late.'
@@ -111,7 +111,7 @@ export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun }: Prop
 }
 
 /** How much Cost to have at the shop: now, and (on request) for every floor. */
-function CostBox({ run, ranked, ctx }: { run: RunSettings; ranked: GiftScore[]; ctx: RunContext }) {
+export function CostBox({ run, ranked, ctx }: { run: RunSettings; ranked: GiftScore[]; ctx: RunContext }) {
   const floor = run.floor ?? 1
   const here = useMemo(() => floorCostFrom(ranked, floor), [ranked, floor])
   const [showAll, setShowAll] = useState(false)

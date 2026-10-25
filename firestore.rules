@@ -1,0 +1,18 @@
+rules_version = '2';
+
+// LimbusSite cloud sync: one document per account, users/{uid}, that only its
+// owner can read or write (web/src/lib/cloud.ts).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['data', 'updatedAt', 'device', 'deviceId', 'app'])
+        && request.resource.data.data is map;
+    }
+    // Nothing else is stored.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

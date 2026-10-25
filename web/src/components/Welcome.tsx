@@ -13,6 +13,8 @@ interface Props {
   onDemo: () => void
   onBuild: () => void
   onContinue: () => void
+  /** Sign in / load a backup to bring data from another computer. */
+  onOpenData: () => void
 }
 
 const SIN_COLORS = ['var(--wrath)', 'var(--lust)', 'var(--sloth)', 'var(--gluttony)', 'var(--gloom)', 'var(--pride)', 'var(--envy)']
@@ -80,7 +82,7 @@ function reducedMotion(): boolean {
  * Shown on a first visit and from the LimbusSite title. Dante's clock with the
  * twelve sinners at their hours is the centerpiece.
  */
-export function Welcome({ equipped, art, counts, hasTeam, onDemo, onBuild, onContinue }: Props) {
+export function Welcome({ equipped, art, counts, hasTeam, onDemo, onBuild, onContinue, onOpenData }: Props) {
   const ring = useMemo(() => SINNERS.map((s, k) => ({ s, i: equipped[s], angle: (k + 1) * 30 })), [equipped])
   const rootRef = useRef<HTMLDivElement>(null)
   // Subtle parallax on the clock with the pointer.
@@ -125,6 +127,9 @@ export function Welcome({ equipped, art, counts, hasTeam, onDemo, onBuild, onCon
               Continue with my current lineup →
             </button>
           )}
+          <button className="link-btn welcome-sync rise" style={{ '--d': '0.6s' } as CSSProperties} onClick={onOpenData}>
+            Played on another computer? Sign in or load a backup to bring your data here
+          </button>
         </div>
 
         <div className="welcome-clock rise" style={{ '--d': '0.2s' } as CSSProperties} aria-hidden="true">

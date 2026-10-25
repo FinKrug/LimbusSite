@@ -6,7 +6,7 @@ import type { BattleProfile, Ego, EgoLoadout } from '../lib/ego'
 import type { RunSettings } from '../lib/scoring'
 import type { Gift, Identity, Sin } from '../lib/types'
 import { Portrait } from './Portrait'
-import { KeywordChip, SinDot } from './bits'
+import { HowItWorks, KeywordChip, SinDot } from './bits'
 
 interface Props {
   team: Identity[]
@@ -84,7 +84,7 @@ export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art
           ))}
         </div>
         <p className="muted small">Skills in your deployed decks by sin ({total}).</p>
-        <p className="small">
+        <HowItWorks label="How swaps are judged">
           Each swap is played out: your team takes a few hundred turns with and without it, picking the best skills each
           turn and lining up same-sin skills for Resonance. The gain counts the stronger skill, Resonance
           (Absolute Resonance {sim.anyAreson ? `on ${Math.round(sim.anyAreson * 100)}% of turns now` : 'rare right now'})
@@ -95,7 +95,7 @@ export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art
           gives something Skill 3 doesn't: hitting several targets when nothing else on your team does, or the
           Resonance a gift you own triggers on, if that part of the gift matters (a part that only adds more of a
           status your team already has plenty of, like Crown of Roses' extra Rupture, doesn't count). {floorsLeft} floor{floorsLeft === 1 ? '' : 's'} left.
-        </p>
+        </HowItWorks>
         {anyDone && <button className="link-btn" onClick={() => onSwapsChange({})}>Reset all swaps (new run)</button>}
         {backups.length > 0 && (
           <div className="seg-toggle" role="group" aria-label="Whose swaps to show">

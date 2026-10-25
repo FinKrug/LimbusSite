@@ -18,7 +18,7 @@ interface Props {
   availableNow?: Set<string>
 }
 
-const PAGE = 30
+const PAGE = 10
 
 export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, giftsById, owned, availableNow }: Props) {
   const [query, setQuery] = useState('')

@@ -201,7 +201,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
               : <b>None of them suits your team.</b>}
             {pack && fc.fromPack.length > 0 && <> Your current pack, {pack.name}, adds {fc.fromPack.map((g) => g.gift.name).join(', ')}.</>}
             {fc.lastChance.length > 0 && <> <b>Last chance</b> at {fc.lastChance.map((g) => g.gift.name).join(', ')}: no later pack this run has {fc.lastChance.length > 1 ? 'them' : 'it'} ({Math.round(fc.lastChanceOdds * 100)}% with these gifts).</>}
-            {!pack && run.floor !== null && ' Pick your current theme pack in Your run: its exclusives can come out of random fusions too.'}
+            {!pack && run.floor !== null && ' Pick your current theme pack in the bar at the top: its exclusives can come out of random fusions too.'}
           </p>
           <ul className="fuse-pool">
             {fc.pool.slice(0, picking ? 40 : 8).map((g) => (

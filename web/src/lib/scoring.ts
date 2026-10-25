@@ -171,6 +171,14 @@ export const WEIGHTS = {
   allyDeath: 0.7,
   /** Weak effects (a little enemy SP damage, a bonus below 0 SP): value x (1 - weakEffect x share). */
   weakEffect: 0.7,
+  /** Clash comes first in Mirror Dungeon (Finley): a unit that wins its clashes doesn't get hit.
+   *  Effects that win clashes (Clash / Coin / Final / Base Power, Offense Level Up, Power Up,
+   *  Haste and Speed, Coin Boost, Unbreakable Coins, or Bind, Paralyze, Offense Level Down and
+   *  Attack Power Down on enemies): value x (1 + clash x share of the text). */
+  clash: 0.6,
+  /** Effects that only add damage (+X% damage, Damage Up) matter less once you win clashes:
+   *  value x (1 - damageOnly x share). */
+  damageOnly: 0.2,
 }
 
 /** A gift's effect gives or saves Cost (Golden Urn, Prestige Card, Wealth ...). */
@@ -239,6 +247,33 @@ export function allyDeathShare(text: string): number {
 /** Sentences that do very little in a fight: a couple of points of SP damage on enemies (SP barely
  *  matters to them), or a bonus for your own units below 0 SP (they almost never are). Lowest Star. */
 const WEAK_EFFECT = /^(?:When[^,]*,\s*)?inflict \d+ (?:fixed )?SP damage(?: on (?:the )?target)?\.?$|\b(?:Allies|ally|units?) with less than 0 SP\b/i
+
+/** Sentences that help win clashes: more power for your units, or less for the enemy's. */
+const CLASH_UP = /Clash Power|Coin Power|Final Power|Base Power|Offense Level Up|Attack Power Up|\b(?:Slash|Pierce|Blunt|Wrath|Lust|Sloth|Gluttony|Gloom|Pride|Envy) Power Up\b|\bPower Up\b|\bHaste\b|Coin Boost|Unbreakable Coin|(?:Min|Max) Speed \+|\bSpeed \+\d/i
+const CLASH_DOWN = /(?:inflict|apply|enem(?:y|ies)[^.]*(?:gain|have))[^.]*\b(?:Bind|Paralyze|Offense Level Down|Attack Power Down|Clash Power Down)\b|Offense Level'? (?:and 'Defense Level' )?reduced/i
+/** Sentences that only boost damage (+X% damage, Damage Up), not damage taken or with a clash part.
+ *  A status's own damage (Burn, Rupture payoffs) isn't counted: that's how status teams kill. */
+const DAMAGE_ONLY = /\+[^\n]*%[^\n]*\bdamage\b|\bDamage Up\b|\bDMG Up\b|\bmore damage\b/i
+const DAMAGE_TAKEN = /\btake[sn]?\b[^\n]*damage|damage taken|received/i
+
+function sentencesOf(text: string): string[] {
+  return text.split(/\n+|(?<=\.)\s+/).map((x) => x.trim())
+    .filter((x) => x.length > 8 && !/^\[Effects apply only to [^\]]*\]$/.test(x))
+}
+
+/** Share of a gift's sentences that help win clashes (CLASH_UP, CLASH_DOWN). */
+export function clashShare(text: string): number {
+  const ss = sentencesOf(text)
+  return ss.length ? ss.filter((x) => CLASH_UP.test(x) || CLASH_DOWN.test(x)).length / ss.length : 0
+}
+
+/** Share of a gift's sentences that only add damage. */
+export function damageOnlyShare(text: string): number {
+  const ss = sentencesOf(text)
+  return ss.length
+    ? ss.filter((x) => DAMAGE_ONLY.test(x) && !DAMAGE_TAKEN.test(x) && !CLASH_UP.test(x) && !CLASH_DOWN.test(x)).length / ss.length
+    : 0
+}
 
 /** Share of a gift's sentences that are weak effects (WEAK_EFFECT). */
 export function weakShare(text: string): number {
@@ -472,6 +507,8 @@ export interface RunSettings {
   pack: string | null
   /** Packs picked on each floor so far (floor -> pack id), for the pack route. */
   visited?: Record<number, string>
+  /** Fights are going badly: events stop picking fights for an extra gift. */
+  struggling?: boolean
 }
 
 /** Packs picked on floors before this one (pack id -> floor). Once you've entered a theme pack you
@@ -1081,6 +1118,22 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
       ? 'Does very little: a bit of SP damage on enemies and a bonus only below 0 SP'
       : 'Part of it is weak (a bit of SP damage, or a bonus only below 0 SP)' })
   }
+  // Clash first: winning clashes means the enemy doesn't hit you, so effects that win them count
+  // for more, and effects that only add damage for a little less.
+  const clash = profile.size ? clashShare(general) : 0
+  const dmgOnly = profile.size ? damageOnlyShare(general) : 0
+  if (clash > 0 || dmgOnly > 0) {
+    const f = (1 + WEIGHTS.clash * clash) * (1 - WEIGHTS.damageOnly * dmgOnly)
+    score *= f
+    for (const p of parts) p.value *= f
+    if (clash >= 0.25) {
+      reasons.push({ kind: 'good', text: clash >= 0.6
+        ? 'Helps you win clashes (power, Haste or enemy debuffs): the most important thing in Mirror Dungeon'
+        : 'Part of it helps you win clashes' })
+    } else if (dmgOnly >= 0.75) {
+      reasons.push({ kind: 'info', text: 'Only adds damage: winning clashes matters more' })
+    }
+  }
   // Effects that pay off when your own units die: you'd rather they didn't, unless the
   // team has the unit it's built around (Blade of the House of Spiders Ryōshū).
   const death = profile.size && !namedHere.length ? allyDeathShare(general) : 0
@@ -1240,6 +1293,24 @@ export interface UpgradeValue {
   label: string
 }
 
+/** The gift as it is at an upgrade level (1 = +, 2 = ++), for scoring: its upgraded text. */
+export function upgradedVariant(gift: Gift, level: number): Gift | null {
+  const text = gift.upgrades?.[level - 1]
+  if (!text || text === gift.effect) return null
+  // A keyword in name only stays that way upgraded: Unhatched Embers+ heals more for a unit that
+  // has Burn on itself, which doesn't make it a Burn-team gift.
+  return { ...gift, id: `${gift.id}~${level}`, effect: text, upgrades: [], ...(usesKeyword(gift) ? {} : { keyword: null }) }
+}
+
+/** The gift's value to your team at an upgrade level (0 = as it is): scored as that version, times how
+ *  much its numbers grow (upgradeMagnitude). */
+export function levelValue(gift: Gift, ctx: RunContext, level: number): number {
+  if (level <= 0) return intrinsicScore(gift, ctx).score
+  const variant = upgradedVariant(gift, level)
+  if (!variant) return intrinsicScore(gift, ctx).score
+  return intrinsicScore(variant, ctx).score * upgradeMagnitude(gift.effect, variant.effect).mag
+}
+
 /**
  * What enhancing a gift would add. Each upgrade level is scored as if it were the gift
  * (so "#6 Deployed" becoming "#4, #6 Deployed" counts twice the units), times how much
@@ -1256,10 +1327,8 @@ export function upgradeValue(gift: Gift, ctx: RunContext, base: number): Upgrade
   let best: UpgradeValue | null = null
   ups.forEach((text, k) => {
     const level = k + 1
-    if (!text || text === gift.effect || level > costs.length) return
-    // A keyword in name only stays that way upgraded: Unhatched Embers+ heals more for a unit that
-    // has Burn on itself, which doesn't make it a Burn-team gift.
-    const variant: Gift = { ...gift, id: `${gift.id}~${level}`, effect: text, upgrades: [], ...(usesKeyword(gift) ? {} : { keyword: null }) }
+    const variant = upgradedVariant(gift, level)
+    if (!variant || level > costs.length) return
     const m = upgradeMagnitude(gift.effect, text)
     const value = intrinsicScore(variant, ctx).score * m.mag
     const cost = costs.slice(0, level).reduce((a, b) => a + b, 0)

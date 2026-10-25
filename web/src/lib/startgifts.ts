@@ -88,13 +88,19 @@ function fittingWord(p: ThemePack, g: Gift): string {
   return p.gifts.length === 1 || p.gifts[0] === g.id ? 'the only gift' : 'most of what’s'
 }
 
-/** The best gifts to buy before the run, in order (count from START_RULES), plus a few alternatives. */
+/** How many other options to list after the picks (the panel shows a few and can expand to all). */
+export const START_OPTIONS = 30
+
+/**
+ * The best gifts to buy before the run, in order (count from START_RULES), plus other options:
+ * the rest of the last round's ranking (scored as if you bought the picks before the last one).
+ */
 export function startingPicks(
   ctx: RunContext, packsForGift: Map<string, ThemePack[]>,
   /** The same context with other gifts owned (keeps your E.G.O, swaps, etc.). */
   rebuild: (owned: string[]) => RunContext = (owned) =>
     makeContext(ctx.data, ctx.lineup, owned, { deployed: ctx.deployed, tiers: ctx.tiers, run: ctx.run }),
-  alternatives = 3,
+  alternatives = START_OPTIONS,
 ): StartPlan {
   const picks: StartPick[] = []
   let cur = ctx
