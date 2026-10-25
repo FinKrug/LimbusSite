@@ -11,7 +11,7 @@ export type Snapshot = Record<string, string>
 
 /** Keys that stay on each computer: the open tab and view switches, and sync's own bookkeeping. */
 // welcomed.v1 too: a new computer still opens on the welcome screen, where the sign-in link is.
-const LOCAL_ONLY = new Set([`${PREFIX}tab.v1`, `${PREFIX}shoptab.v1`, `${PREFIX}skillsview.v1`, `${PREFIX}welcomed.v1`])
+const LOCAL_ONLY = new Set([`${PREFIX}tab.v1`, `${PREFIX}subtab.v1`, `${PREFIX}skillsview.v1`, `${PREFIX}welcomed.v1`])
 export const SYNC_PREFIX = `${PREFIX}sync.`
 
 export function isShared(key: string): boolean {

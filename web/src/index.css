@@ -1282,3 +1282,95 @@ p.skill-best { background: none; border-color: var(--line); }
 .side .panel > .run-cost { border: 0; padding: 0; margin: 0; }
 .dialog-body > .owned-panel { border: 0; padding: 0; background: none; }
 .dialog-body > .owned-panel .panel-head h2 { visibility: hidden; }
+
+/* ---------- Phases of a floor: transitions, Next phase, floor cleared ---------- */
+.phase { animation: phase-fwd 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.phase-back { animation-name: phase-back; }
+@keyframes phase-fwd { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
+@keyframes phase-back { from { opacity: 0; transform: translateX(-36px); } to { opacity: 1; transform: none; } }
+
+.stage { position: relative; transition: border-color 0.25s, background-color 0.25s, color 0.25s, transform 0.2s; }
+.stage:active { transform: scale(0.98); }
+.stage.active::after {
+  content: ''; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2px; border-radius: 2px;
+  background: var(--accent); transform-origin: left; animation: stage-line 0.4s ease-out both;
+}
+@keyframes stage-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.stage.done { color: var(--text); }
+.stage.done .stage-n { background: rgb(127 196 122 / 0.15); border-color: rgb(127 196 122 / 0.6); color: var(--good); animation: done-pop 0.35s ease-out both; }
+@keyframes done-pop { 0% { transform: scale(0.6); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.stage.skipped { opacity: 0.55; }
+.muted-badge { background: var(--panel-2) !important; color: var(--muted) !important; border: 1px solid var(--line); }
+
+.app { padding-bottom: 110px; }
+.next-phase-wrap { position: fixed; right: 24px; bottom: 22px; z-index: 30; pointer-events: none; }
+.next-phase {
+  pointer-events: auto; display: flex; align-items: center; gap: 14px; cursor: pointer; text-align: left;
+  padding: 12px 18px 12px 20px; border-radius: 14px; border: 1px solid #f0c063; color: var(--accent-ink);
+  background: linear-gradient(135deg, #f3d27a, #e3a93c 45%, #c47f24);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  animation: next-in 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; transition: transform 0.15s, box-shadow 0.2s;
+}
+.next-phase:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(227, 169, 60, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4); }
+.next-phase:active { transform: translateY(0) scale(0.98); }
+.next-text { display: grid; gap: 1px; }
+.next-text b { font-size: 16px; font-weight: 800; }
+.next-text small { font-size: 12px; color: #4a3210; max-width: 280px; }
+.next-arrow { font-size: 22px; font-weight: 800; animation: nudge 2.4s ease-in-out 1s infinite; }
+@keyframes next-in { from { opacity: 0; transform: translateY(24px) scale(0.95); } to { opacity: 1; transform: none; } }
+@keyframes nudge { 0%, 70%, 100% { transform: none; } 80% { transform: translateX(5px); } 90% { transform: translateX(-1px); } }
+.next-phase.floor-clear { background: linear-gradient(135deg, #b7e3a9, #7fc47a 45%, #4f9a4a); border-color: #b7e3a9; }
+.next-phase.floor-clear .next-text small { color: #1d3a1a; }
+@media (max-width: 620px) {
+  .next-phase-wrap { left: 12px; right: 12px; bottom: 12px; }
+  .next-phase { width: 100%; justify-content: space-between; }
+}
+
+.cleared {
+  position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; pointer-events: auto;
+  background: radial-gradient(ellipse at center, rgba(10, 9, 8, 0.9), rgba(10, 9, 8, 0.7) 70%);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  animation: cleared-bg 2.4s ease both;
+}
+.cleared-card { display: grid; justify-items: center; gap: 6px; text-align: center; animation: cleared-card 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.cleared-card b {
+  font-size: clamp(34px, 7vw, 64px); font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+  background: linear-gradient(90deg, #f3d27a, #e3a93c, #f3d27a); -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 0 40px rgba(227, 169, 60, 0.25);
+}
+.cleared-card small { font-size: 16px; color: var(--text); letter-spacing: 0.08em; }
+.cleared-line { width: min(420px, 70vw); height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: cleared-line 2.4s ease both; }
+@keyframes cleared-bg { 0% { opacity: 0; } 12%, 78% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes cleared-card { 0% { opacity: 0; transform: scale(0.92); letter-spacing: 0.2em; } 15% { opacity: 1; transform: none; } 78% { opacity: 1; } 100% { opacity: 0; transform: translateY(-14px); } }
+@keyframes cleared-line { 0% { transform: scaleX(0); } 30% { transform: scaleX(1); } 100% { transform: scaleX(1); } }
+
+/* Battle rewards / floor reward */
+.reward-picker { display: grid; gap: 10px; }
+.reward-picker h2 { font-size: 17px; }
+.reward-picker > p { margin: 0; }
+.reward-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.reward {
+  display: grid; grid-template-columns: 28px minmax(0, 1fr) 120px auto; align-items: center; gap: 12px;
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2);
+  animation: reward-in 0.3s ease-out both;
+}
+.reward.best { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+.reward-rank { font-weight: 800; color: var(--muted); text-align: center; }
+.reward.best .reward-rank { color: var(--accent); }
+.reward-main p { margin: 4px 0 0; }
+.reward-bar { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.reward-bar span { display: block; height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.4s ease; }
+.reward-actions { display: flex; align-items: center; gap: 8px; }
+.reward-pick { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); }
+.reward-taken { margin: 0; color: var(--good); font-size: 14px; }
+@keyframes reward-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 620px) {
+  .reward { grid-template-columns: 24px minmax(0, 1fr); }
+  .reward-bar, .reward-actions { grid-column: 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phase, .stage.active::after, .stage.done .stage-n, .next-phase, .next-arrow, .reward, .cleared-card, .cleared-line { animation: none !important; }
+  .cleared { animation: cleared-bg 1.8s ease both; }
+}
+.boss-note { margin: 0; font-size: 14px; }

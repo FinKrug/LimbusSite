@@ -73,7 +73,7 @@ export function OwnedGifts({ gifts, owned, onChange }: Props) {
   )
 }
 
-function GiftSearch({ gifts, owned, onPick, placeholder }: {
+export function GiftSearch({ gifts, owned, onPick, placeholder }: {
   gifts: Gift[]; owned: Set<string>; onPick: (g: Gift) => void; placeholder: string
 }) {
   const [query, setQuery] = useState('')

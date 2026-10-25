@@ -138,6 +138,40 @@ export interface Valued {
   why: string[]
 }
 
+export interface GiftOffer {
+  value: number
+  /** "Name: reason" */
+  why: string
+  /** fits: a gift for your team; fuel: only worth fusing; duplicate: becomes a Vestige; gone: already part of a gift you have. */
+  kind: 'fits' | 'fuel' | 'duplicate' | 'gone'
+}
+
+/**
+ * What one gift is worth if you take it now (an event result, a battle reward, a floor
+ * reward): its score for your team, or as fusion fuel, or as a Vestige if you have it.
+ */
+export function giftOfferValue(id: string, ctx: RunContext): GiftOffer | null {
+  const W = EVENT_WEIGHTS
+  const g = ctx.giftsById.get(id)
+  if (!g) return null
+  if (ctx.owned.has(id)) {
+    // A duplicate turns into a Vestige of its tier: fusion fuel, not nothing.
+    const points = FUSION_POINTS[g.tier ?? 1] ?? 3
+    return { value: Math.max(W.duplicate, points * W.vestigePoint), kind: 'duplicate',
+      why: `${g.name}: you already have it, so it becomes a Tier ${tierLabel(g.tier)} Vestige (${points} fusion points)` }
+  }
+  if (isGone(ctx, id)) return { value: 0, kind: 'gone', why: `${g.name}: already part of ${ctx.gone.get(id)}, which you have` }
+  const s = scoreGift(g, ctx)
+  // Fusion fuel, except on the last floor (no shop after it to fuse at).
+  const points = FUSION_POINTS[g.tier ?? 1] ?? 3
+  const fodder = lastFloor(ctx.run) || g.tier === null || (g.tier ?? 0) >= 5 ? 0 : points * W.fodderPoint
+  if (fodder > s.score) {
+    return { value: fodder, kind: 'fuel', why: `${g.name}: not for your team, but fusion fuel (Tier ${tierLabel(g.tier)}, ${points} fusion points)` }
+  }
+  const reason = s.reasons.find((r) => r.kind === 'good') ?? s.reasons[0]
+  return { value: s.score, kind: 'fits', why: `${g.name}${reason ? `: ${reason.text}` : ''}` }
+}
+
 export function outcomeValue(o: EventOutcome | undefined, ctx: RunContext): Valued {
   if (!o) return { value: 0, why: [] }
   const W = EVENT_WEIGHTS
@@ -146,31 +180,11 @@ export function outcomeValue(o: EventOutcome | undefined, ctx: RunContext): Valu
   const struggling = !!ctx.run.struggling
   const win = o.combat ? (struggling ? W.winChanceStruggling : W.winChance) : 1
   for (const id of o.gifts) {
-    const g = ctx.giftsById.get(id)
+    const g = giftOfferValue(id, ctx)
     if (!g) continue
-    if (ctx.owned.has(id)) {
-      // A duplicate turns into a Vestige of its tier: fusion fuel, not nothing.
-      const points = FUSION_POINTS[g.tier ?? 1] ?? 3
-      value += Math.max(W.duplicate, points * W.vestigePoint)
-      why.push(`${g.name}: you already have it, so it becomes a Tier ${tierLabel(g.tier)} Vestige (${points} fusion points)`)
-      continue
-    }
-    if (isGone(ctx, id)) {
-      why.push(`${g.name}: already part of ${ctx.gone.get(id)}, which you have`)
-      continue
-    }
-    const s = scoreGift(g, ctx)
-    // Fusion fuel, except on the last floor (no shop after it to fuse at).
-    const points = FUSION_POINTS[g.tier ?? 1] ?? 3
-    const fodder = lastFloor(ctx.run) || g.tier === null || (g.tier ?? 0) >= 5 ? 0 : points * W.fodderPoint
-    if (fodder > s.score) {
-      value += fodder * win
-      why.push(`${g.name}: not for your team, but fusion fuel (Tier ${tierLabel(g.tier)}, ${points} fusion points)`)
-      continue
-    }
-    value += s.score * win
-    const reason = s.reasons.find((r) => r.kind === 'good') ?? s.reasons[0]
-    why.push(`${g.name}${reason ? `: ${reason.text}` : ''}`)
+    // A duplicate's Vestige is yours either way; the rest needs the fight won.
+    value += g.kind === 'duplicate' ? g.value : g.value * win
+    why.push(g.why)
   }
   value += o.unknown_gifts.length * W.unknownGift
   if (o.cost) {

@@ -18,6 +18,8 @@ interface Props {
   /** Gifts you have, so a result's "Got it" can add its gifts. */
   owned?: string[]
   onOwnedChange?: (owned: string[]) => void
+  /** "boss": only boss fights' own events (the Boss screen); otherwise the regular "?" events. */
+  kind?: 'regular' | 'boss'
 }
 
 /** Adds a result's gifts to Gifts you have; returns what was added (a gift you have becomes a Vestige). */
@@ -37,7 +39,9 @@ const others = (xs: Identity[]) => xs.length > 4
  * Events tab: type the name of the "?" event you walked into and see which choice
  * is best for your team, which to avoid, and who to send on a check.
  */
-export function EventsTab({ ctx, events, team, pack, owned, onOwnedChange }: Props) {
+export function EventsTab({ ctx, events: allEvents, team, pack, owned, onOwnedChange, kind = 'regular' }: Props) {
+  const boss = kind === 'boss'
+  const events = useMemo(() => allEvents.filter((e) => !!e.boss === boss), [allEvents, boss])
   const adder = useMemo<GiftAdder | null>(() => (owned && onOwnedChange ? {
     add: (ids) => {
       let next = owned
@@ -64,16 +68,19 @@ export function EventsTab({ ctx, events, team, pack, owned, onOwnedChange }: Pro
       .sort((a, b) => a.rank - b.rank || Number(here.has(b.event.id)) - Number(here.has(a.event.id)) || a.event.name.localeCompare(b.event.name))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events, q, inPack])
-  const current = events.find((e) => e.id === picked) ?? (q.trim() ? hits[0]?.event : undefined)
+  // On the Boss screen the floor's boss event (if it has one) opens by itself.
+  const current = events.find((e) => e.id === picked) ?? (q.trim() ? hits[0]?.event : boss ? inPack[0] : undefined)
 
   return (
     <AdderContext.Provider value={adder}>
     <div className="events-tab">
       <section className="panel events-search">
-        <h2>Events</h2>
-        <p className="muted small">Type one of the choices on screen (quickest), the event's name, or a gift it gives.</p>
+        <h2>{boss ? 'Boss fight events' : 'Events'}</h2>
+        <p className="muted small">{boss
+          ? 'Some bosses stop the fight with an event (a choice that can weaken them). Yours come first when you\'ve picked the floor\'s pack.'
+          : 'Type one of the choices on screen (quickest), the event\'s name, or a gift it gives.'}</p>
         <HowItWorks>
-          Boss fights' own events are listed under the pack they're the boss of. Each choice is judged for your team:
+          Each choice is judged for your team:
           the gifts it gives (scored like the Shop's; a duplicate becomes a Vestige and a gift your team can't use is
           fusion fuel), Cost, how much it hurts, and whether it weakens the boss. Fights for an extra gift are worth
           it unless you tick "Struggling in fights" in Run settings.
@@ -89,7 +96,8 @@ export function EventsTab({ ctx, events, team, pack, owned, onOwnedChange }: Pro
           </div>
         )}
         <ul className="events-list">
-          {hits.slice(0, q ? 40 : 400).map(({ event: e, matched }) => (
+          {/* The Boss screen lists the floor's boss events above; others come up as you type. */}
+          {hits.slice(0, q ? 40 : boss && inPack.length ? 0 : 400).map(({ event: e, matched }) => (
             <li key={e.id}>
               <button className={current?.id === e.id ? 'event-row on' : 'event-row'} onClick={() => setPicked(e.id)}>
                 {e.name}{e.boss && <span className="tag">boss</span>}
@@ -104,7 +112,9 @@ export function EventsTab({ ctx, events, team, pack, owned, onOwnedChange }: Pro
       <section className="panel event-detail" aria-live="polite">
         {current ? <EventCard key={current.id} event={current} ctx={ctx} team={team}
           focus={hits.find((h) => h.event.id === current.id)?.matched ?? null} />
-          : <p className="hint">Pick an event to see what to choose.</p>}
+          : <p className="hint">{boss
+            ? pack ? `No boss event is known for ${pack.name}: just fight it.` : 'Pick the floor\'s pack in the bar at the top to see its boss\'s events.'
+            : 'Pick an event to see what to choose.'}</p>}
       </section>
     </div>
     </AdderContext.Provider>

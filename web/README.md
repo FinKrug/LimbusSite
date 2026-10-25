@@ -31,21 +31,29 @@ npm run preview    # serve the production build locally
 
 ## Screens
 
-The site follows a Mirror Dungeon run, so each screen shows only what that moment needs
-(`App.tsx`, `STAGES`):
+The site follows a floor of the Mirror Dungeon, so each screen shows only what that moment
+needs (`App.tsx`, `STAGES`):
 
 1. **Team** (before the run): lineup, identities, E.G.O, saved lineups.
 2. **Pick a pack**: the floor's theme packs, best first (4 shown, then Show more).
-3. **Shop**: **Buy** (your plan for the floor and the ranked gift list), **Fuse**, **Enhance**;
-   Cost to have and Gifts you have on the side.
-4. **Event**: search an event by the choice on screen.
-5. **Battle**: lineup strip and skill swaps.
+3. **Fights & events**: **Battle rewards** (add the gifts a fight offers you; they're ranked for
+   your team, `RewardPicker.tsx` with `giftOfferValue` from `lib/events.ts`) and **"?" Events**.
+4. **Shop**: **Buy** (your plan for the floor and the ranked gift list), **Fuse**, **Enhance**,
+   **Skill swaps**; Cost to have and Gifts you have on the side. Greyed out ("none") when the
+   floor's pack has no shop.
+5. **Boss**: the boss's own event if the wiki has one (Hurtily's tip and the like), then the
+   **Floor reward** picker.
+
+The **Next** button (bottom right) walks through the floor: Start the run → Fights & events →
+Shop → Boss → "Floor N cleared", which moves to the next floor (a short banner) and back to
+Pick a pack; on the last floor it's "Finish the run". Screens slide in (forward or back), done
+screens get a ✓, and motion is off with the system's reduced-motion setting.
 
 Every run screen has the run bar on top (difficulty, floor −/+, the floor's pack, Gifts you
 have, **Run settings** for length, Struggling in fights, End / Clear run). **Tools** in the
 header holds Evaluate and Import gifts. Long explanations are folded into "How this works".
-Old saved tabs map onto the screens (`limbussite.tab.v1` keeps the same ids); the Shop
-remembers its last part (`shoptab.v1`, per computer).
+Old saved tabs map onto the screens (`limbussite.tab.v1` keeps the same ids); screens with
+parts remember the last one (`subtab.v1`, per computer).
 
 ## Your data between computers
 
@@ -171,6 +179,7 @@ src/
     HowToGet.tsx     "How to get" disclosure on gift cards and theme pack gift rows
     WhyRank.tsx      "Why this rank" breakdown on gift and theme pack cards
     RunPanel.tsx     Run settings dialog (difficulty, length, floor, pack, Clear run) and the Shop's Cost box
+    RewardPicker.tsx "Which gift to take": battle rewards and the floor reward, ranked for your team
     RunBar.tsx       the one-line run bar on every run screen (floor −/+, pack, Gifts you have)
     OwnedGifts.tsx   "Gifts you have": search, icons, vestige counters
     GiftList.tsx     "Best gifts" tab
