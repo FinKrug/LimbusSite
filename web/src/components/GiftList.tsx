@@ -16,13 +16,15 @@ interface Props {
   owned: Set<string>
   /** Gifts you can get on the floor you're on. */
   availableNow?: Set<string>
+  /** The Show filter to start on ('now' in a shop: what you can get on this floor). */
+  initialFilter?: string
 }
 
 const PAGE = 10
 
-export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, giftsById, owned, availableNow }: Props) {
+export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, giftsById, owned, availableNow, initialFilter = 'team' }: Props) {
   const [query, setQuery] = useState('')
-  const [keyword, setKeyword] = useState('team')
+  const [keyword, setKeyword] = useState(initialFilter)
   const [tier, setTier] = useState('any')
   const [shown, setShown] = useState(PAGE)
 

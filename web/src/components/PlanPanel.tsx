@@ -12,8 +12,6 @@ interface Props {
   ranked: GiftScore[]
   packsForGift: Map<string, ThemePack[]>
   onOwn: (id: string) => void
-  /** The same context with other gifts owned (for the starting-gift picks). */
-  rebuild: (owned: string[]) => RunContext
 }
 
 /** Shown before "Show more". */
@@ -42,7 +40,7 @@ function PieceChip({ p }: { p: Piece }) {
  * "Your plan" on the Best gifts tab: the best gifts you can get on this floor, the
  * fusions worth working toward, and gift sets to build (src/data/combos.json), all for your team and run.
  */
-export function PlanPanel({ ctx, ranked, packsForGift, onOwn, rebuild }: Props) {
+export function PlanPanel({ ctx, ranked, packsForGift, onOwn }: Props) {
   const now = useMemo(() => getNow(ranked, ctx, packsForGift), [ranked, ctx, packsForGift])
   const later = useMemo(() => comingUp(ranked, ctx, packsForGift), [ranked, ctx, packsForGift])
   // Every target, so you can check other keywords (in a shop: is any other keyword worth starting?).
@@ -66,7 +64,6 @@ export function PlanPanel({ ctx, ranked, packsForGift, onOwn, rebuild }: Props) 
 
   return (
     <>
-    {ctx.run.floor === null && <StartPanel ctx={ctx} packsForGift={packsForGift} onOwn={onOwn} rebuild={rebuild} />}
     <section className="panel plan-panel">
       <header className="plan-head">
         <h2>Your plan{ctx.run.floor !== null ? ` for floor ${floor}` : ''}</h2>
@@ -177,9 +174,9 @@ export function PlanPanel({ ctx, ranked, packsForGift, onOwn, rebuild }: Props) 
 
 /**
  * Before the run: the gifts to buy at the start (up to 3, Tier I–III), in order.
- * Shown while no floor is set in Your run.
+ * On the Team screen while the run hasn't started.
  */
-function StartPanel({ ctx, packsForGift, onOwn, rebuild }: {
+export function StartPanel({ ctx, packsForGift, onOwn, rebuild }: {
   ctx: RunContext; packsForGift: Map<string, ThemePack[]>; onOwn: (id: string) => void
   rebuild: (owned: string[]) => RunContext
 }) {

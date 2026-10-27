@@ -8,7 +8,7 @@ import { Welcome } from './components/Welcome'
 import { FusionTab } from './components/FusionTab'
 import { GiftList } from './components/GiftList'
 import { OwnedGifts, PickupBox } from './components/OwnedGifts'
-import { PlanPanel } from './components/PlanPanel'
+import { PlanPanel, StartPanel } from './components/PlanPanel'
 import { LineupTools, PresetBox } from './components/PresetBox'
 import { availability } from './lib/plan'
 import { PackList } from './components/PackList'
@@ -44,8 +44,8 @@ import { buildTeam, suggestOrder } from './lib/teambuilder'
 import { addGift } from './lib/vestiges'
 import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
-type Tab = 'team' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss'
-const TABS: Tab[] = ['team', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss']
+type Tab = 'team' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best'
+const TABS: Tab[] = ['team', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best']
 
 /**
  * The site follows a floor of the Mirror Dungeon: pick a pack, fight your way through its
@@ -56,7 +56,7 @@ type Stage = 'team' | 'packs' | 'fights' | 'shop' | 'boss' | 'tools'
 const STAGE_OF: Record<Tab, Stage> = {
   team: 'team', packs: 'packs', rewards: 'fights', events: 'fights',
   gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss',
-  evaluate: 'tools', import: 'tools',
+  evaluate: 'tools', import: 'tools', best: 'tools',
 }
 const STAGES: { id: Exclude<Stage, 'tools'>; tab: Tab; label: string; hint: string }[] = [
   { id: 'team', tab: 'team', label: 'Team', hint: 'Before the run' },
@@ -70,8 +70,14 @@ const STAGE_INDEX = Object.fromEntries(STAGES.map((s, k) => [s.id, k])) as Recor
 const SUB_TABS: Partial<Record<Stage, { id: Tab; label: string }[]>> = {
   shop: [{ id: 'gifts', label: 'Buy' }, { id: 'fusion', label: 'Fuse' }, { id: 'upgrades', label: 'Enhance' }, { id: 'skills', label: 'Skill swaps' }],
 }
-const TOOL_LABEL = { evaluate: 'Evaluate a gift or pack', import: 'Import gifts from a screenshot' }
-const TOOL_HINT = { evaluate: 'Pros and cons of one gift or theme pack for your team', import: 'Read Gifts you have from game screenshots' }
+type ToolTab = 'best' | 'evaluate' | 'import'
+const TOOLS: ToolTab[] = ['best', 'evaluate', 'import']
+const TOOL_LABEL: Record<ToolTab, string> = { best: 'Best gifts', evaluate: 'Evaluate a gift or pack', import: 'Import gifts from a screenshot' }
+const TOOL_HINT: Record<ToolTab, string> = {
+  best: 'Every gift ranked for your team, and where to get it',
+  evaluate: 'Pros and cons of one gift or theme pack for your team',
+  import: 'Read Gifts you have from game screenshots',
+}
 
 /** The "Try a demo team" run: a Heishou lineup on Hard, floor 3, with a few gifts already picked up. */
 const DEMO = {
@@ -409,7 +415,7 @@ export default function App() {
 
       {stage === 'tools' && (
         <div className="tools-head">
-          <h2>{TOOL_LABEL[tab as 'evaluate' | 'import']}</h2>
+          <h2>{TOOL_LABEL[tab as ToolTab]}</h2>
           <button className="link-btn" onClick={() => setTab(lastStageTab)}>← Back</button>
         </div>
       )}
@@ -442,9 +448,12 @@ export default function App() {
               }}
             />
             {run.floor === null && (
+              <StartPanel ctx={ctx} packsForGift={packsForGift} onOwn={own} rebuild={rebuildCtx} />
+            )}
+            {run.floor === null && (
               <RewardPicker ctx={ctx} gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned}
                 title="Starting gift choice"
-                hint="Starting a run, you choose a starting E.G.O gift (more choices with the Star-shower Starlight buff, and some buffs let you pick Tier 3 gifts of a keyword). Add the ones offered and they're ranked for your team. Recommended starting gifts are in Shop > Buy before the run starts." />
+                hint="Starting a run, you choose a starting E.G.O gift (more choices with the Star-shower Starlight buff, and some buffs let you pick Tier 3 gifts of a keyword). Add the ones offered and they're ranked for your team. The gifts worth buying before the run are above." />
             )}
           </>
         )}
@@ -471,9 +480,9 @@ export default function App() {
               {tab === 'gifts' && (
                 <>
                   {focusLine}
-                  <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={own} rebuild={rebuildCtx} />
+                  <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={own} />
                   <GiftList ranked={rankedGifts} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
-                    teamKeywords={focus.map((f) => f.keyword)}
+                    teamKeywords={focus.map((f) => f.keyword)} initialFilter={run.floor === null ? 'team' : 'now'}
                     onOwn={own} giftsById={ctx.giftsById} owned={ctx.owned} />
                 </>
               )}
@@ -522,6 +531,18 @@ export default function App() {
           </div>
         )}
 
+        {tab === 'best' && (
+          <div className="best-gifts">
+            <p className="muted small">
+              Every gift ranked for your team, wherever it comes from: shops, theme packs, events or fusing. Open one to see why
+              it ranks there and how to get it. For what to buy right now, use the Shop.
+            </p>
+            {focusLine}
+            <GiftList ranked={rankedGifts} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
+              teamKeywords={focus.map((f) => f.keyword)}
+              onOwn={own} giftsById={ctx.giftsById} owned={ctx.owned} />
+          </div>
+        )}
         {tab === 'evaluate' && <EvaluateTab ctx={ctx} packsForGift={packsForGift} />}
         {tab === 'import' && <ImportTab gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned} />}
       </div>
@@ -587,12 +608,12 @@ function ToolsMenu({ current, onPick }: { current: Tab; onPick: (t: Tab) => void
   }, [open])
   return (
     <div className="tools-menu" ref={ref}>
-      <button className={`sync-btn${current === 'evaluate' || current === 'import' ? ' sync-warn' : ''}`} aria-expanded={open} onClick={() => setOpen(!open)}>
+      <button className={`sync-btn${(TOOLS as Tab[]).includes(current) ? ' sync-warn' : ''}`} aria-expanded={open} onClick={() => setOpen(!open)}>
         Tools ▾
       </button>
       {open && (
         <ul className="tools-list" role="menu">
-          {(['evaluate', 'import'] as const).map((t) => (
+          {TOOLS.map((t) => (
             <li key={t}>
               <button role="menuitem" onClick={() => { onPick(t); setOpen(false) }}>
                 <b>{TOOL_LABEL[t]}</b><small>{TOOL_HINT[t]}</small>
