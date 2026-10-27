@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { DEFAULT_RUN, defaultFloors, makeContext } from './scoring'
-import { maxLevel, planGift, planUpgrades, shopValue } from './upgrades'
+import { affordable, maxLevel, planGift, planUpgrades, shopValue } from './upgrades'
 
 const byId = (id: string) => gameData.identities.find((x) => x.id === id)!
 const byName = (n: string) => gameData.gifts.find((g) => g.name === n)!
@@ -29,10 +29,28 @@ describe('upgrade planner', () => {
     expect(p.verdict).toBe('max')
   })
 
-  it('says "upgrade once" when ++ adds nothing over +, and skips gifts your team can’t use', () => {
+  it('says "upgrade once" when ++ adds nothing over +, and "with spare Cost" for gifts that barely help', () => {
     const o = planUpgrades(ctx)
     expect(o.plans.find((p) => p.gift.name === 'Unhatched Embers')!.verdict).toBe('once')
-    expect(o.plans.find((p) => p.gift.name === 'Blossom Scissors')!.verdict).toBe('skip')
+    // Every upgrade helps a little; it's only a Skip when it changes nothing for your team.
+    const scissors = o.plans.find((p) => p.gift.name === 'Blossom Scissors')!
+    expect(scissors.verdict).toBe('spare')
+    expect(scissors.moves.length).toBeGreaterThan(0)
+    expect(o.order[o.order.length - 1].priority).toBe('spare')
+  })
+
+  it('picks what you can afford, best first, and does everything with a lot of Cost', () => {
+    const { order } = planUpgrades(ctx)
+    const all = order.reduce((a, m) => a + m.cost, 0)
+    expect(affordable(order, all + 1000).moves).toHaveLength(order.length)
+    const some = affordable(order, 250)
+    expect(some.spent).toBeLessThanOrEqual(250)
+    expect(some.moves[0]).toBe(order[0])
+    // A gift's ++ never comes without its +.
+    const tb = byName('Thunderbranch').id
+    const tbMoves = affordable(order, 130).moves.filter((m) => m.gift.id === tb)
+    expect(tbMoves.every((m, k) => m.from === (k === 0 ? 0 : tbMoves[k - 1].to))).toBe(true)
+    expect(affordable(order, 0).moves).toHaveLength(0)
   })
 
   it('moves on as you upgrade, and ranks every move best first', () => {

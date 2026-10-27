@@ -469,7 +469,7 @@ export default function App() {
                   teamKeywords={focus.map((f) => f.keyword)} packsForGift={packsForGift}
                   superShop={superShop} onSuperShopChange={setSuperShop} />
               )}
-              {tab === 'upgrades' && <UpgradesTab ctx={ctx} levels={enhanced} onLevelsChange={setEnhanced} />}
+              {tab === 'upgrades' && <UpgradesTab ctx={ctx} levels={enhanced} onLevelsChange={setEnhanced} ranked={rankedGifts} />}
               {tab === 'skills' && (
                 <SkillsTab team={teamIdentities.slice(0, deployed)} backups={teamIdentities.slice(deployed)} swaps={swaps} onSwapsChange={setSwaps} owned={ownedGifts} art={art}
                   egos={gameData.egos ?? []} loadout={loadout} run={run} battle={ctx.battle} onOpenTeam={() => setTab('team')} />

@@ -1374,3 +1374,12 @@ p.skill-best { background: none; border-color: var(--line); }
   .cleared { animation: cleared-bg 1.8s ease both; }
 }
 .boss-note { margin: 0; font-size: 14px; }
+.pill.pill-prio-spare, .pill.upgrade-verdict-spare { background: rgb(154 145 135 / 0.16); color: var(--text); border: 1px dashed var(--line); }
+.pill.pill-now { background: var(--accent); color: var(--accent-ink); font-weight: 800; }
+.upgrade-move.now { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+.upgrade-move.later { opacity: 0.65; }
+.upgrade-budget { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 10px 0 4px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); }
+.upgrade-budget label:first-child { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.upgrade-budget input[type='number'] { width: 110px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
+.upgrade-budget .run-check { margin: 0; }
+.upgrade-budget-sum { flex-basis: 100%; margin: 0; font-size: 14px; }

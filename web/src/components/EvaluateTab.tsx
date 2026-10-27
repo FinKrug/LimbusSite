@@ -67,7 +67,7 @@ export function EvaluateTab({ ctx, packsForGift }: Props) {
       )}
       <p className="muted small">
         Judged for your deployed team and your run ({run.difficulty}, {run.floors} floors{run.floor !== null ? `, floor ${run.floor}` : ''}).
-        Change the run in the side panel.
+        Change the run in the bar at the top.
       </p>
 
       {!pick || !result ? (

@@ -5,6 +5,8 @@
  */
 import { EXTREME_FROM, isGone, packOnFloor, packPool, rankGifts, rankThemePacks, scoreGift, type GiftScore, type PackScore, type Reason, type RunContext } from './scoring'
 import { isVestige } from './vestiges'
+import { floorCostFrom, shopGift } from './costplan'
+import { mustHave } from './musthave'
 import { type Gift, type ThemePack, floorText, tierLabel } from './types'
 
 export type Verdict = 'take' | 'maybe' | 'skip'
@@ -42,7 +44,7 @@ export function evaluateGift(gift: Gift, ctx: RunContext, packsForGift: Map<stri
   if (pos >= 0 && team) {
     const n = ranked.length
     if (pos < 10) pros.unshift(`#${pos + 1} of ${n} gifts for your team right now`)
-    else if (pos < n * 0.2) notes.unshift(`#${pos + 1} of ${n} gifts for your team (top ${pct((pos + 1) / n)})`)
+    else if (pos < n * 0.3) notes.unshift(`#${pos + 1} of ${n} gifts for your team (top ${pct((pos + 1) / n)})`)
     else cons.unshift(`#${pos + 1} of ${n} gifts for your team: most gifts suit it better`)
   }
   // Better picks of the same keyword.
@@ -87,12 +89,88 @@ export function evaluateGift(gift: Gift, ctx: RunContext, packsForGift: Map<stri
   }
   if (gift.pools.includes('extreme')) notes.push(`EXTREME-only gift: floors ${EXTREME_FROM}–15 of an EXTREME run`)
 
-  const verdict: Verdict = !team ? 'maybe' : rating >= 70 && !cons.some((c) => /Un-staggers|Staggers your own/.test(c)) ? 'take' : rating >= 40 ? 'maybe' : 'skip'
-  const headline = !team ? 'Pick your team on the Team tab to judge this for your team.'
-    : verdict === 'take' ? `Take it: one of the best gifts for this team (${rating}/100).`
-      : verdict === 'maybe' ? `Situational: fine if nothing better is on offer (${rating}/100).`
-        : `Skip it unless you need the Cost or fusion fodder (${rating}/100).`
+  const { verdict, headline } = !team
+    ? { verdict: 'maybe' as const, headline: 'Pick your team on the Team tab to judge this for your team.' }
+    : judgeGift(gift, s, ctx, ranked, pos, cons)
+  void rating
   return { score: s, verdict, headline, pros: dedupe(pros), cons: dedupe(cons), notes: dedupe(notes) }
+}
+
+/** How the verdict is set (Finley: "everything is a skip"; a gift that needs Cost, a partner or a
+ *  fusion to pay off is a Maybe with that condition, not a Skip). */
+export const VERDICT_WEIGHTS = {
+  /** Scores are compared with the 5th best gift for your team (must-haves like Lunar Memory aside,
+   *  since they'd make everything else look weak). */
+  refRank: 5,
+  /** Take it: in your top this-many, or at least this share of the reference. */
+  takeTop: 10,
+  take: 0.8,
+  /** Maybe, as a solid pick that just isn't one of the best. */
+  maybe: 0.45,
+  /** Maybe with a condition (spare Cost, its set, a fusion it goes into): at least this share. */
+  conditional: 0.15,
+  /** A gift that fits your team's keywords, bought with Cost left over: at least this share. */
+  fits: 0.25,
+  /** A gift that doesn't fit your team, bought only with plenty of Cost to spare: at least this share. */
+  spareCost: 0.3,
+  /** Keyword-free sets count as a condition only down to this rank (1 = most important). */
+  setRank: 4,
+  /** Packs: Go for the best this-many on the floor; Maybe for this top share of the floor's packs. */
+  packTakeTop: 3,
+  packMaybeShare: 0.5,
+  /** A fusion it goes into counts when the result is at least this share of the reference. */
+  fusionResult: 0.6,
+}
+
+/**
+ * Take / Maybe / Skip for one gift, with the headline. A Maybe says what it depends on:
+ * Cost to spare after your top picks, the set it belongs to, or the fusion it goes into.
+ */
+export function judgeGift(gift: Gift, s: Omit<GiftScore, 'rating'>, ctx: RunContext, ranked: GiftScore[], pos: number, cons: string[]): { verdict: Verdict; headline: string } {
+  const W = VERDICT_WEIGHTS
+  const refs = ranked.filter((g) => !mustHave(g.gift.id))
+  const ref = Math.max(1e-9, refs[Math.min(W.refRank, refs.length) - 1]?.score ?? s.score)
+  const rel = s.score / ref
+  const rank = pos >= 0 ? `#${pos + 1} of ${ranked.length} for your team` : 'for your team'
+  const harmful = cons.some((c) => /Un-staggers|Staggers your own/.test(c))
+  const spare = floorCostFrom(ranked, ctx.run.floor ?? 1).comfortable
+
+  if (!harmful && ((pos >= 0 && pos < W.takeTop) || rel >= W.take)) {
+    return { verdict: 'take', headline: `One of the best gifts for this team (${rank}).` }
+  }
+  if (!harmful && rel >= W.maybe) {
+    return { verdict: 'maybe', headline: `A solid pick, just not one of your best (${rank}). Take it if nothing better is on offer${shopGift(gift) ? `, or buy it if you'll still have Cost left after your top picks (they take about ${spare})` : ''}.` }
+  }
+  if (rel >= W.conditional) {
+    // What it would take to make it worth it.
+    const into = (ctx.fusionsByIngredient.get(gift.id) ?? [])
+      .map((f) => ctx.giftsById.get(f.result))
+      .find((r) => r && !ctx.owned.has(r.id) && !isGone(ctx, r.id) && scoreGift(r, ctx).score >= ref * W.fusionResult)
+    const set = (ctx.combosByGift.get(gift.id) ?? []).find((c) => c.any_team
+      ? (c.rank ?? 99) <= W.setRank
+      : !c.keyword || (ctx.profile.keywordCounts[c.keyword as keyof typeof ctx.profile.keywordCounts] ?? 0) > 0)
+    const conditions: string[] = []
+    if (into) conditions.push(`you're fusing toward ${into.name} (it's an ingredient)`)
+    if (set) conditions.push(`you're building the ${set.name}`)
+    if ((s.fit >= 0.5 || s.synergy) && rel >= W.fits) {
+      conditions.push(shopGift(gift) ? `you'll still have Cost left after your top picks (they take about ${spare})` : 'nothing better is offered')
+    } else if (shopGift(gift) && !harmful && rel >= W.spareCost) {
+      conditions.push(`you have plenty of Cost to spare (well over the ${spare} your top picks take)`)
+    }
+    if (conditions.length) {
+      return { verdict: 'maybe', headline: `Worth it if ${joinOr(conditions)} (${rank}).${harmful ? ' Mind the downside below.' : ''}` }
+    }
+  }
+  return {
+    verdict: 'skip',
+    headline: harmful ? `Its downside hurts your team more than it helps (${rank}).`
+      : s.fit === 0 && !s.synergy ? `Little use for this team (${rank}). Sell it or use it as fusion fodder.`
+        : `Only if nothing else is on offer (${rank}); as fusion fodder it's fine.`,
+  }
+}
+
+function joinOr(xs: string[]): string {
+  return xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} or ${xs[xs.length - 1]}`
 }
 
 export function evaluatePack(pack: ThemePack, ctx: RunContext): Evaluation & { score: PackScore | null; rank: number | null; of: number } {
@@ -145,11 +223,22 @@ export function evaluatePack(pack: ThemePack, ctx: RunContext): Evaluation & { s
   }
   if (s && s.ownedCount) notes.push(`You already have ${s.ownedCount} of its gifts`)
 
-  const verdict: Verdict = !team ? 'maybe' : s?.verdict === 'go' ? 'take' : s?.verdict === 'maybe' ? 'maybe' : 'skip'
+  // You pick one of the few packs you're offered, so a pack is judged against the others on its
+  // floor: the best few are a Go, the upper half a Maybe.
+  const n = ranked.length
+  // Something only this pack gives that suits your team: an exclusive that fits it.
+  const fitsTeam = !!s && s.highlights.some((h) => h.fits && h.kind === 'exclusive')
+  const where = run.floor !== null && onThisFloor ? `#${k + 1} of ${n} on floor ${run.floor}` : k >= 0 ? `#${k + 1} of ${n}` : ''
+  const verdict: Verdict = !team ? 'maybe'
+    : !s || !s.top.length || !onThisFloor ? 'skip'
+      : s.verdict === 'go' || k < VERDICT_WEIGHTS.packTakeTop ? 'take'
+        : s.verdict === 'maybe' || k < Math.ceil(n * VERDICT_WEIGHTS.packMaybeShare) ? 'maybe' : 'skip'
   const headline = !team ? 'Pick your team on the Team tab to judge this for your team.'
-    : verdict === 'take' ? 'Go: one of the best packs for this team.'
-      : verdict === 'maybe' ? 'Maybe: decent, but there are better packs for this team.'
-        : 'Skip if you have a better option.'
+    : !onThisFloor ? `It can't show up on floor ${run.floor}.`
+      : !s || !s.top.length ? 'You already have everything it can give.'
+        : verdict === 'take' ? `One of the best packs for this team (${where}).`
+          : verdict === 'maybe' ? `A good pick when the other packs on offer are weaker (${where})${fitsTeam ? '; it has exclusive gifts for your team' : ''}. Compare the packs you're offered on Pick a pack.`
+            : `Only if the other packs on offer are worse (${where}).`
   return { score: s, rank: k >= 0 ? k + 1 : null, of: ranked.length, verdict, headline, pros: dedupe(pros), cons: dedupe(cons), notes: dedupe(notes) }
 }
 
