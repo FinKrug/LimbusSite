@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { bestReasons, comingUp, fusionTargets, getNow, setTargets, type Piece } from '../lib/plan'
-import { START_RULES, startingPicks, type StartPick } from '../lib/startgifts'
+import { START_RULES, startingPicks, type StartPick, type StartPlan } from '../lib/startgifts'
 import { tierLabel } from '../lib/types'
 import type { GiftScore, RunContext } from '../lib/scoring'
 import type { ThemePack } from '../lib/types'
@@ -173,20 +173,26 @@ export function PlanPanel({ ctx, ranked, packsForGift, onOwn }: Props) {
 }
 
 /**
- * Before the run: the gifts to buy at the start (up to 3, Tier I–III), in order.
+ * E.G.O Gift Search before the run: the gifts to get with Starlight (up to 3, Tier I–III), in order.
+ * On the Before the run screen (PreRunTab).
  * On the Team screen while the run hasn't started.
  */
-export function StartPanel({ ctx, packsForGift, onOwn, rebuild }: {
+export function StartPanel({ ctx, packsForGift, onOwn, rebuild, title = 'E.G.O Gift Search', hint, plan: given }: {
   ctx: RunContext; packsForGift: Map<string, ThemePack[]>; onOwn: (id: string) => void
   rebuild: (owned: string[]) => RunContext
+  title?: string
+  hint?: string
+  /** Already worked out (startingPicks), so it isn't done twice. */
+  plan?: StartPlan
 }) {
-  const plan = useMemo(() => startingPicks(ctx, packsForGift, rebuild), [ctx, packsForGift, rebuild])
+  const own = useMemo(() => (given ? null : startingPicks(ctx, packsForGift, rebuild)), [given, ctx, packsForGift, rebuild])
+  const plan = given ?? own!
   if (!plan.picks.length) return null
   return (
     <section className="panel start-panel">
       <header className="plan-head">
-        <h2>Before the run: gifts to buy</h2>
-        <span className="muted small">Up to {START_RULES.count} gifts, Tier I–{tierLabel(START_RULES.maxTier)}. Best first.</span>
+        <h2>{title}</h2>
+        <span className="muted small">{hint ?? `Up to ${START_RULES.count} gifts, Tier I–${tierLabel(START_RULES.maxTier)}. Best first.`}</span>
       </header>
       <ol className="start-picks">
         {plan.picks.map((p, k) => (
@@ -224,8 +230,8 @@ function StartOptions({ options, onOwn }: { options: StartPick[]; onOwn: (id: st
   if (!options.length) return null
   const shown = all ? options : options.slice(0, OPTIONS_SHOWN)
   return (
-    <div className="start-options">
-      <h3>Other options <span className="muted small">({options.length}, best first)</span></h3>
+    <details className="start-options">
+      <summary><b>Other options</b> <span className="muted small">({options.length}, best first: to pick your own)</span></summary>
       <ol className="start-option-list">
         {shown.map((p, k) => (
           <li key={p.score.gift.id} className="start-option">
@@ -246,6 +252,6 @@ function StartOptions({ options, onOwn }: { options: StartPick[]; onOwn: (id: st
           {all ? 'Show fewer' : `Show ${options.length - OPTIONS_SHOWN} more`}
         </button>
       )}
-    </div>
+    </details>
   )
 }

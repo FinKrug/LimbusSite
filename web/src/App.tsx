@@ -8,7 +8,9 @@ import { Welcome } from './components/Welcome'
 import { FusionTab } from './components/FusionTab'
 import { GiftList } from './components/GiftList'
 import { OwnedGifts, PickupBox } from './components/OwnedGifts'
-import { PlanPanel, StartPanel } from './components/PlanPanel'
+import { PlanPanel } from './components/PlanPanel'
+import { PreRunTab } from './components/PreRunTab'
+import { EMPTY_PRERUN, type PreRunState } from './lib/prerun'
 import { LineupTools, PresetBox } from './components/PresetBox'
 import { availability } from './lib/plan'
 import { PackList } from './components/PackList'
@@ -44,26 +46,27 @@ import { buildTeam, suggestOrder } from './lib/teambuilder'
 import { addGift } from './lib/vestiges'
 import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
-type Tab = 'team' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best'
-const TABS: Tab[] = ['team', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best']
+type Tab = 'team' | 'prerun' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best'
+const TABS: Tab[] = ['team', 'prerun', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best']
 
 /**
  * The site follows a floor of the Mirror Dungeon: pick a pack, fight your way through its
  * battles and "?" events, shop, then the boss, and on to the next floor (Next phase).
  * Each screen shows only what that moment needs. Evaluate and Import gifts are in Tools.
  */
-type Stage = 'team' | 'packs' | 'fights' | 'shop' | 'boss' | 'tools'
+type Stage = 'team' | 'prerun' | 'packs' | 'fights' | 'shop' | 'boss' | 'tools'
 const STAGE_OF: Record<Tab, Stage> = {
-  team: 'team', packs: 'packs', rewards: 'fights', events: 'fights',
+  team: 'team', prerun: 'prerun', packs: 'packs', rewards: 'fights', events: 'fights',
   gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss',
   evaluate: 'tools', import: 'tools', best: 'tools',
 }
 const STAGES: { id: Exclude<Stage, 'tools'>; tab: Tab; label: string; hint: string }[] = [
-  { id: 'team', tab: 'team', label: 'Team', hint: 'Before the run' },
-  { id: 'packs', tab: 'packs', label: 'Pick a pack', hint: 'Theme pack for the floor' },
-  { id: 'fights', tab: 'events', label: 'Fights & events', hint: 'Gifts you get, "?" events' },
-  { id: 'shop', tab: 'gifts', label: 'Shop', hint: 'Buy, fuse, enhance, skills' },
-  { id: 'boss', tab: 'boss', label: 'Boss', hint: 'Boss fight, floor reward' },
+  { id: 'team', tab: 'team', label: 'Team', hint: 'Identities, E.G.O' },
+  { id: 'prerun', tab: 'prerun', label: 'Before the run', hint: 'Starlight, first gifts' },
+  { id: 'packs', tab: 'packs', label: 'Pick a pack', hint: "The floor's theme pack" },
+  { id: 'fights', tab: 'events', label: 'Fights & events', hint: 'Gifts, "?" events' },
+  { id: 'shop', tab: 'gifts', label: 'Shop', hint: 'Buy, fuse, enhance' },
+  { id: 'boss', tab: 'boss', label: 'Boss', hint: 'Boss, floor reward' },
 ]
 const STAGE_INDEX = Object.fromEntries(STAGES.map((s, k) => [s.id, k])) as Record<Stage, number>
 /** Screens with parts of their own, and the parts. */
@@ -132,6 +135,8 @@ export default function App() {
   const [owned, setOwned] = usePersistentState<string[]>('limbussite.owned.v1', [])
   /** Upgrade level of gifts you've enhanced this run (Upgrades tab). */
   const [enhanced, setEnhanced] = usePersistentState<Record<string, number>>('limbussite.enhanced.v1', {})
+  /** Before the run: Starlight buffs you took, your starting keyword, Starlight to spend. */
+  const [prerun, setPrerun] = usePersistentState<PreRunState>('limbussite.prerun.v1', EMPTY_PRERUN)
   const [offered, setOffered] = usePersistentState<string[]>('limbussite.offered.v1', [])
   const [firstRun] = useState(legacyRun)
   const [run, setRun] = usePersistentState<RunSettings>('limbussite.run.v1', firstRun)
@@ -303,6 +308,7 @@ export default function App() {
     // Run data only: the team, E.G.O, saved lineups and settings stay.
     setOwned([])
     setEnhanced({})
+    setPrerun({ ...EMPTY_PRERUN, starlight: prerun.starlight })
     setOffered([])
     setDismissed([])
     setSuperShop(false)
@@ -341,6 +347,9 @@ export default function App() {
     const f = run.floor
     switch (stage) {
       case 'team': return f === null
+        ? { label: 'Next: Before the run', sub: 'Starlight and starting gifts', go: () => { openStage('prerun'); toTop() } }
+        : { label: 'Back to the run', sub: `Floor ${f}`, go: () => { openStage(run.pack ? 'fights' : 'packs'); toTop() } }
+      case 'prerun': return f === null
         ? { label: 'Start the run', sub: 'Floor 1: pick a pack', go: () => { setRun(withFloor(run, 1)); openStage('packs'); toTop() } }
         : { label: 'Back to the run', sub: `Floor ${f}`, go: () => { openStage(run.pack ? 'fights' : 'packs'); toTop() } }
       case 'packs': return { label: 'Next: Fights & events', sub: currentPack ? currentPack.name : 'Pick your pack in the bar first',
@@ -447,15 +456,15 @@ export default function App() {
                 setSelection(suggestOrder(gameData, ids, deployed, owned, tiers).order)
               }}
             />
-            {run.floor === null && (
-              <StartPanel ctx={ctx} packsForGift={packsForGift} onOwn={own} rebuild={rebuildCtx} />
-            )}
-            {run.floor === null && (
-              <RewardPicker ctx={ctx} gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned}
-                title="Starting gift choice"
-                hint="Starting a run, you choose a starting E.G.O gift (more choices with the Star-shower Starlight buff, and some buffs let you pick Tier 3 gifts of a keyword). Add the ones offered and they're ranked for your team. The gifts worth buying before the run are above." />
-            )}
           </>
+        )}
+
+        {tab === 'prerun' && (
+          <div className="stage-main">
+            {focusLine}
+            <PreRunTab ctx={ctx} packsForGift={packsForGift} rebuild={rebuildCtx} state={prerun} onStateChange={setPrerun}
+              onOwn={own} inRun={run.floor !== null} />
+          </div>
         )}
 
         {tab === 'packs' && (

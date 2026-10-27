@@ -1,6 +1,7 @@
 /**
- * Starting gifts: right before a Mirror Dungeon run you can buy a few E.G.O gifts
- * (START_RULES: up to 3, Tier I–III). Which ones, in order?
+ * E.G.O Gift Search: after the starting gifts, before the run, you can get up to 3 E.G.O gifts of
+ * your choice for Starlight (START_RULES: Tier I–III, 70 / 160 / 270 Starlight; any gift the
+ * Mirror Dungeon has, pack exclusives included, but not recipe results). Which ones, in order?
  *
  * A gift is worth buying up front when:
  *  - it lets you skip a theme pack: it's exclusive to a pack and is most of what that
@@ -42,7 +43,7 @@ export interface StartPick {
 function candidates(ctx: RunContext): Gift[] {
   const recipe = new Set(ctx.data.fusions.map((f) => f.result))
   return ctx.data.gifts.filter((g) => (g.tier ?? 0) >= 1 && (g.tier ?? 0) <= START_RULES.maxTier && !g.fusion_recipe
-    && !recipe.has(g.id) && !g.pools.includes('cursed') && !g.pools.includes('extreme') && !ctx.owned.has(g.id) && !isGone(ctx, g.id))
+    && !recipe.has(g.id) && !g.reward_only && !g.pools.includes('cursed') && !g.pools.includes('extreme') && !ctx.owned.has(g.id) && !isGone(ctx, g.id))
 }
 
 function judge(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>): StartPick | null {

@@ -24,8 +24,8 @@ const KIND_TAG: Record<GiftOffer['kind'], string | null> = {
 }
 
 /**
- * "Which gift do I take?" where the game lets you choose: the starting gift at the start of a
- * run, and the boss reward gifts after each floor's boss (2 on Hard). Add the gifts offered and
+ * "Which gift do I take?" for the boss reward gifts after each floor's boss (2 on Hard); the starting
+ * gifts are on the Before the run screen (PreRunTab). Add the gifts offered and
  * they're ranked for your team, best first; take one and it goes into Gifts you have. Fights'
  * reward cards give a random gift, so there's nothing to compare there (Finley, 2026-10-27).
  */
