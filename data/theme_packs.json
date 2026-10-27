@@ -139,6 +139,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/A_Certain_World_Theme_Pack"
   },
   {
@@ -223,6 +224,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Abnormal_Seismic_Zone_Theme_Pack"
   },
   {
@@ -313,6 +315,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Addicting_Lust_Theme_Pack"
   },
   {
@@ -418,6 +421,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/An_Anarchy_of_Colors_Theme_Pack"
   },
   {
@@ -525,6 +529,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Automated_Factory_Theme_Pack"
   },
   {
@@ -668,6 +673,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blade_and_Artwork_Theme_Pack"
   },
   {
@@ -883,6 +889,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Bridle_of_Infinity_Theme_Pack"
   },
   {
@@ -967,6 +974,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Burning_Haze_Theme_Pack"
   },
   {
@@ -1109,6 +1117,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Charm,_Wander,_Doubt_Theme_Pack"
   },
   {
@@ -1217,6 +1226,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Crawling_Abyss_Theme_Pack"
   },
   {
@@ -1322,6 +1332,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Creed_of_Preservation_Theme_Pack"
   },
   {
@@ -1406,6 +1417,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Crushers_%26_Breakers_Theme_Pack"
   },
   {
@@ -1490,6 +1502,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Crushing_External_Force_Theme_Pack"
   },
   {
@@ -1574,6 +1587,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Deep_Sigh_Theme_Pack"
   },
   {
@@ -1668,6 +1682,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Degraded_Gloom_Theme_Pack"
   },
   {
@@ -1758,6 +1773,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Devoured_Gluttony_Theme_Pack"
   },
   {
@@ -1842,6 +1858,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dizzying_Waves_Theme_Pack"
   },
   {
@@ -1986,6 +2003,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Dregs_of_the_Manor_Theme_Pack"
   },
   {
@@ -2076,6 +2094,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Craving_Theme_Pack"
   },
   {
@@ -2170,6 +2189,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Flood_Theme_Pack"
   },
   {
@@ -2262,6 +2282,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Indolence_Theme_Pack"
   },
   {
@@ -2357,6 +2378,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Judgment_Theme_Pack"
   },
   {
@@ -2449,6 +2471,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Repression_Theme_Pack"
   },
   {
@@ -2539,6 +2562,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Seduction_Theme_Pack"
   },
   {
@@ -2631,6 +2655,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Emotional_Subservience_Theme_Pack"
   },
   {
@@ -2721,6 +2746,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Excessive_Gluttony_Theme_Pack"
   },
   {
@@ -2828,6 +2854,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Faith_%26_Erosion_Theme_Pack"
   },
   {
@@ -2934,6 +2961,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Falling_Flowers_Theme_Pack"
   },
   {
@@ -3036,6 +3064,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Flat-broke_Gamblers_Theme_Pack"
   },
   {
@@ -3177,6 +3206,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Four_Houses_and_Greed_Theme_Pack"
   },
   {
@@ -3293,6 +3323,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stopped_by_a_Bullet_Theme_Pack"
   },
   {
@@ -3411,6 +3442,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hatred_and_Despair_Theme_Pack"
   },
   {
@@ -3524,6 +3556,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Hell's_Chicken_Theme_Pack"
   },
   {
@@ -3616,6 +3649,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Inert_Sloth_Theme_Pack"
   },
   {
@@ -3711,6 +3745,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Insignificant_Envy_Theme_Pack"
   },
   {
@@ -3791,6 +3826,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/La_Manchaland_Re-opening_Theme_Pack"
   },
   {
@@ -3894,6 +3930,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Lake_World_Theme_Pack"
   },
   {
@@ -3971,6 +4008,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Regular_Check-up_Theme_Pack"
   },
   {
@@ -4045,6 +4083,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/LCB_Regular_Check-up_BokGak_Theme_Pack"
   },
   {
@@ -4089,6 +4128,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_1_Theme_Pack"
   },
   {
@@ -4133,6 +4173,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_2_Theme_Pack"
   },
   {
@@ -4180,6 +4221,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_3_Theme_Pack"
   },
   {
@@ -4201,6 +4243,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_4:_Masquerade"
   },
   {
@@ -4248,6 +4291,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_4_-_Section_3_Theme_Pack"
   },
   {
@@ -4295,6 +4339,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_4_-_Section_4_Theme_Pack"
   },
   {
@@ -4344,6 +4389,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_5_Theme_Pack"
   },
   {
@@ -4454,6 +4500,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Miracle_in_District_20_Theme_Pack"
   },
   {
@@ -4562,6 +4609,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Miracle_in_District_20_BokGak_Theme_Pack"
   },
   {
@@ -4678,6 +4726,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Mnestic_Experience_Theme_Pack"
   },
   {
@@ -4763,6 +4812,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Mountain_of_Corpses,_Sea_of_Blood_Theme_Pack"
   },
   {
@@ -4883,6 +4933,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Murder_on_the_WARP_Express_Theme_Pack"
   },
   {
@@ -5002,6 +5053,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Murder_on_the_WARP_Express_BokGak_Theme_Pack"
   },
   {
@@ -5104,6 +5156,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nagel_und_Hammer_Theme_Pack"
   },
   {
@@ -5205,6 +5258,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nest,_Workshop,_and_Technology_Theme_Pack"
   },
   {
@@ -5267,6 +5321,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nocturnal_Sweeping_Theme_Pack"
   },
   {
@@ -5323,6 +5378,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Nocturnal_Sweeping_BokGak_Theme_Pack"
   },
   {
@@ -5406,6 +5462,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Piercers_%26_Penetrators_Theme_Pack"
   },
   {
@@ -5501,6 +5558,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Pitiful_Envy_Theme_Pack"
   },
   {
@@ -5585,6 +5643,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Poised_Breathing_Theme_Pack"
   },
   {
@@ -5690,6 +5749,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Readvent_of_Gluttony_Theme_Pack"
   },
   {
@@ -5782,6 +5842,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Repressed_Wrath_Theme_Pack"
   },
   {
@@ -5866,6 +5927,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Rising_Power_Supply_Theme_Pack"
   },
   {
@@ -5974,6 +6036,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/S.E.A._Theme_Pack"
   },
   {
@@ -6063,6 +6126,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Season_of_the_Flame_Theme_Pack"
   },
   {
@@ -6152,6 +6216,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Sinking_Deluge_Theme_Pack"
   },
   {
@@ -6238,6 +6303,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Sinking_Pang_Theme_Pack"
   },
   {
@@ -6321,6 +6387,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Slicers_%26_Dicers_Theme_Pack"
   },
   {
@@ -6439,6 +6506,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Spring_Cultivation_Theme_Pack"
   },
   {
@@ -6547,6 +6615,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Storefront_Campout_Theme_Pack"
   },
   {
@@ -6643,6 +6712,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Sunk_Gloom_Theme_Pack"
   },
   {
@@ -6733,6 +6803,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tangling_Lust_Theme_Pack"
   },
   {
@@ -6834,6 +6905,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tearful_Things_Theme_Pack"
   },
   {
@@ -6975,6 +7047,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Textbook_Theme_Pack"
   },
   {
@@ -7191,6 +7264,7 @@
       "piece-of-relationship",
       "faith"
     ],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_B.E._Theme_Pack"
   },
   {
@@ -7271,6 +7345,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Dream_Ending_Theme_Pack"
   },
   {
@@ -7389,6 +7464,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Dusk_of_Amber_Theme_Pack"
   },
   {
@@ -7492,6 +7568,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Evil_Defining_Theme_Pack"
   },
   {
@@ -7594,6 +7671,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Forgotten_Theme_Pack"
   },
   {
@@ -7667,6 +7745,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Heartbreaking_Theme_Pack"
   },
   {
@@ -7747,6 +7826,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Infinite_Procession_Theme_Pack"
   },
   {
@@ -7865,6 +7945,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Noon_of_Violet_Theme_Pack"
   },
   {
@@ -7972,6 +8053,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Outcast_Theme_Pack"
   },
   {
@@ -8113,6 +8195,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Surrendered_Witnessing_Theme_Pack"
   },
   {
@@ -8214,6 +8297,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Unchanging_Theme_Pack"
   },
   {
@@ -8319,6 +8403,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Unconfronting_Theme_Pack"
   },
   {
@@ -8424,6 +8509,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Unloving_Theme_Pack"
   },
   {
@@ -8565,6 +8651,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Unsevering_Theme_Pack"
   },
   {
@@ -8649,6 +8736,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Thunder_and_Lightning_Theme_Pack"
   },
   {
@@ -8767,6 +8855,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Timekilling_Time_Theme_Pack"
   },
   {
@@ -8883,6 +8972,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Timekilling_Time_BokGak_Theme_Pack"
   },
   {
@@ -8966,6 +9056,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/To_be_Cleaved_Theme_Pack"
   },
   {
@@ -9050,6 +9141,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/To_be_Crushed_Theme_Pack"
   },
   {
@@ -9133,6 +9225,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/To_be_Pierced_Theme_Pack"
   },
   {
@@ -9225,6 +9318,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Treadwheel_Sloth_Theme_Pack"
   },
   {
@@ -9310,6 +9404,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Trickled_Sanguine_Blood_Theme_Pack"
   },
   {
@@ -9426,6 +9521,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Twining_Threads_Theme_Pack"
   },
   {
@@ -9518,6 +9614,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Tyrannical_Pride_Theme_Pack"
   },
   {
@@ -9614,6 +9711,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Unbound_Wrath_Theme_Pack"
   },
   {
@@ -9698,6 +9796,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Unrelenting_Might_Theme_Pack"
   },
   {
@@ -9793,6 +9892,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Vain_Pride_Theme_Pack"
   },
   {
@@ -9911,6 +10011,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Yield_My_Flesh_to_Claim_Their_Bones_Theme_Pack"
   },
   {
@@ -10025,6 +10126,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Yield_My_Flesh_to_Claim_Their_Bones_BokGak_Theme_Pack"
   },
   {
@@ -10235,6 +10337,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/A_Beautiful_Voice_Theme_Pack"
   },
   {
@@ -10250,9 +10353,7 @@
         15
       ]
     },
-    "gifts": [
-      "kkomi-s-mini-gift"
-    ],
+    "gifts": [],
     "gift_pool": [
       "hellterfly-s-dream",
       "ashes-to-ashes",
@@ -10438,8 +10539,7 @@
       "pre-order-discount",
       "renewed-merch",
       "trial-plan-guide",
-      "prestige-card",
-      "kkomi-s-mini-gift"
+      "prestige-card"
     ],
     "layout": {
       "nodes": 4,
@@ -10449,7 +10549,10 @@
     "event_note": null,
     "hidden": false,
     "appear_rate": null,
-    "clear_rewards": [],
+    "clear_rewards": [
+      "kkomi-s-mini-gift"
+    ],
+    "reward_auto": true,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/A_Midspring_Night's_Dream_2_Theme_Pack"
   },
   {
@@ -10471,6 +10574,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": null
   },
   {
@@ -10486,9 +10590,7 @@
         15
       ]
     },
-    "gifts": [
-      "burning-fate"
-    ],
+    "gifts": [],
     "gift_pool": [
       "hellterfly-s-dream",
       "ashes-to-ashes",
@@ -10674,8 +10776,7 @@
       "pre-order-discount",
       "renewed-merch",
       "trial-plan-guide",
-      "prestige-card",
-      "burning-fate"
+      "prestige-card"
     ],
     "layout": {
       "nodes": 4,
@@ -10685,7 +10786,10 @@
     "event_note": null,
     "hidden": false,
     "appear_rate": null,
-    "clear_rewards": [],
+    "clear_rewards": [
+      "burning-fate"
+    ],
+    "reward_auto": true,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Bearers_of_Weight_Theme_Pack"
   },
   {
@@ -10701,9 +10805,7 @@
         15
       ]
     },
-    "gifts": [
-      "carousel-figurine"
-    ],
+    "gifts": [],
     "gift_pool": [
       "hellterfly-s-dream",
       "ashes-to-ashes",
@@ -10890,8 +10992,7 @@
       "renewed-merch",
       "trial-plan-guide",
       "prestige-card",
-      "wb-flask",
-      "carousel-figurine"
+      "wb-flask"
     ],
     "layout": {
       "nodes": 4,
@@ -10901,7 +11002,10 @@
     "event_note": null,
     "hidden": false,
     "appear_rate": null,
-    "clear_rewards": [],
+    "clear_rewards": [
+      "carousel-figurine"
+    ],
+    "reward_auto": true,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Blessed_Carnival_Theme_Pack"
   },
   {
@@ -10917,9 +11021,7 @@
         15
       ]
     },
-    "gifts": [
-      "clappity-clap"
-    ],
+    "gifts": [],
     "gift_pool": [
       "hellterfly-s-dream",
       "ashes-to-ashes",
@@ -11105,8 +11207,7 @@
       "pre-order-discount",
       "renewed-merch",
       "trial-plan-guide",
-      "prestige-card",
-      "clappity-clap"
+      "prestige-card"
     ],
     "layout": {
       "nodes": 4,
@@ -11116,7 +11217,10 @@
     "event_note": null,
     "hidden": false,
     "appear_rate": null,
-    "clear_rewards": [],
+    "clear_rewards": [
+      "clappity-clap"
+    ],
+    "reward_auto": true,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Bloodtinged_Ichthyic_Odor_Theme_Pack"
   },
   {
@@ -11132,9 +11236,7 @@
         15
       ]
     },
-    "gifts": [
-      "for-the-capo"
-    ],
+    "gifts": [],
     "gift_pool": [
       "hellterfly-s-dream",
       "ashes-to-ashes",
@@ -11320,8 +11422,7 @@
       "pre-order-discount",
       "renewed-merch",
       "trial-plan-guide",
-      "prestige-card",
-      "for-the-capo"
+      "prestige-card"
     ],
     "layout": {
       "nodes": 4,
@@ -11331,7 +11432,10 @@
     "event_note": null,
     "hidden": false,
     "appear_rate": null,
-    "clear_rewards": [],
+    "clear_rewards": [
+      "for-the-capo"
+    ],
+    "reward_auto": true,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Chachihu_Theme_Pack"
   },
   {
@@ -11347,9 +11451,7 @@
         15
       ]
     },
-    "gifts": [
-      "mid-range-k-corp-ampule"
-    ],
+    "gifts": [],
     "gift_pool": [
       "hellterfly-s-dream",
       "ashes-to-ashes",
@@ -11535,8 +11637,7 @@
       "pre-order-discount",
       "renewed-merch",
       "trial-plan-guide",
-      "prestige-card",
-      "mid-range-k-corp-ampule"
+      "prestige-card"
     ],
     "layout": {
       "nodes": 4,
@@ -11546,7 +11647,10 @@
     "event_note": null,
     "hidden": false,
     "appear_rate": null,
-    "clear_rewards": [],
+    "clear_rewards": [
+      "mid-range-k-corp-ampule"
+    ],
+    "reward_auto": true,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Code_Purple_Theme_Pack"
   },
   {
@@ -11562,9 +11666,7 @@
         15
       ]
     },
-    "gifts": [
-      "rules-of-the-middle"
-    ],
+    "gifts": [],
     "gift_pool": [
       "hellterfly-s-dream",
       "ashes-to-ashes",
@@ -11750,8 +11852,7 @@
       "pre-order-discount",
       "renewed-merch",
       "trial-plan-guide",
-      "prestige-card",
-      "rules-of-the-middle"
+      "prestige-card"
     ],
     "layout": {
       "nodes": 4,
@@ -11761,7 +11862,10 @@
     "event_note": null,
     "hidden": false,
     "appear_rate": null,
-    "clear_rewards": [],
+    "clear_rewards": [
+      "rules-of-the-middle"
+    ],
+    "reward_auto": true,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Complete_%26_Total_Extermination_Theme_Pack"
   },
   {
@@ -11974,6 +12078,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Efflorescing_Greenery_Theme_Pack"
   },
   {
@@ -11989,9 +12094,7 @@
         15
       ]
     },
-    "gifts": [
-      "another-round"
-    ],
+    "gifts": [],
     "gift_pool": [
       "hellterfly-s-dream",
       "ashes-to-ashes",
@@ -12177,8 +12280,7 @@
       "pre-order-discount",
       "renewed-merch",
       "trial-plan-guide",
-      "prestige-card",
-      "another-round"
+      "prestige-card"
     ],
     "layout": {
       "nodes": 4,
@@ -12188,7 +12290,10 @@
     "event_note": null,
     "hidden": false,
     "appear_rate": null,
-    "clear_rewards": [],
+    "clear_rewards": [
+      "another-round"
+    ],
+    "reward_auto": true,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Fairy_Tale_Theme_Pack"
   },
   {
@@ -12401,6 +12506,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Impenetrable_Path_Theme_Pack"
   },
   {
@@ -12611,6 +12717,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Into_a_Certain_Library's_Book_Theme_Pack"
   },
   {
@@ -12626,9 +12733,7 @@
         15
       ]
     },
-    "gifts": [
-      "nail-and-hammer"
-    ],
+    "gifts": [],
     "gift_pool": [
       "hellterfly-s-dream",
       "ashes-to-ashes",
@@ -12814,8 +12919,7 @@
       "pre-order-discount",
       "renewed-merch",
       "trial-plan-guide",
-      "prestige-card",
-      "nail-and-hammer"
+      "prestige-card"
     ],
     "layout": {
       "nodes": 4,
@@ -12825,7 +12929,10 @@
     "event_note": null,
     "hidden": false,
     "appear_rate": null,
-    "clear_rewards": [],
+    "clear_rewards": [
+      "nail-and-hammer"
+    ],
+    "reward_auto": true,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_1_:_MADNESS_Theme_Pack"
   },
   {
@@ -13038,6 +13145,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Line_3_-_Terminus_Theme_Pack"
   },
   {
@@ -13250,6 +13358,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/N_Corp._New_League_of_Nine_Litt%C3%A9rateurs_Theme_Pack"
   },
   {
@@ -13462,6 +13571,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/S.E.A._C.R_Theme_Pack"
   },
   {
@@ -13483,6 +13593,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": null
   },
   {
@@ -13693,6 +13804,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Dawn_of_Green_Theme_Pack"
   },
   {
@@ -13708,9 +13820,7 @@
         15
       ]
     },
-    "gifts": [
-      "the-family-s-resentment"
-    ],
+    "gifts": [],
     "gift_pool": [
       "hellterfly-s-dream",
       "ashes-to-ashes",
@@ -13897,8 +14007,7 @@
       "renewed-merch",
       "trial-plan-guide",
       "prestige-card",
-      "wb-flask",
-      "the-family-s-resentment"
+      "wb-flask"
     ],
     "layout": {
       "nodes": 4,
@@ -13908,7 +14017,10 @@
     "event_note": null,
     "hidden": false,
     "appear_rate": null,
-    "clear_rewards": [],
+    "clear_rewards": [
+      "the-family-s-resentment"
+    ],
+    "reward_auto": true,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Master_of_La_Manchaland_Theme_Pack"
   },
   {
@@ -14121,6 +14233,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Who_Couldn't_Be_Bloodfiends_Theme_Pack"
   },
   {
@@ -14142,6 +14255,7 @@
     "hidden": false,
     "appear_rate": null,
     "clear_rewards": [],
+    "reward_auto": false,
     "wiki_url": null
   }
 ]

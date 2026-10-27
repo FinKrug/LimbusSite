@@ -1383,3 +1383,35 @@ p.skill-best { background: none; border-color: var(--line); }
 .upgrade-budget input[type='number'] { width: 110px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
 .upgrade-budget .run-check { margin: 0; }
 .upgrade-budget-sum { flex-basis: 100%; margin: 0; font-size: 14px; }
+.pill.upgrade-verdict-fuse { background: rgb(63 176 217 / 0.16); color: var(--gloom); }
+.upgrade-gift.verdict-row-fuse { opacity: 0.8; }
+.upgrade-fuse-note { color: var(--gloom); }
+/* Picked something up? (Fights & events, Boss) */
+.pickup-box { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(0, 1.6fr); gap: 12px 24px; align-items: start; }
+.pickup-box h3 { margin: 0 0 2px; font-size: 15px; }
+.pickup-box p.muted { margin: 0 0 8px; }
+.vestige-big-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.vestige-big { display: grid; gap: 4px; justify-items: stretch; }
+.vestige-big-add {
+  display: grid; justify-items: center; gap: 2px; padding: 10px 6px 8px; border-radius: 10px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--panel-2); color: var(--text); transition: border-color 0.15s, transform 0.1s;
+}
+.vestige-big-add:hover { border-color: var(--accent); }
+.vestige-big-add:active { transform: scale(0.97); }
+.vestige-big.has .vestige-big-add { border-color: #6b5a3a; }
+.vestige-big-name { font-weight: 700; font-size: 13px; }
+.vestige-big-tier { font-size: 11px; color: var(--muted); }
+.vestige-big-plus { margin-top: 2px; font-weight: 800; color: var(--accent); }
+.vestige-big-count { display: flex; align-items: center; justify-content: center; gap: 8px; font-variant-numeric: tabular-nums; }
+.duplicate-done { grid-column: 1 / -1; margin: 0; color: var(--good); }
+@media (max-width: 860px) { .pickup-box { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .vestige-big-name { font-size: 11px; } .vestige-big-add { padding: 8px 2px; } }
+html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-select: none !important; }
+
+/* Shop: enhance or buy? (ShopAdvice) */
+.shop-advice { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin-bottom: 10px; border-left: 4px solid var(--accent); }
+.shop-advice-buy { border-left-color: var(--line); }
+.shop-advice-body { flex: 1; min-width: 0; }
+.shop-advice h3 { margin: 0 0 2px; font-size: 0.95rem; }
+.shop-advice p { margin: 0; }
+@media (max-width: 600px) { .shop-advice { flex-direction: column; align-items: stretch; } }

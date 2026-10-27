@@ -20,7 +20,8 @@
       "Sinking"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Slash",
@@ -254,7 +255,8 @@
     ],
     "traits": [
       "E.G.O Gear",
-      "LCE"
+      "LCE",
+      "Limbus Company"
     ],
     "attack_types": [
       "Blunt",
@@ -1097,7 +1099,8 @@
     ],
     "traits": [
       "E.G.O Gear",
-      "LCE"
+      "LCE",
+      "Limbus Company"
     ],
     "attack_types": [
       "Slash"
@@ -2008,7 +2011,8 @@
       "Paralyze"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Blunt",
@@ -2955,7 +2959,8 @@
     ],
     "traits": [
       "E.G.O Gear",
-      "LCE"
+      "LCE",
+      "Limbus Company"
     ],
     "attack_types": [
       "Blunt"
@@ -3941,7 +3946,8 @@
       "Unique Stage Interactions"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Pierce"
@@ -5759,6 +5765,7 @@
     ],
     "traits": [
       "LCB",
+      "Limbus Company",
       "Tiansha Star"
     ],
     "attack_types": [
@@ -5982,7 +5989,8 @@
       "Tremor Burst"
     ],
     "traits": [
-      "LCC"
+      "LCC",
+      "Limbus Company"
     ],
     "attack_types": [
       "Blunt",
@@ -7732,7 +7740,8 @@
       "Tremor Burst"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Blunt"
@@ -9562,7 +9571,8 @@
       "Sinking"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Blunt",
@@ -11526,7 +11536,8 @@
       "Tremor Burst"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Blunt"
@@ -13531,7 +13542,8 @@
       "Tremor Burst"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Blunt"
@@ -13770,7 +13782,8 @@
       "Tremor Burst"
     ],
     "traits": [
-      "LCC"
+      "LCC",
+      "Limbus Company"
     ],
     "attack_types": [
       "Blunt"
@@ -14699,6 +14712,7 @@
     "traits": [
       "Blade Lineage",
       "LCD",
+      "Limbus Company",
       "Syndicate"
     ],
     "attack_types": [
@@ -15584,7 +15598,8 @@
       "Counter Skills"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Slash"
@@ -15682,7 +15697,8 @@
       "Paralyze"
     ],
     "traits": [
-      "LCC"
+      "LCC",
+      "Limbus Company"
     ],
     "attack_types": [
       "Blunt"
@@ -17744,7 +17760,8 @@
       "Rupture"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Slash"
@@ -19716,7 +19733,8 @@
       "Rupture"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Pierce",
@@ -20402,7 +20420,8 @@
       "Unique Sinking"
     ],
     "traits": [
-      "LCA"
+      "LCA",
+      "Limbus Company"
     ],
     "attack_types": [
       "Slash",
@@ -21583,7 +21602,8 @@
       "Rupture"
     ],
     "traits": [
-      "LCB"
+      "LCB",
+      "Limbus Company"
     ],
     "attack_types": [
       "Pierce",
@@ -22771,7 +22791,8 @@
     ],
     "traits": [
       "E.G.O Gear",
-      "LCE"
+      "LCE",
+      "Limbus Company"
     ],
     "attack_types": [
       "Slash"
@@ -22923,7 +22944,8 @@
     ],
     "traits": [
       "E.G.O Gear",
-      "LCE"
+      "LCE",
+      "Limbus Company"
     ],
     "attack_types": [
       "Pierce"

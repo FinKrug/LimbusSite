@@ -343,8 +343,10 @@ def build_identities(page_cats: dict[str, list[str]]) -> tuple[list[dict], list[
 
 
 # -- traits (affiliations) in gift effects ------------------------------------------
-# "<X> Identities" categories that are bookkeeping rather than affiliations.
-NOT_TRAITS = {"Event Reward Identities and E.G.O", "Limbus Company"}
+# "<X> Identities" categories that are bookkeeping rather than affiliations. "Limbus Company
+# Identities" is an affiliation (LCB Sinners, LCCB, LCA/LCD/LCE...): Regular Operational Gear
+# and event check bonuses ("+12 for Limbus Company Identities") only work for them.
+NOT_TRAITS = {"Event Reward Identities and E.G.O"}
 
 # A trait only counts as mentioned when a word like "Identities" follows soon
 # after, e.g. '"The Thumb" Identities gain ...' or 'prioritizes Heishou - Wu Identities'.
@@ -388,15 +390,20 @@ def gift_effects(g: dict) -> dict:
     levels = g.get("levels") or []
     base = effects.analyze(levels[0]["desc_markup"] if levels else "")
     attack_types, sins = list(base["attack_types"]), list(base["sins"])
+    bonus = list(base.get("bonus_sins", []))
     for lvl in levels[1:]:
         more = effects.analyze(lvl["desc_markup"])
         attack_types += [a for a in more["attack_types"] if a not in attack_types]
         sins += [x for x in more["sins"] if x not in sins]
+        bonus += [x for x in more.get("bonus_sins", []) if x not in bonus]
     return {
         "needs": base["needs"],
         "applies": base["applies"],
         "attack_types": attack_types,
+        # Sins the effect depends on, and sins only a bonus line uses (Leaked Enkephalin: +1 more
+        # Sinking Count after a Gloom or Envy Resonance; the rest works for any team).
         "affinities": [x.lower() for x in sins],
+        "affinity_bonus": [x.lower() for x in bonus if x not in sins],
         "team_gate": base["team_gate"],
     }
 
@@ -539,7 +546,11 @@ def export_for_app(
     out_packs = []
 
     def pack_record(pid, name, pool, exclusives, info):
-        pool_ids = [gid for gid in (info or {}).get("gift_pool", []) if gid in keep]
+        # A gift given automatically on clearing the pack (EXTREME Long Battle packs) isn't one of
+        # its drops: not a battle reward, shop gift or random fusion result there.
+        auto = [gid for gid in (info or {}).get("auto_rewards", []) if gid in keep]
+        exclusives = [gid for gid in exclusives if gid not in auto]
+        pool_ids = [gid for gid in (info or {}).get("gift_pool", []) if gid in keep and gid not in auto]
         for gid in exclusives:
             if gid not in pool_ids:
                 pool_ids.append(gid)
@@ -557,8 +568,10 @@ def export_for_app(
             # Hidden packs (The B.E.) replace a generated pack only rarely: chance per pack, or None.
             "hidden": bool((info or {}).get("hidden")),
             "appear_rate": (info or {}).get("appear_rate"),
-            # Gifts always offered after clearing it.
-            "clear_rewards": [gid for gid in (info or {}).get("clear_rewards", []) if gid in keep],
+            # Gifts always offered after clearing it, or given automatically (reward_auto).
+            "clear_rewards": list(dict.fromkeys(
+                [gid for gid in (info or {}).get("clear_rewards", []) if gid in keep] + auto)),
+            "reward_auto": bool(auto),
             "wiki_url": wiki_url(title) if title else None,
         }
 
@@ -588,6 +601,17 @@ def export_for_app(
         if rec["gift_pool"]:
             out_packs.append(rec)
     out_packs.sort(key=lambda p: (p["pool"] != "themed", p["name"].lower()))
+
+    # Gifts that only come as a reward: a pack's automatic clear reward, or an EXTREME hidden boss's.
+    reward_only: dict[str, str] = {}
+    for _name, info in (pack_info or {}).items():
+        for gid in info.get("hidden_boss_rewards", []):
+            reward_only.setdefault(gid, "hidden_boss")
+        for gid in info.get("auto_rewards", []):
+            reward_only[gid] = "clear"
+    for g in out_gifts:
+        if g["id"] in reward_only:
+            g["reward_only"] = reward_only[g["id"]]
 
     out_fusions = [
         {"result": f["result"], "ingredients": f["ingredients"]}

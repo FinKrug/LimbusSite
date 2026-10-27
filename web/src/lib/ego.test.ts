@@ -33,6 +33,16 @@ describe('E.G.O gifts', () => {
     expect(resonanceTriggers(byName('Phantom Pain'))[0].sin).toBe('gloom')
     expect(resonanceTriggers(byName('Embers'))).toEqual([])
   })
+
+  it('reads sin lists and bonus lines (Finley: Leaked Enkephalin is mostly Sinking Count)', () => {
+    // "Gloom or Lust Absolute Resonance": either sin sets it off.
+    expect(resonanceTriggers(byName('Thorny Path'))).toEqual([expect.objectContaining({ sins: ['gloom', 'lust'], absolute: true, bonus: false })])
+    // Only the "- If the said highest Reson. was a Gloom or an Envy Reson.: +1 more" line needs a sin.
+    const [t, ...rest] = resonanceTriggers(byName('Leaked Enkephalin'))
+    expect(rest).toEqual([])
+    expect(t).toEqual(expect.objectContaining({ sins: ['gloom', 'envy'], absolute: false, bonus: true }))
+    expect(t.share).toBeLessThan(0.2)
+  })
 })
 
 describe('E.G.O lean', () => {

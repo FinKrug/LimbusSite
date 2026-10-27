@@ -82,6 +82,14 @@ class TraitTests(unittest.TestCase):
         self.assertEqual(ident["traits"], ["Heishou Pack - Mao Branch", "Heishou Pack"])
         self.assertIn("Strider -Mao-", ident["status_effects"])
 
+    def test_limbus_company_is_an_affiliation(self):
+        # Regular Operational Gear only works for "Limbus Company Identities" (Finley, 2026-10-27).
+        ident = build.parse_identity("LCB Sinner Faust", ["Faust Identities", "0-Star Identities", "Gloom Affinity",
+                                                         "LCB Identities", "Limbus Company Identities"])
+        self.assertEqual(ident["traits"], ["LCB", "Limbus Company"])
+        text = "Limbus Company Identities: Skill 2 gains Offense Level +1 and deals +15% damage"
+        self.assertEqual(build.find_trait_mentions(text, ["LCB", "Limbus Company"]), ["Limbus Company"])
+
 
 if __name__ == "__main__":
     unittest.main()
@@ -109,6 +117,21 @@ class PackLayoutTests(unittest.TestCase):
         self.assertEqual(packs.parse_clear_rewards(page), ["Bongy Plush", "Lunar Memory"])
         self.assertEqual(packs.parse_rarity("<p>A normal pack.</p>"), (False, None))
         self.assertEqual(packs.parse_clear_rewards("<p>A normal pack.</p>"), [])
+
+    def test_extreme_auto_and_hidden_boss_rewards(self):
+        # Bearers of Weight (EXTREME): Burning Fate is given on clearing it, not dropped or fused.
+        page = (
+            "<p>It appears on floors 11-15 of Mirror Dungeon extreme mode.\n</p>"
+            "<p>The 'Burning Fate' E.G.O Gift is awarded automatically upon completing this Theme Pack.\n</p>"
+            '<h2><span class="mw-headline" id="Hidden_Bosses">Hidden Bosses</span></h2>'
+            '<table><tr><td><span class="advanced-tooltip"><img alt="Imperfect Eye of Precognition Gift.png"/></span></td></tr>'
+            '<tr><td><span class="advanced-tooltip"><img alt="The Abandoned Oracle Gift.png"/></span></td></tr></table>'
+            '<h2><span class="mw-headline" id="E.G.O_Gift_Rates">E.G.O Gift Rates</span></h2>'
+        )
+        self.assertEqual(packs.parse_auto_rewards(page), ["Burning Fate"])
+        self.assertEqual(packs.parse_hidden_boss_rewards(page), ["Imperfect Eye of Precognition", "The Abandoned Oracle"])
+        self.assertEqual(packs.parse_auto_rewards("<p>A normal pack.</p>"), [])
+        self.assertEqual(packs.parse_hidden_boss_rewards("<p>A normal pack.</p>"), [])
 
     def test_layout_and_event_note(self):
         from scraper import packs

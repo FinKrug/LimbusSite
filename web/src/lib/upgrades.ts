@@ -16,8 +16,15 @@
  * if we have a lot of Cost?"), and "Skip" only when it changes nothing for your team. When ++ is
  * better value than + on its own (+ barely changes anything, ++ adds the effect), the plan goes
  * straight to ++. `affordable` picks the moves that fit the Cost you have, best first.
+ *
+ * "Will be fused" (Finley, 2026-10-27: enhancing a gift you'll fuse later wastes the Cost): an
+ * ingredient of a recipe you've started is left alone when the result is good for your team (a
+ * must-have, or a recipe worth keeping its pieces for) and the fusion is likely: ready now, or few
+ * enough pieces missing for the floors left (`fusingSoon`). An unlikely or bad fusion doesn't stop it.
  */
-import { ENHANCE_COST, intrinsicScore, levelValue, type RunContext } from './scoring'
+import { recipePlans, recipeWorthKeeping, type RecipePlan } from './fusion'
+import { mustHave, neededPiece } from './musthave'
+import { ENHANCE_COST, intrinsicScore, lastFloor, levelValue, type RunContext } from './scoring'
 import type { Gift } from './types'
 import { isVestige } from './vestiges'
 
@@ -48,7 +55,9 @@ export interface UpgradePlan {
   /** Level you have it at. */
   level: number
   maxLevel: number
-  verdict: 'max' | 'once' | 'spare' | 'skip' | 'done'
+  verdict: 'max' | 'once' | 'spare' | 'skip' | 'done' | 'fuse'
+  /** For "Will be fused": the recipe it's going into. */
+  fusing?: FusingSoon
   /** Moves still to make, in order. */
   moves: UpgradeMove[]
   /** The best priority among its moves (for sorting). */
@@ -125,9 +134,56 @@ export interface UpgradeOverview {
   fixed: number
 }
 
+export interface FusingSoon {
+  result: Gift
+  /** Pieces still missing (fixed ingredients plus "any N of" ones). */
+  missing: number
+  ready: boolean
+  /** Likely enough that enhancing it would waste the Cost. Unlikely ones are only a heads-up. */
+  likely: boolean
+  text: string
+}
+
+/** How many pieces a started recipe may still be missing and count as likely; must-haves get the floors left + 1. */
+export const FUSE_LIKELY = { missingNormal: 1, mustHaveExtra: 1 }
+
+/**
+ * Is this gift going into a fusion? Only recipes you've started whose result is good for your team
+ * count. Likely (don't enhance): ready now, or missing 1 piece (a must-have like Lunar Memory: up to
+ * the floors left + 1). Otherwise it's a heads-up and enhancing is fine. Null when no good recipe uses it.
+ */
+export function fusingSoon(g: Gift, ctx: RunContext, plans: RecipePlan[] = recipePlans(ctx, [...ctx.owned])): FusingSoon | null {
+  const F = FUSE_LIKELY
+  const run = ctx.run
+  const floorsLeft = run.floor === null ? run.floors : run.floors - run.floor
+  let best: FusingSoon | null = null
+  for (const p of plans) {
+    const f = p.fusion
+    const piece = f.ingredients.includes(g.id) || (!!f.any_of?.from.includes(g.id) && neededPiece(f, g, ctx.owned))
+    if (!piece) continue
+    const must = !!mustHave(p.result.id)
+    const good = must || (p.worthIt && recipeWorthKeeping(f, ctx))
+    if (!good) continue
+    const missing = p.missing.length + p.anyMissing
+    // On the last floor only a fusion you can make now counts: there's no shop after it.
+    const room = lastFloor(run) ? 0 : must ? floorsLeft + F.mustHaveExtra : F.missingNormal
+    const likely = p.ready || missing <= room
+    const have = p.have.length + (f.any_of ? Math.min(f.any_of.count, f.any_of.from.filter((i) => ctx.owned.has(i)).length) : 0)
+    const total = f.ingredients.length + (f.any_of?.count ?? 0)
+    const pieces = `you have ${have} of ${total} pieces${must ? `; ${mustHave(p.result.id)!.short}` : ''}`
+    const text = p.ready ? `You can fuse it into ${p.result.name} now: an enhance would be lost.`
+      : likely ? `Ingredient for ${p.result.name} (${pieces}): enhancing it is lost when you fuse it.`
+        : `Also an ingredient for ${p.result.name} (${pieces}), but that fusion is a long way off${lastFloor(run) ? ' (last floor)' : ''}, so enhancing is fine. Stop if you get close.`
+    const found: FusingSoon = { result: p.result, missing: p.ready ? 0 : missing, ready: p.ready, likely, text }
+    if (!best || Number(found.likely) > Number(best.likely) || (found.likely === best.likely && found.missing < best.missing)) best = found
+  }
+  return best
+}
+
 /** Plans for all the gifts you own. `levels`: the level each gift is at (missing = not enhanced). */
 export function planUpgrades(ctx: RunContext, levels: Record<string, number> = {}): UpgradeOverview {
   const shop = shopValue(ctx)
+  const recipes = recipePlans(ctx, [...ctx.owned])
   const plans: UpgradePlan[] = []
   let fixed = 0
   for (const id of ctx.owned) {
@@ -135,10 +191,12 @@ export function planUpgrades(ctx: RunContext, levels: Record<string, number> = {
     const g = ctx.giftsById.get(id)
     if (!g) continue
     const p = planGift(g, ctx, levels[id] ?? 0, shop)
-    if (p) plans.push(p)
-    else fixed++
+    if (!p) { fixed++; continue }
+    // Going into a fusion soon: don't spend Cost on it (the plan still shows what it would do).
+    const fusing = p.verdict !== 'done' ? fusingSoon(g, ctx, recipes) : null
+    plans.push(fusing?.likely ? { ...p, verdict: 'fuse', moves: [], fusing } : fusing ? { ...p, fusing } : p)
   }
-  const rank = { max: 0, once: 0, spare: 1, skip: 2, done: 3 }
+  const rank = { max: 0, once: 0, spare: 1, fuse: 2, skip: 3, done: 4 }
   plans.sort((a, b) => rank[a.verdict] - rank[b.verdict] || b.ratio - a.ratio || a.gift.name.localeCompare(b.gift.name))
   // A gift's + and ++ moves are only split when + is the better value, so sorting (stable) keeps + first.
   const order = plans.flatMap((p) => p.moves).sort((a, b) => b.ratio - a.ratio)

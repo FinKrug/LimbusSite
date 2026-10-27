@@ -20,7 +20,6 @@ interface Props {
 export function OwnedGifts({ gifts, owned, onChange }: Props) {
   const byId = useMemo(() => new Map(gifts.map((g) => [g.id, g])), [gifts])
   const ownedGifts = [...new Set(owned)].filter((id) => !isVestige(id)).map((id) => byId.get(id)).filter((g): g is Gift => !!g)
-  const vestiges = VESTIGES.map((id) => byId.get(id)).filter((g): g is Gift => !!g)
   const vestigeTotal = owned.filter(isVestige).length
   const [confirmClear, setConfirmClear] = useState(false)
 
@@ -41,21 +40,7 @@ export function OwnedGifts({ gifts, owned, onChange }: Props) {
       </header>
       <GiftSearch gifts={gifts} owned={new Set(owned)} placeholder="Add a gift…"
         onPick={(g) => onChange(addGift(owned, g.id, g.tier))} />
-      <div className="vestige-row" aria-label="Vestiges">
-        {vestiges.map((v) => {
-          const n = countOf(owned, v.id)
-          return (
-            <span key={v.id} className={n ? 'vestige has' : 'vestige'} title={`${v.name}: counts as a Tier ${tierLabel(v.tier)} gift for selling and fusing`}>
-              <GiftIcon gift={v} size={26} />
-              <span className="vestige-tier">{tierLabel(v.tier)}</span>
-              <button className="vestige-btn" aria-label={`Remove a ${v.name}`} disabled={!n}
-                onClick={() => onChange(removeOne(owned, v.id))}>−</button>
-              <span className="vestige-n">{n}</span>
-              <button className="vestige-btn" aria-label={`Add a ${v.name}`} onClick={() => onChange([...owned, v.id])}>+</button>
-            </span>
-          )
-        })}
-      </div>
+      <VestigeCounters gifts={gifts} owned={owned} onChange={onChange} />
       {ownedGifts.length === 0 ? (
         <p className="hint">Add gifts as you pick them up. A gift you already have becomes a Vestige, like in game.</p>
       ) : (
@@ -68,6 +53,90 @@ export function OwnedGifts({ gifts, owned, onChange }: Props) {
             </li>
           ))}
         </ul>
+      )}
+    </section>
+  )
+}
+
+/** A counter per Vestige tier (I to V): − and + to fix the count. */
+export function VestigeCounters({ gifts, owned, onChange }: Props) {
+  const vestiges = useMemo(() => {
+    const byId = new Map(gifts.map((g) => [g.id, g]))
+    return VESTIGES.map((id) => byId.get(id)).filter((g): g is Gift => !!g)
+  }, [gifts])
+  return (
+    <div className="vestige-row" aria-label="Vestiges">
+      {vestiges.map((v) => {
+        const n = countOf(owned, v.id)
+        return (
+          <span key={v.id} className={n ? 'vestige has' : 'vestige'} title={`${v.name}: counts as a Tier ${tierLabel(v.tier)} gift for selling and fusing`}>
+            <GiftIcon gift={v} size={26} />
+            <span className="vestige-tier">{tierLabel(v.tier)}</span>
+            <button className="vestige-btn" aria-label={`Remove a ${v.name}`} disabled={!n}
+              onClick={() => onChange(removeOne(owned, v.id))}>−</button>
+            <span className="vestige-n">{n}</span>
+            <button className="vestige-btn" aria-label={`Add a ${v.name}`} onClick={() => onChange([...owned, v.id])}>+</button>
+          </span>
+        )
+      })}
+    </div>
+  )
+}
+
+/**
+ * "Picked something up?" (Fights & events, Boss): the gift a fight's reward card or an event gave
+ * you, or a Vestige. In the game a duplicate just shows up as a Vestige of its tier, without saying
+ * which gift it was (Finley), so the Vestiges are big one-click buttons of their own.
+ */
+export function PickupBox({ gifts, owned, onChange }: Props) {
+  const byId = useMemo(() => new Map(gifts.map((g) => [g.id, g])), [gifts])
+  const vestiges = useMemo(() => VESTIGES.map((id) => byId.get(id)).filter((g): g is Gift => !!g), [byId])
+  const [last, setLast] = useState<{ text: string; added: string } | null>(null)
+  const addId = (id: string, text: string) => {
+    const g = byId.get(id)
+    const next = g && !isVestige(id) ? addGift(owned, id, g.tier) : [...owned, id]
+    const added = next[next.length - 1]
+    onChange(next)
+    setLast({ text: added === id ? `Added ${text}.` : `You have ${text}, so it's +1 ${byId.get(added)?.name ?? 'Vestige'}.`, added })
+  }
+  return (
+    <section className="panel pickup-box">
+      <div className="pickup-gift">
+        <h3>Got a gift?</h3>
+        <p className="muted small">From a fight's reward card or an event: add it to Gifts you have.</p>
+        <GiftSearch gifts={gifts.filter((g) => !isVestige(g.id))} owned={new Set(owned)} placeholder="Add the gift you got…"
+          onPick={(g) => addId(g.id, g.name)} />
+      </div>
+      <div className="pickup-vestiges">
+        <h3>Got a Vestige?</h3>
+        <p className="muted small">A duplicate comes as a Vestige of its tier (the game doesn't say which gift it was).</p>
+        <div className="vestige-big-row">
+          {vestiges.map((v) => {
+            const n = countOf(owned, v.id)
+            return (
+              <div key={v.id} className={n ? 'vestige-big has' : 'vestige-big'}>
+                <button className="vestige-big-add" onClick={() => addId(v.id, `a ${v.name}`)}
+                  title={`${v.name}: counts as a Tier ${tierLabel(v.tier)} gift for selling and fusing`}>
+                  <GiftIcon gift={v} size={44} />
+                  <span className="vestige-big-name">{v.name.replace(' Vestige', '')}</span>
+                  <span className="vestige-big-tier">Tier {tierLabel(v.tier)}</span>
+                  <span className="vestige-big-plus">+1</span>
+                </button>
+                <span className="vestige-big-count">
+                  <button className="vestige-btn" aria-label={`Remove a ${v.name}`} disabled={!n}
+                    onClick={() => { onChange(removeOne(owned, v.id)); setLast(null) }}>−</button>
+                  <b>{n}</b>
+                </span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+      {last && (
+        <p className="duplicate-done small">
+          {last.text}{' '}
+          <button className="link-btn" onClick={() => { onChange(removeOne(owned, last.added)); setLast(null) }}>Undo</button>
+        </p>
       )}
     </section>
   )

@@ -76,6 +76,36 @@ _FOR_TRAIT = re.compile(r"^\s*-?\s*For\s+[^:]{3,60}?\s+Identit(?:y|ies)\s*:", re
 _ATTACK = re.compile(r"\b(Slash|Pierce|Blunt)\s+(?:Base\s+)?(?:Attack\s+)?(?:Skills?|damage|type)\b", re.IGNORECASE)
 _SIN = re.compile(r"\b(Wrath|Lust|Sloth|Gluttony|Gloom|Pride|Envy)(?:\s+Affinity|(?=\s+(?:Absolute\s+)?Reson)|(?=\s+(?:Attack\s+)?Skills?\b)|(?=\s+or\s+\w+\s+Affinity))", re.IGNORECASE)
 _SIN_WAS = re.compile(r"Affinity was (Wrath|Lust|Sloth|Gluttony|Gloom|Pride|Envy)", re.IGNORECASE)
+# The sins listed before a matched one: "a Gloom or an Envy Reson.", "Gloom or Lust Absolute Resonance".
+_SIN_BEFORE = re.compile(r"\b(Wrath|Lust|Sloth|Gluttony|Gloom|Pride|Envy)\s*(?:,\s*(?:or\s+|and\s+)?|\s+or\s+|\s+and\s+)(?:an?\s+)?$", re.IGNORECASE)
+
+
+def _clause_sins(plain: str) -> list[str]:
+    """Sins a clause is about: "Envy Affinity", "Gluttony Reson.", "Affinity was Wrath", plus the sins
+    listed with them ("a Gloom or an Envy Reson." is both)."""
+    out: list[str] = []
+    for m in [*_SIN.finditer(plain), *_SIN_WAS.finditer(plain)]:
+        out.append(m.group(1).capitalize())
+        before = plain[:m.start(1)]
+        while (b := _SIN_BEFORE.search(before)):
+            out.append(b.group(1).capitalize())
+            before = before[:b.start()]
+    return out
+
+
+def _clauses(markup: str):
+    """(clause, on a "- ..." sub-line) for each sentence; a sentence keeps its line's dash even when
+    a "Reson. was ..." split cuts the line in two."""
+    for line in re.split(r"<br\s*/?>|\n", markup, flags=re.IGNORECASE):
+        dash = bool(re.match(r"^\s*-", _STATUS.sub(lambda m: m.group(1), line)))
+        for clause in _SPLIT.split(line):
+            yield clause, dash
+
+
+def _is_rider(plain: str) -> bool:
+    """A bonus on top of the gift's effect: a "- If ..." sub-line or an "... instead" upgrade
+    (Leaked Enkephalin: "- If the said highest Reson. was a Gloom or an Envy Reson.: Inflict +1 more")."""
+    return bool(re.match(r"^\s*-", plain)) or bool(re.search(r"\binstead\b", plain, re.IGNORECASE))
 _TIMED = re.compile(r"^\s*(?:\[[^\]]*\]\s*)?(First\s+)?(Turn Start|Turn End|Combat Start|Encounter Start|"
                     r"At the start of|Wave Start|Start of each|On each|Every turn)", re.IGNORECASE)
 
@@ -85,11 +115,16 @@ def _statuses(markup: str) -> list[tuple[int, int, str]]:
 
 
 def analyze(markup: str) -> dict:
-    """{"needs", "applies": [{"status", "when"}], "attack_types", "sins", "team_gate"}"""
+    """{"needs", "applies": [{"status", "when"}], "attack_types", "sins", "bonus_sins", "team_gate"}
+
+    `sins`: sin affinities the effect depends on. `bonus_sins`: ones only a bonus line is about
+    (the gift works without them)."""
     needs: list[str] = []
     applies: list[dict] = []
     attack_types: list[str] = []
     sins: list[str] = []
+    rider_sins: list[str] = []
+    plain_clauses = 0
 
     def add(lst, item):
         if item not in lst:
@@ -99,7 +134,7 @@ def analyze(markup: str) -> dict:
     # "Activates upon Clash Win using a Skill that inflicts Bleed ...": a condition on the whole gift,
     # so every later clause only works for units with those skills (Respite).
     gift_keyword: str | None = None
-    for clause in _SPLIT.split(markup or ""):
+    for clause, dash_line in _clauses(markup or ""):
         if not clause.strip():
             continue
         plain = _STATUS.sub(lambda m: m.group(1), clause)
@@ -109,15 +144,21 @@ def analyze(markup: str) -> dict:
         if _FOR_TRAIT.match(plain):
             continue
         clause_attacks = [a.capitalize() for a in _ATTACK.findall(plain)]
-        clause_sins = [s.capitalize() for s in _SIN.findall(plain)] + [s.capitalize() for s in _SIN_WAS.findall(plain)]
+        clause_sins = _clause_sins(plain)
         if re.search(r"\baffinit(?:y|ies)\b", plain, re.IGNORECASE):
             # "Envy, Wrath, and Gloom affinity Skills": every sin named in the clause counts
             clause_sins += [s.capitalize() for s in re.findall(r"\b(" + "|".join(SINS) + r")\b", plain, re.IGNORECASE)]
         clause_sins = list(dict.fromkeys(clause_sins))
         for a in clause_attacks:
             add(attack_types, a)
-        for s in clause_sins:
-            add(sins, s)
+        if clause_sins and (dash_line or _is_rider(plain)):
+            for s in clause_sins:
+                add(rider_sins, s)
+        else:
+            if not clause_sins:
+                plain_clauses += 1
+            for s in clause_sins:
+                add(sins, s)
         # What makes an "inflict" in this clause conditional?
         skill_keyword = None
         m = re.search(
@@ -211,4 +252,9 @@ def analyze(markup: str) -> dict:
         a["status"] == "Tremor Burst" and a["when"] == "always" for a in applies)]
     # "This Gift activates ... when 5 or more Identities have ..." / "when there are 3 or more X Identities"
     gated = bool(_GATE.search(_STATUS.sub(lambda m: m.group(1), markup or "")))
-    return {"needs": needs, "applies": applies, "attack_types": attack_types, "sins": sins, "team_gate": gated}
+    # Sins only in bonus lines are a bonus when the gift has lines of its own without them; if every
+    # line is about a sin, it depends on them after all.
+    bonus = [x for x in rider_sins if x not in sins]
+    if bonus and not plain_clauses and not sins:
+        sins, bonus = bonus, []
+    return {"needs": needs, "applies": applies, "attack_types": attack_types, "sins": sins, "bonus_sins": bonus, "team_gate": gated}

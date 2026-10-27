@@ -16,7 +16,7 @@ interface Props {
 }
 
 const PRIORITY: Record<Priority, string> = { high: 'High', medium: 'Medium', low: 'Low', spare: 'With spare Cost', skip: 'No change' }
-const VERDICT: Record<UpgradePlan['verdict'], string> = { max: 'Max it', once: 'Upgrade once', spare: 'With spare Cost', skip: 'No change', done: 'Maxed' }
+const VERDICT: Record<UpgradePlan['verdict'], string> = { max: 'Max it', once: 'Upgrade once', spare: 'With spare Cost', skip: 'No change', done: 'Maxed', fuse: 'Will be fused' }
 const plus = (n: number) => (n ? '+'.repeat(n) : 'Base')
 
 function gainText(p: UpgradePlan, m: UpgradeMove): string {
@@ -55,7 +55,8 @@ export function UpgradesTab({ ctx, levels, onLevelsChange, ranked }: Props) {
         <p className="muted small">
           Every upgrade helps; the question is whether the Cost would do more buying gifts. Upgrades are ranked by what they
           add for your team per Cost, next to what the same Cost buys in a shop: <b>High</b> is at least as good as a good
-          shop gift, <b>With spare Cost</b> is worth it once you've bought what you need. Mark an upgrade done and the plan moves on.
+          shop gift, <b>With spare Cost</b> is worth it once you've bought what you need. Gifts you're about to fuse aren't
+          enhanced: the enhance is lost in the fusion. Mark an upgrade done and the plan moves on.
         </p>
         <div className="upgrade-budget">
           <label>
@@ -129,10 +130,12 @@ export function UpgradesTab({ ctx, levels, onLevelsChange, ranked }: Props) {
                 </div>
                 <span className="muted small">
                   {p.verdict === 'done' ? 'Fully upgraded.'
+                    : p.verdict === 'fuse' ? `${p.fusing!.text} If that fusion falls through, it's worth enhancing again.`
                     : p.verdict === 'skip' ? `Upgrading changes nothing your team uses (${costs.slice(p.level, p.level + 1)[0]} Cost for ${plus(p.level + 1)}).`
                     : p.verdict === 'spare' ? `It helps a little (${p.values.map((v, l) => `${plus(l)} ${v.toFixed(1)}`).join(' → ')}), but the Cost does more buying gifts. Worth it once you have Cost to spare.`
                       : p.values.map((v, l) => `${plus(l)} ${v.toFixed(1)}`).join(' → ') + ' (value for your team)'}
                 </span>
+                {p.fusing && !p.fusing.likely && <span className="small upgrade-fuse-note">{p.fusing.text}</span>}
                 {p.level < p.maxLevel && p.gift.upgrades?.[p.level] && (
                   <details className="upgrade-text small">
                     <summary className="muted">What {plus(p.level + 1)} does</summary>

@@ -234,3 +234,48 @@ describe('gifts that only activate with a keyword skill', () => {
   })
 })
 
+
+describe('fusing for Lunar Memory pieces', () => {
+  const team = gameData.identities.filter((i) => (i.keywords as string[]).includes('Rupture')).slice(0, 7)
+  const run = { difficulty: 'hard' as const, floors: 10, floor: 6, pack: null }
+
+  it('puts the last missing piece ahead of set pieces, even giving up gifts you use (Finley)', () => {
+    const owned = ['sundered-memory', 'punctured-memory', 'crushed-memory', 'fragment-of-desire', 'thunderbranch',
+      'broken-compass', 'blue-starshard', 'pink-bouquet', 'downpour', 'rest', 'glimpse-of-flames', 'midwinter-nightmare', 'wealth']
+    const ctx = makeContext(gameData, team, owned, { run })
+    const [first, ...rest] = comboFusions(ctx, owned, null, false)
+    expect(first.combo.name).toBe('Lunar Memory')
+    expect(first.mustHave).toEqual({ have: 4, total: 5 })
+    expect(first.pieces[0].name).toMatch(/^Fragment of/)
+    // Rest is only a so-so gift for this team (not spare), but worth giving up for the last piece.
+    expect(first.ingredients.map((i) => i.gift.id)).toContain('rest')
+    // One line per must-have, not one per Sin Fragment keyword.
+    expect(rest.some((c) => c.mustHave)).toBe(false)
+    // The Suggested fusions count the Fragment too.
+    expect(fusionKeywords(ctx, ['Rupture'])).toContain('Burn')
+  })
+
+  it("doesn't chase Lunar Memory before you have a piece, or on Normal", () => {
+    const owned = ['thunderbranch', 'rest', 'glimpse-of-flames', 'pink-bouquet', 'downpour']
+    expect(comboFusions(makeContext(gameData, team, owned, { run }), owned, null, false).some((c) => c.mustHave)).toBe(false)
+    const started = ['sundered-memory', ...owned]
+    const normal = makeContext(gameData, team, started, { run: { ...run, difficulty: 'normal' as const, floors: 5, floor: 3 } })
+    expect(comboFusions(normal, started, null, false).some((c) => c.mustHave)).toBe(false)
+  })
+})
+
+describe('affiliation-only gifts', () => {
+  it('fuses away Regular Operational Gear without Limbus Company identities (Finley)', () => {
+    const owned = ['regular-operational-gear', 'thunderbranch']
+    const run = { difficulty: 'hard' as const, floors: 10, floor: 4, pack: null }
+    const rupture = gameData.identities.filter((i) => (i.keywords as string[]).includes('Rupture') && !i.traits.includes('Limbus Company')).slice(0, 7)
+    const gear = (team: typeof rupture) => fodder(makeContext(gameData, team, owned, { run }), owned).find((f) => f.gift.id === 'regular-operational-gear')!
+    expect(isSpare(gear(rupture))).toBe(true)
+    const s = scoreGift(g2('regular-operational-gear'), makeContext(gameData, rupture, owned, { run }))
+    expect(s.reasons.some((r) => /only works for Limbus Company identities/.test(r.text))).toBe(true)
+    expect(s.reasons.some((r) => /works with any team/.test(r.text))).toBe(false)
+    // With LCB Sinners and the like on the team it's a keeper.
+    const lc = gameData.identities.filter((i) => i.traits.includes('Limbus Company')).slice(0, 7)
+    expect(isSpare(gear(lc))).toBe(false)
+  })
+})

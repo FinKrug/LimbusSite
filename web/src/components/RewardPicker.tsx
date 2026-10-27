@@ -15,6 +15,8 @@ interface Props {
   hint: string
   /** Gifts always offered here (a pack's clear rewards), added to start with. */
   preset?: string[]
+  /** How many of the offered gifts you get to take (boss rewards on Hard: 2). */
+  picks?: number
 }
 
 const KIND_TAG: Record<GiftOffer['kind'], string | null> = {
@@ -22,13 +24,15 @@ const KIND_TAG: Record<GiftOffer['kind'], string | null> = {
 }
 
 /**
- * "Which gift do I take?": add the gifts the game is offering you (after a fight, or the
- * floor's reward) and they're ranked for your team, best first. Take one and it goes into
- * Gifts you have.
+ * "Which gift do I take?" where the game lets you choose: the starting gift at the start of a
+ * run, and the boss reward gifts after each floor's boss (2 on Hard). Add the gifts offered and
+ * they're ranked for your team, best first; take one and it goes into Gifts you have. Fights'
+ * reward cards give a random gift, so there's nothing to compare there (Finley, 2026-10-27).
  */
-export function RewardPicker({ ctx, gifts, owned, onOwnedChange, title, hint, preset = [] }: Props) {
+export function RewardPicker({ ctx, gifts, owned, onOwnedChange, title, hint, preset = [], picks = 1 }: Props) {
   const [offered, setOffered] = useState<string[]>(preset)
   const [taken, setTaken] = useState<{ id: string; added: string } | null>(null)
+  const [takenCount, setTakenCount] = useState(0)
   const ranked = useMemo(
     () => offered.map((id) => ({ id, gift: ctx.giftsById.get(id), offer: giftOfferValue(id, ctx) }))
       .filter((x): x is { id: string; gift: Gift; offer: GiftOffer } => !!x.gift && !!x.offer)
@@ -41,7 +45,10 @@ export function RewardPicker({ ctx, gifts, owned, onOwnedChange, title, hint, pr
     const next = addGift(owned, g.id, g.tier)
     onOwnedChange(next)
     setTaken({ id: g.id, added: next[next.length - 1] })
-    setOffered([])
+    // With more picks left, the rest of the offer stays (re-ranked now that you have this one).
+    const n = takenCount + 1
+    setTakenCount(n)
+    setOffered(n < picks ? offered.filter((x) => x !== g.id) : [])
   }
 
   return (
@@ -49,11 +56,17 @@ export function RewardPicker({ ctx, gifts, owned, onOwnedChange, title, hint, pr
       <h2>{title}</h2>
       <p className="muted small">{hint}</p>
       <GiftSearch gifts={gifts} owned={new Set(owned)} placeholder="Add a gift you're being offered…"
-        onPick={(g) => { if (!offered.includes(g.id)) setOffered([...offered, g.id]); setTaken(null) }} />
+        onPick={(g) => { if (!offered.includes(g.id)) setOffered([...offered, g.id]); setTaken(null); if (takenCount >= picks) setTakenCount(0) }} />
       {taken && (
         <p className="reward-taken">
           Added {ctx.giftsById.get(taken.id)?.name ?? taken.id} to Gifts you have.{' '}
-          <button className="link-btn" onClick={() => { onOwnedChange(removeOne(owned, taken.added)); setTaken(null) }}>Undo</button>
+          {picks > 1 && takenCount < picks && <>Take {picks - takenCount} more. </>}
+          <button className="link-btn" onClick={() => {
+            onOwnedChange(removeOne(owned, taken.added))
+            if (!offered.includes(taken.id)) setOffered([...offered, taken.id])
+            setTakenCount(Math.max(0, takenCount - 1))
+            setTaken(null)
+          }}>Undo</button>
         </p>
       )}
       {ranked.length > 0 && (
@@ -72,7 +85,7 @@ export function RewardPicker({ ctx, gifts, owned, onOwnedChange, title, hint, pr
                 <span style={{ width: `${best ? Math.max(4, (offer.value / best) * 100) : 0}%` }} />
               </span>
               <span className="reward-actions">
-                {k === 0 && ranked.length > 1 && <span className="reward-pick">Take this</span>}
+                {k < Math.max(1, picks - takenCount) && ranked.length > 1 && <span className="reward-pick">Take this</span>}
                 <button className={k === 0 ? 'btn primary small-btn' : 'btn small-btn'} onClick={() => take(gift)}>Got it</button>
                 <button className="icon-btn" aria-label={`Remove ${gift.name}`} onClick={() => setOffered(offered.filter((x) => x !== id))}>×</button>
               </span>

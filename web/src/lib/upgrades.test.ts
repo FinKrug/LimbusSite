@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { DEFAULT_RUN, defaultFloors, makeContext } from './scoring'
-import { affordable, maxLevel, planGift, planUpgrades, shopValue } from './upgrades'
+import { affordable, fusingSoon, maxLevel, planGift, planUpgrades, shopValue } from './upgrades'
 
 const byId = (id: string) => gameData.identities.find((x) => x.id === id)!
 const byName = (n: string) => gameData.gifts.find((g) => g.name === n)!
@@ -60,5 +60,38 @@ describe('upgrade planner', () => {
     expect(planUpgrades(ctx, { [tb.id]: 2 }).plans.find((p) => p.gift.id === tb.id)!.verdict).toBe('done')
     const { order } = planUpgrades(ctx)
     for (let k = 1; k < order.length; k++) expect(order[k - 1].ratio).toBeGreaterThanOrEqual(order[k].ratio)
+  })
+
+  // Ruin = Broken Revolver + Thunderbranch + Eerie Effigy (Thunderbranch can be enhanced).
+  const ruinParts = (names: string[], r = run) => makeContext(gameData, heishou, [...owned, ...names.map((n) => byName(n).id)], { run: r })
+  const tbPlan = (c: ReturnType<typeof makeContext>) => planUpgrades(c).plans.find((p) => p.gift.name === 'Thunderbranch')!
+
+  it("doesn't enhance a gift you're about to fuse into something good (Finley: it wastes Cost)", () => {
+    const c = ruinParts(['Broken Revolver'])
+    const p = tbPlan(c)
+    expect(p.verdict).toBe('fuse')
+    expect(p.moves).toHaveLength(0)
+    expect(p.fusing!.text).toMatch(/Ruin/)
+    expect(planUpgrades(c).order.some((m) => m.gift.name === 'Thunderbranch')).toBe(false)
+    const ready = tbPlan(ruinParts(['Broken Revolver', 'Eerie Effigy']))
+    expect(ready.verdict).toBe('fuse')
+    expect(ready.fusing!.ready).toBe(true)
+  })
+
+  it('still enhances when the fusion is a long way off or there are no floors left to finish it', () => {
+    // Only Thunderbranch of the three: 2 pieces missing.
+    const far = tbPlan(ruinParts([]))
+    expect(far.verdict).not.toBe('fuse')
+    expect(far.fusing?.likely).toBe(false)
+    expect(far.moves.length).toBeGreaterThan(0)
+    // Last floor: only a fusion you can make right now counts.
+    const last = tbPlan(ruinParts(['Broken Revolver'], { ...run, floor: run.floors }))
+    expect(last.verdict).not.toBe('fuse')
+  })
+
+  it("still enhances an ingredient whose fusion isn't good for your team", () => {
+    // Uniform - Liu Assoc. is a Burn gift; this team plays Rupture and Poise.
+    const c = makeContext(gameData, heishou, ['Polarization', 'Lowest Star'].map((n) => byName(n).id), { run })
+    expect(fusingSoon(byName('Polarization'), c)).toBeNull()
   })
 })

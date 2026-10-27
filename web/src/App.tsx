@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { EvaluateTab } from './components/EvaluateTab'
 import { EventsTab } from './components/EventsTab'
+import { ShopAdvice } from './components/ShopAdvice'
 import { ImportTab } from './components/ImportTab'
 import { UpgradesTab } from './components/UpgradesTab'
 import { Welcome } from './components/Welcome'
 import { FusionTab } from './components/FusionTab'
 import { GiftList } from './components/GiftList'
-import { OwnedGifts } from './components/OwnedGifts'
+import { OwnedGifts, PickupBox } from './components/OwnedGifts'
 import { PlanPanel } from './components/PlanPanel'
 import { LineupTools, PresetBox } from './components/PresetBox'
 import { availability } from './lib/plan'
@@ -37,6 +38,7 @@ import type { TierOverrides } from './lib/strength'
 import type { ArtVariant } from './lib/images'
 import { lineupSuggestions, moveTo } from './lib/ordering'
 import type { SwapState } from './lib/skillswap'
+import { withSwaps } from './lib/battle'
 import type { EgoLoadout } from './lib/ego'
 import { buildTeam, suggestOrder } from './lib/teambuilder'
 import { addGift } from './lib/vestiges'
@@ -59,14 +61,13 @@ const STAGE_OF: Record<Tab, Stage> = {
 const STAGES: { id: Exclude<Stage, 'tools'>; tab: Tab; label: string; hint: string }[] = [
   { id: 'team', tab: 'team', label: 'Team', hint: 'Before the run' },
   { id: 'packs', tab: 'packs', label: 'Pick a pack', hint: 'Theme pack for the floor' },
-  { id: 'fights', tab: 'rewards', label: 'Fights & events', hint: 'Rewards and "?" events' },
+  { id: 'fights', tab: 'events', label: 'Fights & events', hint: 'Gifts you get, "?" events' },
   { id: 'shop', tab: 'gifts', label: 'Shop', hint: 'Buy, fuse, enhance, skills' },
   { id: 'boss', tab: 'boss', label: 'Boss', hint: 'Boss fight, floor reward' },
 ]
 const STAGE_INDEX = Object.fromEntries(STAGES.map((s, k) => [s.id, k])) as Record<Stage, number>
 /** Screens with parts of their own, and the parts. */
 const SUB_TABS: Partial<Record<Stage, { id: Tab; label: string }[]>> = {
-  fights: [{ id: 'rewards', label: 'Battle rewards' }, { id: 'events', label: '"?" Events' }],
   shop: [{ id: 'gifts', label: 'Buy' }, { id: 'fusion', label: 'Fuse' }, { id: 'upgrades', label: 'Enhance' }, { id: 'skills', label: 'Skill swaps' }],
 }
 const TOOL_LABEL = { evaluate: 'Evaluate a gift or pack', import: 'Import gifts from a screenshot' }
@@ -233,6 +234,12 @@ export default function App() {
   const ctx = useMemo(
     () => makeContext(gameData, teamIdentities, owned, { deployed, tiers, run, loadout, swaps }),
     [teamIdentities, owned, deployed, tiers, run, loadout, swaps],
+  )
+  // Event checks use the skills each sinner has now: after skill swaps, a skill swapped away
+  // completely can't be rolled (Finley: Thumb Meursault had only Wrath skills left).
+  const eventTeam = useMemo(
+    () => (teamIdentities.length ? teamIdentities : ctx.members).map((i) => withSwaps(i, swaps[i.id])),
+    [teamIdentities, ctx.members, swaps],
   )
   // Suggestions update live as gifts and identities change; nothing moves until you press Move.
   const lineup = useMemo(
@@ -434,6 +441,11 @@ export default function App() {
                 setSelection(suggestOrder(gameData, ids, deployed, owned, tiers).order)
               }}
             />
+            {run.floor === null && (
+              <RewardPicker ctx={ctx} gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned}
+                title="Starting gift choice"
+                hint="Starting a run, you choose a starting E.G.O gift (more choices with the Star-shower Starlight buff, and some buffs let you pick Tier 3 gifts of a keyword). Add the ones offered and they're ranked for your team. Recommended starting gifts are in Shop > Buy before the run starts." />
+            )}
           </>
         )}
 
@@ -454,6 +466,7 @@ export default function App() {
               <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={setOwned} />
             </aside>
             <main className="main">
+              <ShopAdvice ctx={ctx} ranked={rankedGifts} levels={enhanced} availableNow={availableNow} tab={tab} onOpen={setTab} />
               {subNav}
               {tab === 'gifts' && (
                 <>
@@ -481,16 +494,11 @@ export default function App() {
         {stage === 'fights' && (
           <div className="stage-main">
             {formation}
-            {subNav}
-            {tab === 'rewards' && (
-              <RewardPicker key={`${run.floor}-${run.pack}`} ctx={ctx} gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned}
-                title="Which reward gift to take"
-                hint="After a fight the game lets you pick one of a few E.G.O gifts. Add the ones on screen and take the best one for your team; it goes into Gifts you have." />
-            )}
-            {tab === 'events' && (
-              <EventsTab ctx={ctx} events={gameData.events ?? []} team={teamIdentities.length ? teamIdentities : ctx.members} pack={currentPack}
-                owned={owned} onOwnedChange={setOwned} />
-            )}
+            {/* After a fight the reward card's gift is random (no choice to compare), so this screen
+                is for adding what you got, and the "?" events. */}
+            <PickupBox gifts={gameData.gifts} owned={owned} onChange={setOwned} />
+            <EventsTab ctx={ctx} events={gameData.events ?? []} team={eventTeam} pack={currentPack}
+              owned={owned} onOwnedChange={setOwned} />
           </div>
         )}
 
@@ -498,7 +506,7 @@ export default function App() {
           <div className="stage-main">
             {formation}
             {bossEvents.length > 0 || bossSearch ? (
-              <EventsTab kind="boss" ctx={ctx} events={gameData.events ?? []} team={teamIdentities.length ? teamIdentities : ctx.members} pack={currentPack}
+              <EventsTab kind="boss" ctx={ctx} events={gameData.events ?? []} team={eventTeam} pack={currentPack}
                 owned={owned} onOwnedChange={setOwned} />
             ) : (
               <p className="panel boss-note">
@@ -507,9 +515,10 @@ export default function App() {
               </p>
             )}
             <RewardPicker key={`${run.floor}-${run.pack}`} ctx={ctx} gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned}
-              preset={currentPack?.clear_rewards ?? []}
-              title="Floor reward"
-              hint="Beat the boss and pick your reward: add the gifts you're offered and take the best one. Then press the button below to go to the next floor." />
+              preset={currentPack?.clear_rewards ?? []} picks={run.difficulty === 'normal' ? 1 : 2}
+              title="Boss reward gifts"
+              hint={`Each pack shows the gifts you can choose after its boss (on the pack select screen too). Add the ones offered and they're ranked for your team; you pick ${run.difficulty === 'normal' ? 'one' : 'two on Hard'}. Then press the button below to go to the next floor.`} />
+            <PickupBox gifts={gameData.gifts} owned={owned} onChange={setOwned} />
           </div>
         )}
 

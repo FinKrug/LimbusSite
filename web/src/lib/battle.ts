@@ -98,6 +98,14 @@ export function deckCards(i: Identity, swaps: Swaps = {}): Skill[] {
   return skills.flatMap((s) => Array.from({ length: Math.max(0, copies[s.slot] ?? 0) }, () => s))
 }
 
+/** The identity with its skills' copies after the swaps you've made: a skill swapped away
+ *  completely has 0 copies (it's not in the deck any more, so it can't be used for event checks). */
+export function withSwaps(i: Identity, swaps?: Swaps): Identity {
+  if (!swaps || !Object.values(swaps).some((n) => n) || (i.skills ?? []).length < 3) return i
+  const deck = deckCards(i, swaps)
+  return { ...i, skills: (i.skills ?? []).map((s) => ({ ...s, copies: deck.filter((d) => d === s).length })) }
+}
+
 export type SinMap = Record<Sin, number>
 const zeroSins = (): SinMap => ({ wrath: 0, lust: 0, sloth: 0, gluttony: 0, gloom: 0, pride: 0, envy: 0 })
 

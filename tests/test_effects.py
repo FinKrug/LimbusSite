@@ -41,6 +41,22 @@ class EffectTests(unittest.TestCase):
         r = analyze(f"inflict 3 {S('Sinking')} Potency.<br><br>If the Skill's Affinity was Gluttony, inflict 5 {S('Sinking')} Potency instead.")
         self.assertIn({"status": "Sinking", "when": "sin:Gluttony"}, r["applies"])
 
+    def test_sin_only_in_a_bonus_line(self):
+        # Leaked Enkephalin (Finley): the Sinking Count part works for anyone; only "+1 more" needs Gloom or Envy.
+        r = analyze(f"When the enemy is about to lose or consume {S('Sinking')} Count: (Sinking Potency on the target)% chance "
+                    f"to inflict +1 {S('Sinking')} Count (3 times per turn; max 100%)<br>- Raise base chance by (highest Reson. x2)% (max 12%)"
+                    f"<br>- If the said highest Reson. was a Gloom or an Envy Reson.: Inflict +1 more {S('Sinking')} Count")
+        self.assertEqual(r["sins"], [])
+        self.assertEqual(sorted(r["bonus_sins"]), ["Envy", "Gloom"])
+        # An "instead" upgrade is a bonus too.
+        r = analyze(f"inflict 2 {S('Rupture')} Potency.<br>If the Skill's Affinity was Envy, inflict 5 {S('Rupture')} Potency on target instead.")
+        self.assertEqual((r["sins"], r["bonus_sins"]), ([], ["Envy"]))
+
+    def test_sin_lists_and_whole_gift_conditions(self):
+        r = analyze(f"When activating Gloom or Lust Absolute Resonance, inflict 2 {S('Sinking')} Potency to all enemies")
+        self.assertEqual(sorted(r["sins"]), ["Gloom", "Lust"])
+        self.assertEqual(r["bonus_sins"], [])
+
 
 if __name__ == "__main__":
     unittest.main()

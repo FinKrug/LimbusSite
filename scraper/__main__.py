@@ -261,12 +261,14 @@ def fetch_pack_info(client: WikiClient, gifts: list[dict], packs: list[dict], sk
     info: dict[str, dict] = {}
     for i, (name, title, group) in enumerate(sorted(with_pages), 1):
         entry: dict = {"title": title, "group": group, "floors": None, "gift_pool": [], "unique": [],
-                       "layout": None, "event_note": None, "hidden": False, "appear_rate": None, "clear_rewards": []}
+                       "layout": None, "event_note": None, "hidden": False, "appear_rate": None, "clear_rewards": [],
+                       "auto_rewards": [], "hidden_boss_rewards": []}
         try:
             page = packmod.parse_pack_page(title, _parse_html(client, title, PACK_CACHE_AGE), finder)
             entry.update(floors=page.floors, gift_pool=page.gift_pool, unique=page.unique,
                          layout=page.layout, event_note=page.event_note,
-                         hidden=page.hidden, appear_rate=page.appear_rate, clear_rewards=page.clear_rewards)
+                         hidden=page.hidden, appear_rate=page.appear_rate, clear_rewards=page.clear_rewards,
+                         auto_rewards=page.auto_rewards, hidden_boss_rewards=page.hidden_boss_rewards)
             warnings += page.warnings
             unresolved.update(page.unresolved)
         except WikiError as e:

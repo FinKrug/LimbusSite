@@ -61,6 +61,9 @@ export interface Gift {
   attack_types?: AttackType[]
   /** Sin affinities the effect is about ("Gloom Affinity Skill"), lower-case. */
   affinities?: Sin[]
+  /** Sins only a bonus line is about (Leaked Enkephalin: "+1 more Sinking Count" after a Gloom or Envy
+   *  Resonance); the rest of the gift works for any team. */
+  affinity_bonus?: Sin[]
   /** Only switches on when enough of your identities meet a condition. */
   team_gate?: boolean
   effect: string
@@ -73,6 +76,10 @@ export interface Gift {
   fusion_recipe: string[] | null
   /** Other plain-text sources on the wiki's gift list ("Obtain a duplicate of a Tier I E.G.O Gift"). */
   other_sources?: string[]
+  /** Only ever a reward: "clear" = given automatically for clearing an EXTREME pack (Bearers of Weight
+   *  -> Burning Fate), "hidden_boss" = an EXTREME hidden boss's reward. Never a battle reward, shop
+   *  gift or random fusion result. */
+  reward_only?: 'clear' | 'hidden_boss'
   /** Icon file on the wiki, e.g. "Ebony Brooch Gift.png" (from the scraper). */
   icon?: string
   wiki_url: string
@@ -102,6 +109,8 @@ export interface ThemePack {
   appear_rate?: number | null
   /** Gifts always offered after clearing it (The B.E.: Bongy Plush, Lunar Memory, ...). */
   clear_rewards?: string[]
+  /** Its clear rewards are given automatically (EXTREME Long Battle packs), not offered to pick from. */
+  reward_auto?: boolean
   wiki_url: string | null
 }
 

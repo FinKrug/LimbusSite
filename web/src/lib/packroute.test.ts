@@ -7,8 +7,8 @@ import type { ThemePack } from './types'
 const pack = (id: string, hard: [number, number]): ThemePack => ({
   id, name: id, pool: 'themed', group: null, floors: { normal: null as never, hard }, gifts: [], gift_pool: [], wiki_url: null,
 })
-const scored = (p: ThemePack, score: number): PackScore => ({
-  pack: p, score, rating: 0, verdict: 'go', top: [], ownedCount: 0, reasons: [], parts: [], highlights: [], split: { best: score, team: 0 },
+const scored = (p: ThemePack, score: number, clear = 0): PackScore => ({
+  pack: p, score, rating: 0, verdict: 'go', top: [], ownedCount: 0, reasons: [], parts: [], highlights: [], split: { best: score, team: 0 }, clear,
 })
 const run = (patch: Partial<RunSettings> = {}): RunSettings => ({ difficulty: 'hard', floors: 4, floor: null, pack: null, ...patch })
 
@@ -49,6 +49,32 @@ describe('pack route', () => {
     expect(r.floors[1].pick?.pack.id).toBe('low')
     expect(r.floors.slice(2).map((f) => f.pick?.pack.id)).not.toContain('big')
   })
+
+  it('takes clear-reward packs before the last floor (Finley: EXTREME clear rewards early)', () => {
+    // "reward" is mostly its clear reward (8 of 10); "plain" has no clear reward. Both show up on
+    // floors 3-4, the last two. On floor 4 the reward would come after the run ends.
+    const scores = [scored(pack('reward', [3, 4]), 10, 8), scored(pack('plain', [3, 4]), 7), scored(pack('filler', [1, 4]), 1)]
+    const r = planRoute({ scores, run: run() })
+    expect(r.floors[2].pick?.pack.id).toBe('reward')
+    expect(r.floors[3].pick?.pack.id).toBe('plain')
+    // Offered both on floor 3: take the reward pack now.
+    const { order, advice } = prioritizePacks(scores, scores.slice(0, 2), run({ floor: 3 }), true)
+    expect(order[0].pack.id).toBe('reward')
+    expect(advice.get('reward')?.note).toMatch(/clear reward only helps if you take it before floor 4/)
+  })
+
+  it("doesn't count a clear reward on the run's last floor", () => {
+    const team = gameData.identities.filter((i) => (i.keywords as string[]).includes('Sinking')).slice(0, 7)
+    const packs = gameData.themePacks.filter((p) => p.reward_auto && p.clear_rewards?.length)
+    expect(packs.length).toBeGreaterThan(5)
+    const at = (floor: number) => rankThemePacks(makeContext(gameData, team, [], { run: { difficulty: 'extreme', floors: 15, floor, pack: null } }), packs)
+    const early = at(12)
+    const last = at(15)
+    expect(early.some((p) => p.clear > 0)).toBe(true)
+    expect(last.every((p) => p.clear === 0 && !p.highlights.some((h) => h.kind === 'clear'))).toBe(true)
+    expect(early.find((p) => p.clear > 0)!.reasons.some((r) => /take it before floor 15/.test(r.text))).toBe(true)
+    expect(last[0].reasons.some((r) => /comes after your last fight/.test(r.text))).toBe(true)
+  }, 30000)
 
   it('marks last chances among the fallbacks', () => {
     const scores = [scored(pack('a', [1, 1]), 8), scored(pack('b', [1, 1]), 6), scored(pack('c', [1, 4]), 5)]

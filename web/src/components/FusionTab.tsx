@@ -261,7 +261,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
         </section>
 
         <section className="panel">
-          <h3>Fuse for your gift sets</h3>
+          <h3>Fuse for {forSets.find((c) => c.mustHave)?.combo.name ? `${forSets.find((c) => c.mustHave)!.combo.name} and your gift sets` : 'your gift sets'}</h3>
           {forSets.length === 0 ? (
             <p className="muted small">No set piece you're missing can come out of a fusion of the gifts you'd give up{isSuper ? '' : ' here (a Super Shop can reach more tiers)'}.</p>
           ) : (
@@ -275,10 +275,18 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                     <button className="btn" onClick={() => loadSet(c)}>Load</button>
                   </div>
                   <p className="small fuse-for">
-                    <b>{c.combo.name}{c.combo.any_team ? ' (works for any team)' : ''}:</b> {c.pieces.map((g) => g.name).join(', ')}{' '}
+                    <b>{c.mustHave
+                      ? `${c.combo.name} piece (you have ${c.mustHave.have} of ${c.mustHave.total})`
+                      : `${c.combo.name}${c.combo.any_team ? ' (works for any team)' : ''}`}:</b> {c.pieces.map((g) => g.name).join(', ')}{' '}
                     <span className="muted">(about {Math.round(c.odds * 100)}%: {c.pieces.length} of {c.poolSize} possible {c.keyword} gifts)</span>
                   </p>
-                  <p className="muted small">Gives up {c.ingredients.map((i) => i.gift.name).join(', ')}, which do little for your team.{c.superShop ? ' Super Shop.' : ''}</p>
+                  <p className="muted small">
+                    Gives up {c.ingredients.map((i) => i.gift.name).join(', ')}
+                    {c.mustHave
+                      ? `: worth it ${c.mustHave.have + 1 >= c.mustHave.total ? `for the last piece of ${c.combo.name}` : `to get closer to ${c.combo.name}`} (then fuse it in a Super Shop).`
+                      : ', which do little for your team.'}
+                    {c.superShop ? ' Super Shop.' : ''}
+                  </p>
                 </li>
               ))}
             </ul>

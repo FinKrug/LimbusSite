@@ -146,6 +146,20 @@ export function howToGet(
   events: GameEvent[] = [], allPacks: ThemePack[] = [],
 ): AcquireLine[] {
   const lines: AcquireLine[] = []
+  // Reward-only gifts: nothing else gives them (not shops, battle rewards or random fusions).
+  if (gift.reward_only === 'hidden_boss') {
+    lines.push({ kind: 'other', text: 'EXTREME hidden boss reward', details: [
+      'On EXTREME floors any node (not a boss or shop) has a 10% chance to turn into an optional hidden boss; beating it gives this gift, 1,000 Cost and a full heal.',
+      'Not from shops, battle rewards or fusing.'] })
+    return lines
+  }
+  if (gift.reward_only === 'clear') {
+    const pack = allPacks.find((p) => p.clear_rewards?.includes(gift.id))
+    lines.push({ kind: 'pack', packs: pack ? [pack] : [], text: 'Clear reward', details: [
+      'Given automatically when you clear this pack (EXTREME floors 11–15).',
+      'Not from shops, battle rewards or fusing.'] })
+    return lines
+  }
   if (gift.fusion_recipe?.length) {
     const ingredients = gift.fusion_recipe.map((id) => ({ id, name: giftsById.get(id)?.name ?? id, owned: owned.has(id) }))
     lines.push({ kind: 'fusion', text: 'Fuse', ingredients })
@@ -165,7 +179,7 @@ export function howToGet(
     const odds = packEventOdds(p)
     if (evs.length && odds) details.push(cap(odds))
     if (isHiddenPack(p)) details.push(`A rare hidden pack: it shows up in place of a normal pack ${rarityText(p)}`)
-    if ((p.clear_rewards ?? []).includes(gift.id)) details.push('Always offered when you clear it')
+    if ((p.clear_rewards ?? []).includes(gift.id)) details.push(p.reward_auto ? 'Given automatically when you clear it' : 'Always offered when you clear it')
     if (p.gifts.includes(gift.id)) {
       details.push(p.layout?.shop === false ? 'Battle rewards in this pack' : 'Battle rewards in this pack, and its shop before the boss')
     }

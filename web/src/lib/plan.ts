@@ -40,6 +40,7 @@ export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string,
     const ev = g.events?.[0]?.name
     return { where: 'luck', text: ev ? `Rare: only from the ${ev} event, if you win it` : 'Rare EX gift: not in shops or rewards' }
   }
+  if (g.reward_only) return rewardAvailability(g, ctx)
   if (g.fusion_recipe || isRecipeResult(g.id, ctx.data.fusions)) {
     const f = ctx.data.fusions.find((x) => x.result === g.id)
     return { where: 'fuse', text: f?.super_shop ? 'Fusion only (Super Shop, Hard)' : 'Fusion only' }
@@ -73,6 +74,34 @@ export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string,
     return { where: 'no', text: `Only in ${gone[0].name}, which you played on floor ${played.get(gone[0].id)}: a pack can't be picked twice` }
   }
   return { where: 'no', text: packs.length ? 'Not in this run’s packs' : 'Not in any theme pack' }
+}
+
+/** Reward-only gifts: the EXTREME pack whose clear gives it, or a hidden boss. Never fused or bought. */
+function rewardAvailability(g: Gift, ctx: RunContext): Availability {
+  const { difficulty, floors } = ctx.run
+  const extreme = difficulty === 'extreme'
+  if (g.reward_only === 'hidden_boss') {
+    return extreme
+      ? { where: 'luck', text: 'Hidden boss reward: on EXTREME floors a node sometimes (10%) turns into a hidden boss' }
+      : { where: 'no', text: 'Hidden boss reward on EXTREME floors only' }
+  }
+  const pack = ctx.data.themePacks.find((p) => p.clear_rewards?.includes(g.id))
+  if (!pack) return { where: 'no', text: 'Clear reward of an EXTREME pack' }
+  const played = playedPacks(ctx.run)
+  const floor = ctx.run.floor ?? 1
+  // Cleared on the last floor, the reward comes after the run's last fight.
+  const last = ctx.run.floor !== null && floor >= floors
+  if (ctx.run.pack === pack.id) {
+    return last ? { where: 'no', text: `Clear reward of ${pack.name}: on the last floor it comes after the run ends` }
+      : { where: 'now', text: `Given when you clear this floor's pack (${pack.name})` }
+  }
+  if (played.has(pack.id)) return { where: 'no', text: `Clear reward of ${pack.name}, which you played on floor ${played.get(pack.id)}` }
+  if (!ctx.run.pack && !last && packOnFloor(pack, difficulty, floor)) return { where: 'now', text: `Clear ${pack.name} on this floor: it's given for the clear` }
+  // Not the last floor: a reward from there comes too late to use.
+  for (let f = floor + 1; f < floors; f++) {
+    if (packOnFloor(pack, difficulty, f)) return { where: 'later', text: `Clear reward of ${pack.name} (from floor ${f})` }
+  }
+  return { where: 'no', text: `Only for clearing ${pack.name}${extreme ? '' : ' (EXTREME floors 11–15)'}: not from shops, fights or fusing` }
 }
 
 export interface Pick {

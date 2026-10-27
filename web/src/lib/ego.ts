@@ -128,33 +128,60 @@ export function isEgoGift(g: Gift): boolean {
 }
 
 export interface ResonanceTrigger {
+  /** The first sin named; `sins` has all of them ("Gloom or Lust Absolute Resonance"). */
   sin: Sin
+  /** Any of these sets it off. */
+  sins: Sin[]
   absolute: boolean
   /** Share of the effect that needs it. */
   share: number
   /** The sentences that need it. */
   texts: string[]
+  /** Only an extra on top of a part that works without it: a "- If ... was a Gloom or an Envy
+   *  Reson.: +1 more" line, or "... instead". The rest of the gift doesn't need the Resonance. */
+  bonus: boolean
 }
+
+const SIN_WORD = '(?:Wrath|Lust|Sloth|Gluttony|Gloom|Pride|Envy)'
+const RESON = new RegExp(
+  `\\b(${SIN_WORD}(?:(?:,\\s*|\\s+)(?:or\\s+|and\\s+)?(?:an?\\s+)?${SIN_WORD})*)(?: Affinity)? (Absolute |A-)?(?:Sin )?Reson(?:ance|\\.)`, 'i')
 
 /** "When activating Wrath Absolute Resonance, ..." parts of a gift. */
 export function resonanceTriggers(g: Gift): ResonanceTrigger[] {
   const all = sentences(g.effect)
   const out: ResonanceTrigger[] = []
-  const re = /\b(Wrath|Lust|Sloth|Gluttony|Gloom|Pride|Envy)(?: Affinity)? (Absolute |A-)?(?:Sin )?Reson(?:ance|\.)/i
+  // Whether the last main (non "- ...") sentence needed a Resonance itself.
+  let mainNeeds = false
+  let prevNeeds = false
   for (const s of all) {
-    const m = s.match(re)
+    const m = s.match(RESON)
+    const rider = /^\s*[-\u2013\u2022]/.test(s)
+    const before = { main: mainNeeds, prev: prevNeeds }
+    if (!rider) mainNeeds = !!m
+    prevNeeds = !!m
     if (!m) continue
-    const sin = m[1].toLowerCase() as Sin
+    const sins = [...new Set(m[1].match(new RegExp(SIN_WORD, 'gi'))!.map((x) => x.toLowerCase() as Sin))]
     const absolute = !!m[2]
-    const prev = out.find((x) => x.sin === sin && x.absolute === absolute)
+    // A "- ..." line, or "... instead", on top of a main effect that works without any Resonance:
+    // an extra, not what the gift is for. Under a main line that needs one (Ardent Flower's
+    // "- At 3+ Wrath A-Reson., ... instead") it's still part of the Resonance effect.
+    const bonus = (rider || /\binstead\b/i.test(s)) && !(rider ? before.main : before.prev)
+    const share = (bonus ? 0.5 : 1) / all.length
+    const key = sins.join() + absolute + bonus
+    const prev = out.find((x) => x.sins.join() + x.absolute + x.bonus === key)
     if (prev) {
-      prev.share += 1 / all.length
+      prev.share += share
       prev.texts.push(s)
-    } else out.push({ sin, absolute, share: 1 / all.length, texts: [s] })
+    } else out.push({ sin: sins[0], sins, absolute, share, texts: [s], bonus })
   }
   // A trigger sentence that also has an "or using a Skill that ..." route doesn't fully depend on it.
   for (const t of out) if (/Resonance or /i.test(g.effect)) t.share *= 0.5
   return out
+}
+
+/** One trigger per sin it names, for code that works sin by sin. */
+export function perSin(t: ResonanceTrigger): ResonanceTrigger[] {
+  return t.sins.map((sin) => ({ ...t, sin, sins: [sin] }))
 }
 
 const TRIGGER_STATUS = /\b(Burn|Bleed|Tremor|Rupture|Sinking|Poise|Charge)\b/g
@@ -246,7 +273,7 @@ export function triggerBonus(members: Identity[], owned: Gift[]): { absolute: Si
   const absolute = Object.fromEntries(SINS.map((x) => [x, 0])) as SinMap
   const plain = Object.fromEntries(SINS.map((x) => [x, 0])) as SinMap
   for (const g of owned) {
-    for (const t of resonanceTriggers(g)) {
+    for (const t of resonanceTriggers(g).flatMap(perSin)) {
       const w = triggerWorth(g, t, members, owned)
       // Covered another way (or out of reach): lining up the Resonance adds nothing.
       if (w.kind === 'alternative' || w.kind === 'unreachable') continue

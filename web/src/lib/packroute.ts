@@ -155,7 +155,8 @@ export function planRoute({ scores, run, pickNow }: RouteInput): PackRoute {
   // Hidden packs only when you've actually got one (picked or being compared).
   const candidates = scores.filter((s) => !visitedIds.has(s.pack.id) && (!isHiddenPack(s.pack) || s.pack.id === fixed))
   const windows = new Map(scores.map((s) => [s.pack.id, packFloors(s.pack, run)]))
-  const valueAt = (s: PackScore, f: number) => s.score * (1 + ROUTE_WEIGHTS.early * (run.floors - f))
+  // A clear reward on the last floor comes after the last fight: there the pack is only its other gifts.
+  const valueAt = (s: PackScore, f: number) => (f >= run.floors ? s.score - (s.clear ?? 0) : s.score) * (1 + ROUTE_WEIGHTS.early * (run.floors - f))
   // Rows: floors; columns: packs plus one "nothing" column per floor.
   const weights = floors.map((f, row) => [
     ...candidates.map((s) => {
@@ -311,13 +312,17 @@ export function prioritizePacks(
       a = {
         kind: 'best', loss,
         note: stronger ? `Best pick now: ${stronger.p.pack.name} is stronger, but it also shows up on ${floorsText(later(stronger.p))}`
-          : l.length ? 'Best pick now: the later floors it shows up on have better packs for you'
+          : (r.p.clear ?? 0) > 0 && floor < run.floors && l.length && l.every((f) => f >= run.floors)
+            ? `Best pick now: its clear reward only helps if you take it before floor ${run.floors}`
+            : l.length ? 'Best pick now: the later floors it shows up on have better packs for you'
             : `Best pick now, and the last floor it shows up on (${floorsText(w)})`,
       }
     } else if (isHiddenPack(r.p.pack)) {
       a = { kind: 'last', loss, note: "Rare find: you won't see it again this run" }
     } else if (!l.length) {
       a = { kind: 'last', loss, note: `Last floor it shows up on (${floorsText(w)})` }
+    } else if ((r.p.clear ?? 0) > 0 && l.every((f) => f >= run.floors)) {
+      a = { kind: 'last', loss, note: `Last floor its clear reward is any use: on floor ${run.floors} it comes after the run ends` }
     } else {
       a = { kind: 'wait', loss, note: `Can wait: it also shows up on ${floorsText(l)}` }
     }

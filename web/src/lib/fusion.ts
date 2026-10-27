@@ -17,7 +17,7 @@
  */
 import { fullTierValue, intrinsicScore, isGone, setHas, setKeepValue, isHiddenPack, packOnFloor, packPool, recipeGiveUp, scoreGift, type GiftScore, type RunContext } from './scoring'
 import { isVestige } from './vestiges'
-import { fusableThisRun, mustHave, mustHaveRecipes, neededPiece } from './musthave'
+import { fusableThisRun, mustHave, mustHaveRecipes, neededPiece, recipeProgress, type RecipeProgress } from './musthave'
 import type { Combo, Fusion, Gift, ThemePack } from './types'
 
 /** Keyword categories on the fusion screen. */
@@ -69,11 +69,13 @@ export function matchRecipe(ids: string[], fusions: Fusion[]): Fusion | null {
 }
 
 /** Gifts a random fusion can give: standard gifts of that keyword and tier, plus the
- *  current pack's exclusives. Never recipe results, vestiges or gifts you own. */
+ *  current pack's exclusives. Never recipe results, vestiges, gifts you own, or reward-only
+ *  gifts (Burning Fate only comes from clearing Bearers of Weight). */
 export function randomPool(ctx: RunContext, keyword: string, tier: number, pack: ThemePack | null): Gift[] {
   const recipeResults = new Set(ctx.data.fusions.map((f) => f.result))
   return ctx.data.gifts.filter((g) =>
     g.keyword === keyword && g.tier === tier && !ctx.owned.has(g.id) && !isGone(ctx, g.id) && !recipeResults.has(g.id) && !isVestige(g.id)
+    && !g.reward_only
     && (g.pools.includes('main') || (pack !== null && pack.gifts.includes(g.id))))
 }
 
@@ -151,6 +153,11 @@ export function fusionKeywords(ctx: RunContext, teamKeywords: string[]): string[
       if (k) comboKeywords.push(k)
     }
   }
+  // Pieces of a must-have you've started (Lunar Memory's Memories and Sin Fragments): any keyword.
+  for (const m of mustHavePieces(ctx)) {
+    if (!m.progress.have) continue
+    for (const g of m.pieces) if (g.keyword) comboKeywords.push(g.keyword)
+  }
   return [...new Set([...teamKeywords, ...attacks, ...comboKeywords])].filter((k) => (FUSION_KEYWORDS as readonly string[]).includes(k))
 }
 
@@ -172,7 +179,9 @@ export function forecast(
   }
   // Only chase gifts that do something real for your team: ones that fit it, or pieces of a combo
   // (a keyword-free set works for any team, so its Bleed pieces are worth it on a Rupture team).
+  // A needed piece of a must-have (Lunar Memory) counts too, whatever its keyword.
   const fits = (g: GiftScore) => g.fit >= KEEP_MIN_FIT || g.synergy || !!setOrComboOf(g)
+    || mustHaveRecipes(g.gift, ctx).some((f) => fusableThisRun(f, ctx) && neededPiece(f, g.gift, ctx.owned))
   const lastChance = pool.filter((g) => last.has(g.gift.id) && fits(g))
   const value = (g: GiftScore) => g.score * (lastChance.includes(g) ? 1 + FUSION_WEIGHTS.lastChance : 1)
   const expected = pool.length ? pool.reduce((s, g) => s + value(g), 0) / pool.length : 0
@@ -390,6 +399,27 @@ export function recipePlans(ctx: RunContext, owned: string[]): RecipePlan[] {
     || b.resultScore - a.resultScore)
 }
 
+/** How much more a must-have's piece counts than a set piece of the same odds (x(1 + pieces had / needed)). */
+export const MUST_PIECE_WEIGHT = 2
+/** A fused piece of a must-have is worth this share of the result x (pieces with it / pieces needed):
+ *  the last piece of Lunar Memory is worth giving up a few gifts you use. */
+export const MUST_PIECE_FUSE = 0.6
+
+/** Must-have recipes (Lunar Memory) this run can fuse and you don't own, with the pieces you still need. */
+export function mustHavePieces(ctx: RunContext): { fusion: Fusion; result: Gift; pieces: Gift[]; progress: RecipeProgress }[] {
+  const out: { fusion: Fusion; result: Gift; pieces: Gift[]; progress: RecipeProgress }[] = []
+  for (const f of ctx.data.fusions) {
+    const result = ctx.giftsById.get(f.result)
+    if (!result || !mustHave(f.result) || ctx.owned.has(f.result) || !fusableThisRun(f, ctx)) continue
+    const progress = recipeProgress(f, ctx.owned)
+    const ids = [...f.ingredients.filter((i) => !ctx.owned.has(i)),
+      ...(progress.anyMissing > 0 ? (f.any_of?.from ?? []).filter((i) => !ctx.owned.has(i)) : [])]
+    const pieces = ids.map((i) => ctx.giftsById.get(i)).filter((g): g is Gift => !!g)
+    if (pieces.length) out.push({ fusion: f, result, pieces, progress })
+  }
+  return out
+}
+
 export interface ComboFusion {
   combo: Combo
   keyword: string
@@ -401,6 +431,8 @@ export interface ComboFusion {
   odds: number
   poolSize: number
   superShop: boolean
+  /** A piece of a must-have (Lunar Memory) rather than a set: pieces you have / need. */
+  mustHave?: { have: number; total: number }
 }
 
 /**
@@ -420,11 +452,9 @@ export function comboFusions(ctx: RunContext, owned: string[], pack: ThemePack |
   }
   walk(0, [])
   const out: (ComboFusion & { rank: number })[] = []
-  for (const c of ctx.combos) {
-    const missing = c.gifts.filter((id) => !setHas(ctx, id) && !isGone(ctx, id))
-      .map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
-    // A hand-picked combo only once you have a piece; the keyword-free sets always.
-    if (!missing.length || (!c.any_team && missing.length === c.gifts.length)) continue
+  /** `worth`: what one of the pieces is worth; then the ingredients may be gifts you use, as long as
+   *  odds x worth beats what you give up. Without it, only spare gifts, best odds first. */
+  const aim = (c: Combo, missing: Gift[], weight: number, from = sets, worth?: number, mustHave?: ComboFusion['mustHave']) => {
     const groups = new Map<string, Gift[]>()
     for (const g of missing) {
       if (!g.keyword || !(FUSION_KEYWORDS as readonly string[]).includes(g.keyword) || !g.tier || g.tier > 4) continue
@@ -438,15 +468,50 @@ export function comboFusions(ctx: RunContext, owned: string[], pack: ThemePack |
       const pieces = group.filter((g) => pool.some((p) => p.id === g.id))
       if (!pieces.length) continue
       let best: { ingredients: KeepNote[]; odds: number; cost: number } | null = null
-      for (const ing of sets) {
+      const better = (odds: number, cost: number) => !best ? true
+        : worth !== undefined ? odds * worth - cost > best.odds * worth - best.cost + 1e-9
+          : odds > best.odds + 1e-9 || (Math.abs(odds - best.odds) < 1e-9 && cost < best.cost)
+      for (const ing of from) {
         if (fusionTier(fusionPoints(ing.map((x) => x.gift)), superShop) !== tier) continue
         const odds = keywordChance(ing.length) * pieces.length / pool.length
         const cost = ing.reduce((s, x) => s + x.value, 0)
-        if (!best || odds > best.odds + 1e-9 || (Math.abs(odds - best.odds) < 1e-9 && cost < best.cost)) best = { ingredients: ing, odds, cost }
+        if (better(odds, cost)) best = { ingredients: ing, odds, cost }
       }
-      if (!best) continue
+      if (!best || (worth !== undefined && best.odds * worth <= best.cost)) continue
       out.push({ combo: c, keyword, tier, pieces, ingredients: best.ingredients, odds: best.odds, poolSize: pool.length, superShop,
-        rank: (c.any_team ? 1 - 0.1 * ((c.rank ?? 1) - 1) : 1.2) * best.odds })
+        rank: weight * best.odds, ...(mustHave ? { mustHave } : {}) })
+    }
+  }
+  for (const c of ctx.combos) {
+    const missing = c.gifts.filter((id) => !setHas(ctx, id) && !isGone(ctx, id))
+      .map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
+    // A hand-picked combo only once you have a piece; the keyword-free sets always.
+    if (!missing.length || (!c.any_team && missing.length === c.gifts.length)) continue
+    aim(c, missing, c.any_team ? 1 - 0.1 * ((c.rank ?? 1) - 1) : 1.2)
+  }
+  // Must-haves you've started (Lunar Memory): a missing piece beats a set piece, more the closer
+  // you are (Finley, 2026-10-27: one away from Lunar Memory is worth more than a Rupture set piece).
+  // Its piece is worth giving up gifts you use, not just spare ones.
+  const started = mustHavePieces(ctx).filter((m) => m.progress.have > 0)
+  if (started.length) {
+    const usable = fodder(ctx, owned).filter((f) => !f.keepFor).slice(0, superShop ? 14 : 24)
+    const usableSets: KeepNote[][] = []
+    const walkU = (start: number, combo: KeepNote[]) => {
+      if (combo.length >= 2) usableSets.push(combo)
+      if (combo.length === max) return
+      for (let k = start; k < usable.length; k++) walkU(k + 1, [...combo, usable[k]])
+    }
+    walkU(0, [])
+    for (const m of started) {
+      const share = m.progress.have / m.progress.total
+      const worth = intrinsicScore(m.result, ctx).score * MUST_PIECE_FUSE * (m.progress.have + 1) / m.progress.total
+      const before = out.length
+      aim({ id: `must-${m.result.id}`, name: m.result.name, gifts: m.pieces.map((g) => g.id), why: mustHave(m.result.id)!.why },
+        m.pieces, MUST_PIECE_WEIGHT * (1 + share), usableSets, worth, { have: m.progress.have, total: m.progress.total })
+      // "Any 2 Sin Fragments": every keyword works, so only show the best one.
+      const mine = out.splice(before)
+      const net = (x: ComboFusion) => x.odds * worth - x.ingredients.reduce((t, i) => t + i.value, 0)
+      if (mine.length) out.push(mine.reduce((a, b) => (net(b) > net(a) + 1e-9 ? b : a)))
     }
   }
   return out.sort((a, b) => b.rank - a.rank).slice(0, n).map(({ rank: _r, ...x }) => x)

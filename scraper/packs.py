@@ -145,6 +145,11 @@ class PackPage:
     appear_rate: float | None = None
     # Gifts always offered after clearing it (The B.E.: Bongy Plush, Lunar Memory, ...).
     clear_rewards: list[str] = field(default_factory=list)
+    # Gifts given automatically on clearing it (EXTREME Long Battle packs: Bearers of Weight -> Burning
+    # Fate). They come only from the clear: not battle rewards, shops or random fusions.
+    auto_rewards: list[str] = field(default_factory=list)
+    # EXTREME hidden bosses' reward gifts (the "Hidden Bosses" table on EXTREME pack pages).
+    hidden_boss_rewards: list[str] = field(default_factory=list)
     unresolved: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
@@ -199,6 +204,22 @@ def parse_clear_rewards(page_html: str) -> list[str]:
     return gift_icons(ul.group(1)) if ul else []
 
 
+_AUTO_REWARD = re.compile(
+    r"The ['\u2018\u2019\"]?(.+?)['\u2018\u2019\"]? E\.G\.O Gifts? (?:is|are) awarded automatically upon (?:completing|clearing)",
+    re.IGNORECASE)
+
+
+def parse_auto_rewards(page_html: str) -> list[str]:
+    """Gift names from "The 'Burning Fate' E.G.O Gift is awarded automatically upon completing this Theme Pack"."""
+    return list(dict.fromkeys(m.group(1).strip() for m in _AUTO_REWARD.finditer(html_to_text(page_html))))
+
+
+def parse_hidden_boss_rewards(page_html: str) -> list[str]:
+    """Reward gifts in the "Hidden Bosses" table (EXTREME pack pages)."""
+    sec = section_html(page_html, "Hidden Bosses")
+    return gift_icons(sec) if sec else []
+
+
 def parse_pack_page(title: str, page_html: str, finder: NameFinder) -> PackPage:
     page = PackPage(title)
     page.layout = parse_layout(page_html)
@@ -234,6 +255,8 @@ def parse_pack_page(title: str, page_html: str, finder: NameFinder) -> PackPage:
         return out
 
     page.clear_rewards = resolve_all(parse_clear_rewards(page_html))
+    page.auto_rewards = resolve_all(parse_auto_rewards(page_html))
+    page.hidden_boss_rewards = resolve_all(parse_hidden_boss_rewards(page_html))
     page.unique = resolve_all(gift_icons(blocks.get("unique gifts", "")))
     page.featured = resolve_all(gift_icons(blocks.get("featured gifts", "")))
     page.gift_pool = page.featured + [g for g in page.unique if g not in page.featured]

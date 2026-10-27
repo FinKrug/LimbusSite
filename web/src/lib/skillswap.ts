@@ -34,7 +34,7 @@
  *    triggers are listed, but never make S2 the pick or block Skill 3.
  */
 import { deckCards, skillValue, type Swaps } from './battle'
-import { buildBattle, resonanceTriggers, triggerWorth, withBase, type BattleProfile, type Ego, type EgoLoadout, type TriggerWorth } from './ego'
+import { buildBattle, perSin, resonanceTriggers, triggerWorth, withBase, type BattleProfile, type Ego, type EgoLoadout, type TriggerWorth } from './ego'
 
 export { triggerWorth, type TriggerWorth }
 import type { RunSettings } from './scoring'
@@ -160,16 +160,16 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
   const keywords = [...new Set(team.flatMap((i) => i.keywords))]
   // Sins that gifts you own check skills for ("Sloth Affinity Skills"); a sin named only in a
   // Resonance trigger ("When activating Sloth Absolute Resonance") is handled below, not here.
-  const giftSins = new Set(owned.flatMap((g) => (g.affinities ?? []).filter((sin) => {
+  const giftSins = new Set(owned.flatMap((g) => [...(g.affinities ?? []), ...(g.affinity_bonus ?? [])].filter((sin) => {
     const word = new RegExp(`\\b${sin}\\b`, 'gi')
     const all = (g.effect.match(word) ?? []).length
-    const inTriggers = resonanceTriggers(g).filter((t) => t.sin === sin).flatMap((t) => t.texts).reduce((n, x) => n + (x.match(word) ?? []).length, 0)
+    const inTriggers = resonanceTriggers(g).filter((t) => t.sins.includes(sin)).flatMap((t) => t.texts).reduce((n, x) => n + (x.match(word) ?? []).length, 0)
     return all > inTriggers
   })))
   // Sins whose Resonance a gift you own triggers on ("When activating Wrath Absolute Resonance").
   const resonGifts = new Map<Sin, TriggerWorth[]>()
   for (const g of owned) {
-    for (const t of resonanceTriggers(g)) resonGifts.set(t.sin, [...(resonGifts.get(t.sin) ?? []), triggerWorth(g, t, team, owned)])
+    for (const t of resonanceTriggers(g).flatMap(perSin)) resonGifts.set(t.sin, [...(resonGifts.get(t.sin) ?? []), triggerWorth(g, t, team, owned)])
   }
   // Multi-target damage the team already has: other units' skills and equipped E.G.O.
   const fullLoadout = withBase(loadout, egos)

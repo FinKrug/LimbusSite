@@ -786,3 +786,18 @@ describe('fused gifts count down the whole recipe chain', () => {
   })
 })
 
+
+describe('Resonance bonus lines', () => {
+  it("doesn't mark a gift down for a bonus line its team can't line up (Leaked Enkephalin)", () => {
+    // A Sinking team with no Gloom or Envy skills at all.
+    const team = gameData.identities.filter((i) => (i.keywords as string[]).includes('Sinking')).slice(0, 7)
+      .map((i) => ({ ...i, skills: (i.skills ?? []).map((s) => ({ ...s, sin: 'wrath' as const })), defense: undefined }))
+    const ctx = makeContext(gameData, team, [])
+    const g = gameData.gifts.find((x) => x.name === 'Leaked Enkephalin')!
+    const s = scoreGift(g, ctx)
+    expect(s.reasons.some((r) => /Resonance/.test(r.text) && r.kind === 'bad')).toBe(false)
+    expect(s.reasons.some((r) => /bonus part needs Gloom or Envy Resonance/.test(r.text))).toBe(true)
+    const rank = rankGifts(ctx).findIndex((r) => r.gift.id === g.id)
+    expect(rank).toBeLessThan(110)
+  }, 30000)
+})

@@ -281,9 +281,12 @@ export function checkOdds(c: EventCheck, team: Identity[]): CheckOdds {
   if (!c.sins.length || c.adv === null) return { chance: 0.5, best: null, withSin: [], luck: true }
   let chance = 0
   let best: Identity | null = null
+  let bestHasSin = false
+  let bestMargin = -Infinity
   const withSin: Identity[] = []
   for (const i of team) {
-    const skills = (i.skills ?? []).filter((s) => s.base !== null)
+    // Only skills still in the deck: one swapped away completely (copies 0) can't be used.
+    const skills = (i.skills ?? []).filter((s) => s.base !== null && (s.copies ?? 1) > 0)
     // "sin1=All" (Spiral of Contempt's gaze): any skill counts as the checked sin.
     const sinSkills = skills.filter((s) => s.sin && (c.sins.includes(s.sin) || (c.sins as string[]).includes('all')))
     if (sinSkills.length) withSin.push(i)
@@ -293,7 +296,15 @@ export function checkOdds(c: EventCheck, team: Identity[]): CheckOdds {
       ...skills.map((s) => rollChance((s.base ?? 0) + bonus, Math.max(0, s.coin_power ?? 0), s.coins ?? 1, c.disadv ?? c.adv! * 2)),
     ]
     const p = Math.max(0, ...rolls)
-    if (p > chance) { chance = p; best = i }
+    // Ties (common: 50% vs 50%): someone with a skill of the checked sin, then the higher average roll over what's needed.
+    const hasSin = sinSkills.length > 0
+    const margin = Math.max(-Infinity,
+      ...sinSkills.map((s) => (s.base ?? 0) + bonus + Math.max(0, s.coin_power ?? 0) * (s.coins ?? 1) / 2 - c.adv!),
+      ...skills.map((s) => (s.base ?? 0) + bonus + Math.max(0, s.coin_power ?? 0) * (s.coins ?? 1) / 2 - (c.disadv ?? c.adv! * 2)))
+    const tie = Math.abs(p - chance) < 1e-9
+    if (p > chance + 1e-9 || (tie && p > 0 && (hasSin && !bestHasSin || hasSin === bestHasSin && margin > bestMargin))) {
+      chance = p; best = i; bestHasSin = hasSin; bestMargin = margin
+    }
   }
   return { chance, best, withSin, luck: false }
 }

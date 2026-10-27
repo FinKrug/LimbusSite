@@ -91,6 +91,8 @@ export const WEIGHTS = {
   unmetCap: 0.1,
   /** Affinity-condition fit is the team share times this. */
   affinityFit: 0.8,
+  /** A sin only a bonus line uses: a smaller route, since the gift works without it. */
+  affinityBonus: 0.35,
   /** ...where the share is the share of skill copies of that sin, full at this much: "When hitting with a
    *  Pride Affinity Skill" goes off on that share of your attacks, not whenever a unit has one Pride skill. */
   affinityDeckFull: 0.35,
@@ -825,7 +827,8 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
   } else {
     routes.push({
       fit: WEIGHTS.general,
-      reason: synergyBonus ? undefined : {
+      // Mostly for an affiliation your team doesn't have (Regular Operational Gear): not "any team".
+      reason: synergyBonus || (profile.size && traits.length && share >= 0.5) ? undefined : {
         kind: 'info', text: isCoreKeyword(gift.keyword)
           ? `A ${gift.keyword} gift in name only: nothing in it uses ${gift.keyword}, so it works for any team`
           : gift.keyword ? `${gift.keyword} damage gift` : 'General gift that works with any team',
@@ -864,6 +867,18 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
           ? `Uses ${cap(best.a)} affinity: ${pct}% of ${who}'s skills are ${cap(best.a)}`
           : `Uses ${cap(best.a)} affinity (${best.n}/${fp.size} of ${who} have it)` },
       })
+    }
+  }
+  // A sin only a bonus line is about ("- If the said highest Reson. was a Gloom or an Envy Reson.: +1
+  // more"): the gift doesn't depend on it, so it only adds a little, and never reads as a condition.
+  if (fp.size && !gift.affinities?.length && gift.affinity_bonus?.length) {
+    const deckShare = (a: Sin) => fp.sinDeck ? Math.min(1, fp.sinDeck[a] / WEIGHTS.affinityDeckFull) : (fp.sinCounts[a] ?? 0) / fp.size
+    const sins = gift.affinity_bonus.map((a) => ({ a, share: deckShare(a), n: fp.sinCounts[a] ?? 0 })).filter((x) => x.n > 0)
+    const share = Math.min(1, sins.reduce((t, x) => t + x.share, 0))
+    if (share > 0) {
+      const names = gift.affinity_bonus.map(cap).join(' or ')
+      routes.push({ fit: WEIGHTS.affinityFit * WEIGHTS.affinityBonus * share,
+        reason: { kind: 'info', text: `Extra with ${names}: a bonus part needs ${names} skills or Resonance (the rest works for any team)` } })
     }
   }
   if (profile.size && worksAlone(gift)) {
@@ -1222,16 +1237,24 @@ export function egoAdjust(gift: Gift, ctx: RunContext): { factor: number; reason
     factor += info.resourceShare * (resF - 1)
   }
   for (const t of resonanceTriggers(gift)) {
-    const reson = t.absolute ? sim.areson[t.sin] : sim.reson[t.sin]
+    // Any of the sins named sets it off ("Gloom or Lust Absolute Resonance").
+    const reson = Math.max(...t.sins.map((sin) => (t.absolute ? sim.areson[sin] : sim.reson[sin]) ?? 0))
     // "...Resonance or using a Skill with 2+ Atk Weight": units that set it off another way.
     const alt = alternativeRoute(t.texts.join(' '), ctx.members)
     const altChance = alt && alt.who.length ? Math.min(1, 0.3 * alt.who.length) : 0
     const chance = Math.max(reson, altChance)
     const tf = Math.min(1.2, 0.15 + (t.absolute ? 1.5 : 1.2) * chance)
     factor *= 1 - t.share + t.share * tf
-    const what = `${cap(t.sin)} ${t.absolute ? 'Absolute Resonance' : 'Resonance'}`
+    const what = `${t.sins.map(cap).join(' or ')} ${t.absolute ? 'Absolute Resonance' : 'Resonance'}`
     if (altChance > reson) {
       reasons.push({ kind: 'good', text: `Switches on from ${alt!.who.map((i) => i.sinner).join(', ')}'s ${alt!.how}, even without ${what}` })
+      continue
+    }
+    // Only an extra on top of a part that works for any team (Leaked Enkephalin): never a strike against it.
+    if (t.bonus) {
+      reasons.push(chance >= 0.35
+        ? { kind: 'good', text: `Bonus with ${what}: your team lines it up on about ${pct(chance)} of turns` }
+        : { kind: 'info', text: `A small bonus part needs ${what} (about ${pct(chance)} of turns); the rest works for any team` })
       continue
     }
     reasons.push(chance >= 0.35
@@ -1581,6 +1604,9 @@ export interface PackScore {
   highlights: PackHighlight[]
   /** The score split two ways: its best gifts, and gifts built for your team. */
   split: { best: number; team: number }
+  /** The part of the score that's its clear reward. A clear reward on the run's last floor comes
+   *  after the last fight, so it counts for nothing there (0 when this ranking is for that floor). */
+  clear: number
 }
 
 export interface PackHighlight {
@@ -1631,6 +1657,7 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
     if (!s) scoreCache.set(g.id, s = { ...scoreGift(g, ctx), rating: 0 })
     return s
   }
+  const tooLate = lastFloor(ctx.run)
   const raw = packs.map((pack) => {
     const gifts = packPool(pack).map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
     const ownedCount = gifts.filter((g) => ctx.owned.has(g.id)).length
@@ -1651,10 +1678,12 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
     }
     // Gifts always offered on clearing it (The B.E.: Lunar Memory among them): you pick one, so
     // the best one counts like an exclusive, even a recipe result.
+    // On the run's last floor the clear reward comes after the last fight: it does nothing
+    // (Finley, 2026-10-27: get the EXTREME clear rewards early, end on a pack that doesn't need them).
     const clearIds = (pack.clear_rewards ?? []).filter((id) => !ctx.owned.has(id) && ctx.giftsById.has(id))
-    const clear = clearIds.map((id) => scored.find((g) => g.gift.id === id) ?? scoreOf(ctx.giftsById.get(id)!))
+    const clear = tooLate ? [] : clearIds.map((id) => scored.find((g) => g.gift.id === id) ?? scoreOf(ctx.giftsById.get(id)!))
       .sort((a, b) => b.score - a.score)
-    if (clear[0]) credit(clear[0], clear[0].score * WEIGHTS.packExclusive, 'always offered when you clear it')
+    if (clear[0]) credit(clear[0], clear[0].score * WEIGHTS.packExclusive, pack.reward_auto ? 'given when you clear it' : 'always offered when you clear it')
     const clearValue = clear[0] ? clear[0].score * WEIGHTS.packExclusive : 0
     // Recipes its gifts can finish, with at least one piece only this pack gives: the result is
     // something you'd otherwise never get (Virtues -> Cultivation: Cut, File, Carve, Polish).
@@ -1709,7 +1738,7 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
     const highlights = [...exclusives, ...fusedShown, ...clearShown, ...boosted]
     return {
       pack, score: bestValue + teamValue + clearValue + fusedValue, top, ownedCount, parts, highlights,
-      split: { best: bestValue + clearValue + fusedValue, team: teamValue },
+      split: { best: bestValue + clearValue + fusedValue, team: teamValue }, clear: clearValue,
     }
   })
   // Rare hidden packs don't set the bar for the others (you'll almost never see them).
@@ -1747,7 +1776,14 @@ export function rankThemePacks(ctx: RunContext, packs: ThemePack[] = ctx.data.th
       reasons.unshift({ kind: 'info', text: `Rare hidden pack (it shows up in place of a normal pack ${rarityText(r.pack)}): don't plan around it, but take it if you find it` })
     }
     const clearNames = (r.pack.clear_rewards ?? []).map((id) => ctx.giftsById.get(id)?.name).filter(Boolean)
-    if (clearNames.length) reasons.push({ kind: 'good', text: `Clearing it always offers ${clearNames.join(', ')}` })
+    if (clearNames.length && tooLate) {
+      reasons.push({ kind: 'info', text: `Its clear reward (${clearNames.join(', ')}) comes after your last fight, so on this floor only its other gifts count` })
+    } else if (clearNames.length) {
+      const endsOn = ctx.run.floors
+      const lateToo = r.pack.reward_auto && packOnFloor(r.pack, ctx.run.difficulty, endsOn)
+      reasons.push({ kind: 'good', text: `${r.pack.reward_auto ? 'Clearing it gives you' : 'Clearing it always offers'} ${clearNames.join(', ')}`
+        + (lateToo ? `: take it before floor ${endsOn}, where the reward would come after the run ends` : '') })
+    }
     const rate = (g: GiftScore) => ({ ...g, rating: max > 0 ? Math.round((g.score / max) * 100) : 0 })
     return {
       ...r, rating: Math.round(rel * 100), verdict, reasons, top: r.top.map(rate),

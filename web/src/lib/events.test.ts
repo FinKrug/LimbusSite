@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { adviseVariant, checkOdds, clashLines, eventsForPack, findEvents, rollChance, searchEvents } from './events'
 import { DEFAULT_RUN, defaultFloors, makeContext } from './scoring'
+import { withSwaps } from './battle'
+import type { Sin } from './types'
 
 const byId = (id: string) => gameData.identities.find((x) => x.id === id)!
 const heishou = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
@@ -33,6 +35,28 @@ describe('Mirror Dungeon events', () => {
     expect(odds.best).not.toBeNull()
     expect(odds.withSin.length).toBeGreaterThan(0)
     expect(odds.chance).toBeGreaterThan(0)
+  })
+
+  it('uses the skills each sinner has after swaps (Finley: Thumb Meursault had only Wrath left)', () => {
+    const check = { sins: ['lust', 'gluttony'] as Sin[], adv: 11, disadv: 22, bonuses: [] }
+    const meursault = byId('the-thumb-east-capo-iiii-meursault')
+    const outis = byId('t-corp-class-3-vdcu-staff-outis')
+    // Both have one Lust skill; a tie goes to the stronger roll (Outis's Skill 3).
+    expect(checkOdds(check, [meursault, outis]).best).toBe(outis)
+    // Meursault's Skill 1s and 2s all swapped into his Wrath Skill 3: no Lust skill left.
+    const swapped = withSwaps(meursault, { '1to3': 3, '2to3': 2 })
+    expect(swapped.skills!.filter((x) => x.copies).map((x) => x.sin)).toEqual(['wrath'])
+    const odds = checkOdds(check, [swapped, outis])
+    expect(odds.best).toBe(outis)
+    expect(odds.withSin).toEqual([outis])
+    expect(withSwaps(outis, {})).toBe(outis)
+  })
+
+  it('gives the "+12 for Limbus Company Identities" check bonus to LCB Sinners and the like', () => {
+    const faust = byId('lcb-sinner-faust')
+    const plain = { sins: ['pride'] as Sin[], adv: 14, disadv: 28, bonuses: [] }
+    const withBonus = { ...plain, bonuses: [{ who: 'Limbus Company Identities', mod: 12 }] }
+    expect(checkOdds(withBonus, [faust]).chance).toBeGreaterThan(checkOdds(plain, [faust]).chance)
   })
 
   it('judges choices for the team: a Burn gift is worth taking for Burn, not for Rupture', () => {
