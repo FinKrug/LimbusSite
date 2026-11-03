@@ -69,7 +69,7 @@ export const STARTING_GIFTS: Record<StartKeyword, string[]> = {
 export function startingChoices(buffs: BuffLevels): number {
   return 1 + Number((buffs['star-shower'] ?? 0) > 0) + Number((buffs['perfected-possibility'] ?? 0) > 0)
 }
-/** Tier 3 gifts of your keyword Perfected Possibility gives (1 / 2 / 3 by level). */
+/** Random Tier 3 gifts of your keyword Perfected Possibility gives (1 / 2 / 3 by level). */
 export function tier3Choices(buffs: BuffLevels): number {
   return buffs['perfected-possibility'] ?? 0
 }
@@ -87,9 +87,9 @@ export interface KeywordPlan {
   gifts: GiftScore[]
   /** The ones to take (as many as you have choices). */
   take: GiftScore[]
-  /** Perfected Possibility's Tier 3 picks for this keyword, best first (as many as its level). */
-  tier3: GiftScore[]
-  /** Starting gifts + Tier 3 picks, in score. */
+  /** Perfected Possibility's random Tier 3 gifts of this keyword: their expected score (count x the pool's average). */
+  tier3: number
+  /** Starting gifts + Tier 3 gifts, in score. */
   value: number
   /** 0-100 against the best keyword. */
   rating: number
@@ -110,8 +110,10 @@ export function rankStartKeywords(ctx: RunContext, picks: number, tier3: number)
     const gifts = STARTING_GIFTS[keyword].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
       .map((g) => scored(g, ctx)).sort((a, b) => b.score - a.score)
     const take = gifts.filter((g) => !ctx.owned.has(g.gift.id)).slice(0, picks)
-    const t3 = tier3 ? keywordTierGifts(ctx, keyword, 3).map((g) => scored(g, ctx)).sort((a, b) => b.score - a.score).slice(0, tier3) : []
-    const value = [...take, ...t3].reduce((s, g) => s + Math.max(0, g.score), 0)
+    // Perfected Possibility's Tier 3 gifts are random from the keyword's pool: count its average.
+    const pool = tier3 ? keywordTierGifts(ctx, keyword, 3).map((g) => Math.max(0, scored(g, ctx).score)) : []
+    const t3 = pool.length ? tier3 * pool.reduce((a, b) => a + b, 0) / pool.length : 0
+    const value = take.reduce((s, g) => s + Math.max(0, g.score), 0) + t3
     return { keyword, gifts, take, tier3: t3, value, rating: 0 }
   })
   const max = Math.max(1e-9, ...plans.map((p) => p.value))
@@ -135,8 +137,15 @@ export const BUFF_VALUES = {
   refresh: 15,
   /** A free keyword refresh (90 Cost; you don't always want one), per floor. */
   keywordRefresh: 45,
-  /** All Identities +1 Level. */
+  /** All Identities +1 Level, as a flat one-off (Interstellar Travel's Levels). */
   level: 30,
+  /**
+   * All Identities +1 Level for one floor (Favor of the Nebulae). Every 3 Levels over the enemy is
+   * +1 Clash Power on every clash and about 10% more damage dealt and less taken: a whole floor of
+   * +1 Clash Power is about 5 of Starlight Guidance's one-turn Clash Power Ups (5 x 6), plus the
+   * damage both ways, so about 54 for 3 Levels.
+   */
+  levelFloor: 18,
   /** +1 Max Speed, per floor. */
   speed: 8,
   /** 1 Clash Power Up, Damage Up or Protection at the start of fights, per floor. */
@@ -180,10 +189,12 @@ export interface StarlightStep {
   ratio: number
   /** What the value is made of. */
   why: string[]
+  /** Planned for the levels after it: worth less than its Starlight alone, more with them. */
+  forNext?: boolean
 }
 
 export interface StarlightPlan {
-  /** Every step worth buying (ratio >= 1), best value first, prerequisites first. */
+  /** Every step worth buying (ratio >= 1, or with the levels after it), best value first, prerequisites first. */
   steps: StarlightStep[]
   /** Steps worth less than the Cost the Starlight would convert to. */
   skip: StarlightStep[]
@@ -212,6 +223,13 @@ export function starlightSteps(ctx: RunContext, keyword: KeywordPlan, search: St
   const t3Avg = avg(t3)
   const t4Avg = avg(keywordTierGifts(ctx, keyword.keyword, 4).map((g) => scored(g, ctx)))
   const levels = (n: number) => n * V.level
+  // Levels counted for every floor they last: sum over floors 1..F of the Levels you have there.
+  const floorsOf = (at: (floor: number) => number) => Array.from({ length: F }, (_, k) => at(k + 1)).reduce((a, b) => a + b, 0)
+  const clearLevels = (floor: number, max: number) => Math.min(floor - 1, max)
+  const nebulaBase = floorsOf((f) => 3 + clearLevels(f, 5))
+  const nebulaPlus = floorsOf((f) => clearLevels(f, 9) - clearLevels(f, 5))
+  const nebulaPlusPlus = floorsOf((f) => (f >= 6 ? 3 : 0))
+  const clash = 'every 3 Levels is +1 Clash Power and about 10% more damage dealt, less taken'
   const kw = keyword.keyword
 
   // [value, why] for each buff level, in order.
@@ -247,9 +265,10 @@ export function starlightSteps(ctx: RunContext, keyword: KeywordPlan, search: St
       [V.randomT1 + F * V.keywordRefresh * 0.5 + (hard ? F * 0.15 * V.superShop : 0), ['A second free keyword refresh', 'A third Tier 1 gift', hard ? '+25% Super Shop chance' : 'Super Shop chance (Hard only)']],
     ],
     'favor-of-the-nebulae': [
-      [levels(3 + Math.min(5, F - 1)), [`+${3 + Math.min(5, F - 1)} Levels for every Identity over the run`]],
-      [levels(Math.max(0, Math.min(9, F - 1) - Math.min(5, F - 1))), ['Floor clears give Levels up to 9, not 5']],
-      [levels(F >= 6 ? 3 : 0), [F >= 6 ? '+3 Levels on floor 6' : 'Its +3 Levels on floor 6 needs a 6+ floor run']],
+      [nebulaBase * V.levelFloor, [`+3 Levels from the start and +1 a floor clear (up to ${3 + Math.min(5, F - 1)})`, clash]],
+      [nebulaPlus * V.levelFloor, [F > 6 ? `Floor clears keep giving Levels up to +9: +${Math.min(9, F - 1) - 5} more by floor ${F}`
+        : `Floor clears stop at +5 Levels from floor 6: it only adds Levels in a run of 7+ floors`]],
+      [nebulaPlusPlus * V.levelFloor, [F >= 6 ? `+3 more Levels from floor 6 (${F - 5} floor${F > 6 ? 's' : ''})` : 'Its +3 Levels on floor 6 need a 6+ floor run']],
     ],
     'starlight-guidance': [
       [F * (2 * V.speed + 3 * V.combatBuff), ['+2 Max Speed', '1 Clash Power Up, Damage Up and Protection']],
@@ -264,9 +283,9 @@ export function starlightSteps(ctx: RunContext, keyword: KeywordPlan, search: St
         [`Tier 4 ${kw} gifts on floors 3, 5 and 7`, 'Fusion bonus 1 tier below']],
     ],
     'perfected-possibility': [
-      [F * V.packChoice + extraStart + cost(t3[0]) + V.vestige, ['+1 theme pack choice', `+1 starting gift choice`, t3[0] ? `A Tier 3 ${kw} gift of your choice: ${t3[0].gift.name}` : `A Tier 3 ${kw} gift`, 'A Dark Vestige']],
-      [cost(t3[1]) + 2 * V.vestige, [t3[1] ? `A second Tier 3 pick: ${t3[1].gift.name}` : 'A second Tier 3 pick', 'A Faint Vestige']],
-      [cost(t3[2]) + 3 * V.vestige, [t3[2] ? `A third Tier 3 pick: ${t3[2].gift.name}` : 'A third Tier 3 pick', 'A Twinkling Vestige']],
+      [F * V.packChoice + extraStart + t3Avg + V.vestige, ['+1 theme pack choice', `+1 starting gift choice`, `A random Tier 3 ${kw} gift`, 'A Dark Vestige']],
+      [t3Avg + 2 * V.vestige, [`A second random Tier 3 ${kw} gift`, 'A Faint Vestige']],
+      [t3Avg + 3 * V.vestige, [`A third random Tier 3 ${kw} gift`, 'A Twinkling Vestige']],
     ],
   }
   const steps: StarlightStep[] = []
@@ -300,11 +319,27 @@ export function planStarlight(ctx: RunContext, state: PreRunState,
   const order: StarlightStep[] = []
   const reached = new Map<string, number>()
   const left = [...all]
+  // A level's best ratio counting the levels after it (a + that's only worth it for the ++ it opens).
+  const ahead = (s: StarlightStep) => {
+    const next = left.filter((x) => stepKey(x) === stepKey(s) && x.level >= s.level).sort((a, b) => a.level - b.level)
+    let value = 0, starlight = 0, best = 0
+    for (const x of next) {
+      value += x.value
+      starlight += x.starlight
+      best = Math.max(best, value / (starlight * COST_PER_STARLIGHT))
+    }
+    return best
+  }
   for (;;) {
     const ready = left.filter((s) => s.level === (reached.get(stepKey(s)) ?? 0) + 1)
     if (!ready.length) break
-    const best = ready.reduce((a, b) => (b.ratio > a.ratio ? b : a))
-    if (best.ratio < 1) break
+    const score = new Map(ready.map((s) => [s, ahead(s)]))
+    const best = ready.reduce((a, b) => (score.get(b)! > score.get(a)! ? b : a))
+    if (score.get(best)! < 1) break
+    if (best.ratio < 1) {
+      best.forNext = true
+      best.why = [...best.why, `Worth it for the ${'+'.repeat(best.level)} after it`]
+    }
     order.push(best)
     reached.set(stepKey(best), best.level)
     left.splice(left.indexOf(best), 1)

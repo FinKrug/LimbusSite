@@ -1420,24 +1420,64 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .prerun { display: grid; gap: 14px; }
 .prerun .panel { margin: 0; }
 .prerun-bar { margin: 0; flex: 1 1 260px; }
-.prerun-steps { list-style: none; margin: 10px 0 6px; padding: 0; display: grid; gap: 6px; }
-.prerun-step { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: start; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--panel-2); }
-.prerun-step.now { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
-.prerun-step.later { opacity: 0.65; }
-.prerun-step.took { opacity: 0.55; }
-.prerun-step.took b { text-decoration: line-through; }
-.prerun-step-body { display: grid; gap: 2px; min-width: 0; }
-.prerun-step .plan-now-top button { margin-left: auto; }
 .prerun-skip { margin: 6px 0; padding-left: 18px; display: grid; gap: 4px; }
 .prerun-all { margin-top: 8px; }
-.prerun-buffs, .prerun-keywords { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
-.prerun-buffs li { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--panel-2); display: grid; gap: 2px; }
-.prerun-buffs select { margin-left: auto; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; }
+.prerun-keywords { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
 .prerun-keywords li { display: grid; grid-template-columns: 90px 120px minmax(0, 1fr); gap: 10px; align-items: center; }
 .prerun-keyword { display: grid; gap: 8px; margin-top: 8px; }
+/* Starlight buffs: cards like the game's Grace of the Star screen, in this season's blue (change the --sb-* colors to re-theme). */
+.prerun {
+  --sb-hi: #3f86e0; --sb-glow: 64 140 240; --sb-edge: #d4e6ff; --sb-hover: #4a6a96;
+  --sb-top: #1f4f92; --sb-mid: #10305e; --sb-low: #08162e;
+  --sb-btn-top: #1d4174; --sb-btn-low: #0f2547; --sb-btn-line: #3a5f92; --sb-ink: #e6f0ff;
+}
+.sb-bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin: 12px 0 10px; }
+.sb-total { font-size: 14px; }
+.sb-star { color: var(--accent); }
+.sb-over { color: var(--bad); }
+.sb-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.sb-card {
+  display: grid; grid-template-rows: 1fr auto; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+  background: linear-gradient(180deg, #23272d, #17191c); transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.sb-card:hover { border-color: var(--sb-hover); }
+.sb-card.on {
+  border-color: var(--sb-edge); background: linear-gradient(180deg, var(--sb-top) 0%, var(--sb-mid) 55%, var(--sb-low) 100%);
+  box-shadow: 0 0 0 1px var(--sb-hi), 0 0 14px rgb(var(--sb-glow) / 0.55), inset 0 0 18px rgb(0 0 0 / 0.45);
+}
+.sb-main {
+  display: grid; grid-template-rows: auto auto 1fr auto; gap: 6px; align-content: start; text-align: left; padding: 8px 10px 8px;
+  background: none; border: 0; color: var(--text); font: inherit; cursor: pointer; min-height: 190px;
+}
+.sb-cost {
+  justify-self: end; font-weight: 700; font-size: 15px; color: var(--accent); background: rgb(0 0 0 / 0.45);
+  border-radius: 3px; padding: 0 8px; display: inline-flex; gap: 4px; align-items: center;
+}
+.sb-name { justify-self: end; text-align: right; font-weight: 700; font-size: 14px; line-height: 1.2; }
+.sb-card:not(.on) .sb-name { color: var(--muted); }
+.sb-effects { display: grid; gap: 3px; align-content: start; font-size: 12px; line-height: 1.3; color: var(--sb-ink); }
+.sb-card:not(.on) .sb-effects { color: var(--muted); }
+.sb-effects > span::before { content: '• '; }
+.sb-advice { justify-self: start; font-size: 11px; border-radius: 3px; padding: 1px 6px; background: rgb(0 0 0 / 0.35); color: var(--muted); }
+.sb-advice.buy { color: var(--accent); background: rgb(0 0 0 / 0.4); }
+.sb-advice.worth { color: #c9d6e8; }
+.sb-levels { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 0 8px 8px; }
+.sb-levels button {
+  font: inherit; font-weight: 800; font-size: 15px; letter-spacing: 1px; color: var(--sb-ink); cursor: pointer; padding: 3px 0;
+  background: linear-gradient(180deg, var(--sb-btn-top), var(--sb-btn-low)); border: 1px solid var(--sb-btn-line); border-radius: 2px;
+}
+.sb-levels button:hover { border-color: var(--sb-edge); }
+.sb-levels button.on { background: linear-gradient(180deg, var(--sb-hi), var(--sb-top)); border-color: #fff; box-shadow: 0 0 8px rgb(var(--sb-glow) / 0.7); }
+.sb-card:not(.on) .sb-levels button { background: #262a30; border-color: var(--line); color: var(--muted); }
+.sb-card:not(.on) .sb-levels button:hover { border-color: var(--sb-hover); color: var(--text); }
+.sb-main:focus-visible, .sb-levels button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.sb-order { margin: 8px 0 6px; padding-left: 22px; display: grid; gap: 4px; }
+.sb-order li.now b { color: var(--accent); }
+.sb-order li.later { opacity: 0.65; }
+.sb-order li.took b { text-decoration: line-through; opacity: 0.7; }
+@media (max-width: 560px) { .sb-grid { grid-template-columns: 1fr 1fr; gap: 8px; } .sb-main { min-height: 0; } .sb-effects { font-size: 11px; } }
 @media (max-width: 600px) {
   .prerun-keywords li { grid-template-columns: 80px minmax(0, 1fr); }
   .prerun-keywords li .muted { grid-column: 1 / -1; }
 }
-.prerun-step .plan-now-top { justify-content: flex-start; flex-wrap: wrap; }
 .start-options summary { cursor: pointer; margin-top: 4px; }

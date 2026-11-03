@@ -39,8 +39,9 @@ describe('before the run (Finley)', () => {
     const [best] = rankStartKeywords(ctx, 2, 2)
     expect(best.keyword).toBe('Rupture')
     expect(best.take).toHaveLength(2)
-    expect(best.tier3).toHaveLength(2)
-    expect(best.tier3.every((g) => g.gift.tier === 3 && g.gift.keyword === 'Rupture')).toBe(true)
+    // Perfected Possibility's 2 Tier 3 gifts are random: counted at the pool's average.
+    expect(best.tier3).toBeGreaterThan(0)
+    expect(rankStartKeywords(ctx, 2, 0)[0].tier3).toBe(0)
   })
 
   it('plans Starlight: worth more than its Cost, + after base, within the budget', () => {
@@ -48,7 +49,7 @@ describe('before the run (Finley)', () => {
     const search = startingPicks(ctx, packsByGift(gameData.themePacks)).picks
     const plan = planStarlight(ctx, { ...EMPTY_PRERUN, starlight: 100 }, keywords, search)
     expect(plan.steps.length).toBeGreaterThan(5)
-    expect(plan.steps.every((s) => s.ratio >= 1)).toBe(true)
+    expect(plan.steps.every((s) => s.ratio >= 1 || s.forNext)).toBe(true)
     const seen = new Map<string, number>()
     for (const s of plan.steps) {
       const key = s.kind === 'buff' ? s.buff!.id : 'search'
