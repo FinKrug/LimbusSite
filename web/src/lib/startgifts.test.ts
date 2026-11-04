@@ -59,6 +59,16 @@ describe('starting gifts', () => {
     expect(flower.partner?.id).toBe('moon-in-the-water-md')
     expect(flower.why[0]).toMatch(/Buy it with Moon in the Water/)
   })
+
+  it("never says to skip a pack that still has more for the team: Nocturnal Sweeping for Heishou (Finley)", () => {
+    const ctx = makeContext(gameData, heishou, [], { run: run('hard') })
+    const plan = startingPicks(ctx, pfg)
+    for (const p of [...plan.picks, ...plan.alternatives]) {
+      expect(p.skips.map((x) => x.name), p.score.gift.name).not.toContain('Nocturnal Sweeping')
+    }
+    const glyph = [...plan.picks, ...plan.alternatives].find((p) => p.score.gift.id === 'strange-glyph-inscriptions')
+    if (glyph) expect(glyph.why.join(' ')).toMatch(/Doesn't let you skip Nocturnal Sweeping/)
+  })
 })
 
 describe('EX gifts', () => {

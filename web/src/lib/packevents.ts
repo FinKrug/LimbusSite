@@ -66,7 +66,8 @@ export function usualEvents(events: GameEvent[], packs: ThemePack[]): GameEvent[
 
 function worth(e: GameEvent, v: EventVariant, ctx: RunContext, team: Identity[]): EventWorth {
   const advice = v.choices.length ? adviseVariant(v, ctx, team) : []
-  const best = advice.reduce<ChoiceAdvice | null>((a, x) => (!a || x.value > a.value ? x : a), null)
+  // Choices locked behind a gift you don't have don't count (the game won't offer them).
+  const best = advice.filter((x) => x.verdict !== 'locked').reduce<ChoiceAdvice | null>((a, x) => (!a || x.value > a.value ? x : a), null)
   // A pack's events page lists its events as untitled versions: name them by their first choice,
   // which is also what you'd type on the Events tab.
   const dungeon = / Dungeon Event$/.test(v.name)

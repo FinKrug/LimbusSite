@@ -316,10 +316,46 @@ export interface ChoiceAdvice {
   why: string[]
   /** For a choice that leads to more choices: the best follow-up. */
   then: ChoiceAdvice[]
-  /** "best" | "ok" | "avoid" */
-  verdict: 'best' | 'ok' | 'avoid'
+  /** "best" | "ok" | "avoid", or "locked": the game won't offer it (you don't have the gift it needs). */
+  verdict: 'best' | 'ok' | 'avoid' | 'locked'
   /** Results the wiki doesn't spell out (a step we can't read). */
   unclear: boolean
+  /** Only offered if you hold a gift (or enough of some packs' exclusives): whether you do. */
+  lock?: ChoiceLock
+}
+
+/** What a choice needs before the game offers it, and whether you have it. */
+export interface ChoiceLock {
+  /** "Trauma Shield", "5+ exclusive gifts from The Noon of Violet and Hatred and Despair (you have 2)" */
+  need: string
+  met: boolean
+}
+
+/**
+ * Choices the game only offers when you hold a gift (Finley: "if I don't have the gift, I shouldn't
+ * be able to pick it on the site either"): 1.76 MHz's "Choice unlocked with the E.G.O Gift "Trauma
+ * Shield"", "Only selectable if in possession of the E.G.O Gift "E-Type Dimensional Dagger"", Timekilling
+ * Time's "Choice unlocked with the 'Warning Notice'", and The Dusk of Amber's "Choice unlocked by
+ * carrying 5+ Theme Pack-exclusive E.G.O Gifts from "The Noon of Violet" and "Hatred and Despair" Packs".
+ */
+export function choiceLock(c: EventChoice, ctx: RunContext): ChoiceLock | null {
+  const text = `${c.label}\n${c.desc ?? ''}`
+  const quoted = (s: string) => [...s.matchAll(/"([^"]+)"|“([^”]+)”|'([^']+)'|‘([^’]+)’/g)].map((m) => m[1] ?? m[2] ?? m[3] ?? m[4])
+  const packs = text.match(/unlocked by carrying (\d+)\+ Theme Pack-exclusive E\.G\.O Gifts from (.+?)(?:\n|$)/i)
+  if (packs) {
+    const n = Number(packs[1])
+    const names = quoted(packs[2])
+    const found = names.map((x) => ctx.data.themePacks.find((p) => normText(p.name) === normText(x))).filter((p) => !!p)
+    const exclusive = new Set(found.flatMap((p) => p.gifts))
+    const have = [...ctx.owned].filter((id) => exclusive.has(id)).length
+    return { need: `${n}+ exclusive gifts from ${names.join(' and ')} (you have ${have})`, met: have >= n }
+  }
+  const m = text.match(/(?:Choice unlocked with|in possession of)[^\n"“'‘]*(["“'‘].+)/i)
+  if (!m) return null
+  const name = quoted(m[1])[0]
+  if (!name) return null
+  const gift = ctx.data.gifts.find((g) => normText(g.name) === normText(name))
+  return { need: gift?.name ?? name, met: !!gift && ctx.owned.has(gift.id) }
 }
 
 /** Odds of the pass side of a follow-up roll. */
@@ -349,9 +385,14 @@ function unclearOutcome(o: EventOutcome | undefined): boolean {
   return !o.text
 }
 
+const closed = (a: { lock?: ChoiceLock }) => !!a.lock && !a.lock.met
+
 export function adviseChoice(c: EventChoice, ctx: RunContext, team: Identity[]): Omit<ChoiceAdvice, 'verdict'> {
-  const then = (c.next ?? []).map((n) => adviseChoice(n, ctx, team)).sort((a, b) => b.value - a.value)
-    .map((a, k) => ({ ...a, verdict: (k === 0 ? 'best' : 'ok') as ChoiceAdvice['verdict'] }))
+  // Follow-ups you can't pick go last and are never the one to pick.
+  const then = (c.next ?? []).map((n) => adviseChoice(n, ctx, team))
+    .sort((a, b) => Number(closed(a)) - Number(closed(b)) || b.value - a.value)
+    .map((a, k) => ({ ...a, verdict: (closed(a) ? 'locked' : k === 0 ? 'best' : 'ok') as ChoiceAdvice['verdict'] }))
+  const lock = choiceLock(c, ctx) ?? undefined
   const own = (o: EventOutcome | undefined) => resolvedValue(o, ctx, team)
   let value: number
   let why: string[]
@@ -386,21 +427,25 @@ export function adviseChoice(c: EventChoice, ctx: RunContext, team: Identity[]):
     why = r.why
     unclear = !c.result?.text && !then.length
   }
-  if (then.length) {
-    value += then[0].value
-    why = [...why, `Then: ${then[0].choice.label}`]
+  const next = then.find((t) => t.verdict === 'best')
+  if (next) {
+    value += next.value
+    why = [...why, `Then: ${next.choice.label}`]
   }
-  return { choice: c, value, odds, why, then, unclear }
+  return { choice: c, value, odds, why, then, unclear, lock }
 }
 
 /** Every choice of one version of the event, best first, with a verdict. */
 export function adviseVariant(v: EventVariant, ctx: RunContext, team: Identity[]): ChoiceAdvice[] {
   const raw = v.choices.map((c) => adviseChoice(c, ctx, team))
-  const best = Math.max(...raw.map((r) => r.value))
+  // A choice the game won't offer you (you don't have its gift) is never the pick.
+  const open = raw.filter((r) => !closed(r))
+  const best = Math.max(...open.map((r) => r.value))
+  const lockedOut = (r: (typeof raw)[number]) => ({ ...r, verdict: 'locked' as const })
   // Every choice worth the same (Hurtily's "Investigate" vs "Keep fighting" on paper): don't call one best.
-  if (raw.length > 1 && raw.every((r) => Math.abs(r.value - best) < 0.01)) return raw.map((r) => ({ ...r, verdict: 'ok' as const }))
+  if (open.length > 1 && open.every((r) => Math.abs(r.value - best) < 0.01)) return raw.map((r) => (closed(r) ? lockedOut(r) : { ...r, verdict: 'ok' as const }))
   return raw
-    .map((r) => ({
+    .map((r) => (closed(r) ? lockedOut(r) : {
       ...r,
       verdict: (r.value === best ? 'best' : r.value < best - EVENT_WEIGHTS.avoidGap ? 'avoid' : 'ok') as ChoiceAdvice['verdict'],
     }))

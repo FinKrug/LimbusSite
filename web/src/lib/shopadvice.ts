@@ -12,8 +12,9 @@
  *
  * The shop's stock is random and the site doesn't know it, hence "if the shop has it".
  */
+import type { CostKeep } from './costkeep'
 import { affordable, isCore, planUpgrades, type UpgradeMove } from './upgrades'
-import { intrinsicScore, type GiftScore, type RunContext } from './scoring'
+import { intrinsicScore, packPool, type GiftScore, type RunContext } from './scoring'
 import type { Gift } from './types'
 
 export interface ShopBuy {
@@ -37,23 +38,28 @@ export interface ShopAdvice {
 /** Top picks counted. */
 const TOP_PICKS = 3
 
-/** Can a shop on this floor sell it: a main-pool gift with a price, tier I-IV, available now. */
-function buyable(g: Gift, availableNow: Set<string>): boolean {
-  return g.pools.includes('main') && (g.cost ?? 0) > 0 && (g.tier ?? 9) <= 4 && availableNow.has(g.id)
+/** Can a shop on this floor sell it: a gift with a price, tier I-IV, available now, from the main pool
+ *  or this floor's pack (its shops sell its own gifts too: Spicebush Branch in Falling Flowers). */
+function buyable(g: Gift, availableNow: Set<string>, packGifts: Set<string>): boolean {
+  return (g.pools.includes('main') || packGifts.has(g.id)) && (g.cost ?? 0) > 0 && (g.tier ?? 9) <= 4 && availableNow.has(g.id)
 }
 
 export function shopAdvice(
   ctx: RunContext, ranked: GiftScore[], levels: Record<string, number>, availableNow: Set<string>, cost: number | null = null,
+  /** Cost to keep for the next floor (Cumulating Starcloud). */
+  keep: CostKeep | null = null,
 ): ShopAdvice {
   const up = planUpgrades(ctx, levels)
   const shop = up.shop || 1
+  const pack = ctx.run.pack ? ctx.data.themePacks.find((p) => p.id === ctx.run.pack) : undefined
+  const packGifts = new Set(pack ? packPool(pack) : [])
   const buys = ranked
-    .filter((r) => !ctx.owned.has(r.gift.id) && buyable(r.gift, availableNow))
+    .filter((r) => !ctx.owned.has(r.gift.id) && buyable(r.gift, availableNow, packGifts))
     .slice(0, TOP_PICKS)
     .map((r) => ({ gift: r.gift, ratio: (intrinsicScore(r.gift, ctx).score / r.gift.cost! * 100) / shop }))
   // Worthwhile upgrades, the ones you can pay for first when you've said how much Cost you have.
   const core = up.order.filter((m) => isCore(m.priority))
-  const fits = cost === null ? core : affordable(core, cost).moves
+  const fits = cost === null ? core : affordable(core, cost, keep).moves
   const order = [...fits, ...core.filter((m) => !fits.includes(m))]
   const best = order[0]
   if (!best) return { kind: 'none', enhance: [], buys, better: buys, versusBuy: null }

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { costPlan, floorCostFrom } from '../lib/costplan'
+import type { CostKeep } from '../lib/costkeep'
+import { costPlan, floorCostFrom, type ShopBuffs } from '../lib/costplan'
 import { usePacksOnFloor, withFloor } from '../lib/run'
 import {
   EXTREME_FROM, RUN_LENGTHS, defaultFloors, withPack, type Difficulty, type GiftScore, type RunContext, type RunSettings,
@@ -13,7 +14,7 @@ interface Props {
   /** Gifts ranked for the current floor (the Best gifts list). */
   ranked: GiftScore[]
   ctx: RunContext
-  /** Start fresh: gifts you have, offered packs, floor and pack (team and saved lineups stay). */
+  /** Start fresh: gifts you have, skill swaps, offered packs, floor and pack (team and saved lineups stay). */
   onClearRun: () => void
   /** Show "Cost to have at this floor's shop" (the Shop shows it on its own). */
   showCost?: boolean
@@ -41,14 +42,14 @@ export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun, showCo
           {run.floor !== null && <button className="link-btn" onClick={() => setFloor(null)}
             title="Stop tracking the floor (keeps your gifts)">End run</button>}
           <button className="link-btn danger" onClick={() => setConfirmClear(!confirmClear)}
-            title="Start a new run: clears the gifts you have, offered theme packs, floor and pack. Your team and saved lineups stay.">
+            title="Start a new run: clears the gifts you have, skill swaps, offered theme packs, floor and pack. Your team and saved lineups stay.">
             Clear run
           </button>
         </span>
       </header>
       {confirmClear && (
         <div className="run-clear small">
-          <span>Clear the gifts you have, offered theme packs, floor and pack? Your team and saved lineups stay.</span>
+          <span>Clear the gifts you have, skill swaps, offered theme packs, floor and pack? Your team and saved lineups stay.</span>
           <span className="run-clear-btns">
             <button className="btn small-btn danger-btn" onClick={() => { onClearRun(); setConfirmClear(false) }}>Clear run</button>
             <button className="link-btn" onClick={() => setConfirmClear(false)}>Cancel</button>
@@ -111,12 +112,20 @@ export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun, showCo
 }
 
 /** How much Cost to have at the shop: now, and (on request) for every floor. */
-export function CostBox({ run, ranked, ctx }: { run: RunSettings; ranked: GiftScore[]; ctx: RunContext }) {
+export function CostBox({ run, ranked, ctx, keep, buffs = {}, start = 200 }: {
+  run: RunSettings; ranked: GiftScore[]; ctx: RunContext
+  /** Cost to keep for the next floor (Cumulating Starcloud). */
+  keep?: CostKeep | null
+  /** Free refreshes and Cost on entering the shop, from your Starlight buffs. */
+  buffs?: ShopBuffs
+  /** Cost you start the run with (Star of the Beginning, Star-shower). */
+  start?: number
+}) {
   const floor = run.floor ?? 1
-  const here = useMemo(() => floorCostFrom(ranked, floor), [ranked, floor])
+  const here = useMemo(() => floorCostFrom(ranked, floor, buffs), [ranked, floor, buffs])
   const [showAll, setShowAll] = useState(false)
   // Ranking every floor takes a moment, so only when asked.
-  const all = useMemo(() => (showAll ? costPlan(ctx) : []), [showAll, ctx])
+  const all = useMemo(() => (showAll ? costPlan(ctx, buffs) : []), [showAll, ctx, buffs])
   return (
     <div className="run-cost">
       <div className="run-cost-head">
@@ -125,10 +134,15 @@ export function CostBox({ run, ranked, ctx }: { run: RunSettings; ranked: GiftSc
           {here.comfortable > here.min && <> · <b>{here.comfortable}</b> <span className="muted small">comfortable</span></>}</span>
       </div>
       <ul className="run-cost-parts">
-        {here.parts.map((p) => <li key={p.label}><span>{p.label}</span><span>{p.cost}</span></li>)}
+        {here.parts.map((p) => <li key={p.label}><span>{p.label}</span><span>{p.cost < 0 ? `−${-p.cost}` : p.cost}</span></li>)}
       </ul>
       {here.top && here.comfortable > here.min && (
         <p className="muted small">Comfortable also covers {here.top.name} ({here.top.cost}), your #1 shop gift.</p>
+      )}
+      {keep && (
+        <p className="small keep-line">
+          And <b>leave with {keep.keep}</b>: {keep.label} adds {Math.round(keep.rate * 100)}% of your Cost on the next floor (up to {keep.cap}).
+        </p>
       )}
       <details className="run-cost-all" onToggle={(e) => setShowAll((e.target as HTMLDetailsElement).open)}>
         <summary className="small">Every floor</summary>
@@ -141,7 +155,7 @@ export function CostBox({ run, ranked, ctx }: { run: RunSettings; ranked: GiftSc
           ))}
         </ol>
         <p className="muted small">
-          Where Cost comes from: you start with 200; fights give 75–150 (Hard 85–180) and bosses 200+ (Hard 250+).
+          Where Cost comes from: you start with {start}; fights give 75–150 (Hard 85–180) and bosses 200+ (Hard 250+).
           Cumulating Starcloud adds 10% of your Cost on each new floor (max 100, so holding 1,000 gets it all).
         </p>
       </details>

@@ -165,6 +165,38 @@ export function PackList({
   )
 }
 
+/**
+ * The pack you picked for this floor, at the top of Fights & events: which of its "?" events to
+ * hope for and the gifts it has for your team, so you don't have to go back to Pick a pack.
+ */
+export function CurrentPack({ pack: p, events, floor, packsForGift, giftsById, owned, onChange }: {
+  pack: PackScore
+  events?: PackEvents
+  floor: number | null
+  packsForGift: Map<string, ThemePack[]>
+  giftsById: Map<string, Gift>
+  owned: Set<string>
+  /** Go to Pick a pack. */
+  onChange: () => void
+}) {
+  const how = (g: Gift) => <HowToGet gift={g} packsForGift={packsForGift} giftsById={giftsById} owned={owned} />
+  return (
+    <section className="card card-picked current-pack" aria-label="This floor's theme pack">
+      <div className="card-main">
+        <span className="gift-label">
+          <span className="muted small">{floor !== null ? `Floor ${floor}:` : 'Your pack:'}</span>
+          <WikiLink href={p.pack.wiki_url}>{p.pack.name}</WikiLink>
+          {p.pack.pool !== 'themed' && <span className="tag">{p.pack.pool}</span>}
+        </span>
+        <button className="link-btn small" onClick={onChange}>Change pack</button>
+      </div>
+      {events ? <PackEventsLine ev={events} /> : <p className="muted small">Pick your team to see which of its events are worth it.</p>}
+      <PackGifts pack={p} how={how} />
+      {p.ownedCount > 0 && <p className="muted small">You already have {p.ownedCount} of its gifts.</p>}
+    </section>
+  )
+}
+
 /** Packs shown before "Show more" (the list is best first). */
 const PACKS_FIRST = 4
 

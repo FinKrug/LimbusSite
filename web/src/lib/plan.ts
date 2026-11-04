@@ -8,6 +8,12 @@
  *  - theme-pack gifts: only from a pack that can show up on this floor (the pack you
  *    picked for the floor first);
  *  - fusion results: only by fusing; Super Shop recipes (Lunar Memory) only on Hard floors.
+ *
+ * Last chance (Finley: "I'm in Falling Flowers, and even though I can only be in it once, Spicebush
+ * Branch wasn't recommended over Talisman Bundle, which I can get anywhere dirt cheap"): a gift that
+ * only this floor's pack has, and no pack later in the run, is now or never. Shopping (Get now, the
+ * Buy list, the shop advice) puts it ahead of a gift as good that any shop sells, and fusions and
+ * sets with a piece like that come up sooner.
  */
 import {
   intrinsicScore, isGone, isHiddenPack, playedPacks, setHas, setRankWeight, packOnFloor, rarityText, recipeGiveUp, WEIGHTS, type GiftScore, type Reason, type RunContext,
@@ -52,7 +58,11 @@ export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string,
   const inPacks = packsForGift.get(g.id) ?? []
   const allPacks = inPacks.filter((p) => !played.has(p.id))
   const current = ctx.run.pack ? allPacks.find((p) => p.id === ctx.run.pack) : undefined
-  if (current) return { where: 'now', text: `This floor's pack (${current.name})` }
+  if (current) {
+    return { where: 'now', text: lastChance(g, ctx, packsForGift)
+      ? `Only in ${current.name}, which you won't see again this run: now or never`
+      : `This floor's pack (${current.name})` }
+  }
   if (g.pools.includes('main')) return { where: 'now', text: 'Shops and fight rewards' }
   // Hidden packs (The B.E.) almost never show up: their gifts are luck, not a plan.
   const packs = allPacks.filter((p) => !isHiddenPack(p))
@@ -109,12 +119,47 @@ export interface Pick {
   where: Availability
 }
 
+/**
+ * This floor's pack, when it's the only place left in the run to get this gift: not the main pool
+ * (any shop sells those), and no unplayed pack on a later floor has it. Null otherwise.
+ */
+export function lastChance(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>): ThemePack | null {
+  if (!ctx.run.pack || ctx.run.floor === null || g.pools.includes('main') || g.fusion_recipe || g.reward_only) return null
+  const inPacks = packsForGift.get(g.id) ?? []
+  const current = inPacks.find((p) => p.id === ctx.run.pack)
+  if (!current) return null
+  const played = playedPacks(ctx.run)
+  const { difficulty, floors, floor } = ctx.run
+  for (let f = floor + 1; f <= floors; f++) {
+    if (inPacks.some((p) => p.id !== current.id && !played.has(p.id) && !isHiddenPack(p) && packOnFloor(p, difficulty, f))) return null
+  }
+  return current
+}
+
+/** Shopping weight of a last-chance gift (x1.5): ahead of an equal one any shop sells later. */
+export const LAST_CHANCE = 0.5
+
 /** Which to go for first: a General (keywordless) theme-pack gift beats a keyword one of about the
- *  same value, since fusing can roll the keyword one but never the General one. */
+ *  same value, since fusing can roll the keyword one but never the General one; and a gift only this
+ *  floor's pack has (lastChance) beats one you can still get later. */
 export const UNFUSABLE_PRIORITY = 0.2
-export function pickPriority(s: GiftScore): number {
+export function pickPriority(s: GiftScore, ctx?: RunContext, packsForGift?: Map<string, ThemePack[]>): number {
   const themedOnly = !s.gift.pools.includes('main') && s.gift.pools.includes('themed')
-  return s.score * (themedOnly && !fusableKeyword(s.gift) ? 1 + UNFUSABLE_PRIORITY : 1)
+  const last = ctx && packsForGift && lastChance(s.gift, ctx, packsForGift) ? 1 + LAST_CHANCE : 1
+  return s.score * (themedOnly && !fusableKeyword(s.gift) ? 1 + UNFUSABLE_PRIORITY : 1) * last
+}
+
+/** Gifts in the order to shop for them on this floor (pickPriority), with a "now or never" reason on last-chance ones. */
+export function shoppingOrder(ranked: GiftScore[], ctx: RunContext, packsForGift: Map<string, ThemePack[]>): GiftScore[] {
+  if (!ctx.run.pack || ctx.run.floor === null) return ranked
+  return ranked
+    .map((s) => {
+      const p = lastChance(s.gift, ctx, packsForGift)
+      return { s: p ? { ...s, reasons: [{ kind: 'good' as const, text: `Only in ${p.name}, which you won't see again this run: now or never` }, ...s.reasons] } : s,
+        k: s.score * (p ? 1 + LAST_CHANCE : 1) }
+    })
+    .sort((a, b) => b.k - a.k)
+    .map((x) => x.s)
 }
 
 function bestPicks(ranked: GiftScore[], ctx: RunContext, packsForGift: Map<string, ThemePack[]>, where: Where, n: number, look: number): Pick[] {
@@ -122,10 +167,9 @@ function bestPicks(ranked: GiftScore[], ctx: RunContext, packsForGift: Map<strin
   for (const s of ranked.slice(0, look)) {
     const w = availability(s.gift, ctx, packsForGift)
     if (w.where === where) found.push({ score: s, where: w })
-    // Enough candidates that a General gift a little lower down can still move up.
-    if (found.length >= n * 3) break
   }
-  return found.sort((a, b) => pickPriority(b.score) - pickPriority(a.score)).slice(0, n)
+  // Every candidate, so a General or last-chance gift further down can still move up.
+  return found.map((p) => ({ p, k: pickPriority(p.score, ctx, packsForGift) })).sort((a, b) => b.k - a.k).slice(0, n).map((x) => x.p)
 }
 
 /** The best gifts you can get on this floor. */
@@ -203,11 +247,14 @@ export function fusionTargets(ctx: RunContext, packsForGift: Map<string, ThemePa
       ? 'Needs a Super Shop, which only appears on Hard floors' : undefined
     const progress = have / total
     const soon = pieces.filter((p) => !p.have && p.where.where === 'now').length / Math.max(1, total - have)
-    const rank = must && !blocked ? Infinity : r.score * (0.35 + 0.5 * progress + 0.15 * soon) * (blocked ? 0.3 : 1)
+    // A piece only this floor's pack has: get it here or the recipe's gone.
+    const last = [...pieces, ...anyPieces].filter((p) => !p.have && lastChance(p.gift, ctx, packsForGift))
+    const rank = must && !blocked ? Infinity : r.score * (0.35 + 0.5 * progress + 0.15 * soon) * (blocked ? 0.3 : 1) * (last.length ? 1 + LAST_CHANCE : 1)
     const reasons: Reason[] = must
       ? [{ kind: 'good', text: must.why }, ...(blocked ? [] : [{ kind: 'info' as const,
         text: 'Build toward it even if you can\'t fuse it yet: take its pieces whenever they show up, and keep them' }])]
       : r.reasons.filter((x) => x.kind !== 'bad').slice(0, 2)
+    if (last.length && !blocked) reasons.unshift(lastPieceReason(last, ctx))
     out.push({ fusion, result, value: r.score, pieces, anyOf, progress, blocked, reasons, rank })
   }
   return out.sort((a, b) => b.rank - a.rank).slice(0, n)
@@ -230,9 +277,15 @@ export function setTargets(ctx: RunContext, packsForGift: Map<string, ThemePack[
       * (combo.any_team ? 0.6 + 0.6 * setRankWeight(combo) : 1)
     const progress = done(pieces) / pieces.length
     const soon = pieces.filter((p) => !p.have && p.where.where === 'now').length / Math.max(1, pieces.length - done(pieces))
-    out.push({ combo, value, pieces, progress, rank: value * (0.4 + 0.45 * progress + 0.15 * soon) })
+    const last = pieces.some((p) => !p.have && !p.via && lastChance(p.gift, ctx, packsForGift))
+    out.push({ combo, value, pieces, progress, rank: value * (0.4 + 0.45 * progress + 0.15 * soon) * (last ? 1 + LAST_CHANCE : 1) })
   }
   return out.sort((a, b) => b.rank - a.rank).slice(0, n)
+}
+
+function lastPieceReason(last: Piece[], ctx: RunContext): Reason {
+  const pack = ctx.data.themePacks.find((p) => p.id === ctx.run.pack)?.name ?? "this floor's pack"
+  return { kind: 'good', text: `${last.map((p) => p.gift.name).slice(0, 2).join(' and ')} ${last.length > 1 ? 'are' : 'is'} only in ${pack}, which you won't see again this run: get ${last.length > 1 ? 'them' : 'it'} here` }
 }
 
 /** Reasons to show first: good ones, then info, then bad. */

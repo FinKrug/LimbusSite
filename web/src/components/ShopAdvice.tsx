@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import type { CostKeep } from '../lib/costkeep'
 import { shopAdvice } from '../lib/shopadvice'
 import type { GiftScore, RunContext } from '../lib/scoring'
 import { usePersistentState } from '../lib/storage'
@@ -12,6 +13,8 @@ interface Props {
   /** The Shop part on screen ('gifts' = Buy, 'upgrades' = Enhance). */
   tab: string
   onOpen: (tab: 'gifts' | 'upgrades') => void
+  /** Cost to keep for the next floor (Cumulating Starcloud). */
+  keep?: CostKeep | null
 }
 
 const plus = (n: number) => '+'.repeat(n)
@@ -24,10 +27,11 @@ const names = (list: { gift: { name: string } }[]) => list.map((b, k) => (
  * Shop screen: is the Cost better spent enhancing a gift you have or buying a new one (lib/shopadvice.ts)?
  * Shown above the Shop's parts; uses the Cost you entered on Enhance, if any.
  */
-export function ShopAdvice({ ctx, ranked, levels, availableNow, tab, onOpen }: Props) {
+export function ShopAdvice({ ctx, ranked, levels, availableNow, tab, onOpen, keep = null }: Props) {
   const [cost] = usePersistentState<number | null>('limbussite.cost.v1', null)
-  const a = useMemo(() => shopAdvice(ctx, ranked, levels, availableNow, cost), [ctx, ranked, levels, availableNow, cost])
-  if (!ctx.owned.size || a.kind === 'none') return null
+  const a = useMemo(() => shopAdvice(ctx, ranked, levels, availableNow, cost, keep), [ctx, ranked, levels, availableNow, cost, keep])
+  const keepLine = keep && <KeepLine keep={keep} cost={cost} />
+  if (!ctx.owned.size || a.kind === 'none') return keepLine ? <section className="panel shop-advice">{keepLine}</section> : null
   const [first, second] = a.enhance
   const more = a.versusBuy && a.versusBuy >= 1.1 ? ` (about ${a.versusBuy.toFixed(1)}× as much per Cost)` : ''
   const go = a.kind === 'buy' ? 'gifts' : 'upgrades'
@@ -43,8 +47,21 @@ export function ShopAdvice({ ctx, ranked, levels, availableNow, tab, onOpen }: P
           {a.kind === 'buy' && <>Gifts like {names(a.better.slice(0, 2))} do more for your team per Cost than any upgrade.
             {' '}With Cost left after buying, upgrade {move(first)}.</>}
         </p>
+        {keepLine}
       </div>
       {tab !== go && <button className="btn small-btn" onClick={() => onOpen(go)}>{go === 'upgrades' ? 'Open Enhance' : 'Open Buy'}</button>}
     </section>
+  )
+}
+
+/** Cumulating Starcloud: what to leave the floor with, and what spending below it costs. */
+export function KeepLine({ keep: k, cost }: { keep: CostKeep; cost: number | null }) {
+  const pct = Math.round(k.rate * 100)
+  return (
+    <p className="small keep-line">
+      <b>Leave the floor with {k.keep} Cost</b> for {k.label}: it adds {pct}% of your Cost on the next floor (up to {k.cap}).
+      {' '}Below {k.keep}, each 100 Cost you spend also takes {pct} off that bonus, so the advice only spends there when it's worth it
+      {cost !== null && cost < k.keep ? <> (with your {cost} it adds {Math.round(cost * k.rate)})</> : null}.
+    </p>
   )
 }

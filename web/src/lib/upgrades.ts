@@ -23,6 +23,7 @@
  * enough pieces missing for the floors left (`fusingSoon`). An unlikely or bad fusion doesn't stop it.
  */
 import { recipePlans, recipeWorthKeeping, type RecipePlan } from './fusion'
+import { starcloudLoss, type CostKeep } from './costkeep'
 import { mustHave, neededPiece } from './musthave'
 import { ENHANCE_COST, intrinsicScore, lastFloor, levelValue, type RunContext } from './scoring'
 import type { Gift } from './types'
@@ -206,9 +207,17 @@ export function planUpgrades(ctx: RunContext, levels: Record<string, number> = {
 /**
  * The moves you can pay for with `budget` Cost, best value first. A gift's ++ waits for its +;
  * a move that doesn't fit is passed over for cheaper ones further down.
+ *
+ * With Cost to keep for the next floor (costkeep.ts: Cumulating Starcloud), a move that dips below
+ * it also costs the bonus it loses, and waits (`held`) unless it's still worth it at that price
+ * (a Low upgrade or better). `lost`: what the moves you can do lose of the bonus.
  */
-export function affordable(order: UpgradeMove[], budget: number): { moves: UpgradeMove[]; spent: number } {
+export function affordable(order: UpgradeMove[], budget: number, keep: CostKeep | null = null): {
+  moves: UpgradeMove[]; spent: number; held: UpgradeMove[]; lost: number
+} {
   const picked: UpgradeMove[] = []
+  const held: UpgradeMove[] = []
+  let lost = 0
   // Each gift's level now (its first move starts there), then as moves are picked.
   const reached = new Map<string, number>()
   for (const m of order) reached.set(m.gift.id, Math.min(reached.get(m.gift.id) ?? m.from, m.from))
@@ -216,9 +225,17 @@ export function affordable(order: UpgradeMove[], budget: number): { moves: Upgra
   for (const m of order) {
     if (reached.get(m.gift.id) !== m.from) continue // its + didn't fit
     if (spent + m.cost > budget) continue
+    if (keep) {
+      const loss = starcloudLoss(keep, budget - spent, m.cost)
+      if (loss > 0 && m.ratio * m.cost / (m.cost + loss) < UPGRADE_LEVELS.low) {
+        held.push(m)
+        continue
+      }
+      lost += loss
+    }
     picked.push(m)
     spent += m.cost
     reached.set(m.gift.id, m.to)
   }
-  return { moves: picked, spent }
+  return { moves: picked, spent, held, lost: Math.round(lost) }
 }

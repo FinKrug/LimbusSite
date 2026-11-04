@@ -196,23 +196,27 @@ function Variant({ variant, ctx, team, open = false }: {
   )
 }
 
-function ChoiceRow({ a, nested = false }: { a: ChoiceAdvice; nested?: boolean }) {
+function ChoiceRow({ a, nested = false, locked = false }: { a: ChoiceAdvice; nested?: boolean; locked?: boolean }) {
   const c = a.choice
+  // Not offered to you (you don't have the gift it needs), or under a choice that isn't.
+  const off = locked || a.verdict === 'locked'
   return (
     <li className={`event-choice verdict-${a.verdict}${nested ? ' nested' : ''}`}>
       <div className="event-choice-head">
         <span className="event-choice-label">{c.label || '(choice)'}</span>
         {a.verdict === 'best' && <span className="pill">{nested ? 'Then pick' : '★ Best for your team'}</span>}
         {a.verdict === 'avoid' && <span className="pill warn">Avoid</span>}
+        {a.verdict === 'locked' && a.lock && <span className="pill pill-locked" title="The game only offers this choice if you have it">🔒 Needs {a.lock.need}</span>}
+        {a.lock?.met && <span className="pill pill-unlocked">Unlocked: you have {a.lock.need}</span>}
       </div>
       {c.desc && <p className="muted small">{c.desc}</p>}
       {c.check && a.odds && <CheckLine a={a} />}
       {c.check ? (
         <>
-          <Outcome label="Pass" o={c.pass} />
-          <Outcome label="Fail" o={c.fail} />
+          <Outcome label="Pass" o={c.pass} off={off} />
+          <Outcome label="Fail" o={c.fail} off={off} />
         </>
-      ) : <Outcome o={c.result} />}
+      ) : <Outcome o={c.result} off={off} />}
       {a.why.length > 0 && (
         <ul className="event-why small">
           {a.why.filter((w) => !w.startsWith('Then:')).slice(0, 4).map((w, k) => <li key={k}>{w}</li>)}
@@ -221,7 +225,7 @@ function ChoiceRow({ a, nested = false }: { a: ChoiceAdvice; nested?: boolean })
       {a.unclear && <p className="muted small">The wiki doesn't spell out part of this result; check the wiki page.</p>}
       {a.then.length > 0 && (
         <ol className="event-choices nested-list">
-          {a.then.map((t, k) => <ChoiceRow key={k} a={t} nested />)}
+          {a.then.map((t, k) => <ChoiceRow key={k} a={t} nested locked={off} />)}
         </ol>
       )}
     </li>
@@ -253,7 +257,7 @@ function CheckLine({ a }: { a: ChoiceAdvice }) {
   )
 }
 
-function Outcome({ label, o }: { label?: string; o?: EventOutcome }) {
+function Outcome({ label, o, off = false }: { label?: string; o?: EventOutcome; off?: boolean }) {
   if (!o || (!o.text && !o.then)) return null
   const t = o.then
   const sides = t ? (t.retry
@@ -267,13 +271,13 @@ function Outcome({ label, o }: { label?: string; o?: EventOutcome }) {
       {o.text && (
         <p className={`event-outcome small${o.hurts ? ' hurts' : ''}${o.nothing ? ' nothing' : ''}`}>
           {label && <span className="event-outcome-label">{label}:</span>} {o.text.replace(/\n+/g, ' ')}
-          {o.gifts.length > 0 && <GotIt gifts={o.gifts} />}
+          {o.gifts.length > 0 && !off && <GotIt gifts={o.gifts} />}
         </p>
       )}
       {t && (
         <div className="event-followup">
           {!o.text && label && <p className="event-outcome small"><span className="event-outcome-label">{label}:</span> a second roll decides what you get.</p>}
-          {sides.map(([l, x]) => <Outcome key={l} label={l} o={x} />)}
+          {sides.map(([l, x]) => <Outcome key={l} label={l} o={x} off={off} />)}
         </div>
       )}
     </>

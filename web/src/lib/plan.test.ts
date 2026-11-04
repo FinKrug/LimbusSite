@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { availability, comingUp, fusionTargets, getNow, pickPriority, setTargets } from './plan'
+import { availability, comingUp, fusionTargets, getNow, lastChance, pickPriority, setTargets, shoppingOrder } from './plan'
 import { makeContext, packOnFloor, packsByGift, rankGifts, type RunSettings } from './scoring'
 import type { Identity } from './types'
 
@@ -101,5 +101,24 @@ describe('your plan', () => {
     expect(lunar?.anyOf?.count).toBe(2)
     const hard = makeContext(gameData, team, memories, { run: run() })
     expect(fusionTargets(hard, pfg, 60).find((f) => f.result.id === 'lunar-memory')?.blocked).toBeUndefined()
+  })
+})
+
+describe("last chance: a gift only this floor's pack has (Finley: Spicebush Branch in Falling Flowers)", () => {
+  const ff = run({ difficulty: 'normal', floors: 5, floor: 3, pack: 'falling-flowers' })
+  const ctx = makeContext(gameData, team, [], { run: ff })
+  const byId = (id: string) => ctx.giftsById.get(id)!
+  it("is now or never: not for main-pool gifts, or when a later floor's pack has it too", () => {
+    expect(lastChance(byId('spicebush-branch'), ctx, pfg)?.id).toBe('falling-flowers')
+    expect(lastChance(byId('talisman-bundle'), ctx, pfg)).toBeNull()
+    // Before the pack is picked, nothing is now or never yet.
+    expect(lastChance(byId('spicebush-branch'), makeContext(gameData, team, [], { run: { ...ff, pack: null } }), pfg)).toBeNull()
+    expect(availability(byId('spicebush-branch'), ctx, pfg).text).toMatch(/now or never/)
+  })
+  it('puts it ahead of a cheap gift any shop sells', () => {
+    const order = shoppingOrder(rankGifts(ctx), ctx, pfg)
+    const at = (id: string) => order.findIndex((s) => s.gift.id === id)
+    expect(at('spicebush-branch')).toBeLessThan(at('talisman-bundle'))
+    expect(order[at('spicebush-branch')].reasons[0].text).toMatch(/Only in Falling Flowers/)
   })
 })

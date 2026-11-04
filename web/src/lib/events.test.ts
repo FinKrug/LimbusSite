@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { adviseVariant, checkOdds, clashLines, eventsForPack, findEvents, rollChance, searchEvents } from './events'
+import { adviseVariant, checkOdds, choiceLock, clashLines, eventsForPack, findEvents, rollChance, searchEvents } from './events'
 import { DEFAULT_RUN, defaultFloors, makeContext } from './scoring'
 import { withSwaps } from './battle'
 import type { Sin } from './types'
@@ -156,5 +156,29 @@ describe('clash effects in event results', () => {
     expect(clashLines('All allies gain 1 Clash Power Up for this Encounter')).toBe(1)
     expect(clashLines('[Hurting Teddy Bear] gains 1 Clash Power Down every turn')).toBe(1)
     expect(clashLines('E.G.O Gift Rest obtained!')).toBe(0)
+  })
+})
+
+describe('choices unlocked by a gift (Finley: "if I don\'t have the gift, I shouldn\'t be able to pick it")', () => {
+  const team = gameData.identities.slice(0, 7)
+  const mhz = gameData.events!.find((e) => e.name === '1.76 MHz')!
+  const v = mhz.variants.find((x) => x.choices.some((c) => /Trauma Shield/.test(c.label)))!
+  const shield = (a: { choice: { label: string } }) => /Trauma Shield/.test(a.choice.label)
+  it('is locked, and never the pick, without the gift', () => {
+    const adv = adviseVariant(v, makeContext(gameData, team, [], {}), team)
+    const a = adv.find(shield)!
+    expect(a.verdict).toBe('locked')
+    expect(a.lock).toEqual({ need: 'Trauma Shield', met: false })
+    expect(adv.some((x) => x.verdict === 'best')).toBe(true)
+  })
+  it('opens up once you have it', () => {
+    const a = adviseVariant(v, makeContext(gameData, team, ['trauma-shield'], {}), team).find(shield)!
+    expect(a.verdict).not.toBe('locked')
+    expect(a.lock?.met).toBe(true)
+  })
+  it('counts pack exclusives for The Dusk of Amber', () => {
+    const e = gameData.events!.find((x) => x.name === 'The Dusk of Amber Theme Pack')!
+    const c = e.variants.flatMap((x) => x.choices).find((x) => /Upper Layer/.test(x.label))!
+    expect(choiceLock(c, makeContext(gameData, team, [], {}))?.met).toBe(false)
   })
 })

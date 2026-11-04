@@ -11,11 +11,14 @@ import { OwnedGifts, PickupBox } from './components/OwnedGifts'
 import { PlanPanel } from './components/PlanPanel'
 import { PreRunTab } from './components/PreRunTab'
 import { EMPTY_PRERUN, type PreRunState } from './lib/prerun'
+import { starcloudKeep } from './lib/costkeep'
+import { floorNotes, freeRefreshes, shopNotes, shopTierCost, startingCost } from './lib/buffeffects'
+import { BuffNotes } from './components/BuffNotes'
 import { LineupTools, PresetBox } from './components/PresetBox'
-import { availability } from './lib/plan'
-import { PackList } from './components/PackList'
+import { availability, shoppingOrder } from './lib/plan'
+import { CurrentPack, PackList } from './components/PackList'
 import { prioritizePacks, routeScores } from './lib/packroute'
-import { allPackEvents } from './lib/packevents'
+import { allPackEvents, packEvents as packEventsFor, usualEvents, usualWorth } from './lib/packevents'
 import { eventsForPack } from './lib/events'
 import { FormationBar } from './components/FormationBar'
 import { CostBox, RunPanel } from './components/RunPanel'
@@ -262,6 +265,8 @@ export default function App() {
   const focus = teamFocus(ctx.profile)
   const traitsOnTeam = [...ctx.profile.traitCounts].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1])
   const rankedGifts = useMemo(() => rankGifts(ctx), [ctx])
+  // At the shop: gifts only this floor's pack has (now or never) ahead of ones any shop sells.
+  const shopRanked = useMemo(() => shoppingOrder(rankedGifts, ctx, packsForGift), [rankedGifts, ctx, packsForGift])
   // The route over the whole run (packroute.ts) is internal: it orders the packs in view so one
   // that's about to stop showing up comes before one that will still be around later.
   const routeScoresAll = useMemo(() => (tab === 'packs' && ctx.profile.size && run.floor !== null ? routeScores(ctx) : []), [ctx, tab, run.floor])
@@ -283,6 +288,17 @@ export default function App() {
       : undefined),
     [ctx, tab, teamIdentities],
   )
+  // Fights & events: the floor's pack at the top, with its events and gifts (as on Pick a pack).
+  const currentPackScore = useMemo(
+    () => (stage === 'fights' && currentPack ? rankThemePacks(ctx, [currentPack])[0] ?? null : null),
+    [stage, currentPack, ctx],
+  )
+  const currentPackEvents = useMemo(() => {
+    if (stage !== 'fights' || !currentPack || !ctx.profile.size) return undefined
+    const team = teamIdentities.length ? teamIdentities : ctx.members
+    const events = gameData.events ?? []
+    return packEventsFor(currentPack, events, ctx, team, usualWorth(usualEvents(events, gameData.themePacks), ctx, team))
+  }, [stage, currentPack, ctx, teamIdentities])
   // Gifts you can get on the floor you're on (shops, rewards, this floor's packs).
   const availableNow = useMemo(
     () => new Set(gameData.gifts.filter((g) => availability(g, ctx, packsForGift).where === 'now').map((g) => g.id)),
@@ -290,6 +306,19 @@ export default function App() {
   )
   const ownedGifts = useMemo(() => [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g), [ctx])
 
+  // Cost to leave each floor with, from the Starlight buffs you took (Cumulating Starcloud).
+  const keepCost = useMemo(() => starcloudKeep(prerun.buffs, run), [prerun.buffs, run])
+  // The rest of what they do at shops and on entering floors (lib/buffeffects.ts).
+  const ownedTiers = useMemo(() => owned.map((id) => ctx.giftsById.get(id)?.tier ?? 0), [owned, ctx.giftsById])
+  const shopBuffs = useMemo(() => ({ freeRefreshes: freeRefreshes(prerun.buffs), onEntry: shopTierCost(prerun.buffs, ownedTiers)?.cost }),
+    [prerun.buffs, ownedTiers])
+  const shopBuffNotes = useMemo(() => shopNotes(prerun.buffs, run.floor ?? 1, ownedTiers), [prerun.buffs, run.floor, ownedTiers])
+  const floorBuffNotes = useMemo(() => (run.floor === null ? [] : floorNotes(prerun.buffs, run.floor, prerun.keyword)),
+    [prerun.buffs, run.floor, prerun.keyword])
+  const addMany = (ids: string[]) => setOwned((o) => ids.reduce((acc, id) => addGift(acc, id, ctx.giftsById.get(id)?.tier ?? null), o))
+  const floorBuffBox = (
+    <BuffNotes title={`Your Starlight buffs on floor ${run.floor}`} notes={floorBuffNotes} giftsById={ctx.giftsById} owned={owned} onAdd={addMany} />
+  )
   const own = (id: string) => setOwned((o) => addGift(o, id, ctx.giftsById.get(id)?.tier ?? null))
 
   if (home) {
@@ -308,6 +337,8 @@ export default function App() {
     // Run data only: the team, E.G.O, saved lineups and settings stay.
     setOwned([])
     setEnhanced({})
+    // Skill swaps only last the run (Finley: they were still there after clearing it).
+    setSwaps({})
     setPrerun({ ...EMPTY_PRERUN, starlight: prerun.starlight })
     setOffered([])
     setDismissed([])
@@ -370,7 +401,9 @@ export default function App() {
         } }
         return { label: 'Finish the run', sub: `Floor ${f} was the last`, go: () => {
           setRun(withFloor(run, null))
-          setCleared((c) => ({ key: (c?.key ?? 0) + 1, title: 'Run cleared', sub: 'Your gifts stay until you Clear run' }))
+          // The game puts skills back when the run ends; gifts stay here until Clear run, to look back on.
+          setSwaps({})
+          setCleared((c) => ({ key: (c?.key ?? 0) + 1, title: 'Run cleared', sub: 'Skill swaps are reset; your gifts stay until you Clear run' }))
           openStage('team')
           toTop()
         } }
@@ -469,6 +502,7 @@ export default function App() {
 
         {tab === 'packs' && (
           <div className="stage-main">
+            {floorBuffBox}
             {focusLine}
             <PackList advice={packAdvice} events={packEvents} allPacks={gameData.themePacks} ranked={rankedPacks}
               offered={offered.filter((id) => packsById.has(id))} onOfferedChange={setOffered}
@@ -480,17 +514,18 @@ export default function App() {
         {stage === 'shop' && (
           <div className="layout">
             <aside className="side">
-              <section className="panel"><CostBox run={run} ranked={rankedGifts} ctx={ctx} /></section>
+              <section className="panel"><CostBox run={run} ranked={rankedGifts} ctx={ctx} keep={keepCost} buffs={shopBuffs} start={startingCost(prerun.buffs)} /></section>
               <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={setOwned} />
             </aside>
             <main className="main">
-              <ShopAdvice ctx={ctx} ranked={rankedGifts} levels={enhanced} availableNow={availableNow} tab={tab} onOpen={setTab} />
+              <BuffNotes title="Your Starlight buffs at this shop" notes={shopBuffNotes} giftsById={ctx.giftsById} owned={owned} onAdd={addMany} />
+              <ShopAdvice ctx={ctx} ranked={shopRanked} levels={enhanced} availableNow={availableNow} tab={tab} onOpen={setTab} keep={keepCost} />
               {subNav}
               {tab === 'gifts' && (
                 <>
                   {focusLine}
                   <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={own} />
-                  <GiftList ranked={rankedGifts} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
+                  <GiftList ranked={shopRanked} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
                     teamKeywords={focus.map((f) => f.keyword)} initialFilter={run.floor === null ? 'team' : 'now'}
                     onOwn={own} giftsById={ctx.giftsById} owned={ctx.owned} />
                 </>
@@ -500,7 +535,7 @@ export default function App() {
                   teamKeywords={focus.map((f) => f.keyword)} packsForGift={packsForGift}
                   superShop={superShop} onSuperShopChange={setSuperShop} />
               )}
-              {tab === 'upgrades' && <UpgradesTab ctx={ctx} levels={enhanced} onLevelsChange={setEnhanced} ranked={rankedGifts} />}
+              {tab === 'upgrades' && <UpgradesTab ctx={ctx} levels={enhanced} onLevelsChange={setEnhanced} ranked={rankedGifts} keep={keepCost} />}
               {tab === 'skills' && (
                 <SkillsTab team={teamIdentities.slice(0, deployed)} backups={teamIdentities.slice(deployed)} swaps={swaps} onSwapsChange={setSwaps} owned={ownedGifts} art={art}
                   egos={gameData.egos ?? []} loadout={loadout} run={run} battle={ctx.battle} onOpenTeam={() => setTab('team')} />
@@ -511,6 +546,16 @@ export default function App() {
 
         {stage === 'fights' && (
           <div className="stage-main">
+            {currentPackScore ? (
+              <CurrentPack pack={currentPackScore} events={currentPackEvents} floor={run.floor}
+                packsForGift={packsForGift} giftsById={ctx.giftsById} owned={ctx.owned} onChange={() => { openStage('packs'); toTop() }} />
+            ) : (
+              <p className="panel current-pack-none">
+                Pick this floor's theme pack to see which of its "?" events to go for and the gifts it has for your team.{' '}
+                <button className="link-btn" onClick={() => { openStage('packs'); toTop() }}>Pick a pack</button>
+              </p>
+            )}
+            {floorBuffBox}
             {formation}
             {/* After a fight the reward card's gift is random (no choice to compare), so this screen
                 is for adding what you got, and the "?" events. */}

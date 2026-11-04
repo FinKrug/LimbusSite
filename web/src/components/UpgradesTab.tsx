@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import type { CostKeep } from '../lib/costkeep'
 import { floorCostFrom } from '../lib/costplan'
 import type { GiftScore, RunContext } from '../lib/scoring'
 import { ENHANCE_COST, lastFloor } from '../lib/scoring'
@@ -13,6 +14,8 @@ interface Props {
   onLevelsChange: (levels: Record<string, number>) => void
   /** Gifts ranked for this floor (for the Cost your top shop picks take). */
   ranked: GiftScore[]
+  /** Cost to keep for the next floor (Cumulating Starcloud). */
+  keep?: CostKeep | null
 }
 
 const PRIORITY: Record<Priority, string> = { high: 'High', medium: 'Medium', low: 'Low', spare: 'With spare Cost', skip: 'No change' }
@@ -28,15 +31,17 @@ function gainText(p: UpgradePlan, m: UpgradeMove): string {
 /**
  * Upgrades tab: which of your gifts to enhance at a shop, how far, and in what order (lib/upgrades.ts).
  */
-export function UpgradesTab({ ctx, levels, onLevelsChange, ranked }: Props) {
+export function UpgradesTab({ ctx, levels, onLevelsChange, ranked, keep: starcloud = null }: Props) {
   const overview = useMemo(() => planUpgrades(ctx, levels), [ctx, levels])
   // The Cost you have now, and whether to keep some for your top shop picks (Finley: "what if we have a lot of Cost?").
   const [cost, setCost] = usePersistentState<number | null>('limbussite.cost.v1', null)
   const [keep, setKeep] = usePersistentState<boolean>('limbussite.costkeep.v1', true)
   const reserve = useMemo(() => (lastFloor(ctx.run) ? 0 : floorCostFrom(ranked, ctx.run.floor ?? 1).comfortable), [ranked, ctx.run])
   const budget = cost === null ? null : Math.max(0, cost - (keep ? reserve : 0))
-  const can = useMemo(() => (budget === null ? null : affordable(overview.order, budget)), [overview.order, budget])
+  const can = useMemo(() => (budget === null ? null : affordable(overview.order, budget, starcloud)), [overview.order, budget, starcloud])
   const doNow = new Set((can?.moves ?? []).map((m) => `${m.gift.id}:${m.to}`))
+  // Upgrades that wait so you keep Cumulating Starcloud's bonus.
+  const held = new Set((can?.held ?? []).map((m) => `${m.gift.id}:${m.to}`))
   const setLevel = (id: string, level: number) => {
     const next = { ...levels }
     if (level > 0) next[id] = level
@@ -75,7 +80,10 @@ export function UpgradesTab({ ctx, levels, onLevelsChange, ranked }: Props) {
               {can.moves.length
                 ? <>You can do <b>{can.moves.length}</b> upgrade{can.moves.length === 1 ? '' : 's'} ({can.spent} Cost){keep && reserve > 0 ? `, keeping ${reserve} for shop gifts` : ''}; {cost! - can.spent - (keep ? reserve : 0) > 0 ? `${cost! - can.spent - (keep ? reserve : 0)} left over` : 'nothing left over'}. They're marked <span className="pill pill-now">Do now</span>.</>
                 : budget === 0 && keep && reserve > 0 ? <>All of it goes to your top shop picks. Untick the box to spend it on upgrades instead.</>
-                  : <>Not enough for any upgrade yet (the cheapest is {Math.min(...overview.order.map((m) => m.cost))}).</>}
+                  : can.held.length ? <>Nothing yet: the upgrades you can pay for would cost more in {starcloud!.label}'s bonus than they're worth.</>
+                    : <>Not enough for any upgrade yet (the cheapest is {Math.min(...overview.order.map((m) => m.cost))}).</>}
+              {starcloud && can.lost > 0 && <> These lose about {can.lost} of {starcloud.label}'s bonus on the next floor, and are still worth it.</>}
+              {starcloud && can.held.length > 0 && <> {can.held.length} more wait{can.held.length === 1 ? 's' : ''} (marked <span className="pill pill-keep">Keep Cost</span>): not worth dropping below {starcloud.keep}.</>}
             </p>
           )}
         </div>
@@ -95,6 +103,7 @@ export function UpgradesTab({ ctx, levels, onLevelsChange, ranked }: Props) {
                         <span className="pill">{m.to - m.from > 1 ? `Straight to ${plus(m.to)}` : `To ${plus(m.to)}`}</span>
                         <span className={`pill pill-prio-${m.priority}`}>{PRIORITY[m.priority]}</span>
                         {doNow.has(`${m.gift.id}:${m.to}`) && <span className="pill pill-now">Do now</span>}
+                        {held.has(`${m.gift.id}:${m.to}`) && <span className="pill pill-keep" title={`Worth less than the ${starcloud?.label} bonus it would lose`}>Keep Cost</span>}
                         <button className="btn small-btn" onClick={() => setLevel(m.gift.id, m.to)} title="Mark it as upgraded: the plan moves on">Done</button>
                       </div>
                       <span className="muted small">

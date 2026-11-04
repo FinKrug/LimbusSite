@@ -1159,6 +1159,8 @@ p.skill-best { background: none; border-color: var(--line); }
 .event-got-btn { margin-left: 6px; padding: 1px 10px; }
 .event-got { color: var(--good); }
 .card.card-picked { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 18px rgb(227 169 60 / 0.18); background: linear-gradient(180deg, rgb(227 169 60 / 0.07), var(--panel) 45%); }
+.current-pack { display: grid; gap: 6px; }
+.current-pack .pack-gifts { margin-top: 2px; }
 .pill.pill-picked { background: var(--accent); color: #1b1409; }
 .plan-kws { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 4px 0 10px; }
 
@@ -1376,6 +1378,8 @@ p.skill-best { background: none; border-color: var(--line); }
 .boss-note { margin: 0; font-size: 14px; }
 .pill.pill-prio-spare, .pill.upgrade-verdict-spare { background: rgb(154 145 135 / 0.16); color: var(--text); border: 1px dashed var(--line); }
 .pill.pill-now { background: var(--accent); color: var(--accent-ink); font-weight: 800; }
+.pill.pill-keep { background: rgb(100 150 230 / 0.18); color: #b9d2ff; }
+.keep-line { margin: 6px 0 0; padding: 6px 10px; border-left: 3px solid #5b8fd8; background: rgb(100 150 230 / 0.08); border-radius: 4px; }
 .upgrade-move.now { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
 .upgrade-move.later { opacity: 0.65; }
 .upgrade-budget { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 10px 0 4px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); }
@@ -1481,3 +1485,17 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
   .prerun-keywords li .muted { grid-column: 1 / -1; }
 }
 .start-options summary { cursor: pointer; margin-top: 4px; }
+
+/* Starlight buffs at a shop / on a floor (BuffNotes). */
+.buff-notes h3 { margin: 0 0 6px; font-size: 14px; }
+.buff-notes ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.buff-notes li { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; border-left: 3px solid #5b8fd8; padding: 2px 0 2px 10px; }
+.buff-note-name { font-weight: 700; font-size: 13px; color: #b9d2ff; }
+.buff-note-adds { display: flex; flex-wrap: wrap; gap: 6px; }
+.buff-note-adds .chip-btn { display: inline-flex; align-items: center; gap: 4px; }
+
+/* Event choices the game only offers if you hold a gift. */
+.event-choice.verdict-locked { opacity: 0.55; }
+.event-choice.verdict-locked .event-choice-label { text-decoration: line-through; text-decoration-color: rgb(255 255 255 / 0.35); }
+.pill.pill-locked { background: rgb(224 103 90 / 0.16); color: var(--bad); }
+.pill.pill-unlocked { background: rgb(127 196 122 / 0.16); color: var(--good); }

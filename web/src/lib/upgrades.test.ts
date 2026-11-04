@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { DEFAULT_RUN, defaultFloors, makeContext } from './scoring'
+import { starcloudKeep, starcloudLoss } from './costkeep'
 import { affordable, fusingSoon, maxLevel, planGift, planUpgrades, shopValue } from './upgrades'
 
 const byId = (id: string) => gameData.identities.find((x) => x.id === id)!
@@ -51,6 +52,29 @@ describe('upgrade planner', () => {
     const tbMoves = affordable(order, 130).moves.filter((m) => m.gift.id === tb)
     expect(tbMoves.every((m, k) => m.from === (k === 0 ? 0 : tbMoves[k - 1].to))).toBe(true)
     expect(affordable(order, 0).moves).toHaveLength(0)
+  })
+
+  it('keeps Cost for Cumulating Starcloud: spending below the line only when it is worth the bonus lost (Finley)', () => {
+    // Base: 10% (max 100), so 1000 gets it all; ++: 30% (max 150), 500.
+    expect(starcloudKeep({ 'cumulating-starcloud': 1 }, run)!.keep).toBe(1000)
+    const k = starcloudKeep({ 'cumulating-starcloud': 3 }, run)!
+    expect(k.keep).toBe(500)
+    expect(starcloudKeep({}, run)).toBeNull()
+    // Nothing to keep on the last floor.
+    expect(starcloudKeep({ 'cumulating-starcloud': 3 }, { ...run, floor: run.floors })).toBeNull()
+    // Spending 200 out of 600 drops 100 below 500: 30 of the bonus.
+    expect(starcloudLoss(k, 600, 200)).toBeCloseTo(30)
+    expect(starcloudLoss(k, 2000, 200)).toBe(0)
+    const { order } = planUpgrades(ctx)
+    const all = order.reduce((a, m) => a + m.cost, 0)
+    // Plenty above the line: the same as without it.
+    expect(affordable(order, all + 1000, k).moves).toHaveLength(order.length)
+    // At the line, With spare Cost upgrades wait; what's done is still worth it after the loss.
+    const tight = affordable(order, all, k)
+    expect(tight.held.length).toBeGreaterThan(0)
+    expect(tight.held.some((m) => m.priority === 'spare')).toBe(true)
+    expect(tight.moves.every((m) => m.priority !== 'spare')).toBe(true)
+    expect(tight.lost).toBeGreaterThan(0)
   })
 
   it('moves on as you upgrade, and ranks every move best first', () => {
