@@ -48,6 +48,17 @@ describe('starting gifts', () => {
     const done = gameData.fusions.find((f) => !f.any_of && f.ingredients.every((i) => ids.includes(i)))
     if (done) expect(plan.together.some((t) => t.startsWith('Together they fuse into'))).toBe(true)
   })
+
+  it('pairs Flower in the Mirror with Moon in the Water for Heishou (Finley): both, not "skip it with Flower"', () => {
+    const ctx = makeContext(gameData, heishou, [], { run: run('hard') })
+    // Moon makes its own Poise off Rupture, so a Rupture team fits it as well as Flower.
+    const moon = scoreGift(ctx.giftsById.get('moon-in-the-water-md')!, ctx)
+    expect(moon.fit).toBeGreaterThan(0.9)
+    const plan = startingPicks(ctx, pfg)
+    const flower = [...plan.picks, ...plan.alternatives].find((p) => p.score.gift.id === 'flower-in-the-mirror-md')!
+    expect(flower.partner?.id).toBe('moon-in-the-water-md')
+    expect(flower.why[0]).toMatch(/Buy it with Moon in the Water/)
+  })
 })
 
 describe('EX gifts', () => {

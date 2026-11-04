@@ -137,5 +137,15 @@
     ],
     "why": "Downpour inflicts Tremor and triggers Tremor Burst on every enemy each turn. That sets off Melted Eyeball (Offense and Defense Level Down) and Bell of Truth (Fragile) without needing a Tremor team.",
     "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3564345378"
+  },
+  {
+    "id": "flower-and-moon",
+    "name": "Flower in the Mirror + Moon in the Water pair",
+    "gifts": [
+      "flower-in-the-mirror-md",
+      "moon-in-the-water-md"
+    ],
+    "why": "The Surrendered Witnessing's two gifts: Flower in the Mirror puts Rupture on every enemy each turn, which turns on Moon in the Water's Poise (5+ Rupture Potency) and its crit damage (20+ Rupture). Both grow with how many of your team apply Rupture or gain Poise.",
+    "keyword": "Rupture"
   }
 ]

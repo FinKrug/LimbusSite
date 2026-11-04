@@ -42,6 +42,11 @@ describe('before the run (Finley)', () => {
     // Perfected Possibility's 2 Tier 3 gifts are random: counted at the pool's average.
     expect(best.tier3).toBeGreaterThan(0)
     expect(rankStartKeywords(ctx, 2, 0)[0].tier3).toBe(0)
+    // The keyword's later gifts count too: Rupture's run, not just Slash's starting gifts (Finley).
+    const one = rankStartKeywords(ctx, 1, 0)
+    expect(one[0].keyword).toBe('Rupture')
+    expect(one[0].pool.length).toBeGreaterThan(0)
+    expect(one.findIndex((k) => k.keyword === 'Rupture')).toBeLessThan(one.findIndex((k) => k.keyword === 'Slash'))
   })
 
   it('plans Starlight: worth more than its Cost, + after base, within the budget', () => {

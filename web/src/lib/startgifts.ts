@@ -13,6 +13,9 @@
  *   value = score x 0.5 + score x findFactor + skip
  *   findFactor = 0.25 for main-pool gifts, else min(1, 3 / packs in this difficulty that have it)
  *   skip       = 0.8 x score x (its share of the pack's exclusives that fit your team), when that share >= 0.6
+ *                and no other exclusive there is worth much (60%+ of this one) to your team;
+ *                with one that is (Flower in the Mirror and Moon in the Water), the two are a pair:
+ *                half that, counted on the pair's share, and the advice says to buy both
  *
  * Picks are greedy: after each pick the rest are scored again as if you owned it, so a
  * second gift that applies the same status, or a gift that combos with the first, moves.
@@ -29,13 +32,19 @@ export const START_WEIGHTS = {
   rareAt: 3,
   skip: 0.8,
   skipShare: 0.6,
+  /** Another exclusive of the pack worth this share of this gift makes them a pair to buy together. */
+  pairMin: 0.6,
+  /** A pair's skip value, per gift (you need both to skip the pack). */
+  pairSkip: 0.5,
 }
 
 export interface StartPick {
   score: GiftScore
   value: number
-  /** Packs this gift lets you skip. */
+  /** Packs this gift lets you skip (with its partner, if it has one). */
   skips: ThemePack[]
+  /** Another gift to buy with it: together they're what a pack has for your team. */
+  partner?: Gift
   /** Short reasons, best first. */
   why: string[]
 }
@@ -46,7 +55,7 @@ function candidates(ctx: RunContext): Gift[] {
     && !recipe.has(g.id) && !g.reward_only && !g.pools.includes('cursed') && !g.pools.includes('extreme') && !ctx.owned.has(g.id) && !isGone(ctx, g.id))
 }
 
-function judge(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>): StartPick | null {
+function judge(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>, buyable: Set<string>): StartPick | null {
   const s = { ...scoreGift(g, ctx), rating: 0 }
   if (!(s.fit > 0 || s.synergy) || s.score <= 0) return null
   const W = START_WEIGHTS
@@ -58,18 +67,29 @@ function judge(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>)
   // Packs whose value for your team is mostly this gift.
   const skips: ThemePack[] = []
   let skip = 0
+  let partner: { gift: Gift; pack: ThemePack } | undefined
   for (const p of packs.filter((x) => x.gifts.includes(g.id))) {
     const fitting = p.gifts.filter((id) => !ctx.owned.has(id)).map((id) => ctx.giftsById.get(id))
       .filter((x): x is Gift => !!x).map((x) => (x.id === g.id ? s : scoreGift(x, ctx)))
       .filter((x) => x.fit > 0 || x.synergy)
     const total = fitting.reduce((a, x) => a + x.score, 0)
+    // The best other exclusive there you could buy too, if it's worth much to your team.
+    const mate = fitting.filter((x) => x.gift.id !== g.id && buyable.has(x.gift.id) && x.score >= W.pairMin * s.score)
+      .sort((a, b) => b.score - a.score)[0]
     const share = total ? s.score / total : 0
-    if (share >= W.skipShare) {
+    const pairShare = mate && total ? (s.score + mate.score) / total : 0
+    if (!mate && share >= W.skipShare) {
       skips.push(p)
       skip = Math.max(skip, W.skip * s.score * share)
+    } else if (mate && pairShare >= W.skipShare) {
+      skips.push(p)
+      if (!partner) partner = { gift: mate.gift, pack: p }
+      skip = Math.max(skip, W.skip * W.pairSkip * s.score * pairShare)
     }
   }
-  if (skips.length) {
+  if (partner) {
+    why.push(`Buy it with ${partner.gift.name}: the two are ${fittingPair(partner.pack, g, partner.gift)} ${partner.pack.name} has for your team, so with both you can skip it`)
+  } else if (skips.length) {
     why.push(skips.length === 1
       ? `Lets you skip ${skips[0].name}: it's ${fittingWord(skips[0], g)} there for your team`
       : `Lets you skip ${skips.map((p) => p.name).slice(0, 2).join(' and ')}: it's what they offer your team`)
@@ -82,7 +102,11 @@ function judge(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>)
   }
   const reason = s.reasons.find((r) => r.kind === 'good')
   if (reason) why.push(reason.text)
-  return { score: s, value: s.score * W.base + s.score * find + skip, skips, why }
+  return { score: s, value: s.score * W.base + s.score * find + skip, skips, partner: partner?.gift, why }
+}
+
+function fittingPair(p: ThemePack, a: Gift, b: Gift): string {
+  return p.gifts.length === 2 && p.gifts.includes(a.id) && p.gifts.includes(b.id) ? 'both gifts' : 'most of what'
 }
 
 function fittingWord(p: ThemePack, g: Gift): string {
@@ -107,7 +131,9 @@ export function startingPicks(
   let cur = ctx
   let alts: StartPick[] = []
   for (let k = 0; k < START_RULES.count; k++) {
-    const ranked = candidates(cur).map((g) => judge(g, cur, packsForGift)).filter((x): x is StartPick => !!x)
+    const pool = candidates(cur)
+    const buyable = new Set(pool.map((g) => g.id))
+    const ranked = pool.map((g) => judge(g, cur, packsForGift, buyable)).filter((x): x is StartPick => !!x)
       .sort((a, b) => b.value - a.value)
     if (!ranked.length) break
     picks.push(ranked[0])
@@ -145,6 +171,18 @@ function together(ctx: RunContext, ids: string[]): string[] {
       return s.fit > 0 || s.synergy
     })
     if (fitting.every((id) => ids.includes(id))) out.push(`Together they cover everything ${p.name} has for your team: you can skip it`)
+  }
+  // Sets (combos.json) the picks start: the other pieces you could buy here too.
+  const buyable = new Set(candidates(ctx).map((g) => g.id))
+  for (const c of ctx.combos) {
+    const mine = c.gifts.filter((id) => ids.includes(id))
+    if (!mine.length) continue
+    const more = c.gifts.filter((id) => !have.has(id) && buyable.has(id)).map((id) => ctx.giftsById.get(id)!)
+      .filter((g) => { const x = scoreGift(g, ctx); return x.fit > 0 || x.synergy })
+    const held = c.gifts.filter((id) => have.has(id)).length
+    if (more.length) {
+      out.push(`${mine.map((id) => ctx.giftsById.get(id)?.name ?? id).join(' and ')} ${mine.length > 1 ? 'are' : 'is'} part of the ${c.name} (${held}/${c.gifts.length}): ${more.slice(0, 3).map((g) => g.name).join(', ')} can be bought here too`)
+    }
   }
   return out
 }

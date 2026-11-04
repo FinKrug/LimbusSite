@@ -170,6 +170,11 @@ export function PreRunTab({ ctx, packsForGift, rebuild, state, onStateChange, on
             <b>{chosen === keywords[0] ? 'Best keyword for your team' : 'Your keyword'}</b>
             {state.keyword && <button className="link-btn small" onClick={() => set({ keyword: null })}>Go back to the advice</button>}
           </div>
+          <p className="muted small prerun-bar">
+            It's the run's keyword, not just these 3 gifts: Perfected Possibility and Chance Comet give {chosen.keyword} gifts,
+            and random gifts lean toward it. So it counts how much of {chosen.keyword} fits your team too
+            {chosen.pool.length > 0 && <>, like {chosen.pool.filter((g) => g.score > 0).slice(0, 3).map((g) => g.gift.name).join(', ')}</>}.
+          </p>
           <ol className="reward-list">
             {chosen.gifts.map((g, k) => <StartGift key={g.gift.id} g={g} take={chosen.take.includes(g)} rank={k + 1} owned={ctx.owned.has(g.gift.id)} onOwn={onOwn} />)}
           </ol>

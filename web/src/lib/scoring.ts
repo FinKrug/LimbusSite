@@ -917,12 +917,25 @@ export function intrinsicScore(gift: Gift, ctx: RunContext): Omit<GiftScore, 'ra
     const factor = WEIGHTS.altFloor + WEIGHTS.altSlope * kwShare
     for (const r of routes.slice(1)) r.fit *= factor
   }
+  // A keyword gift that makes its own keyword and runs on another one (Moon in the Water: "On Hit
+  // against enemies with 5+ Rupture Potency: gain 1 Poise Potency"): it fits the teams that use what
+  // it runs on, not only the ones that already use its keyword.
+  const fedBy = kw && profile.size && needs.length && needs.every((n) => isCoreKeyword(n) && n !== kw)
+    && gift.applies?.some((a) => a.status === kw && a.when === 'always') ? needs as CoreKeyword[] : null
+  if (fedBy) {
+    const share = Math.min(...fedBy.map((n) => keywordShare(fp, n)))
+    if (share > 0) {
+      const n = Math.min(...fedBy.map((x) => fp.keywordCounts[x]))
+      routes.push({ fit: share, reason: { kind: 'good',
+        text: `Makes its own ${kw} and runs on ${fedBy.join(' and ')}, which ${n}/${fp.size} of ${who} use` } })
+    }
+  }
   // On a tie prefer the later, more specific route (attack type, affinity, combo).
   const best = routes.reduce((a, b) => (b.fit >= a.fit && b.reason ? b : a))
   let fit = slotCap === null ? best.fit : Math.min(best.fit, slotCap)
   if (best.reason) reasons.push(best.reason)
   else if (keywordReason && fit === 0) reasons.push(keywordReason)
-  if (kw && profile.size && best !== routes[0] && kwShare < 0.5) {
+  if (kw && profile.size && best !== routes[0] && kwShare < 0.5 && !best.reason?.text.startsWith('Makes its own')) {
     const n = fp.keywordCounts[kw]
     reasons.push({ kind: 'info', text: n
       ? `But only ${n}/${fp.size} of ${who} use ${kw}, so its ${kw} part helps few units`

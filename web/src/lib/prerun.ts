@@ -89,7 +89,9 @@ export interface KeywordPlan {
   take: GiftScore[]
   /** Perfected Possibility's random Tier 3 gifts of this keyword: their expected score (count x the pool's average). */
   tier3: number
-  /** Starting gifts + Tier 3 gifts, in score. */
+  /** Its best gifts for your team beyond the starting ones (the run keeps offering this keyword). */
+  pool: GiftScore[]
+  /** Starting gifts + Tier 3 gifts + how deep its pool is for your team, in score. */
   value: number
   /** 0-100 against the best keyword. */
   rating: number
@@ -104,6 +106,20 @@ export function keywordTierGifts(ctx: RunContext, keyword: string, tier: number)
 
 const scored = (g: Gift, ctx: RunContext): GiftScore => ({ ...scoreGift(g, ctx), rating: 0 })
 
+/**
+ * The starting keyword is the run's keyword, not just 3 gifts: Perfected Possibility and Chance
+ * Comet give gifts of "the selected Keyword", and random gifts in the run lean toward it. So a
+ * keyword whose whole pool fits your team (Rupture for Heishou) beats one with a good starting gift
+ * but situational gifts after it (Slash). Its depth: the average of its `top` best gifts (Tier 1-4)
+ * for your team, x `weight`.
+ */
+export const KEYWORD_POOL = { top: 8, weight: 1.5 }
+
+/** Every gift of a keyword the run can offer (Tier 1-4, no recipe results), best for your team first. */
+function keywordPool(ctx: RunContext, keyword: string): GiftScore[] {
+  return [1, 2, 3, 4].flatMap((t) => keywordTierGifts(ctx, keyword, t)).map((g) => scored(g, ctx)).sort((a, b) => b.score - a.score)
+}
+
 /** The 10 starting keywords for your team, best first. */
 export function rankStartKeywords(ctx: RunContext, picks: number, tier3: number): KeywordPlan[] {
   const plans = START_KEYWORDS.map((keyword) => {
@@ -111,10 +127,13 @@ export function rankStartKeywords(ctx: RunContext, picks: number, tier3: number)
       .map((g) => scored(g, ctx)).sort((a, b) => b.score - a.score)
     const take = gifts.filter((g) => !ctx.owned.has(g.gift.id)).slice(0, picks)
     // Perfected Possibility's Tier 3 gifts are random from the keyword's pool: count its average.
-    const pool = tier3 ? keywordTierGifts(ctx, keyword, 3).map((g) => Math.max(0, scored(g, ctx).score)) : []
-    const t3 = pool.length ? tier3 * pool.reduce((a, b) => a + b, 0) / pool.length : 0
-    const value = take.reduce((s, g) => s + Math.max(0, g.score), 0) + t3
-    return { keyword, gifts, take, tier3: t3, value, rating: 0 }
+    const t3Pool = tier3 ? keywordTierGifts(ctx, keyword, 3).map((g) => Math.max(0, scored(g, ctx).score)) : []
+    const t3 = t3Pool.length ? tier3 * t3Pool.reduce((a, b) => a + b, 0) / t3Pool.length : 0
+    const starting = new Set(gifts.map((g) => g.gift.id))
+    const pool = keywordPool(ctx, keyword).filter((g) => !starting.has(g.gift.id)).slice(0, KEYWORD_POOL.top)
+    const depth = pool.reduce((s, g) => s + Math.max(0, g.score), 0) / KEYWORD_POOL.top * KEYWORD_POOL.weight
+    const value = take.reduce((s, g) => s + Math.max(0, g.score), 0) + t3 + depth
+    return { keyword, gifts, take, tier3: t3, pool, value, rating: 0 }
   })
   const max = Math.max(1e-9, ...plans.map((p) => p.value))
   return plans.map((p) => ({ ...p, rating: Math.round(p.value / max * 100) })).sort((a, b) => b.value - a.value)
