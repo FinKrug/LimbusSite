@@ -1,0 +1,29 @@
+sequenceDiagram
+    autonumber
+    actor P as Player (Chrome / Firefox)
+    participant A as React app<br/>My identities screen
+    participant L as localStorage
+    participant W as Cloudflare Worker<br/>gesellschaftmd.com/__/auth
+    participant F as Firebase Auth
+    participant D as Firestore<br/>users/{uid}
+    P->>A: Open gesellschaftmd.com (HTTPS, Cloudflare)
+    A->>L: Load saved data (works offline)
+    P->>A: Sign in with Google
+    A->>W: signInWithPopup (Google OAuth, same-site helper)
+    W->>F: Passes /__/auth through to Firebase
+    F-->>A: ID token + uid
+    A->>D: onSnapshot(users/{uid})
+    D-->>A: Cloud copy of saved data
+    alt Cloud copy differs from this computer
+        A-->>P: Side-by-side preview: keep this computer's or use the cloud copy
+        P->>A: Choose one (Undo available)
+    end
+    P->>A: Tap identities to mark owned
+    A->>L: Save identities.v1 immediately
+    A->>D: setDoc(merge) data.identities_v1 (1 s debounce)
+    alt Write accepted (rules: request.auth.uid == uid)
+        D-->>A: OK
+        A-->>P: "Synced"
+    else Offline / write failed
+        A-->>P: "Couldn't save. Retry" (kept in localStorage)
+    end

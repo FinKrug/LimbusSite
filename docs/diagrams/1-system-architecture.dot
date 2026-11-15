@@ -1,0 +1,53 @@
+digraph G {
+  graph [rankdir=TB, fontname="DejaVu Sans", fontsize=13, pad=0.4, nodesep=0.45, ranksep=0.9, dpi=200, newrank=true];
+  node  [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=12, penwidth=1.2];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#444444", arrowsize=0.8];
+
+  player [label="Player\n(Chrome / Firefox)", shape=ellipse, fillcolor="#fff4d6", color="#b08a00"];
+
+  subgraph cluster_build {
+    label=<<b>Build time</b>>; style="rounded,dashed"; color="#888888";
+    wiki [label="Limbus Company Wiki\n(MediaWiki API)", fillcolor="#e6f4ea", color="#1e7e34"];
+    scraper [label="Python data scraper\n(my computer)", fillcolor="#e6f4ea", color="#1e7e34"];
+    github [label="GitHub repo\nFinKrug/LimbusSite", fillcolor="#eeeeee", color="#555555"];
+    {rank=same; wiki; scraper; github;}
+  }
+
+  subgraph cluster_cf {
+    label=<<b>Cloudflare</b>>; style="rounded,dashed"; color="#888888";
+    dns [label="Registrar + DNS\ngesellschaftmd.com\n(www → root redirect)", fillcolor="#fde6d2", color="#d35400"];
+    builds [label="Workers Builds\nnpm run build →\nwrangler deploy", fillcolor="#fde6d2", color="#d35400"];
+    assets [label="Worker static assets\n(HTML/JS/CSS + game data,\nglobal CDN, HTTPS)", fillcolor="#fde6d2", color="#d35400"];
+    {rank=same; dns; builds;}
+    proxy [label="Worker script\n/__/auth/* → Firebase\n(same-site sign-in)", fillcolor="#fde6d2", color="#d35400"];
+    {rank=same; assets; proxy;}
+  }
+
+  subgraph cluster_fe {
+    label=<<b>Frontend (runs in the browser)</b>>; style="rounded,dashed"; color="#888888";
+    app [label="GesellschaftMD web app\nReact + TypeScript (Vite)\nrecommender, rankings, team builder,\nowned identities & E.G.O, adversity planner", fillcolor="#e8f1fb", color="#1f4e79"];
+    local [label="localStorage\n(offline copy of\nyour saved data)", fillcolor="#f2f2f2", color="#777777"];
+    {rank=same; app; local;}
+  }
+
+  subgraph cluster_fb {
+    label=<<b>Firebase (Google Cloud)</b>>; style="rounded,dashed"; color="#888888";
+    auth [label="Firebase Authentication\n(Google sign-in)", fillcolor="#fdebd0", color="#c0650a"];
+    fs [label="Cloud Firestore (NoSQL)\nusers/{uid}: team, gifts, owned\nidentities & E.G.O, run\nfeedback/{id}: reports +\nrun snapshot to reproduce", fillcolor="#fdebd0", color="#c0650a"];
+    appcheck [label="Firebase App Check\n(blocks bot feedback)", fillcolor="#fdebd0", color="#c0650a"];
+    {rank=same; auth; fs; appcheck;}
+  }
+
+  wiki -> scraper [label="HTTP API\n(wikitext)"];
+  scraper -> github [label="JSON data\n(git push)"];
+  github -> builds [label="every push to main"];
+  builds -> assets [label="deploys"];
+  player -> dns [label="HTTPS GET\ngesellschaftmd.com"];
+  dns -> assets [label="routes to the Worker"];
+  assets -> app [label="serves the static build"];
+  app -> proxy [label="sign-in popup\n(Google OAuth)"];
+  proxy -> auth [label="passes /__/auth through\n(ID token back)"];
+  app -> fs [label="Firebase SDK over HTTPS\nread/write JSON docs\n(real-time listener)", dir=both];
+  app -> local [label="save / load", dir=both];
+  app -> appcheck [label="token on\nfeedback send"];
+}
