@@ -1,0 +1,104 @@
+# Keeps gesellschaftmd.com's game data current (Finley, 2026-11-15: the game updates often).
+#
+# Every day it re-scrapes the Limbus Company Wiki. If anything changed (new gifts, identities,
+# E.G.O, packs, events, fusions or their art), it checks that no data went missing, runs every
+# test and the site build, then commits the new data to main. That push makes Cloudflare
+# (Workers Builds) redeploy the site. If nothing changed, it stops without committing.
+# If a step fails, nothing is published and GitHub emails you.
+#
+# Run it by hand: GitHub > Actions > "Update game data" > Run workflow.
+# Not covered: the community tier lists (data/tiers/*.txt) are still updated by hand.
+name: Update game data
+
+on:
+  schedule:
+    - cron: "17 9 * * *" # every day at 09:17 UTC (2:17 or 3:17 in the morning in Utah)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      # Art already downloaded on earlier runs (git-ignored), so only new pictures are fetched.
+      - name: Restore downloaded wiki art
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/raw-icons
+            data/raw-identity-art
+            data/raw-ego-art
+          key: wiki-art-${{ github.run_id }}
+          restore-keys: wiki-art-
+
+      - name: Install Pillow (for the picture atlases)
+        run: pip install pillow
+
+      - name: Scrape the wiki
+        env:
+          LIMBUS_SCRAPER_UA: "GesellschaftMD data updater (https://gesellschaftmd.com; github.com/FinKrug/LimbusSite; one run a day)"
+        run: |
+          cp data/meta.json "$RUNNER_TEMP/meta-before.json"
+          python -m scraper
+          python -m scraper.icons
+          python -m scraper.identity_art
+          python -m scraper.ego_art
+          python -m scraper.tiers
+
+      - name: Did anything change?
+        id: diff
+        run: |
+          git diff --ignore-cr-at-eol --stat -- data web/src/data
+          if git diff --ignore-cr-at-eol --quiet -- data web/src/data ':(exclude)data/meta.json' ':(exclude)data/report.txt' \
+             && [ -z "$(git ls-files --others --exclude-standard -- data web/src/data)" ]; then
+            echo "Nothing new on the wiki."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check nothing went missing
+        if: steps.diff.outputs.changed == 'true'
+        run: python scripts/check_counts.py "$RUNNER_TEMP/meta-before.json" data/meta.json
+
+      - name: Test the scraper
+        if: steps.diff.outputs.changed == 'true'
+        run: python -m unittest discover -s tests -t .
+
+      - name: Test and build the site
+        if: steps.diff.outputs.changed == 'true'
+        working-directory: web
+        run: |
+          npm ci
+          npx tsc -b
+          npm run lint
+          npx vitest run
+          npm run build
+
+      - name: Publish
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data web/src/data
+          git commit -m "Update game data from the wiki ($(date -u +%Y-%m-%d))" -m "$(head -c 4000 data/report.txt 2>/dev/null)"
+          git push
