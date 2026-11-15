@@ -1,0 +1,17 @@
+// Cloudflare Workers (static assets): how gesellschaftmd.com is served.
+// Workers Builds runs `npm run build` and then `npx wrangler deploy` on every push to main.
+// Static files in dist/ are served directly (free, unlimited); only /__/* runs worker/index.js
+// (the Firebase sign-in pass-through), so normal visits don't count against the Workers limits.
+{
+  "name": "gesellschaftmd",
+  "main": "./worker/index.js",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // A single-page app: unknown paths get index.html.
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/__/*"]
+  },
+  "observability": { "enabled": true }
+}

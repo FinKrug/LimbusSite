@@ -6,11 +6,11 @@ import type { Snapshot } from './transfer'
 import { PREFIX } from './storage'
 
 /**
- * Our own domains (Cloudflare Pages). There, sign-in goes through the site itself:
- * functions/__/[[path]].js passes /__/auth/* through to Firebase, so the sign-in popup is
+ * Our own domain (Cloudflare Workers; www redirects here). There, sign-in goes through the site
+ * itself: worker/index.js passes /__/auth/* through to Firebase, so the sign-in popup is
  * same-site and works in browsers that block third-party storage (Firefox, Safari).
  */
-export const OWN_DOMAINS = ['gesellschaftmd.com', 'www.gesellschaftmd.com']
+export const OWN_DOMAINS = ['gesellschaftmd.com']
 
 /** Where the sign-in popup runs: our own domain when on it, else the Firebase project's. */
 export function authDomainFor(hostname: string | null, fallback: string | undefined): string | undefined {

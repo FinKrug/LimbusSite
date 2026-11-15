@@ -107,24 +107,27 @@ Testing without a real project: `firebase emulators:start --only auth,firestore 
 demo-limbussite`, then run the app with `VITE_FIREBASE_EMULATOR=1` (and any placeholder
 values for the other `VITE_FIREBASE_*` settings).
 
-### Putting it online (Cloudflare Pages, gesellschaftmd.com)
+### Putting it online (Cloudflare Workers, gesellschaftmd.com)
 
-The site is hosted on **Cloudflare Pages** (free, unlimited bandwidth); sign-in and saved data stay
-on Firebase. Pages builds from GitHub on every push to `main`:
+The site is a **Cloudflare Worker with static assets** (Cloudflare's recommended setup for new
+projects; free, unlimited static requests). Sign-in and saved data stay on Firebase.
 
-- Project settings: root directory `web`, build command `npm run build`, output directory `dist`.
-- Custom domain `gesellschaftmd.com` (bought on Cloudflare Registrar, so DNS is already there).
-- `web/.env` (committed, public values) has the Firebase settings. On `gesellschaftmd.com` the
-  app uses its own domain as `authDomain` (`OWN_DOMAINS` in `src/lib/cloud.ts`).
-- `web/functions/__/[[path]].js` passes `/__/auth/*` through to `limbussite.firebaseapp.com`, so
+- `web/wrangler.jsonc`: serves `dist/` as a single-page app; only `/__/*` runs `worker/index.js`,
+  which passes Firebase's sign-in helper (`/__/auth/*`) through to `limbussite.firebaseapp.com`, so
   the sign-in popup is same-site and works in Firefox and Safari (Firebase's "Option 3").
-- Firebase console › Authentication › Settings › Authorized domains: `gesellschaftmd.com`,
-  `www.gesellschaftmd.com` and the `*.pages.dev` address. Google Cloud console › Credentials ›
-  the Web client › Authorized redirect URIs: `https://gesellschaftmd.com/__/auth/handler`.
+- Workers Builds (connected to GitHub): root directory `web`, build command `npm run build`,
+  deploy command `npx wrangler deploy`. Every push to `main` goes live.
+- Domain `gesellschaftmd.com` (Cloudflare Registrar) is a custom domain on the Worker;
+  `www.gesellschaftmd.com` redirects to it (a Redirect Rule on the zone).
+- `web/.env` (committed, public values) has the Firebase settings. On `gesellschaftmd.com` the app
+  uses its own domain as `authDomain` (`OWN_DOMAINS` in `src/lib/cloud.ts`).
+- Firebase console › Authentication › Settings › Authorized domains has `gesellschaftmd.com`;
+  Google Cloud console › Credentials › Web client has the origin `https://gesellschaftmd.com` and
+  the redirect URI `https://gesellschaftmd.com/__/auth/handler`.
 - Security rules still go out with `firebase deploy --only firestore:rules` (repo root).
 
-Test the production build with the proxy locally: `npm run build`, then
-`npx wrangler pages dev dist` (serves `functions/` too).
+Try the production setup locally: `npm run build`, then `npx wrangler dev`.
+Deploy by hand (rarely needed): `npx wrangler login`, then `npm run build && npx wrangler deploy`.
 
 `firebase deploy --only hosting` still works (`firebase.json`) if you ever want the Firebase copy.
 
