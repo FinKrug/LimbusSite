@@ -50,7 +50,7 @@ export function SetupWizard({ identities, stored, onIdentitiesChange, egos, stor
     <div className="setup">
       <header className="setup-head">
         <div>
-          <p className="setup-eyebrow">Set up LimbusSite</p>
+          <p className="setup-eyebrow">Set up GesellschaftMD</p>
           <ol className="setup-steps" aria-label="Setup steps">
             {STEPS.map((s, k) => (
               <li key={s.id} className={k === index ? 'on' : k < index ? 'past' : ''} aria-current={k === index ? 'step' : undefined}>
@@ -158,7 +158,7 @@ function DataStep({ hasTeam, marked, owned, onOpenData, onDone }: {
         )}
         <div className="setup-card">
           <h3>Load a backup file</h3>
-          <p className="muted">A LimbusSite backup you saved earlier (Your data › Save a backup).</p>
+          <p className="muted">A GesellschaftMD (or LimbusSite) backup you saved earlier (Your data › Save a backup).</p>
           <button className="btn" onClick={onOpenData}>Load a backup…</button>
         </div>
       </div>

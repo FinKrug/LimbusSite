@@ -1,4 +1,4 @@
-# LimbusSite
+# GesellschaftMD (formerly LimbusSite)
 
 A Mirror Dungeon helper for Limbus Company: pick your team and the E.G.O gifts you
 already have, and it recommends which gifts to take, which theme packs to enter or

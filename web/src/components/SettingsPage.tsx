@@ -3,11 +3,12 @@ import { useSync } from '../lib/sync'
 import { timeAgo } from '../lib/transfer'
 
 /** Home › Settings: card art, your data (sign in, backups), and the first-time setup. */
-export function SettingsPage({ art, onArtChange, onOpenData, onSetup, dataNote }: {
+export function SettingsPage({ art, onArtChange, onOpenData, onSetup, onTour, dataNote }: {
   art: ArtVariant
   onArtChange: (a: ArtVariant) => void
   onOpenData: () => void
   onSetup: () => void
+  onTour: () => void
   /** "455 gifts · … · data from the wiki, <date>" */
   dataNote: React.ReactNode
 }) {
@@ -48,9 +49,12 @@ export function SettingsPage({ art, onArtChange, onOpenData, onSetup, dataNote }
       </section>
 
       <section className="panel settings-card">
-        <h2>First-time setup</h2>
-        <p className="muted">Sign in and mark the identities you own (by hand or from screenshots), step by step.</p>
-        <div className="settings-row"><button className="btn" onClick={onSetup}>Run the setup again</button></div>
+        <h2>Setup and tour</h2>
+        <p className="muted">Sign in and mark the identities and E.G.O you own (by hand or from screenshots), step by step. Or take the tour of the site.</p>
+        <div className="settings-row">
+          <button className="btn" onClick={onSetup}>Run the setup again</button>
+          <button className="btn" onClick={onTour}>Take the tour</button>
+        </div>
       </section>
 
       <p className="muted small settings-data">{dataNote}</p>

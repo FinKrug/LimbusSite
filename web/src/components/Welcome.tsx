@@ -13,6 +13,8 @@ interface Props {
   onDemo: () => void
   onBuild: () => void
   onContinue: () => void
+  /** The guided tour of the site. */
+  onTour: () => void
   /** Sign in / load a backup to bring data from another computer. */
   onOpenData: () => void
 }
@@ -32,6 +34,19 @@ const EMBERS = Array.from({ length: 26 }, (_, k) => {
   }
 })
 
+const WHY = [
+  { title: 'Judged for your team', text: "Not one tier list for everyone: every gift, pack and event choice is scored for your lineup, its keywords and affiliations, and the gifts you already hold." },
+  { title: 'Knows what you own', text: 'Drop in screenshots of your identity and E.G.O lists and it builds teams you can actually field, and tells you what is worth getting next.' },
+  { title: 'Everything in one place', text: 'Gifts, theme packs, events and fusion recipes from the Limbus Company Wiki, so you are not juggling wiki tabs mid-run.' },
+  { title: 'On every device', text: 'Works on PC and phone. Sign in with Google and your team, collection and run follow you. Free, no ads.' },
+]
+
+const STEPS = [
+  { title: 'Tell it what you have', text: 'Mark your identities and E.G.O, or import them from screenshots. Skippable.' },
+  { title: 'Pick a lineup', text: 'Build one around a keyword from what you own, or set it up by hand like in game.' },
+  { title: 'Play the run with it', text: 'Starlight buffs and starting gifts, then each floor: the pack, events, the shop, the boss.' },
+]
+
 const FEATURES = [
   {
     title: 'Best gifts for your team',
@@ -47,6 +62,11 @@ const FEATURES = [
     title: 'Fusion and Lunar Memory',
     text: 'What to fuse right now, what to keep, and the pieces worth building toward every Hard run.',
     icon: <><circle cx="8" cy="8" r="4" /><circle cx="16" cy="16" r="4" /><path d="M11 11l2 2" /></>,
+  },
+  {
+    title: 'Rankings',
+    text: 'The best E.G.O gifts and identities for Mirror Dungeon overall, by keyword, and the identities worth getting next.',
+    icon: <><path d="M5 20V11M12 20V5M19 20v-6" /></>,
   },
   {
     title: 'Battle simulation',
@@ -79,10 +99,10 @@ function reducedMotion(): boolean {
 
 /**
  * The welcome screen: what the site does, a one-click demo team, and a way in.
- * Shown on a first visit and from the LimbusSite title. Dante's clock with the
+ * Shown on a first visit and from the GesellschaftMD title. Dante's clock with the
  * twelve sinners at their hours is the centerpiece.
  */
-export function Welcome({ equipped, art, counts, hasTeam, onDemo, onBuild, onContinue, onOpenData }: Props) {
+export function Welcome({ equipped, art, counts, hasTeam, onDemo, onBuild, onContinue, onTour, onOpenData }: Props) {
   const ring = useMemo(() => SINNERS.map((s, k) => ({ s, i: equipped[s], angle: (k + 1) * 30 })), [equipped])
   const rootRef = useRef<HTMLDivElement>(null)
   // Subtle parallax on the clock with the pointer.
@@ -106,11 +126,11 @@ export function Welcome({ equipped, art, counts, hasTeam, onDemo, onBuild, onCon
 
       <section className="welcome-hero">
         <div className="welcome-copy">
-          <p className="welcome-eyebrow rise" style={{ '--d': '0.05s' } as CSSProperties}>Limbus Company · Mirror Dungeon</p>
-          <h1 className="welcome-title rise" style={{ '--d': '0.15s' } as CSSProperties}>LimbusSite</h1>
+          <p className="welcome-eyebrow rise" style={{ '--d': '0.05s' } as CSSProperties}>Limbus Company · Mirror Dungeon planner</p>
+          <h1 className="welcome-title rise" style={{ '--d': '0.15s' } as CSSProperties}>Gesellschaft<span>MD</span></h1>
           <p className="welcome-lead rise" style={{ '--d': '0.3s' } as CSSProperties}>
-            Plan your Mirror Dungeon run, Manager. Which E.G.O gifts to take, which theme packs to enter, what to pick
-            in events and what to fuse, all judged for <em>your</em> team.
+            Your Mirror Dungeon co-pilot, Manager. Tell it your team and it tells you which E.G.O gifts to take, which theme
+            packs to enter, what to pick at every event and what to fuse, floor by floor, all judged for <em>your</em> team.
           </p>
           <div className="welcome-actions rise" style={{ '--d': '0.45s' } as CSSProperties}>
             <button className="welcome-btn primary" onClick={onDemo}>
@@ -122,6 +142,10 @@ export function Welcome({ equipped, art, counts, hasTeam, onDemo, onBuild, onCon
               <small>Pick your sinners and identities</small>
             </button>
           </div>
+          <button className="welcome-tour rise" style={{ '--d': '0.5s' } as CSSProperties} onClick={onTour}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M10 8.5l5 3.5-5 3.5z" /></svg>
+            New here? <b>Take the tour</b> <span className="muted">(about a minute)</span>
+          </button>
           {hasTeam && (
             <button className="link-btn welcome-continue rise" style={{ '--d': '0.55s' } as CSSProperties} onClick={onContinue}>
               Continue with my current lineup →
@@ -168,9 +192,35 @@ export function Welcome({ equipped, art, counts, hasTeam, onDemo, onBuild, onCon
         ))}
       </ul>
 
+      <section className="welcome-section">
+        <h2 className="rise" style={{ '--d': '0.8s' } as CSSProperties}>Why use it</h2>
+        <ul className="welcome-why">
+          {WHY.map((w, k) => (
+            <li key={w.title} className="rise" style={{ '--d': `${0.85 + k * 0.08}s` } as CSSProperties}>
+              <h3>{w.title}</h3>
+              <p>{w.text}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="welcome-section">
+        <h2 className="rise" style={{ '--d': '1s' } as CSSProperties}>How it works</h2>
+        <ol className="welcome-steps">
+          {STEPS.map((x, k) => (
+            <li key={x.title} className="rise" style={{ '--d': `${1.05 + k * 0.08}s` } as CSSProperties}>
+              <span className="welcome-step-n">{k + 1}</span>
+              <h3>{x.title}</h3>
+              <p>{x.text}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <h2 className="welcome-section-title rise" style={{ '--d': '1.2s' } as CSSProperties}>What's inside</h2>
       <ul className="welcome-features">
         {FEATURES.map((f, k) => (
-          <li key={f.title} className="rise" style={{ '--d': `${0.85 + k * 0.1}s` } as CSSProperties}>
+          <li key={f.title} className="rise" style={{ '--d': `${1.25 + k * 0.06}s` } as CSSProperties}>
             <svg viewBox="0 0 24 24" aria-hidden="true">{f.icon}</svg>
             <h3>{f.title}</h3>
             <p>{f.text}</p>
@@ -178,7 +228,12 @@ export function Welcome({ equipped, art, counts, hasTeam, onDemo, onBuild, onCon
         ))}
       </ul>
 
-      <p className="welcome-foot rise" style={{ '--d': '1.3s' } as CSSProperties}>
+      <div className="welcome-cta rise" style={{ '--d': '1.5s' } as CSSProperties}>
+        <button className="welcome-btn primary" onClick={onBuild}><span>Get started</span><small>Set up your team</small></button>
+        <button className="welcome-btn" onClick={onTour}><span>Take the tour</span><small>See how it all fits together</small></button>
+      </div>
+
+      <p className="welcome-foot rise" style={{ '--d': '1.6s' } as CSSProperties}>
         Data scraped from the <a href="https://limbuscompany.wiki.gg/" target="_blank" rel="noreferrer">Limbus Company Wiki</a>.
         A fan project, not affiliated with Project Moon.
       </p>

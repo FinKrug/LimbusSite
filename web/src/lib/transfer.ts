@@ -60,11 +60,13 @@ export function writesFor(from: Snapshot, to: Snapshot): Record<string, string |
 
 // ---------- backup files ----------
 
-export const BACKUP_APP = 'LimbusSite'
+export const BACKUP_APP = 'GesellschaftMD'
+/** Backups saved before the rename (2026-11-15) still load. */
+export const OLD_BACKUP_APPS = ['LimbusSite']
 export const BACKUP_VERSION = 1
 
 export interface Backup {
-  app: typeof BACKUP_APP
+  app: string
   version: number
   /** ms since epoch */
   savedAt: number
@@ -78,7 +80,7 @@ export function makeBackup(snapshot: Snapshot, savedAt = Date.now()): Backup {
 export function backupFileName(savedAt = Date.now()): string {
   const d = new Date(savedAt)
   const pad = (n: number) => String(n).padStart(2, '0')
-  return `LimbusSite-backup-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}.json`
+  return `GesellschaftMD-backup-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}.json`
 }
 
 /** Reads a backup file's text. Returns an error message for anything that isn't one. */
@@ -87,14 +89,14 @@ export function parseBackup(text: string): Backup | { error: string } {
   try {
     raw = JSON.parse(text)
   } catch {
-    return { error: "That file isn't a LimbusSite backup (it isn't JSON)." }
+    return { error: "That file isn't a GesellschaftMD backup (it isn't JSON)." }
   }
   const b = raw as Partial<Backup> | null
-  if (!b || typeof b !== 'object' || b.app !== BACKUP_APP || typeof b.data !== 'object' || b.data === null) {
-    return { error: "That file isn't a LimbusSite backup." }
+  if (!b || typeof b !== 'object' || (b.app !== BACKUP_APP && !OLD_BACKUP_APPS.includes(b.app as string)) || typeof b.data !== 'object' || b.data === null) {
+    return { error: "That file isn't a GesellschaftMD backup." }
   }
   if (typeof b.version !== 'number' || b.version > BACKUP_VERSION) {
-    return { error: 'That backup was made by a newer version of LimbusSite. Reload the page and try again.' }
+    return { error: 'That backup was made by a newer version of GesellschaftMD. Reload the page and try again.' }
   }
   const data: Snapshot = {}
   for (const [k, v] of Object.entries(b.data)) {

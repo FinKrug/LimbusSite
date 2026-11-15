@@ -16,6 +16,8 @@ interface Props {
   /** All gifts and the ones you own, to name gifts that make E.G.O resources. */
   gifts: Gift[]
   owned: Set<string>
+  /** E.G.O you own (starting ones included): only those are suggested. Null when you haven't marked any. */
+  ownedEgos?: ReadonlySet<string> | null
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
@@ -31,7 +33,7 @@ function costText(e: Ego): string {
  * deployed sinners' E.G.O count; they decide how much the team leans on E.G.O,
  * which moves E.G.O gifts and skill swaps.
  */
-export function EgoLoadoutPanel({ egos, loadout, onChange, selection, deployed, members, battle, gifts, owned }: Props) {
+export function EgoLoadoutPanel({ egos, loadout, onChange, selection, deployed, members, battle, gifts, owned, ownedEgos }: Props) {
   const { ego, sim } = battle
   const set = (s: Sinner, g: Grade, id: string) => {
     const mine = { ...(loadout[s] ?? {}) }
@@ -42,7 +44,9 @@ export function EgoLoadoutPanel({ egos, loadout, onChange, selection, deployed, 
   const lean = ego.lean >= 0.55 ? 'High' : ego.lean < 0.35 ? 'Low' : 'Medium'
   const best = ego.bestAreson
   const sinners = selection.slice(0, deployed)
-  const recs = useMemo(() => recommendEgos(members, egos, loadout, battle, gifts, owned), [members, egos, loadout, battle, gifts, owned])
+  // Suggest only E.G.O you own (and what's equipped), once you've marked them.
+  const mine = useMemo(() => (ownedEgos ? egos.filter((e) => ownedEgos.has(e.id) || e.base) : egos), [egos, ownedEgos])
+  const recs = useMemo(() => recommendEgos(members, mine, loadout, battle, gifts, owned), [members, mine, loadout, battle, gifts, owned])
   const suggested = recs.filter((r) => r.better)
   const listed = recs.filter((r) => r.better || r.upgrade)
   const recFor = (s: Sinner, g: Grade) => suggested.find((r) => r.sinner === s && r.grade === g)
@@ -51,13 +55,14 @@ export function EgoLoadoutPanel({ egos, loadout, onChange, selection, deployed, 
   const SHOWN = 4
 
   return (
-    <section className="panel ego-panel">
+    <section className="panel ego-panel" data-tour="ego-loadout">
       <header className="ego-head">
         <h2>E.G.O loadout</h2>
         <p className="muted small">
           Pick the E.G.O each deployed sinner has equipped (ZAYIN starts on their base E.G.O, like in game). Skills make E.G.O resources of their sin, so this decides
           how often your E.G.O can come out, and how much E.G.O gifts and skill swaps are worth.
         </p>
+        {ownedEgos && <p className="muted small">★ suggestions only use E.G.O you own; the rest are under "Not owned" in each list.</p>}
       </header>
       {selection.length > 0 && (
         <ul className="ego-stats">
@@ -168,7 +173,16 @@ export function EgoLoadoutPanel({ egos, loadout, onChange, selection, deployed, 
                           aria-label={`${s} ${g} E.G.O`} title={picked ? `${picked.name}: ${costText(picked)}${picked.sanity ? ` · ${picked.sanity} SP` : ''}` : undefined}
                           className={picked?.sin ? `sinborder-${picked.sin}` : undefined}>
                           {!base && <option value="">{options.length ? '—' : 'none'}</option>}
-                          {options.map((e) => <option key={e.id} value={e.id}>{e.name}{e.base ? ' (base)' : ''}</option>)}
+                          {ownedEgos ? (
+                            <>
+                              {options.filter((e) => ownedEgos.has(e.id) || e.base).map((e) => <option key={e.id} value={e.id}>{e.name}{e.base ? ' (base)' : ''}</option>)}
+                              {options.some((e) => !ownedEgos.has(e.id) && !e.base) && (
+                                <optgroup label="Not owned">
+                                  {options.filter((e) => !ownedEgos.has(e.id) && !e.base).map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
+                                </optgroup>
+                              )}
+                            </>
+                          ) : options.map((e) => <option key={e.id} value={e.id}>{e.name}{e.base ? ' (base)' : ''}</option>)}
                         </select>
                         {rec && (
                           <button className="ego-rec-chip" onClick={() => take(rec)} title={rec.best.reasons.join('\n')}>

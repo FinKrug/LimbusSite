@@ -38,7 +38,10 @@ import { DEFAULT_DEPLOYED } from './lib/lineup'
 import { usePersistentState } from './lib/storage'
 import { OWNED_IDENTITIES_KEY, hasMarkedIdentities, ownedIdentitySet } from './lib/myidentities'
 import { MyCollection } from './components/MyCollection'
-import { OWNED_EGOS_KEY, hasMarkedEgos } from './lib/myegos'
+import { OWNED_EGOS_KEY, hasMarkedEgos, ownedEgoSet } from './lib/myegos'
+import { ownedKeywordTeams } from './lib/rankings'
+import { RankingsPage } from './components/RankingsPage'
+import { Tour, type TourStep } from './components/Tour'
 import { SETUP_KEY, SetupWizard, type SetupState } from './components/SetupWizard'
 import { StartRun } from './components/StartRun'
 import { SettingsPage } from './components/SettingsPage'
@@ -55,8 +58,8 @@ import { buildTeam, suggestOrder } from './lib/teambuilder'
 import { addGift } from './lib/vestiges'
 import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
-type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best'
-const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best']
+type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'rank-gifts' | 'rank-ids'
+const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best', 'rank-gifts', 'rank-ids']
 
 /**
  * Two places (Finley, 2026-11-15): Home, with your team and lineups, owned identities and settings;
@@ -64,17 +67,19 @@ const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'gifts
  * buffs, starting gifts), then follows each floor: pick a pack, fight your way through its battles
  * and "?" events, shop, then the boss, and on to the next floor (Next phase). "Run setup" in the
  * run bar goes back to the start questions. Best gifts, Evaluate and Import gifts are in Tools.
+ * Rankings (Finley, 2026-11-15): the best of everything for Mirror Dungeon whatever you own; what to
+ * do with what you own stays on Home's Team & lineups.
  */
-type Stage = 'home' | 'start' | 'packs' | 'fights' | 'shop' | 'boss' | 'tools'
+type Stage = 'home' | 'rankings' | 'start' | 'packs' | 'fights' | 'shop' | 'boss' | 'tools'
 type RunStage = 'packs' | 'fights' | 'shop' | 'boss'
 const STAGE_OF: Record<Tab, Stage> = {
   team: 'home', identities: 'home', settings: 'home', start: 'start', prerun: 'start',
   packs: 'packs', rewards: 'fights', events: 'fights',
   gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss',
-  evaluate: 'tools', import: 'tools', best: 'tools',
+  evaluate: 'tools', import: 'tools', best: 'tools', 'rank-gifts': 'rankings', 'rank-ids': 'rankings',
 }
 /** Left to right, for which way a screen slides in. */
-const STAGE_INDEX: Record<Stage, number> = { home: 0, start: 1, packs: 2, fights: 3, shop: 4, boss: 5, tools: 6 }
+const STAGE_INDEX: Record<Stage, number> = { home: 0, rankings: 1, start: 2, packs: 3, fights: 4, shop: 5, boss: 6, tools: 7 }
 const STAGES: { id: RunStage; tab: Tab; label: string; hint: string }[] = [
   { id: 'packs', tab: 'packs', label: 'Pick a pack', hint: "The floor's theme pack" },
   { id: 'fights', tab: 'events', label: 'Fights & events', hint: 'Gifts, "?" events' },
@@ -84,6 +89,7 @@ const STAGES: { id: RunStage; tab: Tab; label: string; hint: string }[] = [
 /** Screens with parts of their own, and the parts. */
 const SUB_TABS: Partial<Record<Stage, { id: Tab; label: string }[]>> = {
   home: [{ id: 'team', label: 'Team & lineups' }, { id: 'identities', label: 'My identities & E.G.O' }, { id: 'settings', label: 'Settings' }],
+  rankings: [{ id: 'rank-gifts', label: 'Best E.G.O gifts' }, { id: 'rank-ids', label: 'Best identities' }],
   shop: [{ id: 'gifts', label: 'Buy' }, { id: 'fusion', label: 'Fuse' }, { id: 'upgrades', label: 'Enhance' }, { id: 'skills', label: 'Skill swaps' }],
 }
 /** The questions before floor 1. */
@@ -94,13 +100,32 @@ const START_STEPS: { id: Tab; label: string }[] = [
 type ToolTab = 'best' | 'evaluate' | 'import'
 const TOOLS: ToolTab[] = ['best', 'evaluate', 'import']
 const TOOL_LABEL: Record<ToolTab, string> = {
-  best: 'Best gifts', evaluate: 'Evaluate a gift or pack', import: 'Import gifts from a screenshot',
+  best: 'Best gifts for your team', evaluate: 'Evaluate a gift or pack', import: 'Import gifts from a screenshot',
 }
 const TOOL_HINT: Record<ToolTab, string> = {
   best: 'Every gift ranked for your team, and where to get it',
   evaluate: 'Pros and cons of one gift or theme pack for your team',
   import: 'Read Gifts you have from game screenshots',
 }
+
+/** The guided tour (Welcome › Take the tour, Settings): the real screens, one part at a time. */
+const TOUR: TourStep<Tab>[] = [
+  { title: 'Welcome to GesellschaftMD', text: <>A quick look around: about a minute. It points at the real screens, so everything you see here is where it'll be later. Use <b>Next</b> or the arrow keys.</> },
+  { target: 'home-nav', tab: 'team', title: 'Home: your team', text: 'Home holds what stays between runs: your team and saved lineups, the identities and E.G.O you own, and settings.' },
+  { target: 'tab-identities', title: 'Tell it what you own', text: 'Mark the identities and E.G.O you have, by hand or by dropping in screenshots of your in-game lists. Recommendations then stick to what you can actually field.' },
+  { target: 'team-grid', tab: 'team', title: 'Your lineup', text: 'Click sinners in the order you want them deployed, like in game. Swap changes an identity; the side panel suggests better orders as your run changes.' },
+  { target: 'build', title: 'Build a team for you', text: 'Pick a status keyword (Burn, Bleed, Poise…) or an affiliation and Build fills in an identity per sinner and an order. Tick "Only mine" to use only what you own.' },
+  { target: 'owned-teams', title: 'Best teams from what you own', text: 'Which keyword teams your collection is strongest at, with one click to build one.' },
+  { target: 'ego-loadout', title: 'E.G.O loadout', text: "Each deployed sinner's E.G.O. Suggestions (★) come from the E.G.O you own; the loadout changes how much E.G.O gifts and skill swaps are worth." },
+  { target: 'rankings-nav', tab: 'rank-gifts', title: 'Rankings: the best of the best', text: 'The best E.G.O gifts and identities for Mirror Dungeon, whatever you own: for planning what to chase, not just this run.' },
+  { target: 'gift-filters', tab: 'rank-gifts', title: 'Best gifts by keyword', text: 'See the best gifts overall, for any team, or for one keyword\'s team.' },
+  { target: 'get-next', tab: 'rank-ids', title: 'Worth getting next', text: 'Identities you don\'t have yet that would most improve the teams you can build. Handy before spending Lunacy or Thread.' },
+  { target: 'run-nav', tab: 'start', title: 'Start a run', text: 'When you go in: pick the lineup and difficulty, then your Starlight buffs and starting gifts. After that it follows each floor: pick a pack, fights and events, the shop, then the boss.' },
+  { target: 'start-run', tab: 'start', title: 'During the run', text: 'Every gift, pack and event choice is judged for the team you picked. "Run setup" in the run bar comes back here if you change your mind.' },
+  { target: 'tools', tab: 'team', title: 'Tools', text: 'Rank every gift for your team, check one gift or pack in detail, or read the gifts you have from a screenshot.' },
+  { target: 'sync', title: 'Keep it everywhere', text: 'Sign in with Google to save your team, collection and run to your account, so it\'s there on any computer or phone. Or save a backup file.' },
+  { target: 'title', title: "That's it!", text: <>The GesellschaftMD title takes you back to the home page. You can take this tour again from <b>Home › Settings</b>. Good luck down there, Manager.</> },
+]
 
 /** The "Try a demo team" run: a Heishou lineup on Hard, floor 3, with a few gifts already picked up. */
 const DEMO = {
@@ -182,9 +207,9 @@ export default function App() {
     if (to !== stage) setDirection(STAGE_INDEX[to] >= STAGE_INDEX[stage] ? 'fwd' : 'back')
     setStoredTab(t)
   }
-  const openStage = (s: RunStage | 'home') => {
+  const openStage = (s: RunStage | 'home' | 'rankings') => {
     const sub = subTabs[s]
-    setTab(sub && STAGE_OF[sub] === s ? sub : s === 'home' ? 'team' : STAGES.find((x) => x.id === s)!.tab)
+    setTab(sub && STAGE_OF[sub] === s ? sub : s === 'home' ? 'team' : s === 'rankings' ? 'rank-gifts' : STAGES.find((x) => x.id === s)!.tab)
   }
   // Making or editing a lineup from the start-of-run questions: Home's Team page offers a way back.
   const [buildingForRun, setBuildingForRun] = useState(false)
@@ -210,6 +235,11 @@ export default function App() {
   const [activePreset, setActivePreset] = usePersistentState<string | null>('limbussite.presets.active.v1', null)
 
   const identitiesById = useMemo(() => new Map(gameData.identities.map((i) => [i.id, i])), [])
+  // What you own (Home › My identities & E.G.O); null until you've marked any.
+  const markedIds = hasMarkedIdentities(myIdentities, gameData.identities)
+  const ownedIds = useMemo(() => ownedIdentitySet(myIdentities, gameData.identities), [myIdentities])
+  const ownedEgoIds = useMemo(() => (hasMarkedEgos(myEgos, gameData.egos ?? []) ? ownedEgoSet(myEgos, gameData.egos ?? []) : null), [myEgos])
+  const ownedTeams = useMemo(() => (markedIds && tab === 'team' ? ownedKeywordTeams(gameData, ownedIds, tiers) : []), [markedIds, ownedIds, tab, tiers])
   const packsById = useMemo(() => new Map(gameData.themePacks.map((p) => [p.id, p])), [])
   const packsForGift = useMemo(() => packsByGift(gameData.themePacks), [])
   // Every sinner shows an identity: the one you picked, or their base LCB Sinner.
@@ -257,10 +287,12 @@ export default function App() {
   }), [identitiesById, packsById])
   useEffect(() => sync.init(lookups), [lookups])
   const syncDialogs = <SyncDialogs open={dataOpen} onClose={() => setDataOpen(false)} look={lookups} />
-  // Welcome screen: first visit, or the LimbusSite title.
+  // Welcome screen: first visit, or the GesellschaftMD title.
   const [home, setHome] = useState(firstVisit)
   const [, setWelcomed] = usePersistentState<boolean>('limbussite.welcomed.v1', false)
   const leaveHome = (to: Tab) => { setHome(false); setSetupOpen(false); setWelcomed(true); setTab(to); window.scrollTo(0, 0) }
+  const [touring, setTouring] = useState(false)
+  const startTour = () => { leaveHome('team'); setTouring(true) }
   // First-time setup (sign in, identities you own): until you finish or skip it, it opens
   // for anyone who hasn't set anything up yet (no lineup, no identities marked).
   const [setupState, setSetupState] = usePersistentState<SetupState>(SETUP_KEY, null)
@@ -374,6 +406,7 @@ export default function App() {
           counts={{ gifts: gameData.gifts.length, packs: gameData.themePacks.length, events: (gameData.events ?? []).length, identities: gameData.identities.length }}
           onDemo={loadDemo} onBuild={() => (setupState === null && unconfigured ? openSetup() : leaveHome(run.floor !== null ? 'team' : 'start'))}
           onContinue={() => leaveHome(tab)}
+          onTour={startTour}
           onOpenData={() => setDataOpen(true)} />
         {syncDialogs}
       </>
@@ -393,6 +426,13 @@ export default function App() {
     )
   }
 
+  // A new team needs a starting order; after that, only suggestions.
+  const buildFor = (focus: Parameters<typeof buildTeam>[1], ownedOnly: boolean) => {
+    const built = buildTeam(gameData, focus, ownedOnly && markedIds ? ownedIds : undefined, tiers)
+    setTeam(built.team)
+    const ids = SINNERS.map((s) => identitiesById.get(built.team[s] ?? '') ?? equipped[s])
+    setSelection(suggestOrder(gameData, ids, deployed, owned, tiers).order)
+  }
   const clearRun = () => {
     // Run data only: the team, E.G.O, saved lineups and settings stay.
     setOwned([])
@@ -500,7 +540,7 @@ export default function App() {
     <nav className="tabs sub-tabs home-tabs" role="tablist" aria-label="Home">
       {SUB_TABS.home!.map((t) => (
         <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'tab active' : 'tab'}
-          onClick={() => setTab(t.id)}>{t.label}</button>
+          data-tour={`tab-${t.id}`} onClick={() => setTab(t.id)}>{t.label}</button>
       ))}
     </nav>
   )
@@ -509,28 +549,33 @@ export default function App() {
   return (
     <div className="app">
       <header className="top">
-        <button className="top-home" onClick={() => { setHome(true); window.scrollTo(0, 0) }} title="Back to the welcome screen">
-          <h1>LimbusSite</h1>
-          <p className="sub">Mirror Dungeon E.G.O gift planner</p>
+        <button className="top-home" data-tour="title" onClick={() => { setHome(true); window.scrollTo(0, 0) }} title="Back to the home page">
+          <h1>GesellschaftMD</h1>
+          <p className="sub">Mirror Dungeon planner</p>
         </button>
         <nav className="main-nav" aria-label="Main">
           <button className={`main-nav-btn${stage === 'home' ? ' on' : ''}`} aria-current={stage === 'home' ? 'page' : undefined}
-            onClick={() => { setBuildingForRun(false); openStage('home') }}>
+            data-tour="home-nav" onClick={() => { setBuildingForRun(false); openStage('home') }}>
             <b>Home</b><small>Team, identities, settings</small>
+          </button>
+          <button className={`main-nav-btn${stage === 'rankings' ? ' on' : ''}`} aria-current={stage === 'rankings' ? 'page' : undefined}
+            data-tour="rankings-nav" onClick={() => { setBuildingForRun(false); openStage('rankings') }}>
+            <b>Rankings</b><small>Best gifts and identities</small>
           </button>
           <button className={`main-nav-btn run${stage === 'start' || runStage ? ' on' : ''}${inRun ? ' live' : ''}`}
             aria-current={stage === 'start' || runStage ? 'page' : undefined}
-            onClick={() => { setBuildingForRun(false); openRun() }}>
+            data-tour="run-nav" onClick={() => { setBuildingForRun(false); openRun() }}>
             <b>{inRun ? 'Your run' : 'Start a run'}</b>
             <small>{inRun ? `Floor ${run.floor} of ${run.floors}${currentPack ? ` · ${currentPack.name}` : ''}` : 'Lineup, Starlight, first gifts'}</small>
           </button>
         </nav>
         <div className="top-right">
-          <ToolsMenu current={tab} onPick={(t) => setTab(t)} />
-          <SyncButton onOpen={() => setDataOpen(true)} />
+          <span data-tour="tools"><ToolsMenu current={tab} onPick={(t) => setTab(t)} /></span>
+          <span data-tour="sync"><SyncButton onOpen={() => setDataOpen(true)} /></span>
         </div>
       </header>
       {syncDialogs}
+      {touring && <Tour steps={TOUR} onOpenTab={(t) => { setBuildingForRun(false); setTab(t) }} onClose={() => { setTouring(false); setTab('team'); window.scrollTo(0, 0) }} />}
 
       {managing && (
         <Dialog title="Saved lineups" onClose={() => setManaging(false)}>
@@ -553,6 +598,14 @@ export default function App() {
       )}
 
       {stage === 'home' && homeSub}
+      {stage === 'rankings' && (
+        <nav className="tabs sub-tabs home-tabs" role="tablist" aria-label="Rankings">
+          {SUB_TABS.rankings!.map((t) => (
+            <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'tab active' : 'tab'}
+              data-tour={`tab-${t.id}`} onClick={() => setTab(t.id)}>{t.label}</button>
+          ))}
+        </nav>
+      )}
       {stage === 'home' && buildingForRun && (
         <div className="building-banner">
           <span><b>Setting up a lineup for your run.</b> Pick identities and the deployment order, then use it.</span>
@@ -600,7 +653,7 @@ export default function App() {
         </div>
       )}
 
-      <div role="tabpanel" key={stage === 'home' || stage === 'start' ? tab : stage} className={`phase phase-${direction}`}>
+      <div role="tabpanel" key={stage === 'home' || stage === 'start' || stage === 'rankings' ? tab : stage} className={`phase phase-${direction}`}>
         {tab === 'team' && (
           <>
             {lineupStrip}
@@ -619,24 +672,25 @@ export default function App() {
               onClear={() => setSelection([])}
               onSelectAll={() => setSelection([...order, ...SINNERS.filter((s) => !order.includes(s))])}
               onDeployedChange={setDeployed}
-              ownedCount={ownedIdentitySet(myIdentities, gameData.identities).size}
+              ownedCount={ownedIds.size}
               onOpenMyIdentities={() => setTab('identities')}
-              onBuild={(focus) => {
-                // A new team needs a starting order; after that, only suggestions.
-                const built = buildTeam(gameData, focus, undefined, tiers)
-                setTeam(built.team)
-                const ids = SINNERS.map((s) => identitiesById.get(built.team[s] ?? '') ?? equipped[s])
-                setSelection(suggestOrder(gameData, ids, deployed, owned, tiers).order)
-              }}
+              ownedIdentities={markedIds ? ownedIds : null} ownedEgos={ownedEgoIds} ownedTeams={ownedTeams}
+              onBuild={(focus, ownedOnly) => buildFor(focus, ownedOnly)}
+              onBuildOwned={(focus) => buildFor(focus, true)}
             />
           </>
+        )}
+        {(tab === 'rank-gifts' || tab === 'rank-ids') && (
+          <RankingsPage view={tab === 'rank-gifts' ? 'gifts' : 'identities'} data={gameData} ownedIdentities={ownedIds}
+            hasMarked={markedIds} art={art} onOpenMyIdentities={() => setTab('identities')} />
         )}
         {tab === 'identities' && (
           <MyCollection identities={gameData.identities} storedIdentities={myIdentities} onIdentitiesChange={setMyIdentities}
             egos={gameData.egos ?? []} storedEgos={myEgos} onEgosChange={setMyEgos} art={art} onOpenData={() => setDataOpen(true)} />
         )}
         {tab === 'settings' && (
-          <SettingsPage art={art} onArtChange={setArt} onOpenData={() => setDataOpen(true)} onSetup={openSetup} dataNote={dataNote} />
+          <SettingsPage art={art} onArtChange={setArt} onOpenData={() => setDataOpen(true)} onSetup={openSetup}
+            onTour={() => { setTab('team'); setTouring(true) }} dataNote={dataNote} />
         )}
 
         {tab === 'start' && (

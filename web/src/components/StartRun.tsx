@@ -58,7 +58,7 @@ export function StartRun({ presets, activeId, current, selection, deployed, iden
   }
 
   return (
-    <div className="start-run">
+    <div className="start-run" data-tour="start-run">
       <section className="start-section">
         <header className="start-head">
           <h2>Which lineup are you taking in?</h2>

@@ -1,4 +1,4 @@
-# LimbusSite web app
+# GesellschaftMD web app
 
 A Vite + React + TypeScript app. All game data is static JSON from `../data` (made by
 the scraper), bundled at build time. Your team, owned gifts and offered packs are saved in
@@ -15,14 +15,14 @@ npm run dev        # dev server at http://localhost:5173
 npm run dev:lan    # same, plus a Network link for other devices on your Wi-Fi
 npm test           # scoring unit tests (Vitest)
 npm run build      # production build -> dist/
-npm run build:single  # one self-contained file -> dist/LimbusSite.html (to send to someone)
+npm run build:single  # one self-contained file -> dist/GesellschaftMD.html (to send to someone)
 npm run preview    # serve the production build locally
 ```
 
 ## Sharing the site
 
 - **Send a file:** `npm run build:single` packs the whole site, data included, into
-  `dist/LimbusSite.html` (about 2.5 MB). Your friend double-clicks it; there's nothing to install
+  `dist/GesellschaftMD.html` (about 2.5 MB). Your friend double-clicks it; there's nothing to install
   and it works offline. Their team and gifts are saved in their own browser. Rebuild and resend
   it after a scrape or an update. (`scripts/single-file.mjs` inlines the build's JS and CSS,
   because browsers won't load separate module scripts from a file opened off disk.)
@@ -67,7 +67,7 @@ opens **Your data**:
   swaps, settings; rows that differ are marked) and pick which copy to keep. Otherwise it
   syncs on its own: whichever side didn't change takes the other's changes.
 - **Backup file:** Download backup saves everything to a `.json` file; Load a backup shows the
-  same preview before replacing anything. Works without an account and in `LimbusSite.html`.
+  same preview before replacing anything. Works without an account and in `GesellschaftMD.html`.
 - **Undo:** whenever this computer's data is replaced (from the cloud or a backup), what was
   there before is kept so you can put it back.
 
@@ -117,7 +117,7 @@ firebase deploy --only hosting
 
 It builds `web/` (`firebase.json` runs `npm --prefix web run build` first) and publishes
 `web/dist` at `https://<project-id>.web.app`, which is already an authorized sign-in domain.
-`dist/LimbusSite.html` is published too, so `https://<project-id>.web.app/LimbusSite.html` is a
+`dist/GesellschaftMD.html` is published too, so `https://<project-id>.web.app/GesellschaftMD.html` is a
 download link for the offline copy (cloud sync is off there; backups work).
 
 Re-run the scraper (`python -m scraper` in the repo root) after a game patch. The app picks
@@ -569,7 +569,7 @@ See the comment at the top of `src/lib/scoring.ts`. In short:
   note naming gifts that make them (ones naming the sin first, then random ones), and Best gifts
   marks those gifts and scores them a bit higher (`ctx.egoNeeds`, `egoAdjust` in scoring.ts). Once
   you own one, its resources count and the suggestion switches to that E.G.O on its own.
-- **Welcome screen** (`Welcome.tsx`): shown on a first visit, from the LimbusSite title, or with
+- **Welcome screen** (`Welcome.tsx`): shown on a first visit, from the GesellschaftMD title, or with
   `#welcome` at the end of the address. Dante's clock with the twelve sinners (your equipped
   identities) at their hours, rising sin-colored embers, counters from the data, and two ways in:
   **Try a demo team** (a Heishou lineup on Hard, floor 3, with a few gifts; your current lineup is
@@ -684,3 +684,21 @@ Every weight is in `WEIGHTS` at the top of `scoring.ts`. Tune them there.
 - A random fusion's result isn't knowable in advance, so after you press Fuse you pick what you
   actually got (from the possible results, or by search).
 - The fusion tier table and keyword chances are from the wiki's Mirror Dungeon page (Sept 2026).
+
+## Rankings, home page and tour (2026-11-15)
+
+- **Rankings** (top bar, `RankingsPage.tsx`, `lib/rankings.ts`): the best of everything for Mirror
+  Dungeon, whatever you own. *Best E.G.O gifts* scores every gift for the strongest team of each
+  status keyword (whole roster, Hard run, nothing owned) and divides by that team's top-10 average,
+  so 1.0 ≈ a top pick; overall = best over the seven teams, "Any team" = worst (≥ 0.45). *Best
+  identities* = `strength()` (tier lists + MD status bonus + clash) with Sinner / keyword / owned
+  filters, and *Worth getting next*: for each keyword, the team you can build from what you own vs.
+  from everything; identities you don't own that would replace a weaker pick.
+- **Recommendations for what you own** stay on Home › Team & lineups: Build has "Only mine", the
+  identity picker has "Only ones I own", "Best teams from what you own" in the side panel, and the
+  E.G.O loadout only suggests E.G.O you own (others under "Not owned").
+- **Home page** (`Welcome.tsx`): what it does, why use it, how it works, and **Take the tour**.
+- **Tour** (`Tour.tsx`): dims the page and lights up one `[data-tour=…]` element per step, opening
+  the screen it's on first. Steps are `TOUR` in `App.tsx`; also from Home › Settings.
+- Renamed to **GesellschaftMD**. Saved data keys stay `limbussite.*`; backups now say
+  `"app": "GesellschaftMD"` and older `"LimbusSite"` backups still load.

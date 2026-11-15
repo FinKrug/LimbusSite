@@ -1736,3 +1736,115 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .myego.sin-envy { --sin-color: var(--envy); }
 .myego .myid-check { top: 6px; right: 6px; }
 @media (max-width: 560px) { .myegos-grid { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); } }
+
+/* ---------- Rankings (Finley, 2026-11-15): the best for any team ---------- */
+.rankings { display: grid; gap: 14px; }
+.rankings-intro { margin: 0; max-width: 80ch; font-size: 14px; line-height: 1.55; }
+.rankings-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.rankings-tools input[type='search'] { flex: 1 1 200px; max-width: 280px; }
+.chips-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips-row .chip-btn { padding: 4px 12px; font-size: 13px; }
+.chip-btn.on { background: rgb(227 169 60 / 0.12); }
+.rankings-loading { margin: 0; }
+.rank-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.rank-row {
+  display: grid; grid-template-columns: 34px auto minmax(0, 1fr) auto; align-items: center; gap: 12px;
+  padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);
+}
+.rank-row.owned { border-color: #3e5a3b; }
+.rank-n { font-size: 15px; font-weight: 800; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.rank-row:nth-child(-n + 3) .rank-n { color: var(--accent); }
+.rank-row .portrait, .rank-row img.portrait { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
+.rank-main { display: grid; gap: 2px; min-width: 0; }
+.rank-title { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.rank-why { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rank-side { display: grid; justify-items: end; gap: 2px; text-align: right; }
+.rank-value { font-size: 12px; font-weight: 750; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
+.rank-value.v-top { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+.rank-value.v-strong { color: var(--accent); border-color: var(--accent); }
+.rank-value.v-good { color: var(--text); }
+.rank-value.v-sit { color: var(--muted); }
+.rank-for { white-space: nowrap; }
+.rank-tier { min-width: 42px; text-align: center; font-weight: 850; font-size: 15px; padding: 3px 8px; border-radius: 8px; background: var(--panel-2); color: var(--muted); }
+.rank-tier.t-sss { color: #1d1206; background: linear-gradient(135deg, #f3d27a, #e3a93c); }
+.rank-tier.t-ss { color: #f3d27a; border: 1px solid #b07a2a; }
+.rank-tier.t-s { color: var(--text); border: 1px solid var(--line); }
+.getnext h2 { margin: 0 0 6px; }
+.getnext-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+.getnext-card { display: flex; align-items: center; gap: 10px; padding: 8px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel-2); }
+.getnext-card .portrait, .getnext-card img.portrait { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex: none; }
+.getnext-text { display: grid; gap: 3px; min-width: 0; }
+@media (max-width: 620px) {
+  .rank-row { grid-template-columns: 26px auto minmax(0, 1fr); gap: 8px; padding: 8px; }
+  .rank-side { grid-column: 3; justify-items: start; text-align: left; display: flex; gap: 8px; align-items: center; }
+  .rank-why { white-space: normal; }
+}
+
+/* ---------- Team & lineups: what you own ---------- */
+.build-mine, .picker-mine { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.picker-mine { margin-left: auto; margin-right: 8px; }
+.picker-name .tag { margin-left: 6px; font-size: 10px; }
+.owned-team-list { list-style: none; margin: 6px 0; padding: 0; display: grid; gap: 6px; }
+.owned-team-list li { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto auto; align-items: center; gap: 8px; }
+.owned-team-bar { height: 6px; border-radius: 3px; background: var(--panel-2); overflow: hidden; }
+.owned-team-bar span { display: block; height: 100%; background: linear-gradient(90deg, #9c6420, var(--accent)); }
+
+/* ---------- home page: why, how, tour ---------- */
+.welcome-title span { font-size: 0.62em; letter-spacing: 0.08em; margin-left: 0.08em; }
+.welcome-tour {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 10px; cursor: pointer; font-size: 14px;
+  color: var(--text); background: rgb(227 169 60 / 0.06); border: 1px dashed #6b4d27; border-radius: 999px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.welcome-tour:hover { border-color: var(--accent); background: rgb(227 169 60 / 0.12); }
+.welcome-tour svg { width: 20px; height: 20px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linejoin: round; }
+.welcome-tour b { color: var(--accent); }
+.welcome-section { display: grid; gap: 14px; }
+.welcome-section h2, .welcome-section-title {
+  margin: 0; font-family: 'Cinzel', 'Trajan Pro', Georgia, serif; font-size: 22px; letter-spacing: 0.06em; color: #f1e6d4;
+}
+.welcome-why { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.welcome-why li { padding: 16px 18px; border-left: 2px solid var(--accent); background: linear-gradient(90deg, rgba(227, 169, 60, 0.07), transparent 80%); border-radius: 0 10px 10px 0; }
+.welcome-why h3, .welcome-steps h3 { margin: 0 0 6px; font-size: 16px; color: #f1e6d4; }
+.welcome-why p, .welcome-steps p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
+.welcome-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; counter-reset: step; }
+.welcome-steps li { position: relative; padding: 18px; border: 1px solid #3a2e22; border-radius: 12px; background: rgba(20, 17, 14, 0.8); }
+.welcome-step-n {
+  display: inline-grid; place-items: center; width: 30px; height: 30px; margin-bottom: 8px; border-radius: 50%;
+  font-weight: 800; color: var(--accent-ink); background: var(--accent);
+}
+.welcome-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+@media (max-width: 900px) { .welcome-why { grid-template-columns: 1fr; } .welcome-steps { grid-template-columns: 1fr; } }
+
+/* ---------- the tour ---------- */
+.tour { position: fixed; inset: 0; z-index: 1000; }
+.tour-dim { position: fixed; inset: 0; background: rgb(8 6 4 / 0.72); }
+.tour-spot {
+  position: fixed; border-radius: 10px; pointer-events: none;
+  box-shadow: 0 0 0 9999px rgb(8 6 4 / 0.72), 0 0 0 2px var(--accent), 0 0 24px 4px rgb(227 169 60 / 0.35);
+  transition: top 0.25s ease, left 0.25s ease, width 0.25s ease, height 0.25s ease;
+}
+.tour-catch { position: fixed; inset: 0; }
+.tour-box {
+  position: fixed; z-index: 1; display: grid; gap: 8px; padding: 16px 18px; border-radius: 12px;
+  background: var(--panel); border: 1px solid var(--accent); box-shadow: 0 16px 50px rgb(0 0 0 / 0.6);
+  animation: tour-in 0.2s ease;
+}
+@keyframes tour-in { from { opacity: 0; transform: translateY(6px); } }
+.tour-box h2 { margin: 0; font-size: 18px; color: var(--accent); }
+.tour-count { margin: 0; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.tour-text { font-size: 14px; line-height: 1.55; color: var(--text); }
+.tour-dots { display: flex; gap: 5px; }
+.tour-dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
+.tour-dots i.seen { background: #8a6a3a; }
+.tour-dots i.on { background: var(--accent); width: 16px; border-radius: 3px; }
+.tour-btns { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+.tour-btns > span { display: flex; gap: 8px; }
+@media (prefers-reduced-motion: reduce) { .tour-spot, .tour-box { transition: none; animation: none; } }
+@media (max-width: 560px) {
+  .main-nav-btn small { display: none; }
+  .main-nav-btn { padding: 8px 6px; text-align: center; }
+}
+.rankings-tools select { width: auto; flex: 0 1 200px; }
+.welcome-title { font-size: clamp(30px, 4.4vw, 64px); white-space: nowrap; }
+@media (max-width: 900px) { .welcome-title { font-size: clamp(30px, 8.6vw, 64px); } }

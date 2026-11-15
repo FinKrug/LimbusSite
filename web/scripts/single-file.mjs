@@ -1,5 +1,5 @@
 // Packs the production build (dist/) into one self-contained HTML file you can
-// send to someone: dist/LimbusSite.html. It opens by double-clicking, with no
+// send to someone: dist/GesellschaftMD.html. It opens by double-clicking, with no
 // server or install. A normal build can't do that, because browsers block
 // <script src> modules on file:// pages.
 //
@@ -27,6 +27,6 @@ if (/src="\.\/|href="\.\/assets/.test(html)) {
   console.error('A file is still linked rather than inlined; check dist/index.html.')
   process.exit(1)
 }
-const out = join(dist, 'LimbusSite.html')
+const out = join(dist, 'GesellschaftMD.html')
 writeFileSync(out, html)
 console.log(`Wrote ${out} (${Math.round(Buffer.byteLength(html) / 1024)} KB). Send that one file; it opens in any modern browser.`)

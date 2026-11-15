@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { decodeKey, deviceLabel, encodeKey } from './cloud'
 import { gameData } from './data'
 import {
-  changedKeys, compareRows, isBlank, isShared, makeBackup, parseBackup, planSync, summarize, takeSnapshot, writesFor,
+  backupFileName, changedKeys, compareRows, isBlank, isShared, makeBackup, parseBackup, planSync, summarize, takeSnapshot, writesFor,
   type KeyValueStore, type Snapshot, type SummaryLookups,
 } from './transfer'
 
@@ -56,7 +56,13 @@ describe('snapshots', () => {
 describe('backup files', () => {
   it('round-trips', () => {
     const text = JSON.stringify(makeBackup(played, 123))
-    expect(parseBackup(text)).toEqual({ app: 'LimbusSite', version: 1, savedAt: 123, data: played })
+    expect(parseBackup(text)).toEqual({ app: 'GesellschaftMD', version: 1, savedAt: 123, data: played })
+  })
+
+  it('still loads backups saved before the rename', () => {
+    const text = JSON.stringify({ app: 'LimbusSite', version: 1, savedAt: 5, data: played })
+    expect(parseBackup(text)).toMatchObject({ version: 1, savedAt: 5, data: played })
+    expect(backupFileName(0)).toMatch(/^GesellschaftMD-backup-/)
   })
 
   it('drops keys that are not saved values and values that do not parse', () => {

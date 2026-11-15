@@ -4,7 +4,7 @@ import type { ArtVariant } from '../lib/images'
 import type { LineupInfo, LineupSuggestion } from '../lib/ordering'
 import { clashLabel, identityTier } from '../lib/strength'
 import { type Focus, focusKey, parseFocus, traitOptions } from '../lib/teambuilder'
-import { CORE_KEYWORDS, SINNERS, type Gift, type Identity, type Sin, type Sinner } from '../lib/types'
+import { CORE_KEYWORDS, SINNERS, type CoreKeyword, type Gift, type Identity, type Sin, type Sinner } from '../lib/types'
 import { KeywordChip } from './bits'
 import { EgoLoadoutPanel } from './EgoLoadout'
 import type { BattleProfile, Ego, EgoLoadout } from '../lib/ego'
@@ -29,7 +29,7 @@ interface Props {
   onApply: (s: LineupSuggestion) => void
   onDismiss: (s: LineupSuggestion) => void
   onRestoreDismissed: () => void
-  onBuild: (focus: Focus) => void
+  onBuild: (focus: Focus, ownedOnly: boolean) => void
   onArtChange: (art: ArtVariant) => void
   egos: Ego[]
   loadout: EgoLoadout
@@ -41,6 +41,13 @@ interface Props {
   /** Identities you own (Tools > My identities), base ones included. */
   ownedCount: number
   onOpenMyIdentities: () => void
+  /** Identities you own (base ones included), or null when you haven't marked any. */
+  ownedIdentities: ReadonlySet<string> | null
+  /** E.G.O you own (starting ones included), or null when you haven't marked any. */
+  ownedEgos: ReadonlySet<string> | null
+  /** The best keyword teams you can build from what you own, best first. */
+  ownedTeams: { keyword: CoreKeyword; score: number; filled: number }[]
+  onBuildOwned: (focus: Focus) => void
 }
 
 /**
@@ -83,7 +90,7 @@ export function TeamTab(props: Props) {
               title="Take everyone out of the lineup (identities stay equipped)">⟲ Clear order</button>
             <button className="btn small-btn" onClick={onSelectAll} disabled={selection.length === 12}
               title="Add everyone not in the lineup yet, after the ones you picked">Select all</button>
-            <BuildControl identities={identities} onBuild={props.onBuild} />
+            <BuildControl identities={identities} onBuild={props.onBuild} canOwned={!!props.ownedIdentities} />
           </div>
           <div className="seg" role="group" aria-label="Card art">
             <button className={art === 'uptie' ? 'seg-btn on' : 'seg-btn'} aria-pressed={art === 'uptie'} onClick={() => props.onArtChange('uptie')}
@@ -98,7 +105,7 @@ export function TeamTab(props: Props) {
             My identities ({props.ownedCount}/{identities.length} owned) →
           </button>
         </p>
-        <ol className="card-grid" aria-label="Sinners">
+        <ol className="card-grid" aria-label="Sinners" data-tour="team-grid">
           {SINNERS.map((s) => {
             const i = equipped[s]
             const k = selection.indexOf(s)
@@ -114,11 +121,12 @@ export function TeamTab(props: Props) {
         </ol>
         <EgoLoadoutPanel egos={props.egos} loadout={props.loadout} onChange={props.onLoadoutChange}
           selection={selection} deployed={deployed} members={deployedIds} battle={props.battle}
-          gifts={props.gifts} owned={props.owned} />
+          gifts={props.gifts} owned={props.owned} ownedEgos={props.ownedEgos} />
       </div>
 
       <aside className="formation-side">
         <SuggestionBox {...props} />
+        <OwnedTeamsBox {...props} />
 
         <section className="side-box">
           <h3>Affinities <span className="muted small">(deployed)</span></h3>
@@ -141,7 +149,7 @@ export function TeamTab(props: Props) {
 
       {picking && (
         <IdentityPicker sinner={picking} identities={identities.filter((i) => i.sinner === picking)}
-          current={equipped[picking]} art={art}
+          current={equipped[picking]} art={art} owned={props.ownedIdentities}
           onPick={(id) => { props.onEquip(picking, id); setPicking(null) }} onClose={() => setPicking(null)} />
       )}
     </div>
@@ -236,10 +244,13 @@ function IdentityCard({ identity: i, slot, isDeployed, art, suggestion, onToggle
   )
 }
 
-function IdentityPicker({ sinner, identities, current, art, onPick, onClose }: {
+function IdentityPicker({ sinner, identities, current, art, owned, onPick, onClose }: {
   sinner: Sinner; identities: Identity[]; current: Identity; art: ArtVariant
+  /** Null when you haven't marked what you own. */
+  owned: ReadonlySet<string> | null
   onPick: (id: string) => void; onClose: () => void
 }) {
+  const [mineOnly, setMineOnly] = useState(!!owned)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', onKey)
@@ -248,7 +259,7 @@ function IdentityPicker({ sinner, identities, current, art, onPick, onClose }: {
   // Like the game: 000 first, then 00, then 0; alphabetical within each.
   const groups = [3, 2, 1].map((r) => ({
     rarity: r,
-    list: identities.filter((i) => (i.rarity ?? 1) === r).sort((a, b) => shortName(a).localeCompare(shortName(b))),
+    list: identities.filter((i) => (i.rarity ?? 1) === r && (!mineOnly || !owned || owned.has(i.id) || i.id === current.id)).sort((a, b) => shortName(a).localeCompare(shortName(b))),
   })).filter((g) => g.list.length)
 
   return (
@@ -256,6 +267,11 @@ function IdentityPicker({ sinner, identities, current, art, onPick, onClose }: {
       <div className="picker" role="dialog" aria-modal="true" aria-label={`Choose ${sinner}'s identity`} onClick={(e) => e.stopPropagation()}>
         <header className="picker-head">
           <h2>{sinner}</h2>
+          {owned && (
+            <label className="picker-mine">
+              <input type="checkbox" checked={mineOnly} onChange={(e) => setMineOnly(e.target.checked)} /> Only ones I own
+            </label>
+          )}
           <button className="icon-btn" onClick={onClose} aria-label="Close">✕</button>
         </header>
         <div className="picker-scroll">
@@ -271,7 +287,7 @@ function IdentityPicker({ sinner, identities, current, art, onPick, onClose }: {
                       <button className={i.id === current.id ? 'picker-item current' : 'picker-item'} onClick={() => onPick(i.id)}>
                         <Portrait identity={i} kind="profile" variant={art} />
                         <span className="picker-text">
-                          <span className="picker-name">{shortName(i)}</span>
+                          <span className="picker-name">{shortName(i)}{owned && !owned.has(i.id) && <span className="tag muted">Not owned</span>}</span>
                           <span className="picker-meta">
                             {role && <span className="muted small">{role}</span>}
                             {clash && <span className={`small id-card-clash${clash.strong ? ' strong' : ''}`} title={clash.title}>{clash.text}</span>}
@@ -292,11 +308,13 @@ function IdentityPicker({ sinner, identities, current, art, onPick, onClose }: {
 }
 
 /** "Build around…" + Build: picks an identity per sinner and a starting order for all 12. */
-function BuildControl({ identities, onBuild }: { identities: Identity[]; onBuild: (f: Focus) => void }) {
+function BuildControl({ identities, onBuild, canOwned }: { identities: Identity[]; onBuild: (f: Focus, ownedOnly: boolean) => void; canOwned: boolean }) {
   const traits = useMemo(() => traitOptions(identities), [identities])
   const [focus, setFocus] = useState('')
+  const [mine, setMine] = useState(true)
+  const ownedOnly = canOwned && mine
   return (
-    <span className="build-control" title="Picks an identity per sinner for a keyword or affiliation and a starting order for all 12. It doesn't know which identities you own.">
+    <span className="build-control" data-tour="build" title={`Picks an identity per sinner for a keyword or affiliation and a starting order for all 12${ownedOnly ? ', from the identities you own' : ''}.`}>
       <select aria-label="Build a team around" value={focus} onChange={(e) => setFocus(e.target.value)}>
         <option value="">Build a team around…</option>
         <optgroup label="Keyword">
@@ -308,9 +326,44 @@ function BuildControl({ identities, onBuild }: { identities: Identity[]; onBuild
           ))}
         </optgroup>
       </select>
-      <button className="btn small-btn" disabled={!parseFocus(focus)} onClick={() => { const f = parseFocus(focus); if (f) onBuild(f) }}>
+      {canOwned && (
+        <label className="build-mine" title="Only use identities you marked in My identities">
+          <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} /> Only mine
+        </label>
+      )}
+      <button className="btn small-btn" disabled={!parseFocus(focus)} onClick={() => { const f = parseFocus(focus); if (f) onBuild(f, ownedOnly) }}>
         Build
       </button>
     </span>
+  )
+}
+
+/** The keyword teams you can build from what you own (recommendations for what you have). */
+function OwnedTeamsBox({ ownedIdentities, ownedTeams, onBuildOwned, onOpenMyIdentities }: Props) {
+  return (
+    <section className="side-box owned-teams" data-tour="owned-teams">
+      <h3>Best teams from what you own</h3>
+      {!ownedIdentities ? (
+        <p className="hint small">
+          Mark the identities you own to see which keyword teams you can build best.{' '}
+          <button className="link-btn accent" onClick={onOpenMyIdentities}>Mark my identities →</button>
+        </p>
+      ) : (
+        <>
+          <ul className="owned-team-list">
+            {ownedTeams.slice(0, 4).map((t) => (
+              <li key={t.keyword}>
+                <KeywordChip keyword={t.keyword} />
+                <span className="owned-team-bar" aria-hidden="true"><span style={{ width: `${Math.round(t.score * 100)}%` }} /></span>
+                <span className="small muted">{t.filled}/7 fit</span>
+                <button className="btn small-btn" onClick={() => onBuildOwned({ kind: 'keyword', value: t.keyword })}
+                  title={`Build a ${t.keyword} team from the identities you own`}>Build</button>
+              </li>
+            ))}
+          </ul>
+          <p className="hint small">How well your best 7 for each status keyword fit it and how strong they are. For identities worth getting, see Rankings.</p>
+        </>
+      )}
+    </section>
   )
 }
