@@ -5,10 +5,23 @@
 import type { Snapshot } from './transfer'
 import { PREFIX } from './storage'
 
+/**
+ * Our own domains (Cloudflare Pages). There, sign-in goes through the site itself:
+ * functions/__/[[path]].js passes /__/auth/* through to Firebase, so the sign-in popup is
+ * same-site and works in browsers that block third-party storage (Firefox, Safari).
+ */
+export const OWN_DOMAINS = ['gesellschaftmd.com', 'www.gesellschaftmd.com']
+
+/** Where the sign-in popup runs: our own domain when on it, else the Firebase project's. */
+export function authDomainFor(hostname: string | null, fallback: string | undefined): string | undefined {
+  return hostname && OWN_DOMAINS.includes(hostname) ? hostname : fallback
+}
+
 /** The web app's Firebase settings (web/.env: VITE_FIREBASE_*). These are public by design. */
 const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY as string | undefined,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN as string | undefined,
+  authDomain: authDomainFor(typeof location === 'undefined' ? null : location.hostname,
+    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN as string | undefined),
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined,
   appId: import.meta.env.VITE_FIREBASE_APP_ID as string | undefined,
 }

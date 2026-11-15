@@ -107,18 +107,26 @@ Testing without a real project: `firebase emulators:start --only auth,firestore 
 demo-limbussite`, then run the app with `VITE_FIREBASE_EMULATOR=1` (and any placeholder
 values for the other `VITE_FIREBASE_*` settings).
 
-### Putting it online
+### Putting it online (Cloudflare Pages, gesellschaftmd.com)
 
-With the project above set up, from the repo root:
+The site is hosted on **Cloudflare Pages** (free, unlimited bandwidth); sign-in and saved data stay
+on Firebase. Pages builds from GitHub on every push to `main`:
 
-```
-firebase deploy --only hosting
-```
+- Project settings: root directory `web`, build command `npm run build`, output directory `dist`.
+- Custom domain `gesellschaftmd.com` (bought on Cloudflare Registrar, so DNS is already there).
+- `web/.env` (committed, public values) has the Firebase settings. On `gesellschaftmd.com` the
+  app uses its own domain as `authDomain` (`OWN_DOMAINS` in `src/lib/cloud.ts`).
+- `web/functions/__/[[path]].js` passes `/__/auth/*` through to `limbussite.firebaseapp.com`, so
+  the sign-in popup is same-site and works in Firefox and Safari (Firebase's "Option 3").
+- Firebase console › Authentication › Settings › Authorized domains: `gesellschaftmd.com`,
+  `www.gesellschaftmd.com` and the `*.pages.dev` address. Google Cloud console › Credentials ›
+  the Web client › Authorized redirect URIs: `https://gesellschaftmd.com/__/auth/handler`.
+- Security rules still go out with `firebase deploy --only firestore:rules` (repo root).
 
-It builds `web/` (`firebase.json` runs `npm --prefix web run build` first) and publishes
-`web/dist` at `https://<project-id>.web.app`, which is already an authorized sign-in domain.
-`dist/GesellschaftMD.html` is published too, so `https://<project-id>.web.app/GesellschaftMD.html` is a
-download link for the offline copy (cloud sync is off there; backups work).
+Test the production build with the proxy locally: `npm run build`, then
+`npx wrangler pages dev dist` (serves `functions/` too).
+
+`firebase deploy --only hosting` still works (`firebase.json`) if you ever want the Firebase copy.
 
 Re-run the scraper (`python -m scraper` in the repo root) after a game patch. The app picks
 up the new JSON on the next dev reload or build.
