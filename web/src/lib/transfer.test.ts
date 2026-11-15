@@ -114,6 +114,15 @@ describe('the side-by-side preview', () => {
     expect(rows.filter((r) => r.differs).map((r) => r.id)).toEqual(['identities'])
     expect(isBlank(mine, look)).toBe(false)
   })
+
+  it('shows owned E.G.O as their own row', () => {
+    const ego = gameData.egos!.find((e) => !e.base)!
+    const mine = { ...fresh, 'limbussite.egos.owned.v1': JSON.stringify([ego.id]) }
+    const rows = compareRows(mine, fresh, look)
+    expect(rows.filter((r) => r.differs).map((r) => r.id)).toEqual(['owned-egos'])
+    expect(rows.find((r) => r.id === 'owned-egos')!.mine.text).toBe('1 E.G.O marked (plus the 12 starting ones)')
+    expect(isBlank(mine, look)).toBe(false)
+  })
 })
 
 describe('planSync', () => {

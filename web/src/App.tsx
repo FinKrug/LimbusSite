@@ -37,11 +37,14 @@ import {
 import { DEFAULT_DEPLOYED } from './lib/lineup'
 import { usePersistentState } from './lib/storage'
 import { OWNED_IDENTITIES_KEY, hasMarkedIdentities, ownedIdentitySet } from './lib/myidentities'
-import { MyIdentitiesTab } from './components/MyIdentitiesTab'
+import { MyCollection } from './components/MyCollection'
+import { OWNED_EGOS_KEY, hasMarkedEgos } from './lib/myegos'
 import { SETUP_KEY, SetupWizard, type SetupState } from './components/SetupWizard'
+import { StartRun } from './components/StartRun'
+import { SettingsPage } from './components/SettingsPage'
 import { sync } from './lib/sync'
 import type { SummaryLookups } from './lib/transfer'
-import { makePreset, presetMatches, restoreSelection, restoreTeam, validPresets, type Equipped, type TeamPreset } from './lib/presets'
+import { hasOrder, makePreset, presetMatches, restoreSelection, restoreTeam, validPresets, type Equipped, type TeamPreset } from './lib/presets'
 import type { TierOverrides } from './lib/strength'
 import type { ArtVariant } from './lib/images'
 import { lineupSuggestions, moveTo } from './lib/ordering'
@@ -52,40 +55,48 @@ import { buildTeam, suggestOrder } from './lib/teambuilder'
 import { addGift } from './lib/vestiges'
 import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
-type Tab = 'team' | 'prerun' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'identities'
-const TABS: Tab[] = ['team', 'prerun', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best', 'identities']
+type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best'
+const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best']
 
 /**
- * The site follows a floor of the Mirror Dungeon: pick a pack, fight your way through its
- * battles and "?" events, shop, then the boss, and on to the next floor (Next phase).
- * Each screen shows only what that moment needs. Evaluate and Import gifts are in Tools.
+ * Two places (Finley, 2026-11-15): Home, with your team and lineups, owned identities and settings;
+ * and the Run. Entering a run asks for the lineup and difficulty, then Before the run (Starlight
+ * buffs, starting gifts), then follows each floor: pick a pack, fight your way through its battles
+ * and "?" events, shop, then the boss, and on to the next floor (Next phase). "Run setup" in the
+ * run bar goes back to the start questions. Best gifts, Evaluate and Import gifts are in Tools.
  */
-type Stage = 'team' | 'prerun' | 'packs' | 'fights' | 'shop' | 'boss' | 'tools'
+type Stage = 'home' | 'start' | 'packs' | 'fights' | 'shop' | 'boss' | 'tools'
+type RunStage = 'packs' | 'fights' | 'shop' | 'boss'
 const STAGE_OF: Record<Tab, Stage> = {
-  team: 'team', prerun: 'prerun', packs: 'packs', rewards: 'fights', events: 'fights',
+  team: 'home', identities: 'home', settings: 'home', start: 'start', prerun: 'start',
+  packs: 'packs', rewards: 'fights', events: 'fights',
   gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss',
-  evaluate: 'tools', import: 'tools', best: 'tools', identities: 'tools',
+  evaluate: 'tools', import: 'tools', best: 'tools',
 }
-const STAGES: { id: Exclude<Stage, 'tools'>; tab: Tab; label: string; hint: string }[] = [
-  { id: 'team', tab: 'team', label: 'Team', hint: 'Identities, E.G.O' },
-  { id: 'prerun', tab: 'prerun', label: 'Before the run', hint: 'Starlight, first gifts' },
+/** Left to right, for which way a screen slides in. */
+const STAGE_INDEX: Record<Stage, number> = { home: 0, start: 1, packs: 2, fights: 3, shop: 4, boss: 5, tools: 6 }
+const STAGES: { id: RunStage; tab: Tab; label: string; hint: string }[] = [
   { id: 'packs', tab: 'packs', label: 'Pick a pack', hint: "The floor's theme pack" },
   { id: 'fights', tab: 'events', label: 'Fights & events', hint: 'Gifts, "?" events' },
   { id: 'shop', tab: 'gifts', label: 'Shop', hint: 'Buy, fuse, enhance' },
   { id: 'boss', tab: 'boss', label: 'Boss', hint: 'Boss, floor reward' },
 ]
-const STAGE_INDEX = Object.fromEntries(STAGES.map((s, k) => [s.id, k])) as Record<Stage, number>
 /** Screens with parts of their own, and the parts. */
 const SUB_TABS: Partial<Record<Stage, { id: Tab; label: string }[]>> = {
+  home: [{ id: 'team', label: 'Team & lineups' }, { id: 'identities', label: 'My identities & E.G.O' }, { id: 'settings', label: 'Settings' }],
   shop: [{ id: 'gifts', label: 'Buy' }, { id: 'fusion', label: 'Fuse' }, { id: 'upgrades', label: 'Enhance' }, { id: 'skills', label: 'Skill swaps' }],
 }
-type ToolTab = 'identities' | 'best' | 'evaluate' | 'import'
-const TOOLS: ToolTab[] = ['identities', 'best', 'evaluate', 'import']
+/** The questions before floor 1. */
+const START_STEPS: { id: Tab; label: string }[] = [
+  { id: 'start', label: 'Lineup & difficulty' },
+  { id: 'prerun', label: 'Before the run' },
+]
+type ToolTab = 'best' | 'evaluate' | 'import'
+const TOOLS: ToolTab[] = ['best', 'evaluate', 'import']
 const TOOL_LABEL: Record<ToolTab, string> = {
-  identities: 'My identities', best: 'Best gifts', evaluate: 'Evaluate a gift or pack', import: 'Import gifts from a screenshot',
+  best: 'Best gifts', evaluate: 'Evaluate a gift or pack', import: 'Import gifts from a screenshot',
 }
 const TOOL_HINT: Record<ToolTab, string> = {
-  identities: 'Mark the identities you own; saved to your account',
   best: 'Every gift ranked for your team, and where to get it',
   evaluate: 'Pros and cons of one gift or theme pack for your team',
   import: 'Read Gifts you have from game screenshots',
@@ -144,6 +155,8 @@ export default function App() {
   const [owned, setOwned] = usePersistentState<string[]>('limbussite.owned.v1', [])
   /** Identities you own (Tools > My identities), base ones not stored. */
   const [myIdentities, setMyIdentities] = usePersistentState<string[]>(OWNED_IDENTITIES_KEY, [])
+  /** E.G.O you own (Home › My identities & E.G.O › E.G.O), starting ones not stored. */
+  const [myEgos, setMyEgos] = usePersistentState<string[]>(OWNED_EGOS_KEY, [])
   /** Upgrade level of gifts you've enhanced this run (Upgrades tab). */
   const [enhanced, setEnhanced] = usePersistentState<Record<string, number>>('limbussite.enhanced.v1', {})
   /** Before the run: Starlight buffs you took, your starting keyword, Starlight to spend. */
@@ -157,19 +170,24 @@ export default function App() {
   // A screen with parts opens on the part you used last; Tools' Back returns to the last run screen.
   const [subTabs, setSubTabs] = usePersistentState<Partial<Record<Stage, Tab>>>('limbussite.subtab.v1', {})
   const [lastStageTab, setLastStageTab] = useState<Tab>(stage === 'tools' ? 'team' : tab)
+  // The run screen you were last on, for the Run button.
+  const [lastRunTab, setLastRunTab] = useState<Tab | null>(null)
   // Which way the screen slides in: forward through the floor, or back.
   const [direction, setDirection] = useState<'fwd' | 'back'>('fwd')
   const setTab = (t: Tab) => {
     const to = STAGE_OF[t]
     if (SUB_TABS[to]) setSubTabs((m) => ({ ...m, [to]: t }))
     if (to !== 'tools') setLastStageTab(t)
-    if (to !== stage) setDirection(to === 'tools' || STAGE_INDEX[to] >= (STAGE_INDEX[stage] ?? 0) ? 'fwd' : 'back')
+    if (to === 'packs' || to === 'fights' || to === 'shop' || to === 'boss') setLastRunTab(t)
+    if (to !== stage) setDirection(STAGE_INDEX[to] >= STAGE_INDEX[stage] ? 'fwd' : 'back')
     setStoredTab(t)
   }
-  const openStage = (s: Exclude<Stage, 'tools'>) => {
+  const openStage = (s: RunStage | 'home') => {
     const sub = subTabs[s]
-    setTab(sub && STAGE_OF[sub] === s ? sub : STAGES[STAGE_INDEX[s]].tab)
+    setTab(sub && STAGE_OF[sub] === s ? sub : s === 'home' ? 'team' : STAGES.find((x) => x.id === s)!.tab)
   }
+  // Making or editing a lineup from the start-of-run questions: Home's Team page offers a way back.
+  const [buildingForRun, setBuildingForRun] = useState(false)
   // "Floor 3 cleared" / "Run cleared", shown for a moment after the boss.
   const [cleared, setCleared] = useState<{ key: number; title: string; sub: string } | null>(null)
   const [bossSearch, setBossSearch] = useState(false)
@@ -217,6 +235,19 @@ export default function App() {
     if (sel) setSelection(restoreSelection(sel))
   }
   const [managing, setManaging] = useState(false)
+  // Before the team is replaced (a saved lineup or a new one for the run): keep an unsaved team as a lineup.
+  const keepCurrent = () => {
+    if (order.length && !presets.some((p) => presetMatches(p, currentTeam, order))) {
+      const kept = makePreset('Previous team', currentTeam, order, presets)
+      setPresets([...presets, kept])
+    }
+  }
+  const useLineupForRun = (p: TeamPreset) => {
+    if (presetMatches(p, currentTeam, order)) { setActivePreset(p.id); return }
+    keepCurrent()
+    applyLineup(p.team, hasOrder(p) ? restoreSelection(p.selection) : undefined)
+    setActivePreset(p.id)
+  }
   // Your data: cloud sync and backup files (SyncPanel.tsx).
   const [dataOpen, setDataOpen] = useState(false)
   const lookups = useMemo<SummaryLookups>(() => ({
@@ -234,6 +265,7 @@ export default function App() {
   // for anyone who hasn't set anything up yet (no lineup, no identities marked).
   const [setupState, setSetupState] = usePersistentState<SetupState>(SETUP_KEY, null)
   const unconfigured = order.length === 0 && !hasMarkedIdentities(myIdentities, gameData.identities)
+    && !hasMarkedEgos(myEgos, gameData.egos ?? [])
   const [setupOpen, setSetupOpen] = useState(() => !home && setupState === null && unconfigured)
   const openSetup = () => { setHome(false); setWelcomed(true); setSetupOpen(true); window.scrollTo(0, 0) }
   const loadDemo = () => {
@@ -340,7 +372,7 @@ export default function App() {
       <>
         <Welcome equipped={equipped} art={art} hasTeam={order.length > 0}
           counts={{ gifts: gameData.gifts.length, packs: gameData.themePacks.length, events: (gameData.events ?? []).length, identities: gameData.identities.length }}
-          onDemo={loadDemo} onBuild={() => (setupState === null && unconfigured ? openSetup() : leaveHome('team'))}
+          onDemo={loadDemo} onBuild={() => (setupState === null && unconfigured ? openSetup() : leaveHome(run.floor !== null ? 'team' : 'start'))}
           onContinue={() => leaveHome(tab)}
           onOpenData={() => setDataOpen(true)} />
         {syncDialogs}
@@ -352,6 +384,7 @@ export default function App() {
     return (
       <>
         <SetupWizard identities={gameData.identities} stored={myIdentities} onIdentitiesChange={setMyIdentities} art={art}
+          egos={gameData.egos ?? []} storedEgos={myEgos} onEgosChange={setMyEgos}
           hasTeam={order.length > 0} onOpenData={() => setDataOpen(true)}
           onSkip={() => { if (setupState === null) setSetupState('skipped'); leaveHome('team') }}
           onFinish={(to) => { setSetupState('done'); if (to === 'demo') loadDemo(); else leaveHome('team') }} />
@@ -401,15 +434,28 @@ export default function App() {
   // Next phase: through the floor, then on to the next one.
   const hasShop = currentPack?.layout?.shop !== false
   const toTop = () => window.scrollTo({ top: 0, behavior: reducedMotion() ? 'auto' : 'smooth' })
+  // The Run button: back to where you were in the run, or the start questions if there's no run.
+  const openRun = () => {
+    if (run.floor === null) { setTab('start'); return }
+    if (lastRunTab) setTab(lastRunTab)
+    else openStage(run.pack ? 'fights' : 'packs')
+  }
+  const backToRun = { label: 'Back to the run', sub: `Floor ${run.floor}`, go: () => { openRun(); toTop() } }
   const next: { label: string; sub?: string; go: () => void } | null = (() => {
     const f = run.floor
-    switch (stage) {
-      case 'team': return f === null
-        ? { label: 'Next: Before the run', sub: 'Starlight and starting gifts', go: () => { openStage('prerun'); toTop() } }
-        : { label: 'Back to the run', sub: `Floor ${f}`, go: () => { openStage(run.pack ? 'fights' : 'packs'); toTop() } }
+    switch (tab) {
+      case 'team': case 'identities': case 'settings':
+        if (buildingForRun) return { label: 'Use this lineup', sub: 'Back to the run setup', go: () => { setBuildingForRun(false); setTab('start'); toTop() } }
+        return f === null
+          ? { label: 'Start a run', sub: 'Pick a lineup and difficulty', go: () => { setTab('start'); toTop() } }
+          : backToRun
+      case 'start':
+        return { label: 'Next: Before the run', sub: 'Starlight buffs and starting gifts', go: () => { setTab('prerun'); toTop() } }
       case 'prerun': return f === null
-        ? { label: 'Start the run', sub: 'Floor 1: pick a pack', go: () => { setRun(withFloor(run, 1)); openStage('packs'); toTop() } }
-        : { label: 'Back to the run', sub: `Floor ${f}`, go: () => { openStage(run.pack ? 'fights' : 'packs'); toTop() } }
+        ? { label: 'Start the run', sub: 'Floor 1: pick a pack', go: () => { setRun(withFloor(run, 1)); setLastRunTab(null); openStage('packs'); toTop() } }
+        : backToRun
+    }
+    switch (stage) {
       case 'packs': return { label: 'Next: Fights & events', sub: currentPack ? currentPack.name : 'Pick your pack in the bar first',
         go: () => { openStage('fights'); toTop() } }
       case 'fights': return hasShop
@@ -417,7 +463,7 @@ export default function App() {
         : { label: 'Next: Boss', sub: `${currentPack!.name} has no shop`, go: () => { openStage('boss'); toTop() } }
       case 'shop': return { label: 'Next: Boss', go: () => { openStage('boss'); toTop() } }
       case 'boss':
-        if (f === null) return { label: 'Start the run', go: () => { setRun(withFloor(run, 1)); openStage('packs'); toTop() } }
+        if (f === null) return { label: 'Start a run', go: () => { setTab('start'); toTop() } }
         if (f < run.floors) return { label: `Floor ${f} cleared`, sub: `On to floor ${f + 1}`, go: () => {
           setRun(withFloor(run, f + 1))
           setOffered([])
@@ -430,8 +476,9 @@ export default function App() {
           setRun(withFloor(run, null))
           // The game puts skills back when the run ends; gifts stay here until Clear run, to look back on.
           setSwaps({})
+          setLastRunTab(null)
           setCleared((c) => ({ key: (c?.key ?? 0) + 1, title: 'Run cleared', sub: 'Skill swaps are reset; your gifts stay until you Clear run' }))
-          openStage('team')
+          openStage('home')
           toTop()
         } }
       default: return null
@@ -440,6 +487,25 @@ export default function App() {
   const focusLine = <TeamFocus focus={focus} traits={traitsOnTeam} size={ctx.profile.size} deployedOnly={order.length > deployed} deployed={deployed}
     onOpenTeam={() => setTab('team')} />
 
+  const dataNote = (
+    <>
+      {gameData.gifts.length} gifts · {gameData.themePacks.length} theme packs · {gameData.identities.length} identities · {(gameData.events ?? []).length} events · data from the{' '}
+      <a href="https://limbuscompany.wiki.gg/" target="_blank" rel="noreferrer">Limbus Company Wiki</a>
+      {gameData.generatedAt && <>, {new Date(gameData.generatedAt).toLocaleDateString()}</>}. A fan project, not affiliated with Project Moon.
+    </>
+  )
+  const inRun = run.floor !== null
+  const runStage = stage === 'packs' || stage === 'fights' || stage === 'shop' || stage === 'boss'
+  const homeSub = (
+    <nav className="tabs sub-tabs home-tabs" role="tablist" aria-label="Home">
+      {SUB_TABS.home!.map((t) => (
+        <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'tab active' : 'tab'}
+          onClick={() => setTab(t.id)}>{t.label}</button>
+      ))}
+    </nav>
+  )
+  const startStep = START_STEPS.findIndex((x) => x.id === tab)
+
   return (
     <div className="app">
       <header className="top">
@@ -447,15 +513,24 @@ export default function App() {
           <h1>LimbusSite</h1>
           <p className="sub">Mirror Dungeon E.G.O gift planner</p>
         </button>
+        <nav className="main-nav" aria-label="Main">
+          <button className={`main-nav-btn${stage === 'home' ? ' on' : ''}`} aria-current={stage === 'home' ? 'page' : undefined}
+            onClick={() => { setBuildingForRun(false); openStage('home') }}>
+            <b>Home</b><small>Team, identities, settings</small>
+          </button>
+          <button className={`main-nav-btn run${stage === 'start' || runStage ? ' on' : ''}${inRun ? ' live' : ''}`}
+            aria-current={stage === 'start' || runStage ? 'page' : undefined}
+            onClick={() => { setBuildingForRun(false); openRun() }}>
+            <b>{inRun ? 'Your run' : 'Start a run'}</b>
+            <small>{inRun ? `Floor ${run.floor} of ${run.floors}${currentPack ? ` · ${currentPack.name}` : ''}` : 'Lineup, Starlight, first gifts'}</small>
+          </button>
+        </nav>
         <div className="top-right">
-          <ToolsMenu current={tab} onPick={(t) => setTab(t)} onSetup={openSetup} />
+          <ToolsMenu current={tab} onPick={(t) => setTab(t)} />
           <SyncButton onOpen={() => setDataOpen(true)} />
         </div>
       </header>
       {syncDialogs}
-
-      <StageNav stage={stage} inRun={run.floor !== null} floor={run.floor} teamSize={order.length}
-        noShop={!hasShop ? currentPack?.name ?? null : null} onOpen={openStage} />
 
       {managing && (
         <Dialog title="Saved lineups" onClose={() => setManaging(false)}>
@@ -477,9 +552,45 @@ export default function App() {
         </Dialog>
       )}
 
-      {stage !== 'team' && (
-        <RunBar run={run} onChange={setRun} packs={gameData.themePacks} giftCount={owned.length}
-          onOpenSettings={() => setRunOpen(true)} onOpenGifts={stage === 'shop' ? undefined : () => setGiftsOpen(true)} />
+      {stage === 'home' && homeSub}
+      {stage === 'home' && buildingForRun && (
+        <div className="building-banner">
+          <span><b>Setting up a lineup for your run.</b> Pick identities and the deployment order, then use it.</span>
+          <span className="building-banner-btns">
+            <button className="btn primary small-btn" onClick={() => { setBuildingForRun(false); setTab('start') }}>Use this lineup</button>
+            <button className="link-btn" onClick={() => { setBuildingForRun(false); setTab('start') }}>Cancel</button>
+          </span>
+        </div>
+      )}
+      {stage === 'home' && inRun && !buildingForRun && tab === 'team' && (
+        <p className="hint home-run-note">
+          You're on floor {run.floor} of a run: changes to your team here change the team the run is planned for.
+        </p>
+      )}
+
+      {stage === 'start' && (
+        <nav className="start-steps" aria-label="Starting a run">
+          {START_STEPS.map((x, k) => (
+            <button key={x.id} className={`start-step${k === startStep ? ' on' : ''}${k < startStep ? ' done' : ''}`}
+              aria-current={k === startStep ? 'step' : undefined} onClick={() => setTab(x.id)}>
+              <span className="start-step-n">{k < startStep ? '✓' : k + 1}</span>{x.label}
+            </button>
+          ))}
+          <span className={`start-step${inRun ? ' done' : ' later'}`}>
+            <span className="start-step-n">{inRun ? '✓' : 3}</span>{inRun ? `In the run: floor ${run.floor}` : 'Floor 1: pick a pack'}
+          </span>
+          {inRun && <button className="link-btn start-back" onClick={openRun}>← Back to the run</button>}
+        </nav>
+      )}
+
+      {runStage && (
+        <>
+          <RunBar run={run} onChange={setRun} packs={gameData.themePacks} giftCount={owned.length}
+            onOpenSettings={() => setRunOpen(true)} onOpenGifts={stage === 'shop' ? undefined : () => setGiftsOpen(true)}
+            onOpenSetup={() => setTab('start')} onStart={() => setTab('start')} />
+          <StageNav stage={stage as RunStage} inRun={inRun} floor={run.floor}
+            noShop={!hasShop ? currentPack?.name ?? null : null} onOpen={openStage} />
+        </>
       )}
 
       {stage === 'tools' && (
@@ -489,7 +600,7 @@ export default function App() {
         </div>
       )}
 
-      <div role="tabpanel" key={stage} className={`phase phase-${direction}`}>
+      <div role="tabpanel" key={stage === 'home' || stage === 'start' ? tab : stage} className={`phase phase-${direction}`}>
         {tab === 'team' && (
           <>
             {lineupStrip}
@@ -519,6 +630,30 @@ export default function App() {
               }}
             />
           </>
+        )}
+        {tab === 'identities' && (
+          <MyCollection identities={gameData.identities} storedIdentities={myIdentities} onIdentitiesChange={setMyIdentities}
+            egos={gameData.egos ?? []} storedEgos={myEgos} onEgosChange={setMyEgos} art={art} onOpenData={() => setDataOpen(true)} />
+        )}
+        {tab === 'settings' && (
+          <SettingsPage art={art} onArtChange={setArt} onOpenData={() => setDataOpen(true)} onSetup={openSetup} dataNote={dataNote} />
+        )}
+
+        {tab === 'start' && (
+          <StartRun presets={presets} activeId={activePreset} current={currentTeam} selection={order} deployed={deployed}
+            identities={gameData.identities} art={art} run={run} onRunChange={setRun}
+            onUse={useLineupForRun}
+            onUseCurrent={() => setActivePreset(presets.find((p) => presetMatches(p, currentTeam, order))?.id ?? null)}
+            onNewLineup={() => {
+              keepCurrent()
+              setTeam({})
+              setSelection([])
+              setActivePreset(null)
+              setBuildingForRun(true)
+              setTab('team')
+              toTop()
+            }}
+            onEditTeam={() => { setBuildingForRun(true); setTab('team'); toTop() }} />
         )}
 
         {tab === 'prerun' && (
@@ -628,10 +763,6 @@ export default function App() {
         )}
         {tab === 'evaluate' && <EvaluateTab ctx={ctx} packsForGift={packsForGift} />}
         {tab === 'import' && <ImportTab gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned} />}
-        {tab === 'identities' && (
-          <MyIdentitiesTab identities={gameData.identities} stored={myIdentities} onChange={setMyIdentities} art={art}
-            onOpenData={() => setDataOpen(true)} />
-        )}
       </div>
 
       {next && (
@@ -644,11 +775,7 @@ export default function App() {
       )}
       {cleared && <ClearedToast key={cleared.key} title={cleared.title} sub={cleared.sub} onDone={() => setCleared(null)} />}
 
-      <footer className="foot">
-        {gameData.gifts.length} gifts · {gameData.themePacks.length} theme packs · {(gameData.events ?? []).length} events · data from the{' '}
-        <a href="https://limbuscompany.wiki.gg/" target="_blank" rel="noreferrer">Limbus Company Wiki</a>
-        {gameData.generatedAt && <>, {new Date(gameData.generatedAt).toLocaleDateString()}</>}. A fan project, not affiliated with Project Moon.
-      </footer>
+      <footer className="foot">{dataNote}</footer>
     </div>
   )
 }
@@ -681,8 +808,8 @@ function TeamFocus({ focus, traits, size, deployedOnly, deployed, onOpenTeam }: 
   )
 }
 
-/** My identities, Best gifts, Evaluate and Import gifts: used now and then, not at one point in the run. */
-function ToolsMenu({ current, onPick, onSetup }: { current: Tab; onPick: (t: Tab) => void; onSetup: () => void }) {
+/** Best gifts, Evaluate and Import gifts: used now and then, at home or in a run. */
+function ToolsMenu({ current, onPick }: { current: Tab; onPick: (t: Tab) => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -707,11 +834,6 @@ function ToolsMenu({ current, onPick, onSetup }: { current: Tab; onPick: (t: Tab
               </button>
             </li>
           ))}
-          <li>
-            <button role="menuitem" onClick={() => { onSetup(); setOpen(false) }}>
-              <b>Set up again</b><small>Sign in and mark the identities you own, step by step</small>
-            </button>
-          </li>
         </ul>
       )}
     </div>
@@ -761,15 +883,14 @@ function reducedMotion(): boolean {
   try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches } catch { return false }
 }
 
-/** The five screens of a floor as cards; earlier ones get a ✓ during a run. */
-function StageNav({ stage, inRun, floor, teamSize, noShop, onOpen }: {
-  stage: Stage
+/** The four screens of a floor as cards; earlier ones get a ✓ during a run. */
+function StageNav({ stage, inRun, floor, noShop, onOpen }: {
+  stage: RunStage
   inRun: boolean
   floor: number | null
-  teamSize: number
   /** The floor's pack, when it has no shop. */
   noShop: string | null
-  onOpen: (s: Exclude<Stage, 'tools'>) => void
+  onOpen: (s: RunStage) => void
 }) {
   const ref = useRef<HTMLElement>(null)
   // On a phone the cards scroll sideways: keep the current one in view.
@@ -778,11 +899,11 @@ function StageNav({ stage, inRun, floor, teamSize, noShop, onOpen }: {
     const nav = ref.current
     if (el && nav && nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: el.offsetLeft - nav.clientWidth / 2 + el.clientWidth / 2, behavior: 'smooth' })
   }, [stage])
-  const here = STAGE_INDEX[stage]
+  const here = STAGES.findIndex((s) => s.id === stage)
   return (
     <nav className="stages" role="tablist" aria-label="Where you are in the run" ref={ref}>
       {STAGES.map((s, k) => {
-        const done = inRun && stage !== 'tools' && k < here
+        const done = inRun && k < here
         const skipped = s.id === 'shop' && noShop !== null
         return (
           <button key={s.id} role="tab" aria-selected={stage === s.id}
@@ -791,7 +912,7 @@ function StageNav({ stage, inRun, floor, teamSize, noShop, onOpen }: {
             onClick={() => onOpen(s.id)}>
             <span className="stage-n">{done ? '✓' : k + 1}</span>
             <span className="stage-text">
-              <b>{s.label}{s.id === 'team' && <span className="badge">{teamSize}/12</span>}
+              <b>{s.label}
                 {s.id === 'packs' && floor !== null && <span className="badge">F{floor}</span>}
                 {skipped && <span className="badge muted-badge">none</span>}</b>
               <small>{s.hint}</small>

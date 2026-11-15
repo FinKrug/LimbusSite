@@ -109,7 +109,7 @@ export function MyIdentitiesTab({ identities, stored, onChange, art, onOpenData,
 }
 
 /** Where your list is saved, and whether the latest change has reached your account. */
-function SaveStatus({ onOpenData }: { onOpenData: () => void }) {
+export function SaveStatus({ onOpenData }: { onOpenData: () => void }) {
   const { status } = useSync()
   switch (status.kind) {
     case 'synced':

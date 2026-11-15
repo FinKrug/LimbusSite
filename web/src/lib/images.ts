@@ -42,3 +42,8 @@ export function giftIcon(g: Gift, width = 64): string[] {
   const w = Math.min(width, 256)
   return [thumb(file, w), `${FILE_PATH}${encodeURIComponent(file)}?width=${w}`]
 }
+
+/** Round E.G.O art (source is 256px): its wiki file name comes from data/ego_art.json (scraper/ego_art.py). */
+export function egoArt(file: string, width = 128): string {
+  return thumb(file.replace(/ /g, '_'), Math.min(width, 256))
+}

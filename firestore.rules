@@ -10,12 +10,13 @@ service cloud.firestore {
     function isOwner(uid) {
       return request.auth != null && request.auth.uid == uid;
     }
-    // Saved settings: a sane number of keys, and the owned-identities list
-    // (a JSON array of identity ids, about 7 KB with every identity marked) capped.
+    // Saved settings: a sane number of keys, and the owned identities and owned E.G.O
+    // lists (JSON arrays of ids, about 7 KB and 4 KB with everything marked) capped.
     function validData(d) {
       return d is map
         && d.size() <= 64
-        && (!('identities_v1' in d) || (d.identities_v1 is string && d.identities_v1.size() <= 20000));
+        && (!('identities_v1' in d) || (d.identities_v1 is string && d.identities_v1.size() <= 20000))
+        && (!('egos_owned_v1' in d) || (d.egos_owned_v1 is string && d.egos_owned_v1.size() <= 20000));
     }
 
     match /users/{uid} {

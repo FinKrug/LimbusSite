@@ -158,6 +158,7 @@ export function summarize(snap: Snapshot, look: SummaryLookups): SummaryRow[] {
   const prerun = parse<{ buffs?: Record<string, number> } | null>(snap, 'prerun.v1', null)
   const buffCount = Object.values(prerun?.buffs ?? {}).filter((n) => n > 0).length
   const myIds = parse<string[]>(snap, 'identities.v1', []).map((id) => look.identities.get(id)).filter((i): i is Identity => !!i)
+  const myEgoCount = parse<string[]>(snap, 'egos.owned.v1', []).length
 
   const lineup = selection.filter((s, k) => selection.indexOf(s) === k)
   const deployedNames = lineup.slice(0, deployed).map((s) => {
@@ -188,7 +189,7 @@ export function summarize(snap: Snapshot, look: SummaryLookups): SummaryRow[] {
   ].filter(Boolean).join(' · ')
 
   const covered = ['team.v1', 'selection.v1', 'deployed.v3', 'owned.v1', 'run.v1', 'presets.v1', 'presets.active.v1',
-    'egos.v1', 'swaps.v1', 'enhanced.v1', 'offered.v1', 'prerun.v1', 'identities.v1'].map(key)
+    'egos.v1', 'swaps.v1', 'enhanced.v1', 'offered.v1', 'prerun.v1', 'identities.v1', 'egos.owned.v1'].map(key)
 
   return [
     {
@@ -208,6 +209,10 @@ export function summarize(snap: Snapshot, look: SummaryLookups): SummaryRow[] {
       id: 'identities', label: 'Identities you own', keys: [key('identities.v1')],
       text: myIds.length ? `${plural(myIds.length, 'identity', 'identities')} marked (plus the 12 base ones)` : 'None marked',
       detail: list(myIds.map((i) => i.name)),
+    },
+    {
+      id: 'owned-egos', label: 'E.G.O you own', keys: [key('egos.owned.v1')],
+      text: myEgoCount ? `${myEgoCount} E.G.O marked (plus the 12 starting ones)` : 'None marked',
     },
     {
       id: 'gifts', label: 'Gifts you have', keys: [key('owned.v1'), key('enhanced.v1')],
@@ -239,6 +244,7 @@ export function isBlank(snap: Snapshot, look: SummaryLookups): boolean {
     && !parse<unknown[]>(snap, 'selection.v1', []).length
     && !parse<unknown[]>(snap, 'owned.v1', []).length
     && !parse<unknown[]>(snap, 'identities.v1', []).length
+    && !parse<unknown[]>(snap, 'egos.owned.v1', []).length
     && !parse<unknown[]>(snap, 'presets.v1', []).length
     && !Object.keys(parse<object>(snap, 'egos.v1', {})).length
     && (run?.floor ?? null) === null

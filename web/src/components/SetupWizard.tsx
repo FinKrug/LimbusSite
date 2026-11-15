@@ -1,10 +1,12 @@
 import { useState, type ReactNode } from 'react'
 import { cloudUnavailable } from '../lib/cloud'
 import type { ArtVariant } from '../lib/images'
+import type { Ego } from '../lib/ego'
+import { ownedEgoSet } from '../lib/myegos'
 import { ownedIdentitySet } from '../lib/myidentities'
 import { sync, useSync } from '../lib/sync'
 import type { Identity } from '../lib/types'
-import { MyIdentitiesTab } from './MyIdentitiesTab'
+import { MyCollection } from './MyCollection'
 
 /** limbussite.setup.v1: null until you finish or skip the setup. */
 export type SetupState = 'done' | 'skipped' | null
@@ -13,7 +15,7 @@ export const SETUP_KEY = 'limbussite.setup.v1'
 type Step = 'data' | 'identities' | 'done'
 const STEPS: { id: Step; label: string }[] = [
   { id: 'data', label: 'Bring your data' },
-  { id: 'identities', label: 'Identities you own' },
+  { id: 'identities', label: 'Identities & E.G.O you own' },
   { id: 'done', label: 'Ready' },
 ]
 
@@ -22,11 +24,14 @@ const STEPS: { id: Step; label: string }[] = [
  * along, then mark the identities you own. Every step can be skipped, and so can
  * the whole thing.
  */
-export function SetupWizard({ identities, stored, onIdentitiesChange, art, hasTeam, onOpenData, onSkip, onFinish }: {
+export function SetupWizard({ identities, stored, onIdentitiesChange, egos, storedEgos, onEgosChange, art, hasTeam, onOpenData, onSkip, onFinish }: {
   identities: Identity[]
   /** Saved owned identity ids (My identities). */
   stored: string[]
   onIdentitiesChange: (ids: string[]) => void
+  egos: Ego[]
+  storedEgos: string[]
+  onEgosChange: (ids: string[]) => void
   art: ArtVariant
   /** Your data already has a lineup (e.g. it just came in from the cloud). */
   hasTeam: boolean
@@ -39,6 +44,7 @@ export function SetupWizard({ identities, stored, onIdentitiesChange, art, hasTe
   const index = STEPS.findIndex((s) => s.id === step)
   const go = (s: Step) => { setStep(s); window.scrollTo(0, 0) }
   const owned = ownedIdentitySet(stored, identities).size
+  const ownedEgos = ownedEgoSet(storedEgos, egos).size
 
   return (
     <div className="setup">
@@ -65,19 +71,20 @@ export function SetupWizard({ identities, stored, onIdentitiesChange, art, hasTe
         {step === 'data' && <DataStep hasTeam={hasTeam} marked={stored.length > 0} owned={owned} onOpenData={onOpenData} onDone={() => go('done')} />}
         {step === 'identities' && (
           <>
-            <StepIntro title="Which identities do you own?">
-              Import them from screenshots of your identity list, or tap every identity you have (<b>Select all</b> per Sinner
-              helps). Your team suggestions can then stick to units you actually have.
+            <StepIntro title="Which identities and E.G.O do you own?">
+              Import them from screenshots of your lists in the game, or tap every one you have (<b>Select all</b> per Sinner
+              helps). Switch between identities and E.G.O at the top. Suggestions can then stick to what you actually have.
             </StepIntro>
-            <MyIdentitiesTab identities={identities} stored={stored} onChange={onIdentitiesChange} art={art} onOpenData={onOpenData} importOpen />
+            <MyCollection identities={identities} storedIdentities={stored} onIdentitiesChange={onIdentitiesChange}
+              egos={egos} storedEgos={storedEgos} onEgosChange={onEgosChange} art={art} onOpenData={onOpenData} importOpen />
           </>
         )}
         {step === 'done' && (
           <div className="setup-ready">
             <StepIntro title="You're set up">
               {owned > 12
-                ? <>You own <b>{owned}</b> of {identities.length} identities. Change them any time in <b>Tools › My identities</b>.</>
-                : <>You can mark the identities you own any time in <b>Tools › My identities</b>.</>}
+                ? <>You own <b>{owned}</b> of {identities.length} identities and <b>{ownedEgos}</b> of {egos.length} E.G.O. Change them any time in <b>Home › My identities &amp; E.G.O</b>.</>
+                : <>You can mark the identities and E.G.O you own any time in <b>Home › My identities &amp; E.G.O</b>.</>}
             </StepIntro>
             <div className="setup-choices">
               <button className="welcome-btn primary" onClick={() => onFinish('team')}>
@@ -97,10 +104,10 @@ export function SetupWizard({ identities, stored, onIdentitiesChange, art, hasTe
         <footer className="setup-foot">
           <button className="btn" disabled={index === 0} onClick={() => go(STEPS[index - 1].id)}>← Back</button>
           <span className="muted small setup-foot-hint">
-            {step === 'data' ? 'New here? Just press Next.' : `${owned} owned`}
+            {step === 'data' ? 'New here? Just press Next.' : `${owned} identities · ${ownedEgos} E.G.O`}
           </span>
           <button className="btn primary" onClick={() => go(STEPS[index + 1].id)}>
-            {step === 'identities' && stored.length === 0 ? 'Skip this step →' : 'Next →'}
+            {step === 'identities' && stored.length === 0 && storedEgos.length === 0 ? 'Skip this step →' : 'Next →'}
           </button>
         </footer>
       )}
