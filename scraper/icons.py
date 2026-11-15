@@ -27,6 +27,7 @@ import urllib.request
 from pathlib import Path
 
 from .wiki_api import DEFAULT_API, WikiClient, WikiError
+from .pngsave import save_png_if_changed
 
 ATLAS_N = 24          # reference size; 16 mixes up the Pocket Watch types
 ATLAS_COLS = 24
@@ -104,7 +105,7 @@ def build_atlas(gifts: list[dict], icon_dir: Path, out_png: Path, out_json: Path
     for k, (_, im) in enumerate(rows):
         atlas.paste(im, ((k % cols) * n, (k // cols) * n))
     out_png.parent.mkdir(parents=True, exist_ok=True)
-    atlas.save(out_png, optimize=True)
+    save_png_if_changed(atlas, out_png)
     meta = {"n": n, "cols": cols, "ids": [g["id"] for g, _ in rows]}
     out_json.write_text(json.dumps(meta, ensure_ascii=False) + "\n", encoding="utf-8")
     return warnings

@@ -24,6 +24,7 @@ from pathlib import Path
 
 from .icons import fetch_icons, safe_name
 from .wiki_api import DEFAULT_API, WikiClient, WikiError
+from .pngsave import save_png_if_changed
 
 GX, GY = 24, 16             # reference size
 REGION = (0.07, 0.10, 0.93, 0.46)  # x0, y0, x1, y1 as a share of the card
@@ -73,7 +74,7 @@ def build_atlas(identities: list[dict], art_dir: Path, out_png: Path, out_json: 
     for k, (_, _, im) in enumerate(rows):
         atlas.paste(im, ((k % COLS) * GX, (k // COLS) * GY))
     out_png.parent.mkdir(parents=True, exist_ok=True)
-    atlas.save(out_png, optimize=True)
+    save_png_if_changed(atlas, out_png)
     meta = {"gx": GX, "gy": GY, "cols": COLS, "region": list(REGION),
             "refs": [[iid, variant] for iid, variant, _ in rows]}
     out_json.write_text(json.dumps(meta, ensure_ascii=False) + "\n", encoding="utf-8")

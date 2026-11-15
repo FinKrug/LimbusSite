@@ -25,6 +25,7 @@ from pathlib import Path
 
 from .icons import fetch_icons, safe_name
 from .wiki_api import DEFAULT_API, WikiClient, WikiError
+from .pngsave import save_png_if_changed
 
 G = 24
 REGION = (-0.7, -0.85, 0.7, 0.55)   # x0, y0, x1, y1 in ring radii around the ring centre
@@ -95,7 +96,7 @@ def build_atlas(egos: list[dict], art_dir: Path, out_png: Path, out_json: Path,
     for k, (_, _, im) in enumerate(rows):
         atlas.paste(im, ((k % COLS) * G, (k // COLS) * G))
     out_png.parent.mkdir(parents=True, exist_ok=True)
-    atlas.save(out_png, optimize=True)
+    save_png_if_changed(atlas, out_png)
     meta = {"g": G, "cols": COLS, "region": list(REGION), "place": list(PLACE),
             "refs": [[eid, (redirects or {}).get(file, file)] for eid, file, _ in rows]}
     out_json.write_text(json.dumps(meta, ensure_ascii=False) + "\n", encoding="utf-8")
