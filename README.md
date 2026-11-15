@@ -38,6 +38,16 @@ python -m unittest discover -s tests -t .
 
 Re-run it after each game patch, once the wiki has caught up.
 
+### Automatic updates
+
+`.github/workflows/update-data.yml` does this for you every day: it re-scrapes the wiki (data,
+gift icons, identity and E.G.O art, tier ranking), and only if something changed it checks that no
+data went missing (`scripts/check_counts.py`), runs all scraper and site tests plus the build, and
+commits the new data to `main`. Cloudflare then redeploys gesellschaftmd.com. Nothing changed, or
+any step failed: nothing is committed (GitHub emails you about failures). Run it by hand from
+GitHub > Actions > "Update game data" > Run workflow. The tier lists (`data/tiers/*.txt`) are
+still updated by hand.
+
 ## Where the data comes from
 
 | Output | Wiki source |
