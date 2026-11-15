@@ -157,6 +157,7 @@ export function summarize(snap: Snapshot, look: SummaryLookups): SummaryRow[] {
   const offered = parse<string[]>(snap, 'offered.v1', [])
   const prerun = parse<{ buffs?: Record<string, number> } | null>(snap, 'prerun.v1', null)
   const buffCount = Object.values(prerun?.buffs ?? {}).filter((n) => n > 0).length
+  const myIds = parse<string[]>(snap, 'identities.v1', []).map((id) => look.identities.get(id)).filter((i): i is Identity => !!i)
 
   const lineup = selection.filter((s, k) => selection.indexOf(s) === k)
   const deployedNames = lineup.slice(0, deployed).map((s) => {
@@ -187,7 +188,7 @@ export function summarize(snap: Snapshot, look: SummaryLookups): SummaryRow[] {
   ].filter(Boolean).join(' · ')
 
   const covered = ['team.v1', 'selection.v1', 'deployed.v3', 'owned.v1', 'run.v1', 'presets.v1', 'presets.active.v1',
-    'egos.v1', 'swaps.v1', 'enhanced.v1', 'offered.v1', 'prerun.v1'].map(key)
+    'egos.v1', 'swaps.v1', 'enhanced.v1', 'offered.v1', 'prerun.v1', 'identities.v1'].map(key)
 
   return [
     {
@@ -202,6 +203,11 @@ export function summarize(snap: Snapshot, look: SummaryLookups): SummaryRow[] {
       detail: [pack && `Pack: ${pack}`, offered.length ? `${plural(offered.length, 'pack')} on offer` : '', buffCount ? plural(buffCount, 'starter buff') : '',
         run?.struggling ? 'Struggling in fights' : '']
         .filter(Boolean).join(' · ') || undefined,
+    },
+    {
+      id: 'identities', label: 'Identities you own', keys: [key('identities.v1')],
+      text: myIds.length ? `${plural(myIds.length, 'identity', 'identities')} marked (plus the 12 base ones)` : 'None marked',
+      detail: list(myIds.map((i) => i.name)),
     },
     {
       id: 'gifts', label: 'Gifts you have', keys: [key('owned.v1'), key('enhanced.v1')],
@@ -225,13 +231,14 @@ export function summarize(snap: Snapshot, look: SummaryLookups): SummaryRow[] {
   ]
 }
 
-/** Nothing worth keeping: no team, run, gifts or saved lineups. A fresh computer looks like this. */
+/** Nothing worth keeping: no team, run, gifts, owned identities or saved lineups. A fresh computer looks like this. */
 export function isBlank(snap: Snapshot, look: SummaryLookups): boolean {
   const team = parse<Record<string, string | null>>(snap, 'team.v1', {})
   const run = parse<{ floor?: number | null } | null>(snap, 'run.v1', null)
   return !Object.values(team).some((id) => id && look.identities.has(id))
     && !parse<unknown[]>(snap, 'selection.v1', []).length
     && !parse<unknown[]>(snap, 'owned.v1', []).length
+    && !parse<unknown[]>(snap, 'identities.v1', []).length
     && !parse<unknown[]>(snap, 'presets.v1', []).length
     && !Object.keys(parse<object>(snap, 'egos.v1', {})).length
     && (run?.floor ?? null) === null

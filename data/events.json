@@ -13658,6 +13658,89 @@
             }
           }
         ]
+      },
+      {
+        "name": "The Knight of Despair",
+        "note": "This Mirror Dungeon Event is only available within the The Wedge in the Wake of Dawnbreak Theme Pack.",
+        "story": "At the end of a dark passage, a lone knight stands beside a sword glowing blue.\n\nAs we approach, the knight silently regards our wounds before extending a hand.\n\n\"So... there is still something left to protect.\"\n\nA bottomless sorrow hangs about the offered hand, while the tip of the sword floating nearby seems steeped in endless despair.",
+        "choices": [
+          {
+            "label": "Accept the blessing.",
+            "desc": "Pride Advantage check. Pass to gain a Keywordless E.G.O Gift.",
+            "check": {
+              "sins": [
+                "pride"
+              ],
+              "adv": 16,
+              "disadv": 32,
+              "bonuses": [
+                {
+                  "who": "Lobotomy E.G.O::The Sword Sharpened with Tears Rodion",
+                  "mod": 4
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift Hollow Pride obtained!",
+              "gifts": [
+                "hollow-pride"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "Random Friendly Units lost 45!",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Decline the blessing.",
+            "desc": "No particular effect",
+            "check": null,
+            "result": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": true
+            }
+          },
+          {
+            "label": "Offer the Sword Sharpened with Tears.\nChoice unlocked with the E.G.O Gift \"Sword Sharpened with Tears\"",
+            "desc": "Select to gain a Sinking E.G.O Gift",
+            "check": null,
+            "result": {
+              "text": "E.G.O Gift Sword Sharpened with Tears destroyed!\nE.G.O Gift Sword Laced with Grief obtained!",
+              "gifts": [
+                "sword-sharpened-with-tears",
+                "sword-laced-with-grief"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            }
+          }
+        ]
       }
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Knight_of_Despair"
@@ -14060,6 +14143,312 @@
       }
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Queen_of_Hatred"
+  },
+  {
+    "id": "the-wedge-in-the-wake-of-dawnbreak-theme-pack",
+    "name": "The Wedge in the Wake of Dawnbreak Theme Pack",
+    "gifts": [],
+    "variants": [
+      {
+        "name": "The Exemplar Fixer",
+        "note": "",
+        "story": "I saw two young Fixers huddled at the end of a stiflingly narrow street corner, poring over a magazine together.\nOne of them wore a long coat that seemed made for someone at least twice his height. It was a comical sight, him fussing with the hems in a desperate bid to make them look remotely fitting.\n\n\"How do I look? Getting there?\"\n\"Getting to look like a parody of that Fixer, maybe. Trust me, d",
+        "choices": [
+          {
+            "label": "Give the young Fixer some genuine tips.",
+            "desc": "Sloth Advantage check. Pass to gain a Keywordless E.G.O Gift.",
+            "check": {
+              "sins": [
+                "sloth"
+              ],
+              "adv": 16,
+              "disadv": 32,
+              "bonuses": [
+                {
+                  "who": "Don Quixote",
+                  "mod": 6
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift Role Model obtained!",
+              "gifts": [
+                "role-model"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": true
+            }
+          },
+          {
+            "label": "\"That coat looks great on you.\" (Lie)",
+            "desc": "No particular effect",
+            "check": null,
+            "result": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": true
+            }
+          }
+        ]
+      },
+      {
+        "name": "Dawn Office",
+        "note": "",
+        "story": "Lured by a mysterious, pleasantly bitter scent, we stopped beneath a sign that read \"Dawn Office.\"\n\nWhen we stepped inside, we saw an old man lounging on a couch, reading through papers, while a young man in glasses carefully set a steaming teacup in front of him.\n\n\"Hmm… Are you here for a contract?\"\n\"Ah, I suppose you were drawn here by the smell. This tea has quite a pleasant aroma, doesn't it? ",
+        "choices": [
+          {
+            "label": "Take the cup of Ssanghwa-cha.",
+            "desc": "Select to heal HP & SP for all allies",
+            "check": null,
+            "result": {
+              "text": "All Allies healed for 20%.\nAll Allies healed for 10.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Brew our own batch of ssanghwa-cha.",
+            "desc": "Wrath Advantage check. Pass to gain a Keywordless E.G.O Gift.",
+            "check": {
+              "sins": [
+                "wrath"
+              ],
+              "adv": 14,
+              "disadv": 28,
+              "bonuses": [
+                {
+                  "who": "Dawn Office Fixer Sinclair Identity",
+                  "mod": 4
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift Carefully-selected Medicinal Herbs obtained!",
+              "gifts": [
+                "carefully-selected-medicinal-herbs"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "The selected Identity takes 15 damage!\nAll Allies healed for 10%.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            }
+          }
+        ]
+      },
+      {
+        "name": "The Knight of Despair",
+        "note": "",
+        "story": "At the end of a dark passage, a lone knight stands beside a sword glowing blue.\n\nAs we approach, the knight silently regards our wounds before extending a hand.\n\n\"So… there is still something left to protect.\"\n\nA bottomless sorrow hangs about the offered hand, while the tip of the sword floating nearby seems steeped in endless despair.",
+        "choices": [
+          {
+            "label": "Accept the blessing.",
+            "desc": "Pride Advantage check. Pass to gain a Keywordless E.G.O Gift.",
+            "check": {
+              "sins": [
+                "pride"
+              ],
+              "adv": 16,
+              "disadv": 32,
+              "bonuses": [
+                {
+                  "who": "Lobotomy E.G.O::The Sword Sharpened with Tears Rodion Identity",
+                  "mod": 4
+                }
+              ]
+            },
+            "pass": {
+              "text": "E.G.O Gift Hollow Pride obtained!",
+              "gifts": [
+                "hollow-pride"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            },
+            "fail": {
+              "text": "The selected Identity took 45 damage!",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": true,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Decline the blessing.",
+            "desc": "No particular effect",
+            "check": null,
+            "result": {
+              "text": "Nothing happened.",
+              "gifts": [],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": true
+            }
+          },
+          {
+            "label": "Offer the Sword Sharpened with Tears.\nChoice unlocked with the E.G.O Gift \"Sword Sharpened with Tears\"",
+            "desc": "Select to gain a Sinking E.G.O Gift",
+            "check": null,
+            "result": {
+              "text": "E.G.O Gift Sword Sharpened with Tears destroyed!\nE.G.O Gift Sword Laced with Grief obtained!",
+              "gifts": [
+                "sword-sharpened-with-tears",
+                "sword-laced-with-grief"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            }
+          }
+        ]
+      },
+      {
+        "name": "Wedge Office",
+        "note": "",
+        "story": "A sign reading \"Wedge Office\" hangs over an elegant, old-fashioned door.\n\nWe knock cautiously, and two petite Fixers answered the door and received us.\n\n\"You guys here to give us a contract?\"\n\"Is that any way to address a visitor? You should be more polite.\"\n\"Oh, don't start. What do you want me to say?\"\n\"May I ask if you guys are here to commission a contract?\"\n\"… How's that supposed to be more '",
+        "choices": [
+          {
+            "label": "Ask if we can work with them.",
+            "desc": "Select to gain a Keywordless E.G.O Gift",
+            "check": null,
+            "result": {
+              "text": "E.G.O Gift White Cravat obtained!",
+              "gifts": [
+                "white-cravat"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Claim to be new recruits from their sister Office.",
+            "desc": "Select to gain a Tremor E.G.O Gift",
+            "check": null,
+            "result": {
+              "text": "E.G.O Gift Black Tricorne obtained!",
+              "gifts": [
+                "black-tricorne"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            }
+          }
+        ]
+      },
+      {
+        "name": "Wedge Office",
+        "note": "",
+        "story": "At a counter tucked into an alley, two Fixers of markedly different heights are arguing with a clerk.\n\n\"It was a clean cut, you know. We retrieved the head after the whole situation was taken care of.\"\n\n\"My dear fellow, do you truly think we'd pay for such expensive stasis-preservation packaging just to commit insurance fraud?\"\n\n\"According to the policy, you'll need to go back and recover the tors",
+        "choices": [
+          {
+            "label": "Side with the insurance clerk.",
+            "desc": "Select to gain a Tremor E.G.O Gift",
+            "check": null,
+            "result": {
+              "text": "E.G.O Gift Backup Body Adaptation Device obtained!",
+              "gifts": [
+                "backup-body-adaptation-device"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            }
+          },
+          {
+            "label": "Side with the Fixers.",
+            "desc": "Select to gain a Pierce E.G.O Gift",
+            "check": null,
+            "result": {
+              "text": "E.G.O Gift Broken Spearhead obtained!",
+              "gifts": [
+                "broken-spearhead"
+              ],
+              "unknown_gifts": [],
+              "cost": 0,
+              "combat": false,
+              "hurts": false,
+              "weakens": false,
+              "lasting": false,
+              "nothing": false
+            }
+          }
+        ]
+      }
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Wedge_in_the_Wake_of_Dawnbreak_Theme_Pack",
+    "pack": "the-wedge-in-the-wake-of-dawnbreak"
   },
   {
     "id": "time-duck",
@@ -15533,7 +15922,7 @@
         "choices": [
           {
             "label": "Take it.",
-            "desc": "Lust Advantage check. Pass to gain a Keywordless E.G.O Gift.",
+            "desc": "Lust Advantage check. Pass to gain a Bleed E.G.O Gift.",
             "check": {
               "sins": [
                 "lust"
@@ -18062,7 +18451,7 @@
       },
       {
         "name": "The heat of the Abnormality is wearing everyone down.\nWe’ll have to make an offering to calm its wrath.",
-        "note": "To progress to the next phase, you must either destroy both arms, or bring the Abnormality's HP down to 70%.\nFor its attack pattern in this phase, it will always use 3 Skills. One Skill will always be Slam with a random arm, the second will be either Slam or Quake, and the third Skill will be either Quake or Live Offering. If one arm is broken and the other arm is intact, then it will exclusively use the remaining arm for its attacks. However, it has a 50% chance to only use 2 actions instead of 3, and only use the Slam/Quake and Quake/Live Offering skills.\n====Phase 3====\nDoomsday Calendar loses its arms, and the Face becomes the only targetable component. All 3 Clay Dolls are replaced by fully healed Burning Clay Doll, and then a fourth one also spawns. The Frenzy passive activates, which burns the Sinners every turn. At the start of turn 3 in this phase, you must once again sacrifice ",
+        "note": "Either destroying both Arm parts, or reducing the Abnormality's Core HP to 70% will progress the fight to the next phase.\n====Phase 3====\nDoomsday Calendar loses both Arm parts, and only the Face becomes targetable. Any remaining Clay Dolls from the previous phase are removed, and 4 Burning Clay Dolls are spawned.\nDuring this phase, Doomsday Calendar only uses the \"Stalwart Altar\" Skill.\nAt the end of the second turn since this phase started, another Choice Event is triggered. As before, the player must choose to either sacrifice a Sinner (who will lose 30 HP and 15 SP), or sacrifice a Burning Clay Doll that was defeated during this phase.",
         "story": "To weaken the flame, you’ll need cool water.\nSince we aren’t carrying any buckets of water, we should offer up someone cool instead.",
         "choices": [
           {
@@ -18119,7 +18508,7 @@
       },
       {
         "name": "You sense a dangerous glow.",
-        "note": "To progress to the fourth and final phase, you must bring the Abnormality's HP down to 30%. Alternatively, if you fully deplete its health bar, the 4th phase will be skipped as it will be suppressed.\nFor its attack pattern, it will exclusively use Stalwart Altar in this phase.\n====Phase 4====\nAll 4 Clay Dolls respawn and are fully healed. In this phase Doomsday Calendar will use the skill Universe Aflame, which targets all allies and rolls a whopping 35 to 45, instantly killing them. At the start of the next turn, one final Abnormality event begins where you must sacrifice a Sinner. Failure to succeed this check will cause Doomsday Calendar to use Universe Aflame at you, surely killing your team if you do not defeat it before it attacks.",
+        "note": "Reducing the Abnormality's Core HP to 30% will progress the fight to the next and final phase. Alternatively, the Abnormality may be defeated during this phase if its HP is fully depleted before the next turn.\n====Phase 4====\nAll 4 Burning Clay Dolls are respawned and are fully healed. On the first turn of this phase, Doomsday Calendar uses the Skill \"Universe Aflame\", targetting all of its allies, killing them. For the rest of the battle, it will use \"Universe Aflame\" each turn against the Sinners.\nAt the end of the first turn of this phase, another Choice Event is triggered. Passing the check will instantly suppress the Abnormality, ending the fight.",
         "story": "The stars are twinkling.\nWhen they shine, they’ll rob us all of our sight.\nWhat gift would the stars like?",
         "choices": [
           {

@@ -985,6 +985,39 @@
     "icon": "High-tensility Shoes Gift.png"
   },
   {
+    "id": "hollow-pride",
+    "name": "Hollow Pride",
+    "sin": "pride",
+    "tier": 1,
+    "cost": 150,
+    "keyword": null,
+    "secondary_keyword": null,
+    "status_effects": [
+      "A Test of Despair"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": false,
+    "effect": "Encounter Start: Apply A Test of Despair to 1 random ally\nThis E.G.O Gift changes into \"Pride of the Knight\" after 6 Encounter wins in which the Identity that has A Test of Despair survives",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "the-wedge-in-the-wake-of-dawnbreak"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Hollow%20Pride",
+    "icon": "Hollow Pride Gift.png"
+  },
+  {
     "id": "layered-bandages",
     "name": "Layered Bandages",
     "sin": "gloom",
@@ -2565,6 +2598,51 @@
     "icon": "Black Ledger Gift.png"
   },
   {
+    "id": "black-tricorne",
+    "name": "Black Tricorne",
+    "sin": "lust",
+    "tier": 2,
+    "cost": 100,
+    "keyword": "Tremor",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Tremor",
+      "Tremor Burst",
+      "Amplitude Conversion",
+      "Tremor - Superposition"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [
+      {
+        "status": "Tremor",
+        "when": "always"
+      },
+      {
+        "status": "Tremor Burst",
+        "when": "always"
+      }
+    ],
+    "attack_types": [],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": false,
+    "effect": "In a Clash, inflict 2 Tremor on the enemy for every Clash (3 times per Skill)\n\nOn Crit by an ally using a Basic Attack Skill against enemies, if the main target has Tremor, trigger Tremor Burst; then, reduce target's Tremor Count by 1 (once per Skill)\n- If the enemy is in Amplitude Conversion state, deal +10% damage on Critical Hit\n- If the enemy is in Tremor - Superposition state, deal an additional +5% damage on Critical Hit for each type of superposed Unique Tremor (max 25%)",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "the-wedge-in-the-wake-of-dawnbreak"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Black%20Tricorne",
+    "icon": "Black Tricorne Gift.png"
+  },
+  {
     "id": "blackiron-barding",
     "name": "Blackiron Barding",
     "sin": "gluttony",
@@ -2870,6 +2948,41 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Broken%20Glasses",
     "icon": "Broken Glasses Gift.png"
+  },
+  {
+    "id": "broken-spearhead",
+    "name": "Broken Spearhead",
+    "sin": "gloom",
+    "tier": 2,
+    "cost": 100,
+    "keyword": "Pierce",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Embedded Spearhead"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [],
+    "attack_types": [
+      "Pierce"
+    ],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": false,
+    "effect": "On Crit using a Pierce Base Attack Skill, inflict Embedded Spearhead on target at Attack End (once per turn per Identity; in Focused Encounters, the Parts)",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "the-wedge-in-the-wake-of-dawnbreak"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Broken%20Spearhead",
+    "icon": "Broken Spearhead Gift.png"
   },
   {
     "id": "butler-style-binding-arts",
@@ -6022,11 +6135,11 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": false,
-    "effect": "All allies with 2 or more Slash Skills: for this Encounter, gain Clash Power +1 on the first turn, and gain 1 Haste & Clash Power +1 starting from the second turn.\n\nShi Assoc. Identities' HP gets capped to 75% of Max HP. In return, take 50% less damage and receive 50% reduced heal. (activates immediately upon entering an Encounter; except healing from E.G.O Gifts)\n\nShi Assoc. Identities gain 1 Slash Power Up and 1 Slash DMG Up at every Turn Start.",
+    "effect": "All allies with 2 or more Slash Skills: for this Encounter, gain Clash Power +2 on the first turn, and gain 1 Haste & Clash Power +2 starting from the second turn.\n\nShi Assoc. Identities' HP gets capped to 75% of Max HP. In return, take 50% less damage and receive 50% reduced heal. (activates immediately upon entering an Encounter; except healing from E.G.O Gifts)\n\nShi Assoc. Identities gain 1 Slash Power Up and 1 Slash DMG Up at every Turn Start.",
     "max_level": 2,
     "upgrades": [
-      "All allies with 2 or more Slash Skills: for this Encounter, gain Clash Power +1 on the first turn, and gain 2 Haste & Clash Power +1 starting from the second turn.\n\nShi Assoc. Identities' HP gets capped to 50% of Max HP. In return, take 75% less damage and receive 75% reduced heal. (activates immediately upon entering an Encounter; except healing from E.G.O Gifts)\n\nShi Assoc. Identities gain 1 Slash Power Up and 2 Slash DMG Up at every Turn Start.",
-      "All allies with 2 or more Slash Skills: for this Encounter, gain Clash Power +1 on the first turn, and gain 2 Haste & Final Power +1 starting from the second turn.\n\nShi Assoc. Identities' HP gets capped to 49% of Max HP. In return, take 75% less damage and receive 75% reduced heal. (activates immediately upon entering an Encounter; except healing from E.G.O Gifts)\n\nShi Assoc. Identities gain 1 Slash Power Up and 3 Slash DMG Up at every Turn Start."
+      "All allies with 2 or more Slash Skills: for this Encounter, gain Clash Power +2 on the first turn, and gain 2 Haste & Clash Power +2 starting from the second turn.\n\nShi Assoc. Identities' HP gets capped to 50% of Max HP. In return, take 75% less damage and receive 75% reduced heal. (activates immediately upon entering an Encounter; except healing from E.G.O Gifts)\n\nShi Assoc. Identities gain 1 Slash Power Up and 2 Slash DMG Up at every Turn Start.",
+      "All allies with 2 or more Slash Skills: for this Encounter, gain Clash Power +2 on the first turn, and gain 2 Haste & Final Power +1 starting from the second turn.\n- If the affected Identity is at 7+ Speed, the said Identity's Slash Skills deal +10% damage\n\nShi Assoc. Identities' HP gets capped to 49% of Max HP. In return, take 75% less damage and receive 75% reduced heal. (activates immediately upon entering an Encounter; except healing from E.G.O Gifts)\n\nShi Assoc. Identities gain 1 Slash Power Up and 3 Slash DMG Up at every Turn Start."
     ],
     "pools": [
       "main"
@@ -6479,7 +6592,8 @@
     "secondary_keyword": null,
     "status_effects": [
       "Crit DMG Up",
-      "Poise"
+      "Poise",
+      "Discard"
     ],
     "traits": [],
     "needs": [],
@@ -6488,7 +6602,7 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": false,
-    "effect": "Combat Start: Allies with Shield gain 1 Crit DMG Up\nOn Crit with ally Skill, said ally gains Shield equal to (Poise / 5) for the next turn (max 15)",
+    "effect": "Combat Start: Allies with Shield gain 1 Crit DMG Up\nOn Crit with ally Skill, said ally gains Shield equal to (Poise / 5) for the next turn (max 15)\n\n[The House of Spiders: The Pinky Apprentice Sinclair exclusive effect]\nCombat End: At more than 30 Poise Count, consume 10 Poise Count to Discard 1 Skill of the lowest Rank in all of this unit's Skill Slots (once per turn)\n\nAmong the E.G.O Gift \"Cask Spirits\" effects, the following does not apply to this unit:\n\"Combat End: At more than 40 Poise Potency, consume 15 Poise Potency to Discard 1 Skill of the lowest rank in all of that unit's Skill Slots (once per turn for each character)\"",
     "max_level": 0,
     "upgrades": [],
     "pools": [
@@ -7882,6 +7996,42 @@
     "icon": "Ashen Constellation's Blessing Gift.png"
   },
   {
+    "id": "backup-body-adaptation-device",
+    "name": "Backup Body Adaptation Device",
+    "sin": "sloth",
+    "tier": 3,
+    "cost": 250,
+    "keyword": "Tremor",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Tremor Burst",
+      "Tremor - Decay"
+    ],
+    "traits": [],
+    "needs": [
+      "Tremor Burst"
+    ],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": false,
+    "effect": "When triggering Tremor Burst on enemies that have Tremor - Decay, deal Sloth damage to each target equal to (each target's Defense Level reduction)% of the damage dealt (max 15%)",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "the-wedge-in-the-wake-of-dawnbreak"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Backup%20Body%20Adaptation%20Device",
+    "icon": "Backup Body Adaptation Device Gift.png"
+  },
+  {
     "id": "baekja-water-dropper",
     "name": "Baekja Water Dropper",
     "sin": "gluttony",
@@ -8237,6 +8387,43 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Broken%20Violin",
     "icon": "Broken Violin Gift.png"
+  },
+  {
+    "id": "carefully-selected-medicinal-herbs",
+    "name": "Carefully-selected Medicinal Herbs",
+    "sin": "wrath",
+    "tier": 3,
+    "cost": 250,
+    "keyword": "Pierce",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Joint Combo",
+      "Damage Up",
+      "Attack Power Up"
+    ],
+    "traits": [
+      "Wedge Office"
+    ],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": false,
+    "effect": "Attack Skills additionally triggered by Skills that have the Joint Combo effect or triggered by allies' Skill / Passive effects deal +10% damage\n- Deal an additional +2% damage every time the above effect activates (max 10%)\n- For Skills that have the Joint Combo effect, gain 1 Damage Up every time the said Skills are used (max 2 per Identity)\n- If the ally is a \"Dawn Office\" or \"Wedge Office\" Identity, the said ally gains 1 Attack Power Up (max 2 per Identity)",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "the-wedge-in-the-wake-of-dawnbreak"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Carefully%2Dselected%20Medicinal%20Herbs",
+    "icon": "Carefully-selected Medicinal Herbs Gift.png"
   },
   {
     "id": "cartilage",
@@ -10258,7 +10445,10 @@
     "status_effects": [
       "Sinking"
     ],
-    "traits": [],
+    "traits": [
+      "Wuthering Heights",
+      "Edgar Family"
+    ],
     "needs": [],
     "applies": [
       {
@@ -10270,7 +10460,7 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": false,
-    "effect": "Turn End: when Staggered, recover from Stagger; then, at the next Turn Start, inflict 4 Sinking Potency and 4 Sinking Count to all enemies (once per Encounter; in Focused Encounters, on all Parts)\n\nOn Kill, 1 enemy that has the least Sinking Count gains +2 Sinking Count (3 times per turn; in Focused Encounters, the Part)",
+    "effect": "Turn End: when Staggered, recover from Stagger; then, at the next Turn Start, inflict 4 Sinking Potency and 4 Sinking Count to all enemies (once per Encounter; in Focused Encounters, on all Parts)\n- The above effect activates ((deployed \"Wuthering Heights\" Identities + deployed \"Edgar Family\" Identities) / 2) more times per Encounter (max 4 times per Encounter; including Backup Units)\n\nOn Kill, 1 enemy that has the least Sinking Count gains +2 Sinking Count (3 times per turn; in Focused Encounters, the Part)",
     "max_level": 0,
     "upgrades": [],
     "pools": [
@@ -11002,6 +11192,39 @@
     "icon": "Prestige Card Gift.png"
   },
   {
+    "id": "pride-of-the-knight",
+    "name": "Pride of the Knight",
+    "sin": "pride",
+    "tier": 3,
+    "cost": 250,
+    "keyword": null,
+    "secondary_keyword": null,
+    "status_effects": [
+      "The One Beyond Despair"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": false,
+    "effect": "[Effects apply only to #1 Deployed Identity]\nRemove all Stagger thresholds\nEncounter Start: Apply The One Beyond Despair",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "the-wedge-in-the-wake-of-dawnbreak"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Pride%20of%20the%20Knight",
+    "icon": "Pride of the Knight Gift.png"
+  },
+  {
     "id": "providence-of-the-prescript",
     "name": "Providence of the Prescript",
     "sin": "gloom",
@@ -11379,6 +11602,48 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Rest",
     "icon": "Rest Gift.png"
+  },
+  {
+    "id": "role-model",
+    "name": "Role Model",
+    "sin": "gluttony",
+    "tier": 3,
+    "cost": 250,
+    "keyword": null,
+    "secondary_keyword": null,
+    "status_effects": [
+      "Learning by Example",
+      "Attack Power Up",
+      "Fragile"
+    ],
+    "traits": [
+      "Fixer"
+    ],
+    "needs": [],
+    "applies": [
+      {
+        "status": "Fragile",
+        "when": "always"
+      }
+    ],
+    "attack_types": [],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": false,
+    "effect": "If there are 2 or more \"Fixer\" Identities in the Team Loadout, activate the following effect for 1 \"Fixer\" ally with the lattermost Deployment Order (excluding Backup units):\n- Upon entering the Encounter for the first time, gain Learning by Example\n\nTurn Start: Allied \"Fixer\" Identities heal 2 SP for every 2 allied \"Fixer\" Identities on the field\n\nIf there are 3 or more \"Fixer\" Identities of the same faction on the field, activate the following effect:\n- Base Attack Skills of allies that have Learning by Example deal +(# of \"Fixer\" allies on the field x 3)% damage (max 15%)\n\nIf there are 3 or more \"Fixer\" Identities of different factions on the field, activate the following effect:\n- On Base Attack Skill Use by an ally that has Learning by Example, the said ally gains 1 Attack Power Up (2 times per turn)\n- On Hit using a Base Attack Skill by an ally that has Learning by Example, inflict 1 Fragile (2 times per turn; in Focused Encounters, the Part)",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "the-wedge-in-the-wake-of-dawnbreak"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Role%20Model",
+    "icon": "Role Model Gift.png"
   },
   {
     "id": "royal-jelly-perfume",
@@ -12442,7 +12707,7 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": false,
-    "effect": "When an ally hits with a Skill, if target has -20 or less SP, deal Gloom damage equal to Sinking on target (once per Skill)\n\n- If it was a Pierce Skill, deal (Sinking Count on target / 2) bonus fixed damage (once per Skill)",
+    "effect": "When an ally hits with a Skill, if target has -20 or less SP, deal Gloom damage equal to Sinking on target (once per Skill)\n\n- If it was a Pierce Skill, deal (Sinking Count on target / 2) bonus fixed damage",
     "max_level": 0,
     "upgrades": [],
     "pools": [
@@ -12487,6 +12752,39 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Tango%20Marinade",
     "icon": "Tango Marinade Gift.png"
+  },
+  {
+    "id": "the-measure-of-frost",
+    "name": "The Measure of Frost",
+    "sin": "pride",
+    "tier": 3,
+    "cost": 250,
+    "keyword": null,
+    "secondary_keyword": null,
+    "status_effects": [
+      "E.G.O Resource Amp"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": false,
+    "effect": "Turn Start: At 40+ SP, or at -40 SP or lower, gain 1 E.G.O Resource Amp\n\n[Effect exclusive to Identities that have 2 or more Minus Coin Skills]\nTurn Start: Lose 15 SP (this unit's SP does not drop below -40 from this effect)\n\nIn this Encounter, when taking SP damage that would reduce this unit's SP to -45, this unit's SP cannot drop below -44 for the turn (once per Encounter)\n(※ Applies only to SP damage; does not apply to SP-changing effects, or SP-consuming effects such as using E.G.O Skills)\n\nBefore Attack using Skill 3 or an E.G.O Skill, consume up to 5 E.G.O Resources of the same Affinity as the said Skill to deal +(E.G.O Resources consumed x 10)% damage",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "the-unloving"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=The%20Measure%20of%20Frost",
+    "icon": "The Measure of Frost Gift.png"
   },
   {
     "id": "the-middle-styled-knuckle-dusters",
@@ -12895,6 +13193,42 @@
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Twinkling%20Vestige",
     "icon": "Twinkling Vestige Gift.png"
+  },
+  {
+    "id": "white-cravat",
+    "name": "White Cravat",
+    "sin": "sloth",
+    "tier": 3,
+    "cost": 250,
+    "keyword": "Pierce",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Momentum",
+      "Dawn's Camaraderie"
+    ],
+    "traits": [
+      "Wedge Office"
+    ],
+    "needs": [],
+    "applies": [],
+    "attack_types": [],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": true,
+    "effect": "Turn Start: Activates when there are 3 or more \"Wedge Office\" Identities (counts Backup Identities)\n\n[Wedge Office Rep Outis Exclusive Effect]\n- Turn Start: If the condition above was met for the first time, gain 20 Momentum\n- Upon using \"Assume Wedge Formation\", \"... All units, engage for collision.\", \"The Wedge in the Wake of Dawnbreak\", gain 1 Dawn's Camaraderie next turn (2 times per turn)\n- If \"Assume Wedge Formation\" was used, regain half of the consumed Momentum at the next Turn Start (once per turn, rounded down)",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "the-wedge-in-the-wake-of-dawnbreak"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=White%20Cravat",
+    "icon": "White Cravat Gift.png"
   },
   {
     "id": "wing-shaped-waxen-candle",
@@ -13625,6 +13959,7 @@
       "Poise",
       "Haste",
       "Offense Level Up",
+      "Damage Up",
       "Discard"
     ],
     "traits": [],
@@ -13639,7 +13974,7 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": true,
-    "effect": "Turn Start: This Gift activates for the whole Encounter when 5 or more Identities have Attack Skills that apply or gain Poise Potency or Count. (except E.G.O Skills; except Backup Units)\n\nTurn End: If an ally has more than 20 Poise Potency on self, the ally consumes 1 Poise Potency to gain 1 Poise Count\n\nTurn End: 1 ally with the highest Poise Potency and 1 ally with the highest Poise Count] gain 2 Haste and 1 Offense Level Up (can activate on the same Identity)\n\nWhen gaining Poise Potency from Skill effects, gain additional 2 Poise Potency and +2 Poise Count. If the sum of Poise Potency and Count on self is less than 20, gain 3 Poise Potency and +3 Poise Count instead.\n\nCombat End: at more than 40 Poise Potency, consume 15 Poise Potency to Discard 1 Skill of the lowest rank in all of that unit's Skill Slots (once per turn for each character)",
+    "effect": "Turn Start: This Gift activates for the whole Encounter when 5 or more Identities have Attack Skills that apply or gain Poise Potency or Count. (except E.G.O Skills; except Backup Units)\n\nTurn End: If an ally has more than 20 Poise Potency on self, the ally consumes 1 Poise Potency to gain 1 Poise Count\n\nTurn End: 1 ally with the highest Poise Potency and 1 ally with the highest Poise Count gain 2 Haste, 1 Offense Level Up, and 1 Damage Up next turn (can activate on the same Identity)\n\nWhen gaining Poise Potency from Skill effects, gain additional 2 Poise Potency and +2 Poise Count. If the sum of Poise Potency and Count on self is less than 20, gain 3 Poise Potency and +3 Poise Count instead.\n\nCombat End: at more than 40 Poise Potency, consume 15 Poise Potency to Discard 1 Skill of the lowest rank in all of that unit's Skill Slots (once per turn for each character)",
     "max_level": 0,
     "upgrades": [],
     "pools": [
@@ -16261,7 +16596,7 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": false,
-    "effect": "Regular Encounters) On Hit against enemies with 10+ (sum of Sinking Count and Potency):\nif the target is at -45 SP, deal (Sinking Potency on target) / 2) Gloom damage (once per Skill)\n\nFocused Encounters) On Hit against enemies with 10+ (sum of Sinking Count and Potency):\ndeal (Sinking Potency on target) / 2) Gloom damage (once per Skill)\n\nIf the Skill that hit an enemy inflicts Sinking(including Sinking Count and Unique Sinking), instead of dealing (Sinking Potency on target / 2) Gloom damage, deal (Sinking Potency on target) Gloom damage\n(Each turn, this applies only to the first Sinking-inflicting Skill that hits)",
+    "effect": "On Hit against SP Units, if target has -45 SP, deal Gloom damage equal to Sinking Potency on target\n\nIn Focused Encounters, On Hit against enemies that have 10+ (Sinking Potency + Sinking Count):\nDeal ((Sinking Potency on target) / 2) Gloom damage (once per Skill)\n\nIf the Skill that hit an enemy inflicts Sinking(including Sinking Count and Unique Sinking), instead of dealing (Sinking Potency on target / 2) Gloom damage, deal (Sinking Potency on target) Gloom damage\n(Each turn, this applies only to the first Sinking-inflicting Skill that hits)",
     "max_level": 0,
     "upgrades": [],
     "pools": [
@@ -16807,6 +17142,42 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Swarmcloud",
     "icon": "Swarmcloud Gift.png"
+  },
+  {
+    "id": "sword-laced-with-grief",
+    "name": "Sword Laced with Grief",
+    "sin": "pride",
+    "tier": 4,
+    "cost": 400,
+    "keyword": "Sinking",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Sinking",
+      "Charge"
+    ],
+    "traits": [],
+    "needs": [],
+    "applies": [],
+    "attack_types": [
+      "Pierce"
+    ],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": false,
+    "effect": "Pierce Base Skills that inflict Sinking Potency, Count, or Unique Sinking gain Final Power +1\n\nOn Hit by an ally using a Skill, if target has -20 or lower SP, deal Gloom damage equal to Sinking Potency to target (once per Skill)\n- If the said Skill was a Pierce Skill, deal additional fixed damage equal to (Sinking Count on target / 2) (once per Skill)\n\n[Lobotomy E.G.O::The Sword Sharpened with Tears Rodion Exclusive Effect]\nOn Hit against an enemy using the final Coin of a Base Skill that consumes Charge and has 1 Atk Weight, deal Pride damage to all enemies equal to (Charge Potency consumed)% of final damage (including Unique Charge)\n\n[The Sword Sharpened with Tears Hong Lu E.G.O Skill Exclusive Effect]\nE.G.O Skill Final Power +1",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [
+      "the-wedge-in-the-wake-of-dawnbreak"
+    ],
+    "events": [],
+    "fusion_recipe": null,
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Sword%20Laced%20with%20Grief",
+    "icon": "Sword Laced with Grief Gift.png"
   },
   {
     "id": "t-1-perpetual-motion-machine",
@@ -17463,6 +17834,51 @@
     "other_sources": [],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Wholeness",
     "icon": "Wholeness Gift.png"
+  },
+  {
+    "id": "wuthering-heights",
+    "name": "Wuthering Heights",
+    "sin": "gloom",
+    "tier": 4,
+    "cost": 404,
+    "keyword": "Sinking",
+    "secondary_keyword": null,
+    "status_effects": [
+      "Sinking",
+      "Dullahan",
+      "Coffin",
+      "Thundercrack"
+    ],
+    "traits": [
+      "Wuthering Heights",
+      "Edgar Family"
+    ],
+    "needs": [],
+    "applies": [
+      {
+        "status": "Sinking",
+        "when": "always"
+      }
+    ],
+    "attack_types": [],
+    "affinities": [],
+    "affinity_bonus": [],
+    "team_gate": false,
+    "effect": "Turn End: when Staggered, recover from Stagger; then, at the next Turn Start, inflict 4 Sinking Potency and +4 Sinking Count to all enemies (once per Encounter; in Focused Encounters, on all Parts)\n- The above effect activates ((deployed \"Wuthering Heights\" Identities + deployed \"Edgar Family\" Identities) / 2) more times per Encounter (max 4 times per Encounter; including Backup Units)\n\nOn Kill, 1 enemy that has the least Sinking Count gains +2 Sinking Count (in Focused Encounters, the Part)\n\nOn Hit against SP Units, if target has -45 SP, deal Gloom damage equal to Sinking Potency on target\n\nIn Focused Encounters, On Hit against enemies that have 10+ (Sinking Potency + Sinking Count):\nDeal ((Sinking Potency on target) / 2) Gloom damage (once per Skill)\n\nIf the Skill that hit an enemy inflicts Sinking (including Sinking Count and Unique Sinking), instead of dealing (Sinking Potency on target / 2) Gloom damage, deal (Sinking Potency on target) Gloom damage\n(Each turn, this applies only to the first Sinking-inflicting Skill that hits)\n\n[Wild Hunt Heathcliff exclusive effect]\nTurn Start: If this unit does not have Dullahan, gain 1 Dullahan\n- At 5/10 Coffin, gain 2/3 Dullahan\n- Apply 1 Thundercrack on \"Wuthering Heights\" and \"Edgar Family\" Identities (3 times per Identity per Encounter)\n\nDouble the amount of Coffin gained\n- Gain 2 Coffin when \"Wuthering Heights\" or \"Edgar Family\" Identities defeat an enemy\n\n\"Lament, Mourn, and Despair\" Skill effects:\n- Lose 15 more SP from the \"On Use\" effect\n· The effects of the Skill or this E.G.O Gift cannot reduce this unit's SP below -40\n- On final Coin Hit, if the enemy has 20+ Sinking deal Gloom damage equal to 100% of this Coin's final damage",
+    "max_level": 0,
+    "upgrades": [],
+    "pools": [
+      "themed"
+    ],
+    "theme_packs": [],
+    "events": [],
+    "fusion_recipe": [
+      "manor-shaped-music-box",
+      "refraction-glass-pod"
+    ],
+    "other_sources": [],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/List_of_E.G.O_Gifts#:~:text=Wuthering%20Heights",
+    "icon": "Wuthering Heights Gift.png"
   },
   {
     "id": "lunar-memory",

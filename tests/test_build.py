@@ -212,6 +212,14 @@ class BuildTests(unittest.TestCase):
         self.assertTrue(build.parse_identity("X", ["Yi Sang Identities"])["incomplete"])
         self.assertEqual(build.parse_identity("X", ["Ryoshu Identities"])["sinner"], "Ryōshū")
 
+    def test_keyword_categories_are_not_affiliations(self):
+        # The wiki added "<keyword> Identities" categories in Nov 2026.
+        ident = build.parse_identity("Dieci Assoc. South Section 4 Yi Sang", [
+            "Yi Sang Identities", "3-Star Identities", "Dieci Association Identities", "Fixer Identities",
+            "Sinking Identities", "Bleed Identities", "Identities with Sinking",
+        ])
+        self.assertEqual(ident["traits"], ["Dieci Association", "Fixer"])
+
 
 if __name__ == "__main__":
     unittest.main()

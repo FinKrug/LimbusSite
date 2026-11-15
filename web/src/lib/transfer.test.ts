@@ -101,6 +101,19 @@ describe('the side-by-side preview', () => {
     expect(isBlank({}, look)).toBe(true)
     expect(isBlank(played, look)).toBe(false)
   })
+
+  it('shows owned identities as their own row, and a copy with only those is not blank', () => {
+    const faust = gameData.identities.find((i) => i.sinner === 'Faust' && (i.rarity ?? 1) > 1)!
+    const mine = { ...fresh, 'limbussite.identities.v1': JSON.stringify([faust.id]) }
+    const rows = compareRows(mine, fresh, look)
+    const row = rows.find((r) => r.id === 'identities')!
+    expect(row.differs).toBe(true)
+    expect(row.mine.text).toBe('1 identity marked (plus the 12 base ones)')
+    expect(row.mine.detail).toBe(faust.name)
+    expect(row.theirs.text).toBe('None marked')
+    expect(rows.filter((r) => r.differs).map((r) => r.id)).toEqual(['identities'])
+    expect(isBlank(mine, look)).toBe(false)
+  })
 })
 
 describe('planSync', () => {

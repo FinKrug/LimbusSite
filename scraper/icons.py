@@ -40,14 +40,14 @@ OUT_PNG = Path("web/src/data/gift_icons.png")
 OUT_JSON = Path("web/src/data/gift_icons.json")
 
 
-def fetch_icons(client: WikiClient, files: list[str], icon_dir: Path, user_agent: str) -> list[str]:
-    """Download each icon's thumbnail into icon_dir (skipping ones already there)."""
+def fetch_icons(client: WikiClient, files: list[str], icon_dir: Path, user_agent: str, width: int = THUMB) -> list[str]:
+    """Download each file's thumbnail (`width` px wide) into icon_dir (skipping ones already there)."""
     icon_dir.mkdir(parents=True, exist_ok=True)
     warnings: list[str] = []
     missing = [f for f in files if not (icon_dir / safe_name(f)).exists()]
     for i in range(0, len(missing), 50):
         chunk = missing[i:i + 50]
-        data = client.get(action="query", prop="imageinfo", iiprop="url", iiurlwidth=THUMB,
+        data = client.get(action="query", prop="imageinfo", iiprop="url", iiurlwidth=width,
                           titles="|".join(f"File:{f}" for f in chunk))
         q = data.get("query", {})
         back = {n["to"]: n["from"] for n in q.get("normalized", [])}

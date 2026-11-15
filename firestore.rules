@@ -2,13 +2,27 @@ rules_version = '2';
 
 // LimbusSite cloud sync: one document per account, users/{uid}, that only its
 // owner can read or write (web/src/lib/cloud.ts).
+//
+// `data` maps each saved setting to its JSON text (field names from encodeKey,
+// e.g. identities_v1 = the identities you own, Tools > My identities).
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    // Saved settings: a sane number of keys, and the owned-identities list
+    // (a JSON array of identity ids, about 7 KB with every identity marked) capped.
+    function validData(d) {
+      return d is map
+        && d.size() <= 64
+        && (!('identities_v1' in d) || (d.identities_v1 is string && d.identities_v1.size() <= 20000));
+    }
+
     match /users/{uid} {
-      allow read, delete: if request.auth != null && request.auth.uid == uid;
-      allow create, update: if request.auth != null && request.auth.uid == uid
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
         && request.resource.data.keys().hasOnly(['data', 'updatedAt', 'device', 'deviceId', 'app'])
-        && request.resource.data.data is map;
+        && validData(request.resource.data.data);
     }
     // Nothing else is stored.
     match /{document=**} {

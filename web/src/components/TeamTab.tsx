@@ -38,6 +38,9 @@ interface Props {
   /** All gifts and the ones you own (for E.G.O resource gift notes). */
   gifts: Gift[]
   owned: Set<string>
+  /** Identities you own (Tools > My identities), base ones included. */
+  ownedCount: number
+  onOpenMyIdentities: () => void
 }
 
 /**
@@ -89,7 +92,12 @@ export function TeamTab(props: Props) {
               title="The art identities have before Uptie III. Used on every tab.">Base art</button>
           </div>
         </div>
-        <p className="muted small formation-tip">Click identities in the order you want them deployed, like in game. Swap changes an identity.</p>
+        <p className="muted small formation-tip">
+          Click identities in the order you want them deployed, like in game. Swap changes an identity.{' '}
+          <button className="link-btn accent" onClick={props.onOpenMyIdentities}>
+            My identities ({props.ownedCount}/{identities.length} owned) →
+          </button>
+        </p>
         <ol className="card-grid" aria-label="Sinners">
           {SINNERS.map((s) => {
             const i = equipped[s]

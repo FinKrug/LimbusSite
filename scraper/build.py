@@ -346,7 +346,9 @@ def build_identities(page_cats: dict[str, list[str]]) -> tuple[list[dict], list[
 # "<X> Identities" categories that are bookkeeping rather than affiliations. "Limbus Company
 # Identities" is an affiliation (LCB Sinners, LCCB, LCA/LCD/LCE...): Regular Operational Gear
 # and event check bonuses ("+12 for Limbus Company Identities") only work for them.
-NOT_TRAITS = {"Event Reward Identities and E.G.O"}
+# Categories named like affiliations that aren't: since Nov 2026 the wiki also files
+# identities under their status keyword ("Sinking Identities", "Bleed Identities").
+NOT_TRAITS = {"Event Reward Identities and E.G.O", "Burn", "Bleed", "Tremor", "Rupture", "Sinking", "Poise", "Charge"}
 
 # A trait only counts as mentioned when a word like "Identities" follows soon
 # after, e.g. '"The Thumb" Identities gain ...' or 'prioritizes Heishou - Wu Identities'.

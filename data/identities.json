@@ -123,6 +123,7 @@
       "Discard",
       "Guard Skills",
       "Insight",
+      "Shield",
       "Sinking"
     ],
     "traits": [
@@ -946,6 +947,7 @@
       "Increased Atk Weight",
       "Offense Level Up",
       "Rupture",
+      "Shield",
       "Tremor",
       "Tremor Burst",
       "Unbreakable Coin",
@@ -1224,7 +1226,8 @@
     "status_effects": [
       "Burn",
       "Counter Skills",
-      "SP Healing"
+      "SP Healing",
+      "Shield"
     ],
     "traits": [
       "Fixer",
@@ -3421,6 +3424,7 @@
       "Guard Skills",
       "Pierce DMG Up",
       "Poise",
+      "Shield",
       "Slash DMG Up",
       "Unclashable Skills"
     ],
@@ -3558,9 +3562,9 @@
       "Increased Atk Weight",
       "Protection",
       "SP Healing",
+      "Shield",
       "Slash DMG Up",
       "Unbreakable Coin",
-      "Unique Charge",
       "unique Status Effects"
     ],
     "traits": [
@@ -3693,6 +3697,7 @@
       "Poise",
       "Prescript",
       "SP Healing",
+      "Shield",
       "Sinking",
       "The Prescript's Target",
       "Unbreakable Coin"
@@ -4724,11 +4729,12 @@
       "Offense Level Up",
       "Preservation",
       "SP Healing",
+      "Shield",
       "Tremor",
       "Tremor - Conservation",
       "Tremor Burst",
+      "Unbreakable Coin",
       "Unclashable Skills",
-      "Unique Charge",
       "unique Status Effects"
     ],
     "traits": [
@@ -5278,6 +5284,7 @@
       "Prescript",
       "SP Healing",
       "SP Loss",
+      "Shield",
       "Sinking",
       "The Prescript's Target",
       "Unbreakable Coin",
@@ -5412,6 +5419,7 @@
       "Damage Up",
       "HP Healing",
       "Increased Atk Weight",
+      "Shield",
       "Unbreakable Coin",
       "Unique Stage Interactions",
       "unique Sanity mechanics",
@@ -5744,6 +5752,151 @@
       "statuses": []
     },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Agent_Don_Quixote"
+  },
+  {
+    "id": "wedge-office-fixer-don-quixote",
+    "name": "Wedge Office Fixer Don Quixote",
+    "sinner": "Don Quixote",
+    "rarity": 3,
+    "affinities": [
+      "gluttony",
+      "pride",
+      "sloth"
+    ],
+    "keywords": [
+      "Tremor",
+      "Poise"
+    ],
+    "status_effects": [
+      "Amplitude Conversion",
+      "Evade Skills",
+      "Field Analysis",
+      "Haste",
+      "Joint Attack",
+      "Pierce DMG Up",
+      "Poise",
+      "Tremor",
+      "Tremor - Decay",
+      "Tremor Burst",
+      "Unbreakable Coin"
+    ],
+    "traits": [
+      "Fixer",
+      "Wedge Office"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
+    "attack_counts": {
+      "Pierce": 4
+    },
+    "order_notes": [],
+    "skills": [
+      {
+        "slot": 1,
+        "name": "Collision",
+        "sin": "sloth",
+        "type": "Pierce",
+        "base": 6,
+        "coin_power": 7,
+        "coins": 1,
+        "copies": 3,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Poise",
+          "Tremor",
+          "Joint Combo",
+          "Field Analysis",
+          "Pierce DMG Up",
+          "Wedge - Sinclair"
+        ],
+        "enemy": [
+          "Tremor",
+          "Wedge - Sinclair"
+        ],
+        "self": [
+          "Poise",
+          "Field Analysis",
+          "Pierce DMG Up"
+        ]
+      },
+      {
+        "slot": 2,
+        "name": "Gap Strike",
+        "sin": "gluttony",
+        "type": "Pierce",
+        "base": 5,
+        "coin_power": 6,
+        "coins": 2,
+        "copies": 2,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Poise",
+          "Tremor",
+          "Tremor Burst",
+          "Field Analysis"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Poise",
+          "Field Analysis"
+        ]
+      },
+      {
+        "slot": 3,
+        "name": "Speared Sweep",
+        "sin": "pride",
+        "type": "Pierce",
+        "base": 4,
+        "coin_power": 5,
+        "coins": 3,
+        "copies": 1,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Poise",
+          "Tremor",
+          "Joint Combo",
+          "Field Analysis",
+          "Tremor Burst",
+          "Amplitude Conversion",
+          "Amplitude Entanglement",
+          "Tremor - Decay"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst",
+          "Amplitude Conversion",
+          "Amplitude Entanglement",
+          "Tremor - Decay"
+        ],
+        "self": [
+          "Poise",
+          "Field Analysis"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "Catch Breath",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Wedge - Sinclair",
+        "Poise",
+        "Haste",
+        "Field Analysis"
+      ]
+    },
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wedge_Office_Fixer_Don_Quixote"
   },
   {
     "id": "lcb-sinner-ryoshu",
@@ -6318,6 +6471,8 @@
       "Evade Skills",
       "Increased Atk Weight",
       "Poise",
+      "SP Healing",
+      "Shield",
       "Slash Fragility",
       "Unbreakable Coin",
       "Unclashable Skills",
@@ -6471,6 +6626,7 @@
       "Poise",
       "Rupture",
       "SP Healing",
+      "Shield",
       "Unbreakable Coin",
       "unique Status Effects"
     ],
@@ -6728,10 +6884,10 @@
       "Clashable Counter",
       "Counter Skills",
       "Preservation",
+      "Shield",
       "Tremor",
       "Tremor Burst",
       "Unbreakable Coin",
-      "Unique Charge",
       "unique Status Effects"
     ],
     "traits": [
@@ -7235,6 +7391,7 @@
       "Haste",
       "SP Healing",
       "SP Loss",
+      "Shield",
       "Unique Charge",
       "unique Status Effects"
     ],
@@ -7364,6 +7521,7 @@
       "Gaze of Contempt",
       "Guard Skills",
       "Increased Atk Weight",
+      "Protection",
       "Tremor",
       "Tremor - Hemorrhage",
       "Tremor Burst",
@@ -8526,6 +8684,7 @@
       "Guard Skills",
       "Insight",
       "Pierce DMG Up",
+      "Shield",
       "Sinking"
     ],
     "traits": [
@@ -10211,6 +10370,7 @@
     "status_effects": [
       "Bind",
       "Burn",
+      "Coin Reuse",
       "Defense Level Down",
       "Evade Skills",
       "Haste",
@@ -10455,6 +10615,7 @@
       "Amplitude Entanglement",
       "Damage Up",
       "Guard Skills",
+      "Shield",
       "Tremor",
       "Tremor - Reverb",
       "Tremor Burst"
@@ -10699,6 +10860,153 @@
       ]
     },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stop_Office_Rep_Hong_Lu"
+  },
+  {
+    "id": "haute-couture-le-noir-3f-public-address-room-hong-lu",
+    "name": "Haute Couture::Le Noir 3F Public Address Room Hong Lu",
+    "sinner": "Hong Lu",
+    "rarity": 3,
+    "affinities": [
+      "envy",
+      "gloom",
+      "sloth"
+    ],
+    "keywords": [
+      "Tremor",
+      "Charge"
+    ],
+    "status_effects": [
+      "Assist Defense",
+      "Charge",
+      "Charge Potency",
+      "Clashable Counter",
+      "Clashable Guard",
+      "Coin Reuse",
+      "Counter Skills",
+      "Guard Skills",
+      "Preservation",
+      "Protection",
+      "SP Damage",
+      "Shield",
+      "Sloth Resist Down",
+      "Tremor",
+      "Tremor Burst",
+      "Unbreakable Coin",
+      "unique Status Effects"
+    ],
+    "traits": [
+      "Le Noir",
+      "Sisyphe"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
+    "attack_counts": {
+      "Blunt": 4
+    },
+    "order_notes": [],
+    "skills": [
+      {
+        "slot": 1,
+        "name": "Please Listen to Me",
+        "sin": "gloom",
+        "type": "Blunt",
+        "base": 3,
+        "coin_power": 4,
+        "coins": 2,
+        "copies": 3,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Preservation",
+          "Tremor"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Preservation"
+        ]
+      },
+      {
+        "slot": 2,
+        "name": "Repeat on Repeat",
+        "sin": "envy",
+        "type": "Blunt",
+        "base": 4,
+        "coin_power": 6,
+        "coins": 2,
+        "copies": 2,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Preservation",
+          "Tremor",
+          "Time to Listen",
+          "Auditive Punishment",
+          "Sloth Resist Down"
+        ],
+        "enemy": [
+          "Tremor",
+          "Auditive Punishment",
+          "Sloth Resist Down"
+        ],
+        "self": [
+          "Preservation",
+          "Time to Listen"
+        ]
+      },
+      {
+        "slot": 3,
+        "name": "Horribly Infinite Replay",
+        "sin": "sloth",
+        "type": "Blunt",
+        "base": 5,
+        "coin_power": 4,
+        "coins": 3,
+        "copies": 1,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Preservation",
+          "Le Noir Worsted Overcoat",
+          "Time to Listen",
+          "Ready to Narrate",
+          "Tremor",
+          "Tremor Burst",
+          "Auditive Punishment"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tremor Burst",
+          "Time to Listen",
+          "Auditive Punishment"
+        ],
+        "self": [
+          "Preservation",
+          "Le Noir Worsted Overcoat",
+          "Time to Listen",
+          "Ready to Narrate"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "Customer Announcement",
+      "sin": "sloth",
+      "type": "Blunt",
+      "kind": "counter",
+      "base": 5,
+      "coin_power": 4,
+      "coins": 2,
+      "statuses": [
+        "Preservation",
+        "Assist Defense",
+        "Time to Listen",
+        "Le Noir Worsted Overcoat",
+        "Tremor"
+      ]
+    },
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Le_Noir_3F_Public_Address_Room_Hong_Lu"
   },
   {
     "id": "k-corp-class-3-excision-staff-hong-lu",
@@ -11125,7 +11433,6 @@
       "Slash DMG Up",
       "Unbreakable Coin",
       "Unclashable Skills",
-      "Unique Charge",
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
@@ -12204,6 +12511,154 @@
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Full-Stop_Office_Fixer_Heathcliff"
   },
   {
+    "id": "haute-couture-le-rouge-king-of-needleworks-heathcliff",
+    "name": "Haute Couture::Le Rouge King of Needleworks Heathcliff",
+    "sinner": "Heathcliff",
+    "rarity": 3,
+    "affinities": [
+      "envy",
+      "lust",
+      "wrath"
+    ],
+    "keywords": [
+      "Bleed",
+      "Charge"
+    ],
+    "status_effects": [
+      "Attack Power Up",
+      "Bleed",
+      "Charge",
+      "Charge Potency",
+      "Clashable Counter",
+      "Counter Skills",
+      "HP Healing",
+      "Increased Atk Weight",
+      "Pierce DMG Up",
+      "Pierce Fragility",
+      "Pulsation",
+      "Unfocused Volley",
+      "Unique Bleed",
+      "unique Status Effects"
+    ],
+    "traits": [
+      "Le Rouge",
+      "Sisyphe"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
+    "attack_counts": {
+      "Pierce": 5
+    },
+    "order_notes": [
+      {
+        "kind": "in_order",
+        "text": "Prioritizes \"Le Rouge\" Identities (in Deployment Order)",
+        "source": "Double stitching past the side seam? Double-needle! Rejected!"
+      }
+    ],
+    "skills": [
+      {
+        "slot": 1,
+        "name": "Bla Bla Warp Bla, Yap Yap Weft Yap",
+        "sin": "envy",
+        "type": "Pierce",
+        "base": 2,
+        "coin_power": 3,
+        "coins": 3,
+        "copies": 3,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Pulsation (Ally)",
+          "Bleed",
+          "Needlekin",
+          "Naildle (Heathcliff)"
+        ],
+        "enemy": [
+          "Bleed",
+          "Naildle (Heathcliff)"
+        ],
+        "self": [
+          "Pulsation (Ally)",
+          "Needlekin"
+        ]
+      },
+      {
+        "slot": 2,
+        "name": "Stitch! Per! Inch!",
+        "sin": "lust",
+        "type": "Pierce",
+        "base": 3,
+        "coin_power": 3,
+        "coins": 4,
+        "copies": 2,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Pulsation (Ally)",
+          "Bleed",
+          "Needlekin",
+          "Naildle (Heathcliff)"
+        ],
+        "enemy": [
+          "Bleed",
+          "Naildle (Heathcliff)"
+        ],
+        "self": [
+          "Pulsation (Ally)",
+          "Needlekin"
+        ]
+      },
+      {
+        "slot": 3,
+        "name": "Pick stitch too obvious, you say?! I'll pick-stitch your bum!",
+        "sin": "wrath",
+        "type": "Pierce",
+        "base": 5,
+        "coin_power": 4,
+        "coins": 3,
+        "copies": 1,
+        "weight": 1,
+        "weight_bonus": 1,
+        "statuses": [
+          "Pulsation (Ally)",
+          "Tiny and Sharp Nails",
+          "Bleed",
+          "Naildle (Heathcliff)",
+          "Pierce Fragility",
+          "Taxidermized (Heathcliff)"
+        ],
+        "enemy": [
+          "Bleed",
+          "Naildle (Heathcliff)",
+          "Pierce Fragility",
+          "Taxidermized (Heathcliff)"
+        ],
+        "self": [
+          "Pulsation (Ally)",
+          "Tiny and Sharp Nails",
+          "Naildle (Heathcliff)"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "Gnnnngh…",
+      "sin": "lust",
+      "type": "Pierce",
+      "kind": "counter",
+      "base": 7,
+      "coin_power": 8,
+      "coins": 1,
+      "statuses": [
+        "Attack Power Up",
+        "Pulsation (Ally)",
+        "Naildle (Heathcliff)"
+      ]
+    },
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Le_Rouge_King_of_Needleworks_Heathcliff"
+  },
+  {
     "id": "heishou-pack-you-branch-adept-heathcliff",
     "name": "Heishou Pack - You Branch Adept Heathcliff",
     "sinner": "Heathcliff",
@@ -12906,6 +13361,7 @@
       "Offense Level Up",
       "Paralyze",
       "SP Healing",
+      "Shield",
       "Tremor",
       "Tremor Burst",
       "Unbreakable Coin",
@@ -13173,6 +13629,7 @@
       "Defense Level Up",
       "Guard Skills",
       "Rupture",
+      "Shield",
       "Unbreakable Coin"
     ],
     "traits": [
@@ -13903,6 +14360,7 @@
       "Aggro",
       "Guard Skills",
       "Rupture",
+      "Shield",
       "Tremor",
       "Tremor Burst"
     ],
@@ -14135,6 +14593,7 @@
       "Retreat",
       "Rupture",
       "Unbreakable Coin",
+      "Unclashable Skills",
       "unique Status Effects"
     ],
     "traits": [
@@ -14293,6 +14752,7 @@
       "Charge Potency",
       "Clashable Counter",
       "Clashable Guard",
+      "Coin Reuse",
       "Counter Skills",
       "Damage Up",
       "Guard Skills",
@@ -14300,8 +14760,8 @@
       "Lust Fragility",
       "Power Up",
       "Pulsation",
+      "Shield",
       "Unbreakable Coin",
-      "Unique Charge",
       "unique Status Effects"
     ],
     "traits": [
@@ -15186,6 +15646,7 @@
       "Burn",
       "Counter Skills",
       "Paralyze",
+      "Shield",
       "Vengeance Mark",
       "unique Status Effects"
     ],
@@ -16039,7 +16500,8 @@
       "Aggro",
       "Fragile",
       "Guard Skills",
-      "Poise"
+      "Poise",
+      "Shield"
     ],
     "traits": [
       "Fixer",
@@ -16151,7 +16613,8 @@
       "Haste",
       "Retreat",
       "Rupture",
-      "SP Loss"
+      "SP Loss",
+      "Shield"
     ],
     "traits": [
       "Devyat' Association",
@@ -16280,6 +16743,7 @@
       "Discard",
       "Guard Skills",
       "Insight",
+      "Shield",
       "Sinking"
     ],
     "traits": [
@@ -16402,6 +16866,7 @@
       "Counter Skills",
       "Duality",
       "Offense Level Up",
+      "Shield",
       "Sloth Resist Down",
       "Tremor",
       "Tremor Burst",
@@ -16923,6 +17388,7 @@
       "Protection",
       "SP Healing",
       "SP Loss",
+      "Shield",
       "Sinking",
       "Unbreakable Coin",
       "Unique Charge",
@@ -18677,6 +19143,7 @@
       "Increased Atk Weight",
       "SP Healing",
       "SP Loss",
+      "Shield",
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
@@ -18793,7 +19260,8 @@
       "Haste",
       "Retreat",
       "Rupture",
-      "SP Loss"
+      "SP Loss",
+      "Shield"
     ],
     "traits": [
       "Devyat' Association",
@@ -18924,6 +19392,7 @@
       "Bleed",
       "Charge",
       "Charge Potency",
+      "Clash Power Up",
       "Clashable Counter",
       "Clashable Guard",
       "Counter Skills",
@@ -18937,8 +19406,8 @@
       "Pulsation",
       "SP Healing",
       "Unbreakable Coin",
+      "Unclashable Skills",
       "Unique Bleed",
-      "Unique Charge",
       "unique Sanity mechanics",
       "unique Status Effects"
     ],
@@ -19227,6 +19696,7 @@
       "Increased Atk Weight",
       "Poise",
       "SP Healing",
+      "Shield",
       "Slash Power Up",
       "Unbreakable Coin",
       "Unfocused Volley",
@@ -19354,6 +19824,7 @@
       "Defense Level Up",
       "Offense Level Up",
       "SP Healing",
+      "Shield",
       "Vendetta Mark",
       "Vengeance Mark"
     ],
@@ -19714,6 +20185,148 @@
       ]
     },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Thumb_East_Soldato_II_Sinclair"
+  },
+  {
+    "id": "wedge-office-fixer-sinclair",
+    "name": "Wedge Office Fixer Sinclair",
+    "sinner": "Sinclair",
+    "rarity": 3,
+    "affinities": [
+      "gluttony",
+      "pride",
+      "sloth"
+    ],
+    "keywords": [
+      "Tremor",
+      "Poise"
+    ],
+    "status_effects": [
+      "Amplitude Conversion",
+      "Coin Reuse",
+      "Evade Skills",
+      "Field Analysis",
+      "Haste",
+      "Joint Attack",
+      "Offense Level Up",
+      "Poise",
+      "Tremor",
+      "Tremor - Decay",
+      "Tremor Burst",
+      "Unbreakable Coin"
+    ],
+    "traits": [
+      "Fixer",
+      "Wedge Office"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
+    "attack_counts": {
+      "Pierce": 4
+    },
+    "order_notes": [],
+    "skills": [
+      {
+        "slot": 1,
+        "name": "Collision",
+        "sin": "gluttony",
+        "type": "Pierce",
+        "base": 3,
+        "coin_power": 4,
+        "coins": 2,
+        "copies": 3,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Poise",
+          "Tremor",
+          "Joint Combo",
+          "Field Analysis",
+          "Wedge - Don Quixote"
+        ],
+        "enemy": [
+          "Tremor",
+          "Wedge - Don Quixote"
+        ],
+        "self": [
+          "Poise",
+          "Field Analysis"
+        ]
+      },
+      {
+        "slot": 2,
+        "name": "Riding the Tide of the Offensive",
+        "sin": "sloth",
+        "type": "Pierce",
+        "base": 4,
+        "coin_power": 4,
+        "coins": 3,
+        "copies": 2,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Poise",
+          "Tremor",
+          "Field Analysis"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Poise",
+          "Field Analysis"
+        ]
+      },
+      {
+        "slot": 3,
+        "name": "Speared Sweep",
+        "sin": "pride",
+        "type": "Pierce",
+        "base": 4,
+        "coin_power": 3,
+        "coins": 4,
+        "copies": 1,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Poise",
+          "Tremor",
+          "Joint Combo",
+          "Field Analysis",
+          "Amplitude Conversion",
+          "Amplitude Entanglement",
+          "Tremor - Decay",
+          "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Amplitude Conversion",
+          "Amplitude Entanglement",
+          "Tremor - Decay",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Poise",
+          "Field Analysis"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "Catch Breath",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Wedge - Don Quixote",
+        "Poise",
+        "Haste",
+        "Field Analysis"
+      ]
+    },
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wedge_Office_Fixer_Sinclair"
   },
   {
     "id": "lcb-sinner-outis",
@@ -20413,6 +21026,7 @@
       "Panic Type Altering Status Effects",
       "Protection",
       "Reload",
+      "Shield",
       "Sinking",
       "Tremor",
       "Tremor Burst",
@@ -21210,6 +21824,7 @@
       "Protection",
       "SP Healing",
       "SP Loss",
+      "Shield",
       "Unbreakable Coin",
       "Unclashable Skills",
       "Vengeance Mark",
@@ -21474,6 +22089,160 @@
       ]
     },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/W_Corp._L3_Cleanup_Captain_Outis"
+  },
+  {
+    "id": "wedge-office-rep-outis",
+    "name": "Wedge Office Rep Outis",
+    "sinner": "Outis",
+    "rarity": 3,
+    "affinities": [
+      "envy",
+      "lust",
+      "pride",
+      "sloth"
+    ],
+    "keywords": [
+      "Tremor",
+      "Poise"
+    ],
+    "status_effects": [
+      "Amplitude Conversion",
+      "Amplitude Entanglement",
+      "Assist Defense",
+      "Clashable Counter",
+      "Counter Skills",
+      "Discard",
+      "Evade Skills",
+      "Increased Atk Weight",
+      "Joint Attack",
+      "Pierce DMG Up",
+      "Pierce Fragility",
+      "Pierce Power Up",
+      "Poise",
+      "Tremor",
+      "Tremor - Decay",
+      "Tremor Burst",
+      "Unbreakable Coin",
+      "unique Status Effects"
+    ],
+    "traits": [
+      "Fixer",
+      "Wedge Office"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
+    "attack_counts": {
+      "Pierce": 7
+    },
+    "order_notes": [],
+    "skills": [
+      {
+        "slot": 1,
+        "name": "High-speed Stabbing",
+        "sin": "lust",
+        "type": "Pierce",
+        "base": 2,
+        "coin_power": 3,
+        "coins": 3,
+        "copies": 3,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Poise",
+          "Tremor",
+          "Wedge Office"
+        ],
+        "enemy": [
+          "Tremor"
+        ],
+        "self": [
+          "Poise"
+        ]
+      },
+      {
+        "slot": 2,
+        "name": "Sparking Spear",
+        "sin": "sloth",
+        "type": "Pierce",
+        "base": 4,
+        "coin_power": 6,
+        "coins": 2,
+        "copies": 2,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Pierce DMG Up",
+          "Discard",
+          "Poise",
+          "Tremor",
+          "Wedge Office",
+          "Tremor Burst"
+        ],
+        "enemy": [
+          "Pierce DMG Up",
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Poise",
+          "Wedge Office"
+        ]
+      },
+      {
+        "slot": 3,
+        "name": "Transpierce",
+        "sin": "pride",
+        "type": "Pierce",
+        "base": 10,
+        "coin_power": 12,
+        "coins": 1,
+        "copies": 1,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Tremor",
+          "Poise",
+          "Wedge Office",
+          "Joint Combo",
+          "Dawn's Camaraderie",
+          "Unbreakable Coin",
+          "Amplitude Conversion",
+          "Amplitude Entanglement",
+          "Tremor - Decay",
+          "Pierce Fragility",
+          "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Amplitude Conversion",
+          "Amplitude Entanglement",
+          "Tremor - Decay",
+          "Pierce Fragility",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Poise",
+          "Dawn's Camaraderie",
+          "Unbreakable Coin"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "Catch Breath",
+      "sin": "pride",
+      "type": "Evade",
+      "kind": "evade",
+      "base": 4,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Assist Defense",
+        "Poise",
+        "Haste"
+      ]
+    },
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Wedge_Office_Rep_Outis"
   },
   {
     "id": "wuthering-heights-chief-butler-outis",
@@ -22423,6 +23192,7 @@
       "unique Status Effects"
     ],
     "traits": [
+      "Firefist Office",
       "Fixer"
     ],
     "attack_types": [
@@ -22786,6 +23556,7 @@
       "Offense Level Up",
       "Photoelectricity",
       "Rupture",
+      "Shield",
       "Unbreakable Coin",
       "unique Status Effects"
     ],
@@ -23482,7 +24253,8 @@
       "Defense Level Up",
       "Defense Power Up",
       "Guard Skills",
-      "Haste"
+      "Haste",
+      "Shield"
     ],
     "traits": [
       "Fixer",

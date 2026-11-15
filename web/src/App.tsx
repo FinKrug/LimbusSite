@@ -36,6 +36,9 @@ import {
 } from './lib/scoring'
 import { DEFAULT_DEPLOYED } from './lib/lineup'
 import { usePersistentState } from './lib/storage'
+import { OWNED_IDENTITIES_KEY, hasMarkedIdentities, ownedIdentitySet } from './lib/myidentities'
+import { MyIdentitiesTab } from './components/MyIdentitiesTab'
+import { SETUP_KEY, SetupWizard, type SetupState } from './components/SetupWizard'
 import { sync } from './lib/sync'
 import type { SummaryLookups } from './lib/transfer'
 import { makePreset, presetMatches, restoreSelection, restoreTeam, validPresets, type Equipped, type TeamPreset } from './lib/presets'
@@ -49,8 +52,8 @@ import { buildTeam, suggestOrder } from './lib/teambuilder'
 import { addGift } from './lib/vestiges'
 import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
-type Tab = 'team' | 'prerun' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best'
-const TABS: Tab[] = ['team', 'prerun', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best']
+type Tab = 'team' | 'prerun' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'identities'
+const TABS: Tab[] = ['team', 'prerun', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best', 'identities']
 
 /**
  * The site follows a floor of the Mirror Dungeon: pick a pack, fight your way through its
@@ -61,7 +64,7 @@ type Stage = 'team' | 'prerun' | 'packs' | 'fights' | 'shop' | 'boss' | 'tools'
 const STAGE_OF: Record<Tab, Stage> = {
   team: 'team', prerun: 'prerun', packs: 'packs', rewards: 'fights', events: 'fights',
   gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss',
-  evaluate: 'tools', import: 'tools', best: 'tools',
+  evaluate: 'tools', import: 'tools', best: 'tools', identities: 'tools',
 }
 const STAGES: { id: Exclude<Stage, 'tools'>; tab: Tab; label: string; hint: string }[] = [
   { id: 'team', tab: 'team', label: 'Team', hint: 'Identities, E.G.O' },
@@ -76,10 +79,13 @@ const STAGE_INDEX = Object.fromEntries(STAGES.map((s, k) => [s.id, k])) as Recor
 const SUB_TABS: Partial<Record<Stage, { id: Tab; label: string }[]>> = {
   shop: [{ id: 'gifts', label: 'Buy' }, { id: 'fusion', label: 'Fuse' }, { id: 'upgrades', label: 'Enhance' }, { id: 'skills', label: 'Skill swaps' }],
 }
-type ToolTab = 'best' | 'evaluate' | 'import'
-const TOOLS: ToolTab[] = ['best', 'evaluate', 'import']
-const TOOL_LABEL: Record<ToolTab, string> = { best: 'Best gifts', evaluate: 'Evaluate a gift or pack', import: 'Import gifts from a screenshot' }
+type ToolTab = 'identities' | 'best' | 'evaluate' | 'import'
+const TOOLS: ToolTab[] = ['identities', 'best', 'evaluate', 'import']
+const TOOL_LABEL: Record<ToolTab, string> = {
+  identities: 'My identities', best: 'Best gifts', evaluate: 'Evaluate a gift or pack', import: 'Import gifts from a screenshot',
+}
 const TOOL_HINT: Record<ToolTab, string> = {
+  identities: 'Mark the identities you own; saved to your account',
   best: 'Every gift ranked for your team, and where to get it',
   evaluate: 'Pros and cons of one gift or theme pack for your team',
   import: 'Read Gifts you have from game screenshots',
@@ -136,6 +142,8 @@ export default function App() {
   const [firstSelection] = useState(legacySelection)
   const [selection, setSelection] = usePersistentState<Sinner[]>('limbussite.selection.v1', firstSelection)
   const [owned, setOwned] = usePersistentState<string[]>('limbussite.owned.v1', [])
+  /** Identities you own (Tools > My identities), base ones not stored. */
+  const [myIdentities, setMyIdentities] = usePersistentState<string[]>(OWNED_IDENTITIES_KEY, [])
   /** Upgrade level of gifts you've enhanced this run (Upgrades tab). */
   const [enhanced, setEnhanced] = usePersistentState<Record<string, number>>('limbussite.enhanced.v1', {})
   /** Before the run: Starlight buffs you took, your starting keyword, Starlight to spend. */
@@ -221,7 +229,13 @@ export default function App() {
   // Welcome screen: first visit, or the LimbusSite title.
   const [home, setHome] = useState(firstVisit)
   const [, setWelcomed] = usePersistentState<boolean>('limbussite.welcomed.v1', false)
-  const leaveHome = (to: Tab) => { setHome(false); setWelcomed(true); setTab(to); window.scrollTo(0, 0) }
+  const leaveHome = (to: Tab) => { setHome(false); setSetupOpen(false); setWelcomed(true); setTab(to); window.scrollTo(0, 0) }
+  // First-time setup (sign in, identities you own): until you finish or skip it, it opens
+  // for anyone who hasn't set anything up yet (no lineup, no identities marked).
+  const [setupState, setSetupState] = usePersistentState<SetupState>(SETUP_KEY, null)
+  const unconfigured = order.length === 0 && !hasMarkedIdentities(myIdentities, gameData.identities)
+  const [setupOpen, setSetupOpen] = useState(() => !home && setupState === null && unconfigured)
+  const openSetup = () => { setHome(false); setWelcomed(true); setSetupOpen(true); window.scrollTo(0, 0) }
   const loadDemo = () => {
     // Keep the lineup you had: save it first unless it's already saved.
     if (order.length && !presets.some((p) => presetMatches(p, currentTeam, order))) {
@@ -326,8 +340,21 @@ export default function App() {
       <>
         <Welcome equipped={equipped} art={art} hasTeam={order.length > 0}
           counts={{ gifts: gameData.gifts.length, packs: gameData.themePacks.length, events: (gameData.events ?? []).length, identities: gameData.identities.length }}
-          onDemo={loadDemo} onBuild={() => leaveHome('team')} onContinue={() => leaveHome(tab)}
+          onDemo={loadDemo} onBuild={() => (setupState === null && unconfigured ? openSetup() : leaveHome('team'))}
+          onContinue={() => leaveHome(tab)}
           onOpenData={() => setDataOpen(true)} />
+        {syncDialogs}
+      </>
+    )
+  }
+
+  if (setupOpen) {
+    return (
+      <>
+        <SetupWizard identities={gameData.identities} stored={myIdentities} onIdentitiesChange={setMyIdentities} art={art}
+          hasTeam={order.length > 0} onOpenData={() => setDataOpen(true)}
+          onSkip={() => { if (setupState === null) setSetupState('skipped'); leaveHome('team') }}
+          onFinish={(to) => { setSetupState('done'); if (to === 'demo') loadDemo(); else leaveHome('team') }} />
         {syncDialogs}
       </>
     )
@@ -421,7 +448,7 @@ export default function App() {
           <p className="sub">Mirror Dungeon E.G.O gift planner</p>
         </button>
         <div className="top-right">
-          <ToolsMenu current={tab} onPick={(t) => setTab(t)} />
+          <ToolsMenu current={tab} onPick={(t) => setTab(t)} onSetup={openSetup} />
           <SyncButton onOpen={() => setDataOpen(true)} />
         </div>
       </header>
@@ -481,6 +508,8 @@ export default function App() {
               onClear={() => setSelection([])}
               onSelectAll={() => setSelection([...order, ...SINNERS.filter((s) => !order.includes(s))])}
               onDeployedChange={setDeployed}
+              ownedCount={ownedIdentitySet(myIdentities, gameData.identities).size}
+              onOpenMyIdentities={() => setTab('identities')}
               onBuild={(focus) => {
                 // A new team needs a starting order; after that, only suggestions.
                 const built = buildTeam(gameData, focus, undefined, tiers)
@@ -599,6 +628,10 @@ export default function App() {
         )}
         {tab === 'evaluate' && <EvaluateTab ctx={ctx} packsForGift={packsForGift} />}
         {tab === 'import' && <ImportTab gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned} />}
+        {tab === 'identities' && (
+          <MyIdentitiesTab identities={gameData.identities} stored={myIdentities} onChange={setMyIdentities} art={art}
+            onOpenData={() => setDataOpen(true)} />
+        )}
       </div>
 
       {next && (
@@ -648,8 +681,8 @@ function TeamFocus({ focus, traits, size, deployedOnly, deployed, onOpenTeam }: 
   )
 }
 
-/** Evaluate and Import gifts: used now and then, not at one point in the run. */
-function ToolsMenu({ current, onPick }: { current: Tab; onPick: (t: Tab) => void }) {
+/** My identities, Best gifts, Evaluate and Import gifts: used now and then, not at one point in the run. */
+function ToolsMenu({ current, onPick, onSetup }: { current: Tab; onPick: (t: Tab) => void; onSetup: () => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -674,6 +707,11 @@ function ToolsMenu({ current, onPick }: { current: Tab; onPick: (t: Tab) => void
               </button>
             </li>
           ))}
+          <li>
+            <button role="menuitem" onClick={() => { onSetup(); setOpen(false) }}>
+              <b>Set up again</b><small>Sign in and mark the identities you own, step by step</small>
+            </button>
+          </li>
         </ul>
       )}
     </div>

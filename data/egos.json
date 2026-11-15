@@ -504,6 +504,7 @@
       "Hardened Shell-Barrier",
       "Rupture",
       "SP Healing",
+      "Shield",
       "Unbreakable Coin",
       "unique Status Effects"
     ],
@@ -720,6 +721,7 @@
       "Offense Level Up",
       "Power Down",
       "SP Healing",
+      "Shield",
       "Unbreakable Coin"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/I'll_Go_fer_Scissors._How_'Bout_You%3F_Don_Quixote"
@@ -1562,7 +1564,9 @@
     "statuses": [
       "Bleed",
       "Drink to the Fallen",
+      "HP Healing",
       "Poise",
+      "SP Healing",
       "Slash DMG Up",
       "Slash Fragility",
       "unique Status Effects"
@@ -1957,6 +1961,60 @@
       "Rupture"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Effervescent_Corrosion_Hong_Lu"
+  },
+  {
+    "id": "the-sword-sharpened-with-tears-hong-lu",
+    "name": "The Sword Sharpened with Tears",
+    "sinner": "Hong Lu",
+    "grade": "HE",
+    "sin": "pride",
+    "cost": {
+      "sloth": 2,
+      "gloom": 2,
+      "pride": 2
+    },
+    "sanity": 25,
+    "base": false,
+    "skill": {
+      "type": "Pierce",
+      "base": 10,
+      "coin_power": 7,
+      "coins": 2,
+      "weight": 1,
+      "statuses": [
+        "Duality",
+        "Sword Sharpened with Tears",
+        "Weathered Pride",
+        "Poise",
+        "Charge",
+        "Crit DMG Up",
+        "Poise Identity",
+        "Charge Identity",
+        "Damage Up",
+        "The Knight's Loyal Protection",
+        "Unbreakable Coin"
+      ]
+    },
+    "statuses": [
+      "Charge",
+      "Charge Identity",
+      "Crit DMG Up",
+      "Damage Up",
+      "Duality",
+      "Pierce DMG Up",
+      "Pierce Fragility",
+      "Pierce Power Up",
+      "Poise",
+      "Poise Identity",
+      "Pride DMG Up",
+      "SP Healing",
+      "Sword Sharpened with Tears",
+      "The Knight's Loyal Protection",
+      "Unbreakable Coin",
+      "Weathered Pride",
+      "unique Status Effects"
+    ],
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Sword_Sharpened_with_Tears_Hong_Lu"
   },
   {
     "id": "to-remain-oneself-hong-lu",
@@ -2983,6 +3041,7 @@
       "HP Healing",
       "SP Damage",
       "SP Healing",
+      "Shield",
       "Sloth Fragility",
       "Tremor Burst"
     ],
@@ -3117,6 +3176,7 @@
       "Aggro",
       "Blubberbubble",
       "Protection",
+      "Shield",
       "Sinking",
       "unique Status Effects"
     ],
@@ -3408,6 +3468,7 @@
       "Nails",
       "Needle",
       "Power Down",
+      "Shield",
       "Unbreakable Coin"
     ],
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/I'll_Go_fer_Scissors._How_'Bout_You%3F_Outis"
