@@ -51,7 +51,7 @@ class TierTests(unittest.TestCase):
         p = tiers.read_list(tiers.TIER_DIR / "prydwen.txt", with_role=True)
         g = tiers.read_list(tiers.TIER_DIR / "gll.txt", with_role=False)
         out, report = tiers.build(identities, p, g)
-        # Brand-new identities take a while to reach the tier lists (8 unrated after the Nov 2026 scrape).
+        # Brand-new identities can take a while to reach the tier lists.
         self.assertGreaterEqual(len(out), 0.95 * len(identities))
         self.assertFalse([line for line in report if "no match" in line or "duplicate" in line], report)
         self.assertEqual(out["heishou-pack-mao-branch-adept-faust"]["tier"], "SSS")
