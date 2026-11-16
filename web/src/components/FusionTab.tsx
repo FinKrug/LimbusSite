@@ -382,16 +382,6 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
               ))}
             </ul>
           )}
-          {fodder(ctx, [...new Set(owned)]).some((f) => f.keepFor) && (
-            <>
-              <h4 className="muted small">Keep</h4>
-              <ul className="fuse-spare">
-                {fodder(ctx, [...new Set(owned)]).filter((f) => f.keepFor).map((f) => (
-                  <li key={f.gift.id}><GiftLabel gift={f.gift} icon={24} link={false} /><span className="muted small grow-right">{f.keepFor}</span></li>
-                ))}
-              </ul>
-            </>
-          )}
         </section>
       </div>
     </div>

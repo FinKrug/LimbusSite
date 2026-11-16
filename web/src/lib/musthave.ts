@@ -64,9 +64,13 @@ export function recipeProgress(f: Fusion, owned: Set<string>): RecipeProgress {
   }
 }
 
-/** Can this run fuse it at all? Super Shop recipes need Hard. */
+/**
+ * Can this run still fuse it? Super Shop recipes need Hard, and a shop that's still to come: at
+ * the last floor's shop, if it's a regular one, there's no other (Finley, 2026-11-15: no point
+ * keeping Crushed Memory for Lunar Memory then).
+ */
 export function fusableThisRun(f: Fusion, ctx: RunContext): boolean {
-  return !f.super_shop || ctx.run.difficulty !== 'normal'
+  return !f.super_shop || (ctx.run.difficulty !== 'normal' && !ctx.run.noSuperShopLeft)
 }
 
 /** Is this owned or offered gift still a needed piece of the must-have recipe? */

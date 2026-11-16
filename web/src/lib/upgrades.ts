@@ -24,7 +24,7 @@
  */
 import { recipePlans, recipeWorthKeeping, type RecipePlan } from './fusion'
 import { starcloudLoss, type CostKeep } from './costkeep'
-import { mustHave, neededPiece } from './musthave'
+import { fusableThisRun, mustHave, neededPiece } from './musthave'
 import { ENHANCE_COST, intrinsicScore, lastFloor, levelValue, type RunContext } from './scoring'
 import type { Gift } from './types'
 import { isVestige } from './vestiges'
@@ -165,6 +165,8 @@ export function fusingSoon(g: Gift, ctx: RunContext, plans: RecipePlan[] = recip
     const f = p.fusion
     const piece = f.ingredients.includes(g.id) || (!!f.any_of?.from.includes(g.id) && neededPiece(f, g, ctx.owned))
     if (!piece) continue
+    // A Super Shop recipe this run can no longer make (no Super Shop left) isn't happening.
+    if (!fusableThisRun(f, ctx)) continue
     const must = !!mustHave(p.result.id)
     const good = must || (p.worthIt && recipeWorthKeeping(f, ctx))
     if (!good) continue

@@ -323,9 +323,14 @@ export default function App() {
     (ids: string[]) => makeContext(gameData, teamIdentities, ids, { deployed, tiers, run, loadout, swaps }),
     [teamIdentities, deployed, tiers, run, loadout, swaps],
   )
+  // At the last floor's shop, a regular one, or later on that floor: no Super Shop is left this
+  // run, so Super Shop recipes (Lunar Memory) can't be made and their pieces aren't worth keeping.
+  const noSuperShopLeft = run.floor !== null && run.floor >= run.floors
+    && ((stage === 'shop' && !(superShop && run.difficulty !== 'normal')) || stage === 'boss')
+  const ctxRun = useMemo(() => (noSuperShopLeft ? { ...run, noSuperShopLeft } : run), [run, noSuperShopLeft])
   const ctx = useMemo(
-    () => makeContext(gameData, teamIdentities, owned, { deployed, tiers, run, loadout, swaps }),
-    [teamIdentities, owned, deployed, tiers, run, loadout, swaps],
+    () => makeContext(gameData, teamIdentities, owned, { deployed, tiers, run: ctxRun, loadout, swaps }),
+    [teamIdentities, owned, deployed, tiers, ctxRun, loadout, swaps],
   )
   // Event checks use the skills each sinner has now: after skill swaps, a skill swapped away
   // completely can't be rolled (Finley: Thumb Meursault had only Wrath skills left).

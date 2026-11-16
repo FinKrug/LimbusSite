@@ -511,6 +511,10 @@ export interface RunSettings {
   visited?: Record<number, string>
   /** Fights are going badly: events stop picking fights for an extra gift. */
   struggling?: boolean
+  /** No Super Shop is left this run: you're at the last floor's shop and it's a regular one, or
+   *  past it (Finley, 2026-11-15: then there's no point keeping Crushed Memory for Lunar Memory).
+   *  Set by the page, not stored. */
+  noSuperShopLeft?: boolean
 }
 
 /** Packs picked on floors before this one (pack id -> floor). Once you've entered a theme pack you
@@ -1447,7 +1451,9 @@ export function scoreGift(gift: Gift, ctx: RunContext): Omit<GiftScore, 'rating'
     const must = mustHave(f.result)!
     const prog = recipeProgress(f, new Set([...ctx.owned, gift.id]))
     if (!fusableThisRun(f, ctx)) {
-      reasons.push({ kind: 'info', text: `Piece of ${result.name} (${must.short}), but that needs a Super Shop, which only appears on Hard` })
+      reasons.push({ kind: 'info', text: ctx.run.difficulty === 'normal'
+        ? `Piece of ${result.name} (${must.short}), but that needs a Super Shop, which only appears on Hard`
+        : `Piece of ${result.name} (${must.short}), but that needs a Super Shop and this run has none left` })
       continue
     }
     const timing = pieceTiming(ctx.run)
