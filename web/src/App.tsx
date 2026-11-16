@@ -767,7 +767,8 @@ export default function App() {
               {tab === 'shophome' && (
                 <ShopOverview moves={shopOverview} hasTeam={teamIdentities.length > 0} hasGifts={owned.length > 0} keep={keepCost}
                   floorsLeft={floorsWeight(run).floorsLeft} onOpen={setTab} onOpenTeam={() => setTab('team')} onDone={doMove}
-                  justDone={lastMove?.move ?? null} onUndo={undoMove} />
+                  justDone={lastMove?.move ?? null} onUndo={undoMove}
+                  refresh={{ ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop, onSuperShopChange: setSuperShop }} />
               )}
               {tab === 'gifts' && (
                 <>

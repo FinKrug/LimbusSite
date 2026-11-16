@@ -1896,3 +1896,14 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
   .shop-move-side { grid-column: 2; flex-direction: row; align-items: center; gap: 10px; }
 }
 .done-note { margin: 0 0 8px; padding: 6px 10px; border-radius: 6px; background: rgb(127 196 122 / 0.12); }
+
+/* Shop refreshes (ShopRefresh.tsx) */
+.shop-refresh-head { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; justify-content: space-between; }
+.refresh-kinds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 10px 0; }
+.refresh-kind { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); }
+.free-line { color: var(--good); }
+.free-tag { margin-left: 6px; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background: rgb(127 196 122 / 0.16); color: var(--good); }
+.refresh-steps { margin: 4px 0 10px; padding-left: 22px; display: grid; gap: 3px; }
+.refresh-wanted { columns: 2; margin: 0 0 8px; padding-left: 18px; }
+.refresh-done { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+@media (max-width: 760px) { .refresh-kinds { grid-template-columns: minmax(0, 1fr); } .refresh-wanted { columns: 1; } }

@@ -3,6 +3,9 @@ import type { CostKeep } from '../lib/costkeep'
 import { shopPlan, worthLabel, type MoveKind, type ShopMove } from '../lib/shopoverview'
 import { usePersistentState } from '../lib/storage'
 import { KeepLine } from './ShopAdvice'
+import { ShopRefresh } from './ShopRefresh'
+import type { Buffs } from '../lib/buffeffects'
+import type { GiftScore, RunContext } from '../lib/scoring'
 
 interface Props {
   moves: ShopMove[]
@@ -18,6 +21,8 @@ interface Props {
   justDone?: ShopMove | null
   onUndo?: () => void
   onOpenTeam: () => void
+  /** For the refresh advice. */
+  refresh: { ctx: RunContext; ranked: GiftScore[]; availableNow: Set<string>; buffs: Buffs; superShop: boolean; onSuperShopChange: (v: boolean) => void }
 }
 
 const KIND: Record<MoveKind, { label: string; tab: 'gifts' | 'upgrades' | 'skills'; done: string; open: string }> = {
@@ -45,7 +50,7 @@ function detail(m: ShopMove): string {
  * Shop overview (lib/shopoverview.ts): buying, enhancing and skill swaps on one list, best value
  * per Cost for your team first, plus what to do with the Cost you have.
  */
-export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft, onOpen, onDone, onOpenTeam, justDone = null, onUndo }: Props) {
+export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft, onOpen, onDone, onOpenTeam, justDone = null, onUndo, refresh }: Props) {
   const [cost, setCost] = usePersistentState<number | null>('limbussite.cost.v1', null)
   const plan = useMemo(() => (cost === null ? null : shopPlan(moves, cost, keep)), [moves, cost, keep])
   const best = (k: MoveKind) => moves.find((m) => m.kind === k)
@@ -106,10 +111,12 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
           </ol>
         )}
         {plan && plan.moves.some((m) => m.chance) && (
-          <p className="muted small">Buys and swaps depend on what the shop rolled (a regular shop's Skill Replacement is for one random sinner). If one isn't there, skip it and the next one moves up.</p>
+          <p className="muted small">Buys and swaps depend on what the shop rolled (a regular shop's Skill Replacement is for one random sinner). If one isn't there, see <b>Refreshing the shop</b> below, or skip it and the next one moves up.</p>
         )}
         {keep && <KeepLine keep={keep} cost={cost} />}
       </section>
+
+      <ShopRefresh {...refresh} moves={moves} cost={cost} />
 
       <section className="panel">
         <h3>Everything worth doing, best first</h3>
