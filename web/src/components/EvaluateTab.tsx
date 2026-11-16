@@ -10,6 +10,9 @@ import { GiftLabel, WikiLink } from './bits'
 interface Props {
   ctx: RunContext
   packsForGift: Map<string, ThemePack[]>
+  /** A bar at the top of another page (Gifts for your team): no autofocus, no empty-state box,
+   *  and the result can be closed. */
+  compact?: boolean
 }
 
 type Pick = { kind: 'gift'; gift: Gift } | { kind: 'pack'; pack: ThemePack }
@@ -17,7 +20,7 @@ type Pick = { kind: 'gift'; gift: Gift } | { kind: 'pack'; pack: ThemePack }
 const VERDICT = { take: 'Take it', maybe: 'Maybe', skip: 'Skip' }
 
 /** Type a gift or theme pack; get every reason to take or skip it, for your team and run. */
-export function EvaluateTab({ ctx, packsForGift }: Props) {
+export function EvaluateTab({ ctx, packsForGift, compact = false }: Props) {
   const [query, setQuery] = useState('')
   const [pick, setPick] = useState<Pick | null>(null)
   const [recent, setRecent] = useState<Pick[]>([])
@@ -45,7 +48,7 @@ export function EvaluateTab({ ctx, packsForGift }: Props) {
   return (
     <div className="evaluate">
       <div className="search eval-search">
-        <input type="search" placeholder="Type an E.G.O gift or theme pack…" value={query} autoFocus
+        <input type="search" placeholder={compact ? 'Check a gift or theme pack for your team…' : 'Type an E.G.O gift or theme pack…'} value={query} autoFocus={!compact}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter' && options[0]) choose(options[0]) }} aria-label="Gift or theme pack to evaluate" />
         {options.length > 0 && (
@@ -65,15 +68,18 @@ export function EvaluateTab({ ctx, packsForGift }: Props) {
           {recent.map((r) => <button key={key(r)} className="chip-btn" onClick={() => setPick(r)}>{r.kind === 'gift' ? r.gift.name : r.pack.name}</button>)}
         </div>
       )}
-      <p className="muted small">
-        Judged for your deployed team and your run ({run.difficulty}, {run.floors} floors{run.floor !== null ? `, floor ${run.floor}` : ''}).
-        Change the run in the bar at the top.
-      </p>
+      {!compact && (
+        <p className="muted small">
+          Judged for your deployed team and your run ({run.difficulty}, {run.floors} floors{run.floor !== null ? `, floor ${run.floor}` : ''}).
+          Change the run in the bar at the top.
+        </p>
+      )}
 
-      {!pick || !result ? (
+      {!pick || !result ? (compact ? null :
         <div className="empty">Search for a gift (like White Gossypium or Lunar Memory) or a theme pack (like Spring Cultivation) to see its pros and cons for your team.</div>
       ) : (
         <article className={`card eval-card eval-${result.verdict}`}>
+          {compact && <button className="eval-close link-btn" onClick={() => setPick(null)} aria-label="Close">✕</button>}
           <header className="eval-head">
             {pick.kind === 'gift' ? <GiftIcon gift={pick.gift} size={72} /> : null}
             <div className="eval-title">

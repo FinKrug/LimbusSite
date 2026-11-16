@@ -54,11 +54,14 @@ function BestGifts({ data }: { data: GameData }) {
     return () => clearTimeout(t)
   }, [data])
 
+  // A gift's place in the list for the teams picked, kept when you search (Finley, 2026-11-15).
+  const full = useMemo(() => (list ? giftsFor(list, filter) : []), [list, filter])
+  const place = useMemo(() => new Map(full.map((g, i) => [g.gift.id, i + 1])), [full])
   const rows = useMemo(() => {
-    if (!list) return []
     const q = query.trim().toLowerCase()
-    return giftsFor(list, filter).filter((g) => !q || g.gift.name.toLowerCase().includes(q))
-  }, [list, filter, query])
+    return full.filter((g) => !q || g.gift.name.toLowerCase().includes(q))
+  }, [full, query])
+  const giftsFiltered = rows.length < full.length
   const recipes = useMemo(() => {
     const names = new Map(data.gifts.map((g) => [g.id, g.name]))
     return new Map(data.fusions.map((f) => [f.result, f.ingredients.map((i) => names.get(i) ?? i).join(' + ')]))
@@ -94,7 +97,7 @@ function BestGifts({ data }: { data: GameData }) {
           const recipe = recipes.get(g.gift.id)
           return (
             <li key={g.gift.id} className="rank-row">
-              <span className="rank-n">{k + 1}</span>
+              <RankN n={place.get(g.gift.id) ?? k + 1} of={full.length} filtered={giftsFiltered} />
               <GiftIcon gift={g.gift} size={40} />
               <span className="rank-main">
                 <span className="rank-title">
@@ -137,6 +140,8 @@ function BestIdentities({ data, owned, hasMarked, art, onOpenMyIdentities }: {
     && (!sinner || r.identity.sinner === sinner)
     && (!keyword || r.identity.keywords.includes(keyword))
     && (own === 'all' || (own === 'owned') === owned.has(r.identity.id)))
+  // Each identity's place among all of them, kept when you search or filter (Finley, 2026-11-15).
+  const place = useMemo(() => new Map(ranked.map((r, i) => [r.identity.id, i + 1])), [ranked])
 
   return (
     <div className="rankings">
@@ -198,7 +203,7 @@ function BestIdentities({ data, owned, hasMarked, art, onOpenMyIdentities }: {
           const clash = clashLabel(r.identity)
           return (
             <li key={r.identity.id} className={`rank-row${owned.has(r.identity.id) ? ' owned' : ''}`}>
-              <span className="rank-n">{k + 1}</span>
+              <RankN n={place.get(r.identity.id) ?? k + 1} of={ranked.length} filtered={rows.length < ranked.length} />
               <Portrait identity={r.identity} kind="profile" variant={art} />
               <span className="rank-main">
                 <span className="rank-title">
@@ -246,6 +251,7 @@ function BestEgos({ egos, owned }: { egos: Ego[]; owned: ReadonlySet<string> | n
     && (!sinner || r.ego.sinner === sinner)
     && (!keyword || r.keywords.includes(keyword))
     && (own === 'all' || !owned || (own === 'owned') === owned.has(r.ego.id)))
+  const place = useMemo(() => new Map(ranked.map((r, i) => [r.ego.id, i + 1])), [ranked])
 
   return (
     <div className="rankings">
@@ -287,7 +293,7 @@ function BestEgos({ egos, owned }: { egos: Ego[]; owned: ReadonlySet<string> | n
           const mine = owned?.has(r.ego.id)
           return (
             <li key={r.ego.id} className={`rank-row${mine ? ' owned' : ''}`}>
-              <span className="rank-n">{k + 1}</span>
+              <RankN n={place.get(r.ego.id) ?? k + 1} of={ranked.length} filtered={rows.length < ranked.length} />
               <span className="rank-ego-art"><EgoArt file={EGO_ART.get(r.ego.id)} name={r.ego.name} /></span>
               <span className="rank-main">
                 <span className="rank-title">
@@ -308,5 +314,14 @@ function BestEgos({ egos, owned }: { egos: Ego[]; owned: ReadonlySet<string> | n
       {rows.length > shown && <button className="btn" onClick={() => setShown(shown + 40)}>Show {Math.min(40, rows.length - shown)} more</button>}
       {rows.length === 0 && <p className="muted">No E.G.O match.</p>}
     </div>
+  )
+}
+
+/** A row's place in the whole ranking: with a search or filter on, "of 195" says it's the overall place. */
+function RankN({ n, of, filtered }: { n: number; of: number; filtered: boolean }) {
+  return (
+    <span className={`rank-n${n <= 3 ? ' top3' : ''}`} title={`#${n} of ${of}`}>
+      {n}{filtered && <small className="rank-of">of {of}</small>}
+    </span>
   )
 }

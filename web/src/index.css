@@ -1753,7 +1753,7 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 }
 .rank-row.owned { border-color: #3e5a3b; }
 .rank-n { font-size: 15px; font-weight: 800; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
-.rank-row:nth-child(-n + 3) .rank-n { color: var(--accent); }
+.rank-n.top3 { color: var(--accent); }
 .rank-row .portrait, .rank-row img.portrait { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
 .rank-main { display: grid; gap: 2px; min-width: 0; }
 .rank-title { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
@@ -1775,7 +1775,7 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .getnext-card .portrait, .getnext-card img.portrait { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex: none; }
 .getnext-text { display: grid; gap: 3px; min-width: 0; }
 @media (max-width: 620px) {
-  .rank-row { grid-template-columns: 26px auto minmax(0, 1fr); gap: 8px; padding: 8px; }
+  .rank-row { grid-template-columns: 32px auto minmax(0, 1fr); gap: 8px; padding: 8px; }
   .rank-side { grid-column: 3; justify-items: start; text-align: left; display: flex; gap: 8px; align-items: center; }
   .rank-why { white-space: normal; }
 }
@@ -1962,3 +1962,12 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 @media (max-width: 1100px) { .shop-home-kinds { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 760px) { .shop-home-kinds { grid-template-columns: minmax(0, 1fr); } }
 .shop-home > * { min-width: 0; }
+.rank-n .rank-of { display: block; font-size: 10px; font-weight: 600; line-height: 1.1; letter-spacing: 0.02em; }
+
+/* Gifts for your team: one page (feedback 2026-11-15) */
+.dialog.dialog-wide { width: min(860px, 100%); max-height: 90vh; overflow: auto; }
+.best-gifts-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.best-gifts-head h2 { margin: 0; font-size: 20px; }
+.best-gifts .evaluate { margin-bottom: 10px; }
+.best-gifts .eval-card { position: relative; margin-top: 8px; }
+.eval-close { position: absolute; top: 8px; right: 10px; font-size: 16px; }

@@ -96,7 +96,6 @@ const STAGES: { id: RunStage; tab: Tab; label: string; hint: string }[] = [
 /** Screens with parts of their own, and the parts. */
 const SUB_TABS: Partial<Record<Stage, { id: Tab; label: string }[]>> = {
   home: [{ id: 'team', label: 'Team & lineups' }, { id: 'identities', label: 'My identities & E.G.O' }, { id: 'settings', label: 'Settings' }],
-  yourgifts: [{ id: 'best', label: 'Ranked for your team' }, { id: 'evaluate', label: 'Check a gift or pack' }, { id: 'import', label: 'Import from screenshots' }],
   rankings: [{ id: 'rank-gifts', label: 'E.G.O gifts' }, { id: 'rank-ids', label: 'Identities' }, { id: 'rank-egos', label: 'E.G.O' }],
   shop: [{ id: 'shophome', label: 'Overview' }, { id: 'gifts', label: 'Buy' }, { id: 'fusion', label: 'Fuse' }, { id: 'upgrades', label: 'Enhance' }, { id: 'skills', label: 'Skill swaps' }],
 }
@@ -120,7 +119,7 @@ const TOUR: TourStep<Tab>[] = [
   { target: 'get-next', tab: 'rank-ids', title: 'Worth getting next', text: 'Identities you don\'t have yet that would most improve the teams you can build. Handy before spending Lunacy or Thread.' },
   { target: 'run-nav', tab: 'start', title: 'Start a run', text: 'When you go in: pick the lineup and difficulty, then your Starlight buffs and starting gifts. After that it follows each floor: pick a pack, fights and events, the shop, then the boss.' },
   { target: 'start-run', tab: 'start', title: 'During the run', text: 'Every gift, pack and event choice is judged for the team you picked. "Run setup" in the run bar comes back here if you change your mind.' },
-  { target: 'your-gifts', tab: 'best', title: 'Gifts for your team', text: 'Next to the floor-by-floor steps, but not one of them: every gift ranked for your team and run right now, a close look at any one gift or pack, and reading the gifts you have from screenshots. Check it any time.' },
+  { target: 'your-gifts', tab: 'best', title: 'Gifts for your team', text: 'Next to the floor-by-floor steps, but not one of them: every gift ranked for your team and run right now. The bar at the top checks any gift or theme pack, and the corner button reads the gifts you have from screenshots. Check it any time.' },
   { target: 'sync', title: 'Keep it everywhere', text: 'Sign in with Google to save your team, collection and run to your account, so it\'s there on any computer or phone. Or save a backup file.' },
   { target: 'title', title: "That's it!", text: <>The GesellschaftMD title takes you back to the home page. You can take this tour again from <b>Home › Settings</b>. Good luck down there, Manager.</> },
 ]
@@ -218,6 +217,8 @@ export default function App() {
   const [bossSearch, setBossSearch] = useState(false)
   const [runOpen, setRunOpen] = useState(false)
   const [giftsOpen, setGiftsOpen] = useState(false)
+  // Screenshot import: a corner button on Gifts for your team (and in Gifts you have) opens it.
+  const [importOpen, setImportOpen] = useState(false)
   const [swaps, setSwaps] = usePersistentState<SwapState>('limbussite.swaps.v1', {})
   const [deployed, setDeployed] = usePersistentState<number>('limbussite.deployed.v3', DEFAULT_DEPLOYED)
   // Ratings set in an earlier version still count; there's no UI for them now that tiers aren't shown.
@@ -390,8 +391,8 @@ export default function App() {
   // Gifts for your team lists only what this run can still give (Finley, 2026-11-15: an EXTREME-only
   // gift has no place in a 5-floor run); the rest can be shown on request.
   const [showUnreachable, setShowUnreachable] = useState(false)
-  const reachable = useMemo(() => (tab !== 'best' ? null
-    : rankedGifts.filter((r) => availability(r.gift, ctx, packsForGift).where !== 'no')), [tab, rankedGifts, ctx, packsForGift])
+  const reachable = useMemo(() => (stage !== 'yourgifts' ? null
+    : rankedGifts.filter((r) => availability(r.gift, ctx, packsForGift).where !== 'no')), [stage, rankedGifts, ctx, packsForGift])
   // The Cost you have at the shop: buying, enhancing, swaps and refreshes marked here take their price
   // off (Finley, 2026-11-15). Nothing comes off until you've entered it.
   const [shopCost, setShopCost] = usePersistentState<number | null>('limbussite.cost.v1', null)
@@ -695,10 +696,15 @@ export default function App() {
             onClearRun={clearRun} />
         </Dialog>
       )}
+      {importOpen && (
+        <Dialog title="Import gifts from screenshots" wide onClose={() => setImportOpen(false)}>
+          <ImportTab gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned} />
+        </Dialog>
+      )}
       {giftsOpen && (
         <Dialog title="Gifts you have" onClose={() => setGiftsOpen(false)}>
           <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={addOwned} />
-          <p className="small"><button className="link-btn" onClick={() => { setGiftsOpen(false); setTab('import') }}>
+          <p className="small"><button className="link-btn" onClick={() => { setGiftsOpen(false); setImportOpen(true) }}>
             Import gifts from a screenshot →</button></p>
         </Dialog>
       )}
@@ -752,14 +758,6 @@ export default function App() {
         </>
       )}
 
-      {stage === 'yourgifts' && (
-        <nav className="tabs sub-tabs home-tabs" role="tablist" aria-label="Gifts for your team">
-          {SUB_TABS.yourgifts!.map((t) => (
-            <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'tab active' : 'tab'}
-              data-tour={`tab-${t.id}`} onClick={() => setTab(t.id)}>{t.label}</button>
-          ))}
-        </nav>
-      )}
 
       <div role="tabpanel" key={stage === 'home' || stage === 'start' || stage === 'rankings' || stage === 'yourgifts' ? tab : stage} className={`phase phase-${direction}`}>
         {tab === 'team' && (
@@ -925,8 +923,15 @@ export default function App() {
           </div>
         )}
 
-        {tab === 'best' && (
+        {stage === 'yourgifts' && (
           <div className="best-gifts">
+            {/* One page (feedback, 2026-11-15): the ranked list, a check-any-gift bar always on screen,
+                and screenshot import as a corner button. */}
+            <div className="best-gifts-head">
+              <h2>Gifts for your team</h2>
+              <button className="btn small-btn" onClick={() => setImportOpen(true)}>Import from screenshots</button>
+            </div>
+            <EvaluateTab ctx={ctx} packsForGift={packsForGift} compact />
             <p className="muted small">
               Every gift ranked for your team and this run right now, wherever it comes from: shops, theme packs, events or fusing.
               It updates as your team, the gifts you have and the floor change. Open one to see why it ranks there and how to get it.
@@ -947,8 +952,6 @@ export default function App() {
               onOwn={own} giftsById={ctx.giftsById} owned={ctx.owned} />
           </div>
         )}
-        {tab === 'evaluate' && <EvaluateTab ctx={ctx} packsForGift={packsForGift} />}
-        {tab === 'import' && <ImportTab gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned} />}
       </div>
 
       {next && (
@@ -995,7 +998,7 @@ function TeamFocus({ focus, traits, size, deployedOnly, deployed, onOpenTeam }: 
 }
 
 /** A modal panel (Saved lineups): closes on Escape, the ✕ or a click outside. */
-function Dialog({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
+function Dialog({ title, onClose, children, wide = false }: { title: string; onClose: () => void; children: React.ReactNode; wide?: boolean }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', onKey)
@@ -1003,7 +1006,7 @@ function Dialog({ title, onClose, children }: { title: string; onClose: () => vo
   }, [onClose])
   return (
     <div className="picker-backdrop" onClick={onClose}>
-      <div className="picker dialog" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
+      <div className={`picker dialog${wide ? ' dialog-wide' : ''}`} role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
         <header className="picker-head">
           <h2>{title}</h2>
           <button className="icon-btn" onClick={onClose} aria-label="Close">✕</button>
@@ -1081,7 +1084,7 @@ function StageNav({ stage, inRun, floor, noShop, lastRun, onOpen }: {
       <button role="tab" aria-selected={stage === 'yourgifts'} data-tour="your-gifts"
         className={`stage stage-side${stage === 'yourgifts' ? ' active' : ''}`} onClick={() => onOpen('yourgifts')}>
         <span className="stage-n" aria-hidden="true">★</span>
-        <span className="stage-text"><b>Gifts for your team</b><small>Ranked, check one, import</small></span>
+        <span className="stage-text"><b>Gifts for your team</b><small>Ranked for your run</small></span>
       </button>
     </nav>
   )
