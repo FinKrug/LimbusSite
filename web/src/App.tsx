@@ -4,7 +4,8 @@ import { EventsTab } from './components/EventsTab'
 import { ShopAdvice } from './components/ShopAdvice'
 import { ShopOverview } from './components/ShopOverview'
 import { shopMoves, type ShopMove } from './lib/shopoverview'
-import { floorsWeight, planSwaps } from './lib/skillswap'
+import { floorsWeight, planSwaps, SWAPS } from './lib/skillswap'
+import { CostNow, type CostChange } from './components/CostNow'
 import { ImportTab } from './components/ImportTab'
 import { UpgradesTab } from './components/UpgradesTab'
 import { Welcome } from './components/Welcome'
@@ -34,7 +35,7 @@ import { TeamTab } from './components/TeamTab'
 import { KeywordChip } from './components/bits'
 import { gameData } from './lib/data'
 import {
-  DEFAULT_RUN, defaultFloors, makeContext, withPack, packInDifficulty, playedPacks, packOnFloor, packsByGift, rankGifts, rankThemePacks, teamFocus,
+  DEFAULT_RUN, ENHANCE_COST, defaultFloors, makeContext, withPack, packInDifficulty, playedPacks, packOnFloor, packsByGift, rankGifts, rankThemePacks, teamFocus,
   type Difficulty, type RunSettings,
 } from './lib/scoring'
 import { DEFAULT_DEPLOYED } from './lib/lineup'
@@ -383,6 +384,46 @@ export default function App() {
   const [showUnreachable, setShowUnreachable] = useState(false)
   const reachable = useMemo(() => (tab !== 'best' ? null
     : rankedGifts.filter((r) => availability(r.gift, ctx, packsForGift).where !== 'no')), [tab, rankedGifts, ctx, packsForGift])
+  // The Cost you have at the shop: buying, enhancing, swaps and refreshes marked here take their price
+  // off (Finley, 2026-11-15). Nothing comes off until you've entered it.
+  const [shopCost, setShopCost] = usePersistentState<number | null>('limbussite.cost.v1', null)
+  const [costLog, setCostLog] = useState<CostChange[]>([])
+  const spend = (amount: number, label: string) => {
+    if (!amount || shopCost === null) return
+    setShopCost((c) => (c === null ? c : Math.max(0, c - amount)))
+    setCostLog((l) => [{ key: Date.now() + Math.random(), amount, label }, ...l].slice(0, 5))
+  }
+  /** Buying at the shop: the gift is yours and its price comes off. */
+  const buy = (id: string) => {
+    const g = ctx.giftsById.get(id)
+    if (!g || ctx.owned.has(id)) return own(id)
+    own(id)
+    spend(g.cost ?? 0, `Bought ${g.name}`)
+  }
+  /** Enhancing at the shop: each level up costs its Enhance price (a level taken back gives it back). */
+  const shopSetEnhanced = (next: Record<string, number>) => {
+    for (const id of new Set([...Object.keys(enhanced), ...Object.keys(next)])) {
+      const g = ctx.giftsById.get(id)
+      const costs = ENHANCE_COST[g?.tier ?? 0]
+      const from = enhanced[id] ?? 0
+      const to = next[id] ?? 0
+      if (!g || !costs || from === to) continue
+      const price = costs.slice(Math.min(from, to), Math.max(from, to)).reduce((a, b) => a + b, 0)
+      spend(to > from ? price : -price, to > from ? `${g.name} to ${'+'.repeat(to)}` : `${g.name} back to ${'+'.repeat(to) || 'base'}`)
+    }
+    setEnhanced(next)
+  }
+  /** Skill swaps at the shop: each swap recorded costs its price (one taken back gives it back). */
+  const shopSetSwaps = (next: SwapState) => {
+    for (const id of new Set([...Object.keys(swaps), ...Object.keys(next)])) {
+      const name = gameData.identities.find((i) => i.id === id)?.sinner ?? 'Swap'
+      for (const sw of SWAPS) {
+        const d = (next[id]?.[sw.kind] ?? 0) - (swaps[id]?.[sw.kind] ?? 0)
+        if (d) spend(d * sw.cost, `${name}: skill ${sw.from} → ${sw.to}${d < 0 ? ' taken back' : ''}`)
+      }
+    }
+    setSwaps(next)
+  }
   // The shop overview: buying, enhancing and skill swaps on one list (lib/shopoverview.ts).
   const shopOverview = useMemo(() => {
     if (tab !== 'shophome' || !teamIdentities.length) return []
@@ -391,19 +432,24 @@ export default function App() {
     return shopMoves(ctx, shopRanked, enhanced, availableNow, plans)
   }, [tab, teamIdentities, deployed, swaps, ctx, loadout, run, shopRanked, enhanced, availableNow])
   // The last move marked done on the overview, with what it changed, so it can be undone.
-  const [lastMove, setLastMove] = useState<{ move: ShopMove; owned: string[]; enhanced: Record<string, number>; swaps: SwapState } | null>(null)
+  const [lastMove, setLastMove] = useState<{ move: ShopMove; owned: string[]; enhanced: Record<string, number>; swaps: SwapState; cost: number | null } | null>(null)
   const undoMove = () => {
     if (!lastMove) return
-    setOwned(lastMove.owned); setEnhanced(lastMove.enhanced); setSwaps(lastMove.swaps); setLastMove(null)
+    setOwned(lastMove.owned); setEnhanced(lastMove.enhanced); setSwaps(lastMove.swaps)
+    if (lastMove.cost !== shopCost) {
+      setShopCost(lastMove.cost)
+      setCostLog((l) => l.slice(1))
+    }
+    setLastMove(null)
   }
   const doMove = (m: ShopMove) => {
-    setLastMove({ move: m, owned, enhanced, swaps })
-    if (m.kind === 'buy') own(m.gift!.id)
-    else if (m.kind === 'enhance') setEnhanced({ ...enhanced, [m.gift!.id]: m.to! })
+    setLastMove({ move: m, owned, enhanced, swaps, cost: shopCost })
+    if (m.kind === 'buy') buy(m.gift!.id)
+    else if (m.kind === 'enhance') shopSetEnhanced({ ...enhanced, [m.gift!.id]: m.to! })
     else {
       const log = { ...(swaps[m.identity!.id] ?? {}) }
       log[m.swap!] = (log[m.swap!] ?? 0) + 1
-      setSwaps({ ...swaps, [m.identity!.id]: log })
+      shopSetSwaps({ ...swaps, [m.identity!.id]: log })
     }
   }
   const ownedGifts = useMemo(() => [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g), [ctx])
@@ -757,26 +803,27 @@ export default function App() {
         {stage === 'shop' && (
           <div className="layout">
             <aside className="side">
+              <CostNow cost={shopCost} onChange={setShopCost} log={costLog} />
               <section className="panel"><CostBox run={run} ranked={rankedGifts} ctx={ctx} keep={keepCost} buffs={shopBuffs} start={startingCost(prerun.buffs)} /></section>
               <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={setOwned} />
             </aside>
             <main className="main">
               <BuffNotes title="Your Starlight buffs at this shop" notes={shopBuffNotes} giftsById={ctx.giftsById} owned={owned} onAdd={addMany} />
-              {tab !== 'shophome' && <ShopAdvice ctx={ctx} ranked={shopRanked} levels={enhanced} availableNow={availableNow} tab={tab} onOpen={setTab} keep={keepCost} />}
+              {tab !== 'shophome' && <ShopAdvice ctx={ctx} ranked={shopRanked} levels={enhanced} availableNow={availableNow} tab={tab} onOpen={setTab} keep={keepCost} cost={shopCost} />}
               {subNav}
               {tab === 'shophome' && (
                 <ShopOverview moves={shopOverview} hasTeam={teamIdentities.length > 0} hasGifts={owned.length > 0} keep={keepCost}
                   floorsLeft={floorsWeight(run).floorsLeft} onOpen={setTab} onOpenTeam={() => setTab('team')} onDone={doMove}
-                  justDone={lastMove?.move ?? null} onUndo={undoMove}
-                  refresh={{ ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop, onSuperShopChange: setSuperShop }} />
+                  justDone={lastMove?.move ?? null} onUndo={undoMove} cost={shopCost} onCostChange={setShopCost}
+                  refresh={{ ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop, onSuperShopChange: setSuperShop, onSpend: spend }} />
               )}
               {tab === 'gifts' && (
                 <>
                   {focusLine}
-                  <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={own} />
+                  <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={buy} />
                   <GiftList ranked={shopRanked} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
                     teamKeywords={focus.map((f) => f.keyword)} initialFilter={run.floor === null ? 'team' : 'now'}
-                    onOwn={own} giftsById={ctx.giftsById} owned={ctx.owned} />
+                    onOwn={buy} giftsById={ctx.giftsById} owned={ctx.owned} />
                 </>
               )}
               {tab === 'fusion' && (
@@ -784,9 +831,10 @@ export default function App() {
                   teamKeywords={focus.map((f) => f.keyword)} packsForGift={packsForGift}
                   superShop={superShop} onSuperShopChange={setSuperShop} />
               )}
-              {tab === 'upgrades' && <UpgradesTab ctx={ctx} levels={enhanced} onLevelsChange={setEnhanced} ranked={rankedGifts} keep={keepCost} />}
+              {tab === 'upgrades' && <UpgradesTab ctx={ctx} levels={enhanced} onLevelsChange={shopSetEnhanced} ranked={rankedGifts} keep={keepCost}
+                cost={shopCost} onCostChange={setShopCost} />}
               {tab === 'skills' && (
-                <SkillsTab team={teamIdentities.slice(0, deployed)} backups={teamIdentities.slice(deployed)} swaps={swaps} onSwapsChange={setSwaps} owned={ownedGifts} art={art}
+                <SkillsTab team={teamIdentities.slice(0, deployed)} backups={teamIdentities.slice(deployed)} swaps={swaps} onSwapsChange={shopSetSwaps} owned={ownedGifts} art={art}
                   egos={gameData.egos ?? []} loadout={loadout} run={run} battle={ctx.battle} onOpenTeam={() => setTab('team')} />
               )}
             </main>

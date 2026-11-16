@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import type { CostKeep } from '../lib/costkeep'
 import { shopAdvice } from '../lib/shopadvice'
 import type { GiftScore, RunContext } from '../lib/scoring'
-import { usePersistentState } from '../lib/storage'
 import type { UpgradeMove } from '../lib/upgrades'
 
 interface Props {
@@ -15,6 +14,8 @@ interface Props {
   onOpen: (tab: 'gifts' | 'upgrades') => void
   /** Cost to keep for the next floor (Cumulating Starcloud). */
   keep?: CostKeep | null
+  /** The Cost you have (null: not entered). */
+  cost?: number | null
 }
 
 const plus = (n: number) => '+'.repeat(n)
@@ -27,8 +28,7 @@ const names = (list: { gift: { name: string } }[]) => list.map((b, k) => (
  * Shop screen: is the Cost better spent enhancing a gift you have or buying a new one (lib/shopadvice.ts)?
  * Shown above the Shop's parts; uses the Cost you entered on Enhance, if any.
  */
-export function ShopAdvice({ ctx, ranked, levels, availableNow, tab, onOpen, keep = null }: Props) {
-  const [cost] = usePersistentState<number | null>('limbussite.cost.v1', null)
+export function ShopAdvice({ ctx, ranked, levels, availableNow, tab, onOpen, keep = null, cost = null }: Props) {
   const a = useMemo(() => shopAdvice(ctx, ranked, levels, availableNow, cost, keep), [ctx, ranked, levels, availableNow, cost, keep])
   const keepLine = keep && <KeepLine keep={keep} cost={cost} />
   if (!ctx.owned.size || a.kind === 'none') return keepLine ? <section className="panel shop-advice">{keepLine}</section> : null

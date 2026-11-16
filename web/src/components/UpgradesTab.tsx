@@ -8,6 +8,9 @@ import { affordable, planUpgrades, UPGRADE_LEVELS, type Priority, type UpgradeMo
 import { Empty, GiftLabel } from './bits'
 
 interface Props {
+  /** The Cost you have (null: not entered), shared with the rest of the shop. */
+  cost: number | null
+  onCostChange: (c: number | null) => void
   ctx: RunContext
   /** Upgrade level of each gift you own (missing = not enhanced). */
   levels: Record<string, number>
@@ -31,10 +34,9 @@ function gainText(p: UpgradePlan, m: UpgradeMove): string {
 /**
  * Upgrades tab: which of your gifts to enhance at a shop, how far, and in what order (lib/upgrades.ts).
  */
-export function UpgradesTab({ ctx, levels, onLevelsChange, ranked, keep: starcloud = null }: Props) {
+export function UpgradesTab({ ctx, levels, onLevelsChange, ranked, keep: starcloud = null, cost, onCostChange: setCost }: Props) {
   const overview = useMemo(() => planUpgrades(ctx, levels), [ctx, levels])
   // The Cost you have now, and whether to keep some for your top shop picks (Finley: "what if we have a lot of Cost?").
-  const [cost, setCost] = usePersistentState<number | null>('limbussite.cost.v1', null)
   const [keep, setKeep] = usePersistentState<boolean>('limbussite.costkeep.v1', true)
   const reserve = useMemo(() => (lastFloor(ctx.run) ? 0 : floorCostFrom(ranked, ctx.run.floor ?? 1).comfortable), [ranked, ctx.run])
   const budget = cost === null ? null : Math.max(0, cost - (keep ? reserve : 0))

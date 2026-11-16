@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import type { CostKeep } from '../lib/costkeep'
 import { shopPlan, worthLabel, type MoveKind, type ShopMove } from '../lib/shopoverview'
-import { usePersistentState } from '../lib/storage'
 import { KeepLine } from './ShopAdvice'
 import { ShopRefresh } from './ShopRefresh'
 import type { Buffs } from '../lib/buffeffects'
@@ -21,8 +20,10 @@ interface Props {
   justDone?: ShopMove | null
   onUndo?: () => void
   onOpenTeam: () => void
+  cost: number | null
+  onCostChange: (c: number | null) => void
   /** For the refresh advice. */
-  refresh: { ctx: RunContext; ranked: GiftScore[]; availableNow: Set<string>; buffs: Buffs; superShop: boolean; onSuperShopChange: (v: boolean) => void }
+  refresh: { ctx: RunContext; ranked: GiftScore[]; availableNow: Set<string>; buffs: Buffs; superShop: boolean; onSuperShopChange: (v: boolean) => void; onSpend: (amount: number, label: string) => void }
 }
 
 const KIND: Record<MoveKind, { label: string; tab: 'gifts' | 'upgrades' | 'skills'; done: string; open: string }> = {
@@ -50,8 +51,7 @@ function detail(m: ShopMove): string {
  * Shop overview (lib/shopoverview.ts): buying, enhancing and skill swaps on one list, best value
  * per Cost for your team first, plus what to do with the Cost you have.
  */
-export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft, onOpen, onDone, onOpenTeam, justDone = null, onUndo, refresh }: Props) {
-  const [cost, setCost] = usePersistentState<number | null>('limbussite.cost.v1', null)
+export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft, onOpen, onDone, onOpenTeam, justDone = null, onUndo, refresh, cost, onCostChange: setCost }: Props) {
   const plan = useMemo(() => (cost === null ? null : shopPlan(moves, cost, keep)), [moves, cost, keep])
   const best = (k: MoveKind) => moves.find((m) => m.kind === k)
   if (!hasTeam) {

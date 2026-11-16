@@ -15,6 +15,8 @@ interface Props {
   cost: number | null
   superShop: boolean
   onSuperShopChange: (v: boolean) => void
+  /** Take a paid refresh's price off your Cost (negative: give it back). */
+  onSpend: (amount: number, label: string) => void
 }
 
 const pct = (x: number) => `${Math.round(x * 100)}%`
@@ -28,11 +30,23 @@ function stepText(s: RefreshStep, keyword: string | null) {
  * Shop refreshes on the overview (lib/shoprefresh.ts): both kinds, what each one's chances are for
  * this team, and how many to do before stopping.
  */
-export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, superShop, onSuperShopChange }: Props) {
+export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, superShop, onSuperShopChange, onSpend }: Props) {
   // Paid refreshes done at this shop, per floor (the price goes up 15 each time).
   const [done, setDone] = usePersistentState<{ floor: number | null; n: number }>('limbussite.refreshes.v1', { floor: null, n: 0 })
   const paidDone = done.floor === ctx.run.floor ? done.n : 0
   const setPaid = (n: number) => setDone({ floor: ctx.run.floor, n: Math.max(0, n) })
+  // A paid refresh's price comes off your Cost; Undo gives the last one's back.
+  const [kinds, setKinds] = useState<('normal' | 'keyword')[]>([])
+  const addPaid = (kind: 'normal' | 'keyword') => {
+    onSpend(refreshPrice(kind, paidDone), kind === 'keyword' ? 'Keyword refresh' : 'Refresh')
+    setKinds([...kinds.slice(0, paidDone), kind])
+    setPaid(paidDone + 1)
+  }
+  const removePaid = () => {
+    const kind = kinds[paidDone - 1] ?? 'normal'
+    onSpend(-refreshPrice(kind, paidDone - 1), kind === 'keyword' ? 'Keyword refresh taken back' : 'Refresh taken back')
+    setPaid(paidDone - 1)
+  }
   const a = useMemo(() => refreshAdvice(ctx, ranked, availableNow, moves, { buffs, superShop, cost, paidDone }),
     [ctx, ranked, availableNow, moves, buffs, superShop, cost, paidDone])
   const [showWanted, setShowWanted] = useState(false)
@@ -90,10 +104,10 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
         <p className="small"><b>Don't refresh.</b> {a.wanted.length ? 'The odds of something better are too low for the price.' : 'Nothing the shop can roll beats what you can already do with the Cost.'}</p>
       )}
       <div className="refresh-done small">
-        Paid refreshes done at this shop:
-        <button className="btn small-btn" onClick={() => setPaid(paidDone - 1)} disabled={!paidDone} aria-label="One fewer">−</button>
-        <b>{paidDone}</b>
-        <button className="btn small-btn" onClick={() => setPaid(paidDone + 1)} aria-label="One more">+</button>
+        Paid refreshes done at this shop: <b>{paidDone}</b>
+        <button className="btn small-btn" onClick={() => addPaid('normal')}>+ Refresh ({refreshPrice('normal', paidDone)})</button>
+        {a.keyword && <button className="btn small-btn" onClick={() => addPaid('keyword')}>+ Keyword ({refreshPrice('keyword', paidDone)})</button>}
+        <button className="btn small-btn" onClick={removePaid} disabled={!paidDone} aria-label="Take one back">Undo</button>
       </div>
       <p className="muted small">
         The game doesn't publish how strongly a keyword refresh leans, so this assumes about {pct(REFRESH.keywordShare)} of its gifts
