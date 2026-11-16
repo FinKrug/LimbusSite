@@ -1914,3 +1914,41 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .cost-log { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 2px; }
 .cost-down { color: var(--bad); font-variant-numeric: tabular-nums; font-weight: 600; }
 .cost-up { color: var(--good); font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* Rare find celebration (Celebration.tsx): coins for Wealth, stars for other rare gifts */
+.celebrate { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
+.celebrate-rain { position: absolute; inset: 0; overflow: hidden; }
+.celebrate-piece {
+  position: absolute; top: -48px; display: block; perspective: 200px;
+  animation-name: celebrate-fall; animation-timing-function: cubic-bezier(.35, .1, .7, 1); animation-fill-mode: both;
+}
+.celebrate-face { display: grid; place-items: center; width: 100%; height: 100%; animation: celebrate-spin linear infinite; }
+.celebrate-coins .celebrate-face {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3c4 0 12%, #f6cf5a 13% 45%, #c8901c 70%, #8a5a0c 100%);
+  box-shadow: inset 0 0 0 2px #b07a14, inset 0 0 0 4px #f3d270, 0 2px 6px rgb(0 0 0 / 0.45);
+}
+.celebrate-stars .celebrate-face { color: var(--accent); font-size: 1.1em; line-height: 1; text-shadow: 0 0 10px rgb(227 169 60 / 0.8); }
+@keyframes celebrate-fall {
+  0% { transform: translate(0, 0); opacity: 0; }
+  8% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate(var(--drift, 0), calc(100vh + 96px)); opacity: 0; }
+}
+@keyframes celebrate-spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+.celebrate-banner {
+  position: absolute; top: 18px; left: 50%; transform: translateX(-50%); pointer-events: auto;
+  display: flex; align-items: center; gap: 12px; width: max-content; max-width: min(92vw, 460px); padding: 12px 18px 12px 12px; text-align: left;
+  border: 1px solid var(--accent); border-radius: 12px; background: var(--panel); opacity: 1; color: var(--text); font: inherit; cursor: pointer;
+  box-shadow: 0 10px 40px rgb(0 0 0 / 0.55), 0 0 30px rgb(227 169 60 / 0.25);
+  animation: celebrate-pop 420ms cubic-bezier(.2, 1.4, .4, 1) both;
+}
+.celebrate-banner > span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.celebrate-banner b { font-size: 18px; }
+.celebrate-banner small { color: var(--muted); }
+.celebrate-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+@keyframes celebrate-pop { from { transform: translate(-50%, -16px) scale(0.92); opacity: 0; } to { transform: translate(-50%, 0) scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .celebrate-rain { display: none; }
+  .celebrate-banner { animation: none; }
+}

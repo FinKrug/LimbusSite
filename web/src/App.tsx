@@ -6,6 +6,8 @@ import { ShopOverview } from './components/ShopOverview'
 import { shopMoves, type ShopMove } from './lib/shopoverview'
 import { floorsWeight, planSwaps, SWAPS } from './lib/skillswap'
 import { CostNow, type CostChange } from './components/CostNow'
+import { Celebration } from './components/Celebration'
+import { rareFind, rareStyle, type RareFind } from './lib/rare'
 import { ImportTab } from './components/ImportTab'
 import { UpgradesTab } from './components/UpgradesTab'
 import { Welcome } from './components/Welcome'
@@ -463,11 +465,25 @@ export default function App() {
   const shopBuffNotes = useMemo(() => shopNotes(prerun.buffs, run.floor ?? 1, ownedTiers), [prerun.buffs, run.floor, ownedTiers])
   const floorBuffNotes = useMemo(() => (run.floor === null ? [] : floorNotes(prerun.buffs, run.floor, prerun.keyword)),
     [prerun.buffs, run.floor, prerun.keyword])
-  const addMany = (ids: string[]) => setOwned((o) => ids.reduce((acc, id) => addGift(acc, id, ctx.giftsById.get(id)?.tier ?? null), o))
+  // A rare find (Wealth, a hidden pack's gift…) gets a celebration when you add it by hand: picking
+  // a reward, buying, fusing, an event. Not for sync, backups, the demo team or screenshot imports.
+  const [celebrate, setCelebrate] = usePersistentState<boolean>('limbussite.celebrate.v1', true)
+  const [rare, setRare] = useState<RareFind | null>(null)
+  const closeRare = useCallback(() => setRare(null), [setRare])
+  const addOwned = (next: string[] | ((o: string[]) => string[])) => {
+    const after = typeof next === 'function' ? next(owned) : next
+    if (celebrate) {
+      const before = new Set(owned)
+      const found = rareFind(after.filter((id) => !before.has(id)), ctx, packsForGift)
+      if (found) setRare(found)
+    }
+    setOwned(after)
+  }
+  const addMany = (ids: string[]) => addOwned((o) => ids.reduce((acc, id) => addGift(acc, id, ctx.giftsById.get(id)?.tier ?? null), o))
   const floorBuffBox = (
     <BuffNotes title={`Your Starlight buffs on floor ${run.floor}`} notes={floorBuffNotes} giftsById={ctx.giftsById} owned={owned} onAdd={addMany} />
   )
-  const own = (id: string) => setOwned((o) => addGift(o, id, ctx.giftsById.get(id)?.tier ?? null))
+  const own = (id: string) => addOwned((o) => addGift(o, id, ctx.giftsById.get(id)?.tier ?? null))
 
   if (home) {
     return (
@@ -644,6 +660,7 @@ export default function App() {
         </div>
       </header>
       {syncDialogs}
+      {rare && <Celebration key={rare.gift.id + rare.why} find={rare} onDone={closeRare} />}
       {touring && <Tour steps={TOUR} onOpenTab={(t) => { setBuildingForRun(false); setTab(t) }} onClose={() => { setTouring(false); setTab('team'); window.scrollTo(0, 0) }} />}
 
       {managing && (
@@ -660,7 +677,7 @@ export default function App() {
       )}
       {giftsOpen && (
         <Dialog title="Gifts you have" onClose={() => setGiftsOpen(false)}>
-          <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={setOwned} />
+          <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={addOwned} />
           <p className="small"><button className="link-btn" onClick={() => { setGiftsOpen(false); setTab('import') }}>
             Import gifts from a screenshot →</button></p>
         </Dialog>
@@ -760,7 +777,12 @@ export default function App() {
             egos={gameData.egos ?? []} storedEgos={myEgos} onEgosChange={setMyEgos} art={art} onOpenData={() => setDataOpen(true)} />
         )}
         {tab === 'settings' && (
-          <SettingsPage art={art} onArtChange={setArt} onOpenData={() => setDataOpen(true)} onSetup={openSetup}
+          <SettingsPage celebrate={celebrate} onCelebrateChange={setCelebrate}
+            onPreviewCelebration={(style) => {
+              const g = gameData.gifts.find((x) => (style === 'coins' ? rareStyle(x) === 'coins' : (x.tier ?? 0) >= 6 && rareStyle(x) === 'stars'))
+              if (g) setRare({ gift: g, style, why: 'A preview: this shows when you get a gift only luck gives.' })
+            }}
+            art={art} onArtChange={setArt} onOpenData={() => setDataOpen(true)} onSetup={openSetup}
             onTour={() => { setTab('team'); setTouring(true) }} dataNote={dataNote} />
         )}
 
@@ -805,7 +827,7 @@ export default function App() {
             <aside className="side">
               <CostNow cost={shopCost} onChange={setShopCost} log={costLog} />
               <section className="panel"><CostBox run={run} ranked={rankedGifts} ctx={ctx} keep={keepCost} buffs={shopBuffs} start={startingCost(prerun.buffs)} /></section>
-              <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={setOwned} />
+              <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={addOwned} />
             </aside>
             <main className="main">
               <BuffNotes title="Your Starlight buffs at this shop" notes={shopBuffNotes} giftsById={ctx.giftsById} owned={owned} onAdd={addMany} />
@@ -827,7 +849,7 @@ export default function App() {
                 </>
               )}
               {tab === 'fusion' && (
-                <FusionTab ctx={ctx} owned={owned} onOwnedChange={setOwned} run={run} pack={currentPack}
+                <FusionTab ctx={ctx} owned={owned} onOwnedChange={addOwned} run={run} pack={currentPack}
                   teamKeywords={focus.map((f) => f.keyword)} packsForGift={packsForGift}
                   superShop={superShop} onSuperShopChange={setSuperShop} />
               )}
@@ -856,9 +878,9 @@ export default function App() {
             {formation}
             {/* After a fight the reward card's gift is random (no choice to compare), so this screen
                 is for adding what you got, and the "?" events. */}
-            <PickupBox gifts={gameData.gifts} owned={owned} onChange={setOwned} />
+            <PickupBox gifts={gameData.gifts} owned={owned} onChange={addOwned} />
             <EventsTab ctx={ctx} events={gameData.events ?? []} team={eventTeam} pack={currentPack}
-              owned={owned} onOwnedChange={setOwned} />
+              owned={owned} onOwnedChange={addOwned} />
           </div>
         )}
 
@@ -867,18 +889,18 @@ export default function App() {
             {formation}
             {bossEvents.length > 0 || bossSearch ? (
               <EventsTab kind="boss" ctx={ctx} events={gameData.events ?? []} team={eventTeam} pack={currentPack}
-                owned={owned} onOwnedChange={setOwned} />
+                owned={owned} onOwnedChange={addOwned} />
             ) : (
               <p className="panel boss-note">
                 {currentPack ? <>No boss event is known for <b>{currentPack.name}</b>: just fight it.</> : 'Pick the floor\'s pack in the bar above to see if its boss has an event.'}{' '}
                 <button className="link-btn" onClick={() => setBossSearch(true)}>Look up a boss event</button>
               </p>
             )}
-            <RewardPicker key={`${run.floor}-${run.pack}`} ctx={ctx} gifts={gameData.gifts} owned={owned} onOwnedChange={setOwned}
+            <RewardPicker key={`${run.floor}-${run.pack}`} ctx={ctx} gifts={gameData.gifts} owned={owned} onOwnedChange={addOwned}
               preset={currentPack?.clear_rewards ?? []} picks={run.difficulty === 'normal' ? 1 : 2}
               title="Boss reward gifts"
               hint={`Each pack shows the gifts you can choose after its boss (on the pack select screen too). Add the ones offered and they're ranked for your team; you pick ${run.difficulty === 'normal' ? 'one' : 'two on Hard'}. Then press the button below to go to the next floor.`} />
-            <PickupBox gifts={gameData.gifts} owned={owned} onChange={setOwned} />
+            <PickupBox gifts={gameData.gifts} owned={owned} onChange={addOwned} />
           </div>
         )}
 

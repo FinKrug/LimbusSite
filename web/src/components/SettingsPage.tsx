@@ -3,8 +3,12 @@ import { useSync } from '../lib/sync'
 import { timeAgo } from '../lib/transfer'
 
 /** Home › Settings: card art, your data (sign in, backups), and the first-time setup. */
-export function SettingsPage({ art, onArtChange, onOpenData, onSetup, onTour, dataNote }: {
+export function SettingsPage({ art, onArtChange, onOpenData, onSetup, onTour, dataNote, celebrate, onCelebrateChange, onPreviewCelebration }: {
   art: ArtVariant
+  /** Coins or stars for a rare find (Celebration.tsx). */
+  celebrate: boolean
+  onCelebrateChange: (on: boolean) => void
+  onPreviewCelebration: (style: 'coins' | 'stars') => void
   onArtChange: (a: ArtVariant) => void
   onOpenData: () => void
   onSetup: () => void
@@ -45,6 +49,16 @@ export function SettingsPage({ art, onArtChange, onOpenData, onSetup, onTour, da
             title="The art identities get at Uptie III (threadspinning)">Threadspun</button>
           <button className={art === 'base' ? 'seg-btn on' : 'seg-btn'} aria-pressed={art === 'base'} onClick={() => onArtChange('base')}
             title="The art identities have before Uptie III">Base art</button>
+        </div>
+      </section>
+
+      <section className="panel settings-card">
+        <h2>Rare find celebrations</h2>
+        <p className="muted">When you add a gift only luck gives (Wealth, A Certain Philosophy, The B.E.'s gifts…), coins or stars rain down for a moment.</p>
+        <div className="settings-row">
+          <label><input type="checkbox" checked={celebrate} onChange={(e) => onCelebrateChange(e.target.checked)} /> Celebrate rare finds</label>
+          <button className="btn" onClick={() => onPreviewCelebration('coins')}>Preview coins</button>
+          <button className="btn" onClick={() => onPreviewCelebration('stars')}>Preview stars</button>
         </div>
       </section>
 
