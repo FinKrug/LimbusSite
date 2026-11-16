@@ -1905,7 +1905,7 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .free-tag { margin-left: 6px; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background: rgb(127 196 122 / 0.16); color: var(--good); }
 .refresh-steps { margin: 4px 0 10px; padding-left: 22px; display: grid; gap: 3px; }
 .refresh-wanted { columns: 2; margin: 0 0 8px; padding-left: 18px; }
-.refresh-done { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.refresh-done { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 6px; }
 @media (max-width: 760px) { .refresh-kinds { grid-template-columns: minmax(0, 1fr); } .refresh-wanted { columns: 1; } }
 
 /* The Cost you have at the shop (CostNow.tsx) */
@@ -1957,3 +1957,8 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .price-off { color: var(--good); }
 .cost-discounts { margin: 6px 0 0; color: var(--good); }
 .skill-search { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--line); }
+.kind-fuse { background: rgb(157 87 209 / 0.18); color: var(--envy); }
+.shop-home-kinds { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .shop-home-kinds { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .shop-home-kinds { grid-template-columns: minmax(0, 1fr); } }
+.shop-home > * { min-width: 0; }

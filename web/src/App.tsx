@@ -3,7 +3,7 @@ import { EvaluateTab } from './components/EvaluateTab'
 import { EventsTab } from './components/EventsTab'
 import { ShopAdvice } from './components/ShopAdvice'
 import { ShopOverview } from './components/ShopOverview'
-import { shopMoves, type ShopMove } from './lib/shopoverview'
+import { shopFusions, shopMoves, type ShopMove } from './lib/shopoverview'
 import { floorsWeight, planSwaps, SWAPS } from './lib/skillswap'
 import { CostNow, type CostChange } from './components/CostNow'
 import { Celebration } from './components/Celebration'
@@ -62,7 +62,7 @@ import type { SwapState } from './lib/skillswap'
 import { withSwaps } from './lib/battle'
 import type { EgoLoadout } from './lib/ego'
 import { buildTeam, suggestOrder } from './lib/teambuilder'
-import { addGift } from './lib/vestiges'
+import { addGift, removeOne } from './lib/vestiges'
 import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
 type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'shophome' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'rank-gifts' | 'rank-ids' | 'rank-egos'
@@ -437,6 +437,12 @@ export default function App() {
     const plans = planSwaps(teamIdentities.slice(0, deployed), swaps, owned, { egos: gameData.egos ?? [], loadout, run })
     return shopMoves(ctx, shopRanked, enhanced, availableNow, plans, { superShop: superShop && run.difficulty !== 'normal' })
   }, [tab, teamIdentities, deployed, swaps, ctx, loadout, run, shopRanked, enhanced, availableNow, superShop])
+  // Fusing on the overview: free, so it comes first (recipes you can make, the best random fusions).
+  const focusKey = focus.map((f) => f.keyword).join('|')
+  const focusKeywords = useMemo(() => (focusKey ? focusKey.split('|') : []), [focusKey])
+  const shopFusionAdvice = useMemo(() => (tab !== 'shophome' ? { recipes: [], ideas: [] }
+    : shopFusions(ctx, owned, focusKeywords, currentPack ?? null, superShop && run.difficulty !== 'normal')),
+  [tab, ctx, owned, focusKeywords, currentPack, superShop, run.difficulty])
   // The last move marked done on the overview, with what it changed, so it can be undone.
   const [lastMove, setLastMove] = useState<{ move: ShopMove; owned: string[]; enhanced: Record<string, number>; swaps: SwapState; cost: number | null } | null>(null)
   const undoMove = () => {
@@ -451,6 +457,11 @@ export default function App() {
   const doMove = (m: ShopMove) => {
     setLastMove({ move: m, owned, enhanced, swaps, cost: shopCost })
     if (m.kind === 'buy') buy(m.gift!.id)
+    else if (m.kind === 'fuse') {
+      let next = owned
+      for (const g of m.uses ?? []) next = removeOne(next, g.id)
+      addOwned(addGift(next, m.gift!.id, m.gift!.tier))
+    }
     else if (m.kind === 'enhance') shopSetEnhanced({ ...enhanced, [m.gift!.id]: m.to! })
     else {
       const log = { ...(swaps[m.identity!.id] ?? {}) }
@@ -841,6 +852,7 @@ export default function App() {
                 <ShopOverview moves={shopOverview} hasTeam={teamIdentities.length > 0} hasGifts={owned.length > 0} keep={keepCost}
                   floorsLeft={floorsWeight(run).floorsLeft} onOpen={setTab} onOpenTeam={() => setTab('team')} onDone={doMove}
                   justDone={lastMove?.move ?? null} onUndo={undoMove} cost={shopCost} onCostChange={setShopCost}
+                  fusions={shopFusionAdvice}
                   refresh={{ ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop: superShop && run.difficulty !== 'normal', onSuperShopChange: setSuperShop, onSpend: spend }} />
               )}
               {tab === 'gifts' && (

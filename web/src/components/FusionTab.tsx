@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import {
-  FUSE_NOW_SHARE, FUSION_KEYWORDS, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, isSpare, fusionIdeas, fusionPoints, fusionTier, keywordChance,
+  FUSE_NOW_SHARE, FUSION_KEYWORDS, canFuse as fusable, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, isSpare, fusionIdeas, fusionPoints, fusionTier, keywordChance,
   comboFusions, fusionKeywords, matchRecipe, recipePlans, setOrComboOf, type ComboFusion, type FusionIdea,
 } from '../lib/fusion'
 import { mustHave } from '../lib/musthave'
@@ -48,7 +48,8 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
   const inventory = useMemo(() => {
     const ids = [...new Set(owned)]
     const value = new Map(ids.map((id) => [id, isVestige(id) ? -1 : scoreGift(byId.get(id)!, ctx).score]))
-    return ids.map((id) => byId.get(id)!).filter(Boolean).sort((a, b) =>
+    // EX gifts (Wealth) can't be fused, so they aren't offered.
+    return ids.map((id) => byId.get(id)!).filter((g) => g && fusable(g)).sort((a, b) =>
       sort === 'tier' ? (b.tier ?? 0) - (a.tier ?? 0) || a.name.localeCompare(b.name) : value.get(a.id)! - value.get(b.id)!)
   }, [owned, byId, ctx, sort])
 

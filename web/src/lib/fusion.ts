@@ -26,6 +26,11 @@ export { FUSION_KEYWORDS }
 export type FusionKeyword = (typeof FUSION_KEYWORDS)[number]
 
 export const FUSION_POINTS: Record<number, number> = { 1: 3, 2: 6, 3: 10, 4: 15, 5: 30, 6: 30 }
+
+/** Can it go into a fusion? Not EX gifts (Finley, 2026-11-15: "you cannot fuse wealth"). */
+export function canFuse(g: Gift): boolean {
+  return (g.tier ?? 0) < 6
+}
 export const REGULAR_SLOTS = 3
 export const SUPER_SLOTS = 5
 
@@ -247,7 +252,7 @@ export function fodder(ctx: RunContext, owned: string[]): KeepNote[] {
   }
   return owned
     .map((id) => ctx.giftsById.get(id))
-    .filter((g): g is Gift => !!g)
+    .filter((g): g is Gift => !!g && canFuse(g))
     .map((g) => {
       const m = mustPiece(g)
       if (m) {

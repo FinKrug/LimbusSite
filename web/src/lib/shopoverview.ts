@@ -27,9 +27,11 @@ import { SWAP_WEIGHTS, type IdentityPlan, type SwapKind } from './skillswap'
 import { isCore, planUpgrades, shopValue, UPGRADE_LEVELS } from './upgrades'
 import { LIST_PRICES } from './shopprices'
 import type { GiftScore, RunContext } from './scoring'
-import type { Gift, Identity } from './types'
+import type { Gift, Identity, ThemePack } from './types'
+import { fusionIdeas, fusionKeywords, recipePlans, type FusionIdea, type RecipePlan } from './fusion'
 
-export type MoveKind = 'buy' | 'enhance' | 'swap'
+/** 'fuse': a recipe you can make now (free; never part of the Cost plan). */
+export type MoveKind = 'buy' | 'enhance' | 'swap' | 'fuse'
 
 export interface ShopMove {
   kind: MoveKind
@@ -47,6 +49,8 @@ export interface ShopMove {
   swap?: SwapKind
   skillFrom?: string
   skillTo?: string
+  /** fuse: the gifts that go in (the result is `gift`). */
+  uses?: Gift[]
   /** swap: ID Skill Search (you pick the Sinner, at a Super Shop) rather than the shop's random one. */
   pick?: boolean
   /** swap: the change in the team's value per turn (0.02 = +2%). */
@@ -150,4 +154,31 @@ export function worthLabel(ratio: number): { text: string; cls: string } {
   if (ratio >= 0.6) return { text: 'Good', cls: 'good' }
   if (ratio >= WORTH) return { text: 'Fair', cls: 'fair' }
   return { text: 'Spare Cost only', cls: 'spare' }
+}
+
+/**
+ * Fusing on the overview (Finley, 2026-11-15: "the shop overview does not account for fusing gifts").
+ * Fusing is free (wiki: Shop Functions, Fuse Gifts: "Free"), so it doesn't compete for Cost: it goes
+ * first. A recipe you can make now and that's worth it (fusion.ts `recipePlans`), and the best random
+ * fusion of spare gifts for each of your keywords (`fusionIdeas`). Doing them before buying matters:
+ * the result can change what's worth buying, and the gifts that go in shouldn't be enhanced first
+ * (upgrades.ts already leaves those alone).
+ */
+export interface ShopFusions {
+  /** Recipes you have every piece of, worth making, with the gifts that go in. */
+  recipes: { plan: RecipePlan; uses: Gift[]; needsSuper: boolean; move: ShopMove }[]
+  /** The best random fusions of spare gifts (best first). */
+  ideas: FusionIdea[]
+}
+
+export function shopFusions(ctx: RunContext, owned: string[], keywords: string[], pack: ThemePack | null, superShop: boolean): ShopFusions {
+  const recipes = recipePlans(ctx, owned).filter((p) => p.ready && p.worthIt).map((plan) => {
+    const f = plan.fusion
+    const anyUses = f.any_of ? f.any_of.from.filter((id) => owned.includes(id)).slice(0, f.any_of.count) : []
+    const uses = [...f.ingredients, ...anyUses].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
+    const move: ShopMove = { kind: 'fuse', key: `fuse:${plan.result.id}`, cost: 0, ratio: 0, gift: plan.result, uses, chance: false, why: [] }
+    return { plan, uses, needsSuper: !!f.super_shop && !superShop, move }
+  })
+  const ideas = fusionIdeas(ctx, owned, fusionKeywords(ctx, keywords), pack, superShop).slice(0, 2)
+  return { recipes, ideas }
 }
