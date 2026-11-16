@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import type { CostKeep } from '../lib/costkeep'
 import { floorCostFrom } from '../lib/costplan'
+import { pricesFor } from '../lib/shopprices'
 import type { GiftScore, RunContext } from '../lib/scoring'
-import { ENHANCE_COST, lastFloor } from '../lib/scoring'
+import { lastFloor } from '../lib/scoring'
 import { usePersistentState } from '../lib/storage'
 import { affordable, planUpgrades, UPGRADE_LEVELS, type Priority, type UpgradeMove, type UpgradePlan } from '../lib/upgrades'
 import { Empty, GiftLabel } from './bits'
@@ -38,7 +39,7 @@ export function UpgradesTab({ ctx, levels, onLevelsChange, ranked, keep: starclo
   const overview = useMemo(() => planUpgrades(ctx, levels), [ctx, levels])
   // The Cost you have now, and whether to keep some for your top shop picks (Finley: "what if we have a lot of Cost?").
   const [keep, setKeep] = usePersistentState<boolean>('limbussite.costkeep.v1', true)
-  const reserve = useMemo(() => (lastFloor(ctx.run) ? 0 : floorCostFrom(ranked, ctx.run.floor ?? 1).comfortable), [ranked, ctx.run])
+  const reserve = useMemo(() => (lastFloor(ctx.run) ? 0 : floorCostFrom(ranked, ctx.run.floor ?? 1, {}, pricesFor(ctx)).comfortable), [ranked, ctx])
   const budget = cost === null ? null : Math.max(0, cost - (keep ? reserve : 0))
   const can = useMemo(() => (budget === null ? null : affordable(overview.order, budget, starcloud)), [overview.order, budget, starcloud])
   const doNow = new Set((can?.moves ?? []).map((m) => `${m.gift.id}:${m.to}`))
@@ -126,7 +127,6 @@ export function UpgradesTab({ ctx, levels, onLevelsChange, ranked, keep: starclo
         <h2>Your gifts</h2>
         <ul className="upgrade-gifts">
           {overview.plans.map((p) => {
-            const costs = ENHANCE_COST[p.gift.tier ?? 0] ?? []
             return (
               <li key={p.gift.id} className={`upgrade-gift verdict-row-${p.verdict}`}>
                 <div className="plan-now-top">
@@ -142,7 +142,7 @@ export function UpgradesTab({ ctx, levels, onLevelsChange, ranked, keep: starclo
                 <span className="muted small">
                   {p.verdict === 'done' ? 'Fully upgraded.'
                     : p.verdict === 'fuse' ? `${p.fusing!.text} If that fusion falls through, it's worth enhancing again.`
-                    : p.verdict === 'skip' ? `Upgrading changes nothing your team uses (${costs.slice(p.level, p.level + 1)[0]} Cost for ${plus(p.level + 1)}).`
+                    : p.verdict === 'skip' ? `Upgrading changes nothing your team uses (${pricesFor(ctx).enhance(p.gift, p.level, p.level + 1)} Cost for ${plus(p.level + 1)}).`
                     : p.verdict === 'spare' ? `It helps a little (${p.values.map((v, l) => `${plus(l)} ${v.toFixed(1)}`).join(' → ')}), but the Cost does more buying gifts. Worth it once you have Cost to spare.`
                       : p.values.map((v, l) => `${plus(l)} ${v.toFixed(1)}`).join(' → ') + ' (value for your team)'}
                 </span>

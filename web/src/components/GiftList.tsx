@@ -5,6 +5,8 @@ import { Empty, GiftLabel, Reasons, RatingBar } from './bits'
 import { bestFilter, filterLabel, matches, searchOptions } from '../lib/giftsearch'
 import { HowToGet } from './HowToGet'
 import { GiftWhy } from './WhyRank'
+import type { ShopPrices } from '../lib/shopprices'
+import { Price } from './Price'
 
 interface Props {
   ranked: GiftScore[]
@@ -16,13 +18,15 @@ interface Props {
   owned: Set<string>
   /** Gifts you can get on the floor you're on. */
   availableNow?: Set<string>
+  /** At a shop: what each gift costs you (Wealth: 1), shown by its button. */
+  prices?: ShopPrices
   /** The Show filter to start on ('now' in a shop: what you can get on this floor). */
   initialFilter?: string
 }
 
 const PAGE = 10
 
-export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, giftsById, owned, availableNow, initialFilter = 'team' }: Props) {
+export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, giftsById, owned, availableNow, initialFilter = 'team', prices }: Props) {
   const [query, setQuery] = useState('')
   const [keyword, setKeyword] = useState(initialFilter)
   const [tier, setTier] = useState('any')
@@ -120,6 +124,7 @@ export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, gif
                       <p key={k} className="effect-upgrade"><b>{'+'.repeat(k + 1)}</b> {u}</p>
                     ))}
                   </details>
+                  {prices && s.gift.cost !== null && <Price list={s.gift.cost} pay={prices.gift(s.gift)!} />}
                   <button className="btn" onClick={() => onOwn(s.gift.id)}>I got this</button>
                 </div>
               </li>

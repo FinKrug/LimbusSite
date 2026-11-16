@@ -28,6 +28,7 @@ import { mustHave, neededPiece } from './musthave'
 import { ENHANCE_COST, intrinsicScore, lastFloor, levelValue, type RunContext } from './scoring'
 import type { Gift } from './types'
 import { isVestige } from './vestiges'
+import { pricesFor, type ShopPrices } from './shopprices'
 
 export const UPGRADE_LEVELS = { high: 1, medium: 0.6, low: 0.35 }
 /** An upgrade adding less than this share of the gift's value changes nothing worth paying for. */
@@ -83,10 +84,11 @@ export function maxLevel(g: Gift): number {
 }
 
 /** What 100 Cost buys in a shop for this team: the median value per 100 Cost of your best shop gifts. */
-export function shopValue(ctx: RunContext): number {
+export function shopValue(ctx: RunContext, prices: ShopPrices = pricesFor(ctx)): number {
+  // At the prices you pay (Wealth: 1 Cost a gift), so 100 Cost buys more when gifts are cheaper.
   const per = ctx.data.gifts
     .filter((g) => g.pools.includes('main') && (g.cost ?? 0) > 0 && !ctx.owned.has(g.id) && (g.tier ?? 9) <= 4)
-    .map((g) => intrinsicScore(g, ctx).score / g.cost! * 100)
+    .map((g) => intrinsicScore(g, ctx).score / Math.max(1, prices.gift(g)!) * 100)
     .sort((a, b) => b - a)
     .slice(0, SHOP_TOP)
   if (!per.length) return 1
@@ -97,11 +99,12 @@ export function shopValue(ctx: RunContext): number {
 export function planGift(g: Gift, ctx: RunContext, level: number, shop: number): UpgradePlan | null {
   const max = maxLevel(g)
   if (!max) return null
-  const costs = ENHANCE_COST[g.tier ?? 0]!
+  const prices = pricesFor(ctx)
   const values = Array.from({ length: max + 1 }, (_, l) => levelValue(g, ctx, l))
   const at = Math.min(level, max)
   const step = (from: number, to: number): UpgradeMove => {
-    const cost = costs.slice(from, to).reduce((a, b) => a + b, 0)
+    // What you pay (Wealth: 1 a step; Renewed Merch: 30% off).
+    const cost = Math.max(1, prices.enhance(g, from, to))
     const gain = Math.max(0, values[to] - values[from])
     const ratio = shop > 0 ? (gain / cost * 100) / shop : 0
     const helps = gain > Math.max(1e-6, values[from] * NO_GAIN)

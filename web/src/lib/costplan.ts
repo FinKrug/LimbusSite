@@ -15,6 +15,7 @@
  */
 import { rankGifts, type GiftScore, type RunContext } from './scoring'
 import { tierLabel, type Gift } from './types'
+import { LIST_PRICES, pricesFor, type ShopPrices } from './shopprices'
 
 export const COST_WEIGHTS = {
   /** Shop gifts considered for the best value. */
@@ -57,28 +58,31 @@ export function shopGift(g: Gift): boolean {
 }
 
 export function floorCost(ctx: RunContext, floor: number, buffs: ShopBuffs = {}): FloorCost {
-  return floorCostFrom(rankGifts({ ...ctx, run: { ...ctx.run, floor } }), floor, buffs)
+  return floorCostFrom(rankGifts({ ...ctx, run: { ...ctx.run, floor } }), floor, buffs, pricesFor(ctx))
 }
 
 /** The same from gifts already ranked for that floor (the Best gifts list). */
-export function floorCostFrom(rankedGifts: GiftScore[], floor: number, buffs: ShopBuffs = {}): FloorCost {
+export function floorCostFrom(rankedGifts: GiftScore[], floor: number, buffs: ShopBuffs = {},
+  /** What the shop charges you (shopprices.ts: Wealth, Prestige Card…). */
+  prices: ShopPrices = LIST_PRICES): FloorCost {
   const ranked = rankedGifts.filter((s) => shopGift(s.gift)).slice(0, COST_WEIGHTS.topN)
+  const price = (g: Gift) => Math.max(1, prices.gift(g) ?? 1)
   const top = ranked[0]?.gift ?? null
   const best = ranked.reduce<(typeof ranked)[number] | null>(
-    (a, b) => (!a || b.score / b.gift.cost! > a.score / a.gift.cost! ? b : a), null)
+    (a, b) => (!a || b.score / price(b.gift) > a.score / price(a.gift) ? b : a), null)
   const value = best?.gift ?? null
   const parts: CostPart[] = []
-  if (value) parts.push({ label: `${value.name} (Tier ${tierLabel(value.tier)}), your best value for the Cost`, cost: value.cost! })
+  if (value) parts.push({ label: `${value.name} (Tier ${tierLabel(value.tier)}), your best value for the Cost`, cost: price(value) })
   const free = Math.min(2, buffs.freeRefreshes ?? 0)
   // The paid ones are 15, then 30; free ones come first.
-  const refresh = [15, 30].slice(0, 2 - free).reduce((a, b) => a + b, 0)
+  const refresh = [15, 30].slice(0, 2 - free).reduce((a, b) => a + prices.refresh('normal', b), 0)
   if (refresh) parts.push({ label: free ? `2 refreshes to find it (${free} free)` : '2 refreshes to find it', cost: refresh })
   if (floor >= COST_WEIGHTS.healFrom) parts.push({ label: 'A heal', cost: COST_WEIGHTS.heal })
   if (buffs.onEntry) parts.push({ label: 'Binary Star-shop gives you this on entering', cost: -buffs.onEntry })
   const round5 = (x: number) => Math.ceil(x / 5) * 5
   const reserve = parts.slice(value ? 1 : 0).reduce((a, p) => a + p.cost, 0)
-  const min = Math.max(0, round5((value?.cost ?? 0) + reserve))
-  const comfortable = Math.max(min, round5((top?.cost ?? 0) + reserve))
+  const min = Math.max(0, round5((value ? price(value) : 0) + reserve))
+  const comfortable = Math.max(min, round5((top ? price(top) : 0) + reserve))
   return { floor, min, comfortable, parts, value, top }
 }
 

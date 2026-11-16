@@ -30,6 +30,7 @@ import type { ShopMove } from './shopoverview'
 import { shopValue } from './upgrades'
 import type { GiftScore, RunContext } from './scoring'
 import { CORE_KEYWORDS, type Gift } from './types'
+import { LIST_PRICES, pricesFor, type ShopPrices } from './shopprices'
 
 export const REFRESH = {
   first: 15,
@@ -64,7 +65,7 @@ export interface RefreshAdvice {
   slots: number
   pool: number
   /** Buys that beat the fallback, best first. */
-  wanted: { gift: Gift; ratio: number }[]
+  wanted: { gift: Gift; ratio: number; price: number }[]
   fallback: number
   /** Chance one roll has at least one wanted gift / offers a wanted swap. */
   normal: { giftChance: number; swapChance: number }
@@ -83,9 +84,10 @@ export function shopSlots(b: Buffs, superShop: boolean): number {
   return (superShop ? 7 : 4) + ((b['star-of-the-beginning'] ?? 0) > 0 ? 1 : 0) + ((b['binary-star-shop'] ?? 0) > 0 ? 1 : 0)
 }
 
-/** Price of the next refresh after `paid` paid ones (the +15 count is shared by both kinds). */
-export function refreshPrice(kind: RefreshKind, paid: number): number {
-  return (kind === 'keyword' ? REFRESH.keyword : REFRESH.first) + REFRESH.step * paid
+/** Price of the next refresh after `paid` paid ones (the +15 count is shared by both kinds), with
+ *  Pre-order Discount's 30% off normal ones when you have it. */
+export function refreshPrice(kind: RefreshKind, paid: number, prices: ShopPrices = LIST_PRICES): number {
+  return prices.refresh(kind, (kind === 'keyword' ? REFRESH.keyword : REFRESH.first) + REFRESH.step * paid)
 }
 
 /** Chance at least one of `wanted` of `pool` shows up in `slots` slots drawn without repeats. */
@@ -114,7 +116,9 @@ export function refreshAdvice(
   const sure = Math.max(0, ...moves.filter((m) => !m.chance).map((m) => m.ratio))
   const fallback = Math.max(sure, REFRESH.save)
   const wanted = sellable.filter((b) => b.ratio > fallback).sort((a, b) => b.ratio - a.ratio)
-  const surplus = (b: { gift: Gift; ratio: number }) => (b.ratio - fallback) * (b.gift.cost ?? 0) / 100
+  // What buying it adds over spending its price at the fallback rate (at the price you pay).
+  const surplus = (b: { price: number; ratio: number }) => (b.ratio - fallback) * b.price / 100
+  const prices = pricesFor(ctx)
   const swaps = moves.filter((m) => m.kind === 'swap' && m.ratio > fallback)
   const sinnersOffered = superShop ? 2 : 1
   const swapChance = Math.min(1, swaps.length * sinnersOffered / REFRESH.sinners)
@@ -171,7 +175,7 @@ export function refreshAdvice(
   // normal ones first makes a later keyword one dearer), each cut where it's worth the most.
   // A refresh only matters if nothing good has turned up yet, so each step counts for the chance
   // that the ones before it all missed. Only while there's still Cost to buy what turns up.
-  const cheapest = Math.min(...wanted.map((b) => b.gift.cost ?? Infinity), ...swaps.map((m) => m.cost))
+  const cheapest = Math.min(...wanted.map((b) => b.price), ...swaps.map((m) => m.cost))
   const budget = opts.cost ?? Infinity
   const hit = (x: RefreshStep) => 1 - (1 - x.giftChance) * (1 - x.swapChance)
   let missFree = 1
@@ -187,7 +191,7 @@ export function refreshAdvice(
     const seq: RefreshStep[] = []
     for (let i = 0; i < n; i++) {
       const kind = kinds[Math.floor(mask / kinds.length ** i) % kinds.length]
-      const x = step(kind, refreshPrice(kind, done + i), false)
+      const x = step(kind, refreshPrice(kind, done + i, prices), false)
       if (budget - spent - x.price < cheapest) break
       seq.push(x)
       spent += x.price
@@ -199,7 +203,7 @@ export function refreshAdvice(
   steps.push(...bestPlan)
   // Where to stop: the next refresh after the plan, the cheaper kind.
   const after = done + bestPlan.length
-  const next = [step('normal', refreshPrice('normal', after), false), ...(keyword ? [step('keyword', refreshPrice('keyword', after), false)] : [])]
+  const next = [step('normal', refreshPrice('normal', after, prices), false), ...(keyword ? [step('keyword', refreshPrice('keyword', after, prices), false)] : [])]
   const stop = next.sort((a, b) => a.price - b.price)[0]
   const spentPaid = bestPlan.reduce((a, x) => a + x.price, 0)
   const stopReason: RefreshAdvice['stopReason'] = budget - spentPaid - stop.price < cheapest ? 'cost' : 'odds'

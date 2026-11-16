@@ -39,6 +39,7 @@ import { buildBattle, perSin, resonanceTriggers, triggerWorth, withBase, type Ba
 export { triggerWorth, type TriggerWorth }
 import type { RunSettings } from './scoring'
 import type { DefenseSkill, Gift, Identity, Sin, Skill } from './types'
+import { pricesFromGifts } from './shopprices'
 
 export { skillValue }
 
@@ -179,6 +180,7 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
     .filter((e): e is Ego => !!e && (e.skill?.weight ?? 1) > 1))
   const aoeFrom = (except: Identity) => team.filter((m) => m !== except && (m.skills ?? []).some(multiTarget))
   const { floorsLeft, weight } = floorsWeight(opts.run)
+  const swapPrice = pricesFromGifts(owned).swap
 
   const plan = (i: Identity, unit: number): IdentityPlan => {
     const skills = [...(i.skills ?? [])].sort((a, b) => a.slot - b.slot)
@@ -192,7 +194,9 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
         const log = { ...(swaps[i.id] ?? {}), [sw.kind]: (swaps[i.id]?.[sw.kind] ?? 0) + 1 }
         const after = buildBattle(team, { ...swaps, [i.id]: log }, egos, loadout, owned, sim)
         const gain = (total(after) - baseTotal) / baseTotal
-        const score = (gain * 100 * weight) / (sw.cost / 100)
+        // At the price you pay (Trial Plan Guide: 30% off).
+        const price = swapPrice(sw.cost)
+        const score = (gain * 100 * weight) / (price / 100)
         const pros: string[] = []
         const cons: string[] = []
 
@@ -290,7 +294,7 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
           worth = special && !losesGiftReson && gain > -0.02 && floorsLeft > 1
         }
         const hurts = gain <= SWAP_WEIGHTS.hurtAt || !!losesGiftReson
-        options.push({ kind: sw.kind, from, to, cost: sw.cost, search: sw.search, gain, score, worth, special, hurts, pros, cons })
+        options.push({ kind: sw.kind, from, to, cost: price, search: sw.search, gain, score, worth, special, hurts, pros, cons })
       }
     }
     // A Skill 2 swap with a reason Skill 3 can't cover comes first; then Skill 3 swaps.

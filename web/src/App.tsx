@@ -8,6 +8,7 @@ import { floorsWeight, planSwaps, SWAPS } from './lib/skillswap'
 import { CostNow, type CostChange } from './components/CostNow'
 import { Celebration } from './components/Celebration'
 import { rareFind, rareStyle, type RareFind } from './lib/rare'
+import { pricesFor } from './lib/shopprices'
 import { ImportTab } from './components/ImportTab'
 import { UpgradesTab } from './components/UpgradesTab'
 import { Welcome } from './components/Welcome'
@@ -390,27 +391,29 @@ export default function App() {
   // off (Finley, 2026-11-15). Nothing comes off until you've entered it.
   const [shopCost, setShopCost] = usePersistentState<number | null>('limbussite.cost.v1', null)
   const [costLog, setCostLog] = useState<CostChange[]>([])
+  // What the shop charges you: Wealth makes gifts and enhancing 1 Cost, Prestige Card & co. 30% off.
+  const shopPrices = pricesFor(ctx)
   const spend = (amount: number, label: string) => {
-    if (!amount || shopCost === null) return
-    setShopCost((c) => (c === null ? c : Math.max(0, c - amount)))
-    setCostLog((l) => [{ key: Date.now() + Math.random(), amount, label }, ...l].slice(0, 5))
+    if (!amount) return
+    // Before the Cost is entered, the change is still listed (so it's clear nothing came off).
+    if (shopCost !== null) setShopCost((c) => (c === null ? c : Math.max(0, c - amount)))
+    setCostLog((l) => [{ key: Date.now() + Math.random(), amount, label, untracked: shopCost === null }, ...l].slice(0, 5))
   }
   /** Buying at the shop: the gift is yours and its price comes off. */
   const buy = (id: string) => {
     const g = ctx.giftsById.get(id)
     if (!g || ctx.owned.has(id)) return own(id)
     own(id)
-    spend(g.cost ?? 0, `Bought ${g.name}`)
+    spend(shopPrices.gift(g) ?? 0, `Bought ${g.name}`)
   }
   /** Enhancing at the shop: each level up costs its Enhance price (a level taken back gives it back). */
   const shopSetEnhanced = (next: Record<string, number>) => {
     for (const id of new Set([...Object.keys(enhanced), ...Object.keys(next)])) {
       const g = ctx.giftsById.get(id)
-      const costs = ENHANCE_COST[g?.tier ?? 0]
       const from = enhanced[id] ?? 0
       const to = next[id] ?? 0
-      if (!g || !costs || from === to) continue
-      const price = costs.slice(Math.min(from, to), Math.max(from, to)).reduce((a, b) => a + b, 0)
+      if (!g || !ENHANCE_COST[g.tier ?? 0] || from === to) continue
+      const price = shopPrices.enhance(g, from, to)
       spend(to > from ? price : -price, to > from ? `${g.name} to ${'+'.repeat(to)}` : `${g.name} back to ${'+'.repeat(to) || 'base'}`)
     }
     setEnhanced(next)
@@ -421,7 +424,7 @@ export default function App() {
       const name = gameData.identities.find((i) => i.id === id)?.sinner ?? 'Swap'
       for (const sw of SWAPS) {
         const d = (next[id]?.[sw.kind] ?? 0) - (swaps[id]?.[sw.kind] ?? 0)
-        if (d) spend(d * sw.cost, `${name}: skill ${sw.from} → ${sw.to}${d < 0 ? ' taken back' : ''}`)
+        if (d) spend(d * shopPrices.swap(sw.cost), `${name}: skill ${sw.from} → ${sw.to}${d < 0 ? ' taken back' : ''}`)
       }
     }
     setSwaps(next)
@@ -825,7 +828,7 @@ export default function App() {
         {stage === 'shop' && (
           <div className="layout">
             <aside className="side">
-              <CostNow cost={shopCost} onChange={setShopCost} log={costLog} />
+              <CostNow cost={shopCost} onChange={setShopCost} log={costLog} discounts={shopPrices.discounts} />
               <section className="panel"><CostBox run={run} ranked={rankedGifts} ctx={ctx} keep={keepCost} buffs={shopBuffs} start={startingCost(prerun.buffs)} /></section>
               <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={addOwned} />
             </aside>
@@ -842,10 +845,10 @@ export default function App() {
               {tab === 'gifts' && (
                 <>
                   {focusLine}
-                  <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={buy} />
+                  <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={buy} prices={shopPrices} />
                   <GiftList ranked={shopRanked} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
                     teamKeywords={focus.map((f) => f.keyword)} initialFilter={run.floor === null ? 'team' : 'now'}
-                    onOwn={buy} giftsById={ctx.giftsById} owned={ctx.owned} />
+                    onOwn={buy} prices={shopPrices} giftsById={ctx.giftsById} owned={ctx.owned} />
                 </>
               )}
               {tab === 'fusion' && (

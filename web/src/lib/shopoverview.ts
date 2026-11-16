@@ -21,7 +21,8 @@ import type { CostKeep } from './costkeep'
 import { starcloudLoss } from './costkeep'
 import { shopBuys } from './shopadvice'
 import { SWAP_WEIGHTS, type IdentityPlan, type SwapKind } from './skillswap'
-import { isCore, planUpgrades, UPGRADE_LEVELS } from './upgrades'
+import { isCore, planUpgrades, shopValue, UPGRADE_LEVELS } from './upgrades'
+import { LIST_PRICES } from './shopprices'
 import type { GiftScore, RunContext } from './scoring'
 import type { Gift, Identity } from './types'
 
@@ -60,7 +61,7 @@ export function shopMoves(
   const up = planUpgrades(ctx, levels)
   const byId = new Map(ranked.map((r) => [r.gift.id, r]))
   const buys: ShopMove[] = shopBuys(ctx, ranked, availableNow, up.shop, LIMITS.buys).map((b) => ({
-    kind: 'buy', key: `buy:${b.gift.id}`, cost: b.gift.cost ?? 0, ratio: b.ratio, gift: b.gift, chance: true,
+    kind: 'buy', key: `buy:${b.gift.id}`, cost: b.price, ratio: b.ratio, gift: b.gift, chance: true,
     why: (byId.get(b.gift.id)?.reasons ?? []).filter((r) => r.kind === 'good').slice(0, 2).map((r) => r.text),
   }))
   // Only each gift's next level: its ++ shows up once the + is done.
@@ -75,11 +76,15 @@ export function shopMoves(
     })
     if (upgrades.length >= LIMITS.upgrades) break
   }
+  // A swap's score is per 100 Cost at the swap's price (skillswap.ts, Trial Plan Guide included); its
+  // "worth buying" bar matches a good gift at list prices, so when gifts are cheaper (Wealth, Prestige
+  // Card) a swap is worth that much less next to them.
+  const cheaper = shopValue(ctx, LIST_PRICES) / (up.shop || 1)
   const swaps: ShopMove[] = swapPlans.flatMap((p) => {
     const s = p.best ?? p.spare
     if (!s || s.hurts) return []
     return [{
-      kind: 'swap' as const, key: `swap:${p.identity.id}:${s.kind}`, cost: s.cost, ratio: Math.max(0, s.score) / SWAP_WEIGHTS.worth,
+      kind: 'swap' as const, key: `swap:${p.identity.id}:${s.kind}`, cost: s.cost, ratio: Math.max(0, s.score) / SWAP_WEIGHTS.worth * cheaper,
       identity: p.identity, swap: s.kind, skillFrom: s.from.name, skillTo: s.to.name, gain: s.gain, chance: true, why: s.pros.slice(0, 2),
     }]
   })

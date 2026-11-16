@@ -1952,3 +1952,7 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
   .celebrate-rain { display: none; }
   .celebrate-banner { animation: none; }
 }
+.price { font-size: 13px; white-space: nowrap; }
+.price s { margin-right: 2px; }
+.price-off { color: var(--good); }
+.cost-discounts { margin: 6px 0 0; color: var(--good); }

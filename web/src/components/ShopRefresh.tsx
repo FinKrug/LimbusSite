@@ -4,6 +4,7 @@ import type { GiftScore, RunContext } from '../lib/scoring'
 import type { ShopMove } from '../lib/shopoverview'
 import { REFRESH, refreshAdvice, refreshPrice, type RefreshStep } from '../lib/shoprefresh'
 import { usePersistentState } from '../lib/storage'
+import { pricesFor } from '../lib/shopprices'
 import { KeywordChip } from './bits'
 
 interface Props {
@@ -34,17 +35,19 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
   // Paid refreshes done at this shop, per floor (the price goes up 15 each time).
   const [done, setDone] = usePersistentState<{ floor: number | null; n: number }>('limbussite.refreshes.v1', { floor: null, n: 0 })
   const paidDone = done.floor === ctx.run.floor ? done.n : 0
+  const prices = pricesFor(ctx)
+  const price = (kind: 'normal' | 'keyword', paid: number) => refreshPrice(kind, paid, prices)
   const setPaid = (n: number) => setDone({ floor: ctx.run.floor, n: Math.max(0, n) })
   // A paid refresh's price comes off your Cost; Undo gives the last one's back.
   const [kinds, setKinds] = useState<('normal' | 'keyword')[]>([])
   const addPaid = (kind: 'normal' | 'keyword') => {
-    onSpend(refreshPrice(kind, paidDone), kind === 'keyword' ? 'Keyword refresh' : 'Refresh')
+    onSpend(price(kind, paidDone), kind === 'keyword' ? 'Keyword refresh' : 'Refresh')
     setKinds([...kinds.slice(0, paidDone), kind])
     setPaid(paidDone + 1)
   }
   const removePaid = () => {
     const kind = kinds[paidDone - 1] ?? 'normal'
-    onSpend(-refreshPrice(kind, paidDone - 1), kind === 'keyword' ? 'Keyword refresh taken back' : 'Refresh taken back')
+    onSpend(-price(kind, paidDone - 1), kind === 'keyword' ? 'Keyword refresh taken back' : 'Refresh taken back')
     setPaid(paidDone - 1)
   }
   const a = useMemo(() => refreshAdvice(ctx, ranked, availableNow, moves, { buffs, superShop, cost, paidDone }),
@@ -67,19 +70,19 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
       </p>
       {showWanted && (
         <ul className="refresh-wanted small">
-          {a.wanted.map((w) => <li key={w.gift.id}>{w.gift.name} <KeywordChip keyword={w.gift.keyword} /> <span className="muted">{w.gift.cost}</span></li>)}
+          {a.wanted.map((w) => <li key={w.gift.id}>{w.gift.name} <KeywordChip keyword={w.gift.keyword} /> <span className="muted">{w.price}</span></li>)}
         </ul>
       )}
       <div className="refresh-kinds">
         <div className="refresh-kind">
           <b>Refresh</b>
-          <span className="small muted">{refreshPrice('normal', paidDone)} Cost{paidDone ? '' : ', then +15 each time'}. New gifts and a new Sinner for Skill Replacement.</span>
+          <span className="small muted">{price('normal', paidDone)} Cost{paidDone ? '' : ', then +15 each time'}. New gifts and a new Sinner for Skill Replacement.</span>
           <span className="small">Each one: <b>{pct(a.normal.giftChance)}</b> chance of a gift worth buying{a.normal.swapChance > 0 && <>, <b>{pct(a.normal.swapChance)}</b> of a swap worth making</>}.</span>
           {a.free.normal > 0 && <span className="small free-line">{a.free.normal} free at each shop (Star of the Beginning)</span>}
         </div>
         <div className="refresh-kind">
           <b>Keyword refresh</b>
-          <span className="small muted">{refreshPrice('keyword', paidDone)} Cost{paidDone ? '' : ', +15 for every refresh before it'}. Pick a keyword: the new gifts lean toward it.</span>
+          <span className="small muted">{price('keyword', paidDone)} Cost{paidDone ? '' : ', +15 for every refresh before it'}. Pick a keyword: the new gifts lean toward it.</span>
           {a.keyword
             ? <span className="small">Pick <b>{a.keyword.keyword}</b>: about <b>{pct(a.keyword.giftChance)}</b> chance of a gift worth buying.</span>
             : <span className="small muted">No keyword has gifts worth refreshing for.</span>}
@@ -105,8 +108,8 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
       )}
       <div className="refresh-done small">
         Paid refreshes done at this shop: <b>{paidDone}</b>
-        <button className="btn small-btn" onClick={() => addPaid('normal')}>+ Refresh ({refreshPrice('normal', paidDone)})</button>
-        {a.keyword && <button className="btn small-btn" onClick={() => addPaid('keyword')}>+ Keyword ({refreshPrice('keyword', paidDone)})</button>}
+        <button className="btn small-btn" onClick={() => addPaid('normal')}>+ Refresh ({price('normal', paidDone)})</button>
+        {a.keyword && <button className="btn small-btn" onClick={() => addPaid('keyword')}>+ Keyword ({price('keyword', paidDone)})</button>}
         <button className="btn small-btn" onClick={removePaid} disabled={!paidDone} aria-label="Take one back">Undo</button>
       </div>
       <p className="muted small">

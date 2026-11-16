@@ -16,9 +16,12 @@ import type { CostKeep } from './costkeep'
 import { affordable, isCore, planUpgrades, type UpgradeMove } from './upgrades'
 import { intrinsicScore, packPool, type GiftScore, type RunContext } from './scoring'
 import type { Gift } from './types'
+import { pricesFor } from './shopprices'
 
 export interface ShopBuy {
   gift: Gift
+  /** What you pay for it here (Wealth: 1). */
+  price: number
   /** Value per 100 Cost, as a share of a typical good shop gift's (same scale as UpgradeMove.ratio). */
   ratio: number
 }
@@ -48,10 +51,12 @@ function buyable(g: Gift, availableNow: Set<string>, packGifts: Set<string>): bo
 export function shopBuys(ctx: RunContext, ranked: GiftScore[], availableNow: Set<string>, shop: number, n: number): ShopBuy[] {
   const pack = ctx.run.pack ? ctx.data.themePacks.find((p) => p.id === ctx.run.pack) : undefined
   const packGifts = new Set(pack ? packPool(pack) : [])
+  const prices = pricesFor(ctx)
   return ranked
     .filter((r) => !ctx.owned.has(r.gift.id) && buyable(r.gift, availableNow, packGifts))
     .slice(0, n)
-    .map((r) => ({ gift: r.gift, ratio: (intrinsicScore(r.gift, ctx).score / r.gift.cost! * 100) / (shop || 1) }))
+    // At the price you pay (Wealth: 1; Prestige Card: 30% off).
+    .map((r) => ({ gift: r.gift, price: prices.gift(r.gift)!, ratio: (intrinsicScore(r.gift, ctx).score / Math.max(1, prices.gift(r.gift)!) * 100) / (shop || 1) }))
 }
 
 export function shopAdvice(

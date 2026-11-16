@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { CostKeep } from '../lib/costkeep'
 import { costPlan, floorCostFrom, type ShopBuffs } from '../lib/costplan'
+import { pricesFor } from '../lib/shopprices'
 import { usePacksOnFloor, withFloor } from '../lib/run'
 import {
   EXTREME_FROM, RUN_LENGTHS, defaultFloors, withPack, type Difficulty, type GiftScore, type RunContext, type RunSettings,
@@ -122,7 +123,7 @@ export function CostBox({ run, ranked, ctx, keep, buffs = {}, start = 200 }: {
   start?: number
 }) {
   const floor = run.floor ?? 1
-  const here = useMemo(() => floorCostFrom(ranked, floor, buffs), [ranked, floor, buffs])
+  const here = useMemo(() => floorCostFrom(ranked, floor, buffs, pricesFor(ctx)), [ranked, floor, buffs, ctx])
   const [showAll, setShowAll] = useState(false)
   // Ranking every floor takes a moment, so only when asked.
   const all = useMemo(() => (showAll ? costPlan(ctx, buffs) : []), [showAll, ctx, buffs])
@@ -137,7 +138,7 @@ export function CostBox({ run, ranked, ctx, keep, buffs = {}, start = 200 }: {
         {here.parts.map((p) => <li key={p.label}><span>{p.label}</span><span>{p.cost < 0 ? `−${-p.cost}` : p.cost}</span></li>)}
       </ul>
       {here.top && here.comfortable > here.min && (
-        <p className="muted small">Comfortable also covers {here.top.name} ({here.top.cost}), your #1 shop gift.</p>
+        <p className="muted small">Comfortable also covers {here.top.name} ({pricesFor(ctx).gift(here.top)}), your #1 shop gift.</p>
       )}
       {keep && (
         <p className="small keep-line">
