@@ -1956,3 +1956,4 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .price s { margin-right: 2px; }
 .price-off { color: var(--good); }
 .cost-discounts { margin: 6px 0 0; color: var(--good); }
+.skill-search { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--line); }

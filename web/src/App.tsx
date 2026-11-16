@@ -419,12 +419,13 @@ export default function App() {
     setEnhanced(next)
   }
   /** Skill swaps at the shop: each swap recorded costs its price (one taken back gives it back). */
-  const shopSetSwaps = (next: SwapState) => {
+  const shopSetSwaps = (next: SwapState, via: 'random' | 'search' = 'random') => {
     for (const id of new Set([...Object.keys(swaps), ...Object.keys(next)])) {
       const name = gameData.identities.find((i) => i.id === id)?.sinner ?? 'Swap'
       for (const sw of SWAPS) {
         const d = (next[id]?.[sw.kind] ?? 0) - (swaps[id]?.[sw.kind] ?? 0)
-        if (d) spend(d * shopPrices.swap(sw.cost), `${name}: skill ${sw.from} → ${sw.to}${d < 0 ? ' taken back' : ''}`)
+        // ID Skill Search (Super Shop): you pick the Sinner, at its own price (Trial Plan Guide doesn't lower it).
+        if (d) spend(d * (via === 'search' ? sw.search : shopPrices.swap(sw.cost)), `${name}: skill ${sw.from} → ${sw.to}${via === 'search' ? ' (Skill Search)' : ''}${d < 0 ? ' taken back' : ''}`)
       }
     }
     setSwaps(next)
@@ -434,8 +435,8 @@ export default function App() {
     if (tab !== 'shophome' || !teamIdentities.length) return []
     const owned = [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
     const plans = planSwaps(teamIdentities.slice(0, deployed), swaps, owned, { egos: gameData.egos ?? [], loadout, run })
-    return shopMoves(ctx, shopRanked, enhanced, availableNow, plans)
-  }, [tab, teamIdentities, deployed, swaps, ctx, loadout, run, shopRanked, enhanced, availableNow])
+    return shopMoves(ctx, shopRanked, enhanced, availableNow, plans, { superShop: superShop && run.difficulty !== 'normal' })
+  }, [tab, teamIdentities, deployed, swaps, ctx, loadout, run, shopRanked, enhanced, availableNow, superShop])
   // The last move marked done on the overview, with what it changed, so it can be undone.
   const [lastMove, setLastMove] = useState<{ move: ShopMove; owned: string[]; enhanced: Record<string, number>; swaps: SwapState; cost: number | null } | null>(null)
   const undoMove = () => {
@@ -454,7 +455,7 @@ export default function App() {
     else {
       const log = { ...(swaps[m.identity!.id] ?? {}) }
       log[m.swap!] = (log[m.swap!] ?? 0) + 1
-      shopSetSwaps({ ...swaps, [m.identity!.id]: log })
+      shopSetSwaps({ ...swaps, [m.identity!.id]: log }, m.pick ? 'search' : 'random')
     }
   }
   const ownedGifts = useMemo(() => [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g), [ctx])
@@ -840,7 +841,7 @@ export default function App() {
                 <ShopOverview moves={shopOverview} hasTeam={teamIdentities.length > 0} hasGifts={owned.length > 0} keep={keepCost}
                   floorsLeft={floorsWeight(run).floorsLeft} onOpen={setTab} onOpenTeam={() => setTab('team')} onDone={doMove}
                   justDone={lastMove?.move ?? null} onUndo={undoMove} cost={shopCost} onCostChange={setShopCost}
-                  refresh={{ ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop, onSuperShopChange: setSuperShop, onSpend: spend }} />
+                  refresh={{ ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop: superShop && run.difficulty !== 'normal', onSuperShopChange: setSuperShop, onSpend: spend }} />
               )}
               {tab === 'gifts' && (
                 <>
@@ -859,7 +860,7 @@ export default function App() {
               {tab === 'upgrades' && <UpgradesTab ctx={ctx} levels={enhanced} onLevelsChange={shopSetEnhanced} ranked={rankedGifts} keep={keepCost}
                 cost={shopCost} onCostChange={setShopCost} />}
               {tab === 'skills' && (
-                <SkillsTab team={teamIdentities.slice(0, deployed)} backups={teamIdentities.slice(deployed)} swaps={swaps} onSwapsChange={shopSetSwaps} owned={ownedGifts} art={art}
+                <SkillsTab team={teamIdentities.slice(0, deployed)} backups={teamIdentities.slice(deployed)} swaps={swaps} onSwapsChange={shopSetSwaps} superShop={superShop && run.difficulty !== 'normal'} owned={ownedGifts} art={art}
                   egos={gameData.egos ?? []} loadout={loadout} run={run} battle={ctx.battle} onOpenTeam={() => setTab('team')} />
               )}
             </main>

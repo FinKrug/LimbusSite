@@ -47,4 +47,22 @@ describe('shop overview: buy, enhance and swap on one list (Finley, 2026-11-15)'
     expect(worthLabel(m(1.5).ratio).text).toBe('Top pick')
     expect(worthLabel(m(0.1).ratio).text).toBe('Spare Cost only')
   })
+
+  it('Super Shop: ID Skill Search adds a sure swap you pick, at its own price (Finley, 2026-11-15)', () => {
+    const sup = shopMoves(ctx, rankGifts(ctx), {}, now, plans, { superShop: true })
+    const picks = sup.filter((m) => m.pick)
+    expect(picks.length).toBeGreaterThan(0)
+    for (const p of picks) {
+      const random = sup.find((m) => m.kind === 'swap' && !m.pick && m.identity!.id === p.identity!.id)!
+      expect(p.chance).toBe(false)
+      expect(p.cost).toBe(random.cost * 2)
+      expect(p.ratio).toBeCloseTo(random.ratio / 2)
+    }
+    expect(moves.some((m) => m.pick)).toBe(false)
+    const plan = shopPlan(sup, 5000, null, { superShop: true })
+    const sw = plan.moves.filter((m) => m.kind === 'swap')
+    expect(sw.filter((m) => m.pick).length).toBeLessThanOrEqual(1)
+    expect(sw.filter((m) => !m.pick).length).toBeLessThanOrEqual(2)
+    expect(new Set(sw.map((m) => m.identity!.id)).size).toBe(sw.length)
+  })
 })

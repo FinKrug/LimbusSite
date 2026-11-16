@@ -5,7 +5,10 @@
  *
  *  - buy:     a top pick a shop on this floor can sell (shopadvice.ts `shopBuys`);
  *  - enhance: the next worthwhile upgrade of a gift you have (upgrades.ts `planUpgrades`);
- *  - swap:    each deployed identity's recommended Skill Replacement (skillswap.ts `planSwaps`).
+ *  - swap:    each deployed identity's recommended Skill Replacement (skillswap.ts `planSwaps`), two
+ *             ways (Finley, 2026-11-15; wiki: Shop Functions): Skill Replacement, for the Sinner the
+ *             shop rolled (45 / 75 / 120), or, at a Super Shop, ID Skill Search, for the Sinner you pick
+ *             (90 / 150 / 240 Cost, or 25 / 50 / 75 Starlight; Trial Plan Guide doesn't lower it).
  *
  * The scale is "value per 100 Cost, as a share of what 100 Cost buys in a shop" (1 = as good as a
  * typical good shop gift), which buys and upgrades already use. A swap's score is % of team value
@@ -44,6 +47,8 @@ export interface ShopMove {
   swap?: SwapKind
   skillFrom?: string
   skillTo?: string
+  /** swap: ID Skill Search (you pick the Sinner, at a Super Shop) rather than the shop's random one. */
+  pick?: boolean
   /** swap: the change in the team's value per turn (0.02 = +2%). */
   gain?: number
   /** Short reasons (the swap planner's pros; a buy's "Built for your team"). */
@@ -57,6 +62,7 @@ const LIMITS = { buys: 5, upgrades: 6 }
 
 export function shopMoves(
   ctx: RunContext, ranked: GiftScore[], levels: Record<string, number>, availableNow: Set<string>, swapPlans: IdentityPlan[],
+  opts: { superShop?: boolean } = {},
 ): ShopMove[] {
   const up = planUpgrades(ctx, levels)
   const byId = new Map(ranked.map((r) => [r.gift.id, r]))
@@ -83,10 +89,13 @@ export function shopMoves(
   const swaps: ShopMove[] = swapPlans.flatMap((p) => {
     const s = p.best ?? p.spare
     if (!s || s.hurts) return []
-    return [{
-      kind: 'swap' as const, key: `swap:${p.identity.id}:${s.kind}`, cost: s.cost, ratio: Math.max(0, s.score) / SWAP_WEIGHTS.worth * cheaper,
+    const random: ShopMove = {
+      kind: 'swap', key: `swap:${p.identity.id}:${s.kind}`, cost: s.cost, ratio: Math.max(0, s.score) / SWAP_WEIGHTS.worth * cheaper,
       identity: p.identity, swap: s.kind, skillFrom: s.from.name, skillTo: s.to.name, gain: s.gain, chance: true, why: s.pros.slice(0, 2),
-    }]
+    }
+    // ID Skill Search: the same swap, sure, at its own price (value per Cost scales down with it).
+    const pick: ShopMove = { ...random, key: `pick:${p.identity.id}:${s.kind}`, cost: s.search, ratio: random.ratio * s.cost / s.search, chance: false, pick: true }
+    return opts.superShop ? [random, pick] : [random]
   })
   return [...buys, ...upgrades, ...swaps].filter((m) => m.ratio > 0).sort((a, b) => b.ratio - a.ratio)
 }
@@ -99,19 +108,26 @@ export const WORTH = UPGRADE_LEVELS.low
  * With Cost to keep for the next floor (Cumulating Starcloud), a move that dips below it also pays
  * the bonus it loses, and waits unless it's still worth it.
  */
-export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | null = null): {
+export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | null = null, opts: { superShop?: boolean } = {}): {
   moves: ShopMove[]; spent: number; lost: number
-  /** A regular shop offers Skill Replacement for one random sinner: the plan has one swap, for
-   *  whichever of these it turns out to be (the plan's swap first). */
+  /** A regular shop offers Skill Replacement for one random sinner (a Super Shop, two): the plan's
+   *  random swap is for whichever of these it turns out to be (the plan's swap first). */
   swapFor: ShopMove[]
 } {
   const picked: ShopMove[] = []
   let spent = 0
   let lost = 0
-  const swaps = moves.filter((m) => m.kind === 'swap' && m.ratio >= WORTH)
+  const swaps = moves.filter((m) => m.kind === 'swap' && !m.pick && m.ratio >= WORTH)
+  // Random swaps: as many as Sinners the shop offers (1, or 2 at a Super Shop); ID Skill Search: 1.
+  // One swap per identity either way.
+  const randomSlots = opts.superShop ? 2 : 1
   for (const m of moves) {
     if (m.ratio < WORTH || spent + m.cost > budget) continue
-    if (m.kind === 'swap' && picked.some((p) => p.kind === 'swap')) continue
+    if (m.kind === 'swap') {
+      const mine = picked.filter((p) => p.kind === 'swap')
+      if (mine.some((p) => p.identity!.id === m.identity!.id)) continue
+      if (m.pick ? mine.some((p) => p.pick) : mine.filter((p) => !p.pick).length >= randomSlots) continue
+    }
     if (keep) {
       const loss = starcloudLoss(keep, budget - spent, m.cost)
       if (loss > 0 && m.ratio * m.cost / (m.cost + loss) < WORTH) continue
@@ -120,8 +136,11 @@ export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | nul
     picked.push(m)
     spent += m.cost
   }
-  const swap = picked.find((m) => m.kind === 'swap')
-  return { moves: picked, spent, lost: Math.round(lost), swapFor: swap ? [swap, ...swaps.filter((m) => m !== swap && m.cost <= swap.cost)] : [] }
+  const randoms = picked.filter((m) => m.kind === 'swap' && !m.pick)
+  const taken = new Set(picked.filter((m) => m.kind === 'swap').map((m) => m.identity!.id))
+  const most = Math.max(0, ...randoms.map((m) => m.cost))
+  return { moves: picked, spent, lost: Math.round(lost),
+    swapFor: randoms.length ? [...randoms, ...swaps.filter((m) => !taken.has(m.identity!.id) && m.cost <= most)] : [] }
 }
 
 /** "Top pick" … "Spare Cost only": how a move's value per Cost compares with a typical good shop gift. */

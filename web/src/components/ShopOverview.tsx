@@ -33,18 +33,23 @@ const KIND: Record<MoveKind, { label: string; tab: 'gifts' | 'upgrades' | 'skill
 }
 const SWAP_TEXT = { '1to2': 'Skill 1 → Skill 2', '2to3': 'Skill 2 → Skill 3', '1to3': 'Skill 1 → Skill 3' } as const
 const SWAP_SHORT = { '1to2': 'S1 → S2', '2to3': 'S2 → S3', '1to3': 'S1 → S3' } as const
+/** ID Skill Search's Starlight price (wiki: 25 / 50 / 75). */
+const SEARCH_STARLIGHT = { '1to2': 25, '2to3': 50, '1to3': 75 } as const
+const label = (m: ShopMove) => (m.pick ? 'Skill search' : KIND[m.kind].label)
 
 function title(m: ShopMove) {
   if (m.kind === 'buy') return <><b>{m.gift!.name}</b></>
   if (m.kind === 'enhance') return <><b>{m.gift!.name}</b> to {'+'.repeat(m.to!)}</>
-  return <><b>{m.identity!.name}</b> <span className="muted">{SWAP_TEXT[m.swap!]}</span></>
+  return <><b>{m.identity!.name}</b> <span className="muted">{SWAP_TEXT[m.swap!]}{m.pick ? ', picked with ID Skill Search' : ''}</span></>
 }
 
 function detail(m: ShopMove): string {
   if (m.kind === 'buy') return [...m.why, 'if the shop has it'].join(' · ')
   if (m.kind === 'enhance') return m.from ? `From + to ++: the full effect` : 'Upgrade a gift you have'
   const gain = m.gain ?? 0
-  return `${m.skillTo} replaces a copy of ${m.skillFrom}: ${gain >= 0 ? '+' : ''}${(gain * 100).toFixed(1)}% team value per turn · if the shop offers it for ${m.identity!.sinner}`
+  const what = `${m.skillTo} replaces a copy of ${m.skillFrom}: ${gain >= 0 ? '+' : ''}${(gain * 100).toFixed(1)}% team value per turn`
+  return m.pick ? `${what} · you choose ${m.identity!.sinner}, no luck needed (or pay ${SEARCH_STARLIGHT[m.swap!]} Starlight instead of Cost)`
+    : `${what} · if the shop offers it for ${m.identity!.sinner}`
 }
 
 /**
@@ -52,8 +57,13 @@ function detail(m: ShopMove): string {
  * per Cost for your team first, plus what to do with the Cost you have.
  */
 export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft, onOpen, onDone, onOpenTeam, justDone = null, onUndo, refresh, cost, onCostChange: setCost }: Props) {
-  const plan = useMemo(() => (cost === null ? null : shopPlan(moves, cost, keep)), [moves, cost, keep])
+  const superShop = refresh.superShop
+  const plan = useMemo(() => (cost === null ? null : shopPlan(moves, cost, keep, { superShop })), [moves, cost, keep, superShop])
   const best = (k: MoveKind) => moves.find((m) => m.kind === k)
+  // A Super Shop offers 2 Sinners: the plan's random swaps show as one line.
+  const randomSwaps = plan?.moves.filter((m) => m.kind === 'swap' && !m.pick) ?? []
+  const firstRandom = randomSwaps[0]
+  const randomCount = randomSwaps.length
   if (!hasTeam) {
     return (
       <section className="panel shop-home">
@@ -99,13 +109,13 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
         </div>
         {plan && plan.moves.length > 0 && (
           <ol className="shop-home-plan">
-            {plan.moves.map((m) => (
-              <li key={m.key}><span className={`kind-tag kind-${m.kind}`}>{KIND[m.kind].label}</span>{' '}
-                {m.kind === 'swap' && plan.swapFor.length > 1
-                  ? <> for whichever the shop offers: {plan.swapFor.slice(0, 4).map((s, k) => (
+            {plan.moves.filter((m) => !(m.kind === 'swap' && !m.pick && m !== firstRandom)).map((m) => (
+              <li key={m.key}><span className={`kind-tag kind-${m.kind}`}>{label(m)}</span>{' '}
+                {m.kind === 'swap' && !m.pick && plan.swapFor.length > 1
+                  ? <>{randomCount > 1 ? ` ×${randomCount}` : ''} for whichever {randomCount > 1 ? `${randomCount} Sinners` : 'Sinner'} the shop offers: {plan.swapFor.slice(0, 5).map((s, k) => (
                     <span key={s.key} title={s.identity!.name}>{k > 0 && ', '}<b>{s.identity!.sinner}</b> <span className="muted">({SWAP_SHORT[s.swap!]})</span></span>
                   ))}</>
-                  : title(m)} <span className="muted small">{m.cost}</span>
+                  : title(m)} <span className="muted small">{m.kind === 'swap' && !m.pick && randomCount > 1 ? `${randomCount} × ${m.cost}` : m.cost}</span>
               </li>
             ))}
           </ol>
@@ -122,7 +132,7 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
         <h3>Everything worth doing, best first</h3>
         {justDone && (
           <p className="small done-note" role="status">
-            Marked done: {KIND[justDone.kind].label.toLowerCase()} {title(justDone)}. The list is updated for it.
+            Marked done: {label(justDone).toLowerCase()} {title(justDone)}. The list is updated for it.
             {' '}{onUndo && <button className="link-btn" onClick={onUndo}>Undo</button>}
           </p>
         )}
@@ -134,20 +144,25 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
                 <li key={m.key} className="shop-move">
                   <span className="shop-move-n">{i + 1}</span>
                   <div className="shop-move-body">
-                    <div><span className={`kind-tag kind-${m.kind}`}>{KIND[m.kind].label}</span> {title(m)}</div>
+                    <div><span className={`kind-tag kind-${m.kind}`}>{label(m)}</span> {title(m)}</div>
                     <div className="muted small">{detail(m)}</div>
                   </div>
                   <div className="shop-move-side">
                     <span className={`worth worth-${w.cls}`} title={`${m.ratio.toFixed(2)}× a typical good shop gift's value per Cost`}>{w.text}</span>
                     <span className="small">{m.cost} Cost</span>
-                    <button className="link-btn small" onClick={() => onDone(m)}>{KIND[m.kind].done}</button>
+                    <button className="link-btn small" onClick={() => onDone(m)}>{m.pick ? 'Picked it' : KIND[m.kind].done}</button>
                   </div>
                 </li>
               )
             })}
           </ul>
         )}
-        <p className="muted small">Value per Cost compared with a typical good gift from this shop. Fusing isn't listed: see Fuse for recipes you're close to.</p>
+        <p className="muted small">
+          Value per Cost compared with a typical good gift from this shop. Fusing isn't listed: see Fuse for recipes you're close to.
+          {' '}Skill swaps come two ways: <b>Skill Replacement</b> (45 / 75 / 120) is for whichever Sinner the shop rolled;
+          {' '}<b>ID Skill Search</b> (90 / 150 / 240, or 25 / 50 / 75 Starlight) lets you pick the Sinner, and only Super Shops have it
+          {superShop ? '' : ' (tick "This is a Super Shop" above when you\'re in one)'}.
+        </p>
       </section>
     </div>
   )
