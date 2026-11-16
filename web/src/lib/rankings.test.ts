@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import type { Ego } from './ego'
 import { gameData } from './data'
 import { ownedIdentitySet } from './myidentities'
-import { ANY_TEAM_MIN, getNextPicks, giftsFor, ownedKeywordTeams, rankGiftsOverall, rankIdentitiesOverall } from './rankings'
+import { ANY_TEAM_MIN, genericTeam, getNextPicks, giftsFor, ownedKeywordTeams, rankEgosOverall, rankGiftsOverall, rankIdentitiesOverall } from './rankings'
 import { CORE_KEYWORDS } from './types'
 
 describe('best gifts for any team', () => {
@@ -49,5 +50,28 @@ describe('identities', () => {
     expect(base.map((t) => t.keyword).sort()).toEqual([...CORE_KEYWORDS].sort())
     const best = (ts: typeof base) => Math.max(...ts.map((t) => t.score))
     expect(best(all)).toBeGreaterThan(best(base))
+  })
+})
+
+describe('general rankings', () => {
+  it('ranks gifts for a stand-in team, not particular identities', () => {
+    const team = genericTeam('Poise')
+    expect(team).toHaveLength(7)
+    expect(team.every((i) => i.traits.length === 0 && i.status_effects.join() === 'Poise')).toBe(true)
+    // Fusion results are ranked too.
+    const ranked = new Set(rankGiftsOverall(gameData).map((g) => g.gift.id))
+    expect(gameData.fusions.every((f) => ranked.has(f.result))).toBe(true)
+  })
+
+  it('ranks every E.G.O, cheaper ones ahead when they hit as hard', () => {
+    const r = rankEgosOverall(gameData.egos ?? [])
+    expect(r).toHaveLength((gameData.egos ?? []).length)
+    expect(r[0].score).toBe(1)
+    for (let k = 1; k < r.length; k++) expect(r[k - 1].score).toBeGreaterThanOrEqual(r[k].score)
+    const base: Ego = { id: 'x', name: 'X', sinner: 'Yi Sang', grade: 'HE', sin: 'wrath', sanity: 20, statuses: [], wiki_url: '', cost: null,
+      skill: { type: 'Slash', base: 10, coin_power: 5, coins: 2, weight: 1, statuses: [] } }
+    const [cheap, dear] = rankEgosOverall([{ ...base, id: 'cheap', cost: { wrath: 4 } }, { ...base, id: 'dear', cost: { wrath: 12 } }])
+    expect(cheap.ego.id).toBe('cheap')
+    expect(dear.score).toBeLessThan(cheap.score)
   })
 })

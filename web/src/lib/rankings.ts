@@ -1,7 +1,7 @@
 // Rankings (the Rankings tab): the best of everything for Mirror Dungeon, whatever you own.
 //
-// Gifts: there's no "team" here, so each gift is scored for the strongest team of every status
-// keyword (built from the whole roster, Hard run, nothing owned yet) with the normal gift scoring.
+// Gifts: there's no "team" here, so each gift is scored for a stand-in team of every status keyword
+// (genericTeam: no particular identities, Hard run, nothing owned yet) with the normal gift scoring.
 // Each team's scores are divided by the average of its top 10, so 1.0 = "as good as that team's
 // best picks". A gift's overall value is its best across the seven teams; "works with any team" is
 // how well it does for its worst one (General gifts that help everyone).
@@ -9,10 +9,11 @@
 // Identities: strength (strength.ts: community tier lists with the Mirror Dungeon status bonus,
 // plus clash), and "get next": for each keyword, the team you can build from what you own vs.
 // from everything; an identity you don't own that would replace a weaker one of yours is a pick.
+import { egoCost, egoValue, type Ego } from './ego'
 import { identityTier, strength, type TierOverrides } from './strength'
 import { type GiftScore, makeContext, rankGifts, type RunSettings } from './scoring'
 import { buildTeam, keywordFit, suggestOrder } from './teambuilder'
-import { CORE_KEYWORDS, SINNERS, type CoreKeyword, type GameData, type Gift, type Identity, type Sinner } from './types'
+import { CORE_KEYWORDS, SINNERS, SINS, type CoreKeyword, type GameData, type Gift, type Identity, type Sinner } from './types'
 
 /** A full Hard run before it starts: the usual Mirror Dungeon. */
 export const RANKING_RUN: RunSettings = { difficulty: 'hard', floors: 10, floor: null, pack: null }
@@ -42,12 +43,35 @@ export function keywordTeam(data: GameData, k: CoreKeyword, tiers: TierOverrides
 
 export const ANY_TEAM_MIN = 0.45
 
+const ATTACKS = ['Slash', 'Pierce', 'Blunt'] as const
+
+/**
+ * A stand-in team for ranking gifts in general (Finley, 2026-11-15: the ranking shouldn't depend on
+ * any particular identity). Seven sinners who all use one status keyword and nothing else: no
+ * affiliations, no identity-specific statuses (Deathrite Haste, Torn Memory...), sins and attack
+ * types spread evenly. So a gift scores on what it does for a team built around its keyword.
+ */
+export function genericTeam(k: CoreKeyword): Identity[] {
+  const sins = SINS
+  return SINNERS.slice(0, 7).map((sinner, n) => ({
+    id: `generic-${k.toLowerCase()}-${n}`,
+    name: `${k} identity`,
+    sinner,
+    rarity: 3,
+    affinities: [sins[n % sins.length], sins[(n + 3) % sins.length]],
+    keywords: [k],
+    status_effects: [k],
+    traits: [],
+    attack_types: [ATTACKS[n % 3], ATTACKS[(n + 1) % 3]],
+    attack_counts: { [ATTACKS[n % 3]]: 2, [ATTACKS[(n + 1) % 3]]: 1 },
+    wiki_url: '',
+  }))
+}
+
 export function rankGiftsOverall(data: GameData, tiers: TierOverrides = {}): GiftRanking[] {
   const per = new Map<string, { byKeyword: Partial<Record<CoreKeyword, number>>; reasons: Partial<Record<CoreKeyword, GiftScore['reasons']>> }>()
   for (const k of CORE_KEYWORDS) {
-    // Without affiliations: a keyword's best team happens to have three Middle members, which would
-    // make Middle gifts look like Burn gifts. Affiliation teams are their own thing.
-    const team = keywordTeam(data, k, tiers).map((i) => ({ ...i, traits: [] }))
+    const team = genericTeam(k)
     const ctx = makeContext(data, team, [], { deployed: 7, tiers, run: RANKING_RUN })
     const ranked = rankGifts(ctx)
     const top = ranked.slice(0, 10).map((g) => g.score)
@@ -153,4 +177,41 @@ export function ownedKeywordTeams(data: GameData, owned: ReadonlySet<string>, ti
     const score = top.reduce((sum, i) => sum + spotValue(i, k, tiers), 0) / 7
     return { keyword: k, score, filled: top.filter((i) => keywordFit(i, k) >= 0.5).length }
   }).sort((a, b) => b.score - a.score)
+}
+
+// ---------- E.G.O ----------
+
+export interface EgoRanking {
+  ego: Ego
+  /** 0-1, relative to the best E.G.O. */
+  score: number
+  /** Value of one use (how hard it hits, plus the status keywords it inflicts). */
+  hit: number
+  /** Total resources per use. */
+  cost: number
+  /** Core status keywords its skill inflicts. */
+  keywords: CoreKeyword[]
+  estimated: boolean
+}
+
+/**
+ * E.G.O ranked for Mirror Dungeon, for any team. There's no community E.G.O tier list to lean on,
+ * so this is the site's own rule of thumb: how hard one use hits (skill power and coins, as for
+ * the E.G.O loadout) and the status keywords it inflicts, against what it costs, since a cheap
+ * E.G.O comes out far more often in a run. value = hit / cost^0.5.
+ */
+export function rankEgosOverall(egos: readonly Ego[]): EgoRanking[] {
+  const rows = egos.map((e) => {
+    const { cost, estimated } = egoCost(e)
+    const total = Math.max(1, Object.values(cost).reduce((a, b) => a + (b ?? 0), 0))
+    // What the skill itself inflicts (the page's full list also has passives and corrosion).
+    const inflicts = e.skill?.statuses.length ? e.skill.statuses : e.statuses
+    const keywords = CORE_KEYWORDS.filter((k) => inflicts.some((s) => s === k || s.startsWith(`${k} `)))
+    // A team runs one or two keywords, so inflicting all seven (Holiday) is worth no more than two.
+    const hit = egoValue(e, 10, 1) + 1.5 * Math.min(2, keywords.length)
+    return { ego: e, score: hit / Math.sqrt(total), hit, cost: total, keywords, estimated }
+  })
+  const best = Math.max(...rows.map((r) => r.score), 1e-9)
+  return rows.map((r) => ({ ...r, score: r.score / best }))
+    .sort((a, b) => b.score - a.score || a.ego.name.localeCompare(b.ego.name))
 }

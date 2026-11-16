@@ -9,7 +9,7 @@ import { SaveStatus } from './MyIdentitiesTab'
 
 type Show = 'all' | 'owned' | 'missing'
 /** E.G.O id -> wiki file of its round art. */
-const ART = new Map((artMeta.refs as [string, string][]).map(([id, file]) => [id, file]))
+export const EGO_ART = new Map((artMeta.refs as [string, string][]).map(([id, file]) => [id, file]))
 
 /**
  * Home › My identities & E.G.O › E.G.O: every E.G.O grouped by sinner; tap one to mark it owned.
@@ -88,7 +88,7 @@ export function MyEgoTab({ egos, stored, onChange, onOpenData, importOpen = fals
                     <button className={`myid myego${own ? ' own' : ''} sin-${e.sin ?? 'none'}`} aria-pressed={own} disabled={isBase}
                       title={`${e.name} (${e.grade}): ${isBase ? 'every player has this one' : own ? 'owned, tap to unmark' : 'tap to mark as owned'}`}
                       onClick={() => toggle(e)}>
-                      <EgoArt file={ART.get(e.id)} name={e.name} />
+                      <EgoArt file={EGO_ART.get(e.id)} name={e.name} />
                       {own && <span className="myid-check" aria-hidden="true">✓</span>}
                       <span className={`myego-grade g-${e.grade.toLowerCase()}`}>{e.grade}</span>
                       <span className="myid-name">{e.name}</span>
@@ -106,7 +106,7 @@ export function MyEgoTab({ egos, stored, onChange, onOpenData, importOpen = fals
 }
 
 /** The round art, or a plain circle with the initials if it can't load. */
-function EgoArt({ file, name }: { file?: string; name: string }) {
+export function EgoArt({ file, name }: { file?: string; name: string }) {
   const [failed, setFailed] = useState(false)
   if (!file || failed) {
     const initials = name.split(/\s+/).slice(0, 2).map((w) => w[0]).join('')

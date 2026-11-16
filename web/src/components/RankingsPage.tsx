@@ -1,28 +1,33 @@
 import { useEffect, useMemo, useState } from 'react'
 import { shortName } from '../lib/format'
 import type { ArtVariant } from '../lib/images'
-import { getNextPicks, giftsFor, rankGiftsOverall, rankIdentitiesOverall, type GiftRanking } from '../lib/rankings'
+import type { Ego } from '../lib/ego'
+import { getNextPicks, giftsFor, rankEgosOverall, rankGiftsOverall, rankIdentitiesOverall, type GiftRanking } from '../lib/rankings'
 import { clashLabel } from '../lib/strength'
 import { CORE_KEYWORDS, SINNERS, type CoreKeyword, type GameData, type Sinner } from '../lib/types'
 import { KeywordChip, TierBadge } from './bits'
 import { GiftIcon } from './GiftIcon'
+import { EGO_ART, EgoArt } from './MyEgoTab'
 import { Portrait } from './Portrait'
 
-export type RankingsView = 'gifts' | 'identities'
+export type RankingsView = 'gifts' | 'identities' | 'egos'
 
 let giftCache: GiftRanking[] | null = null
 
 /** Rankings: the best E.G.O gifts and identities for Mirror Dungeon, whatever you own. */
-export function RankingsPage({ view, data, ownedIdentities, hasMarked, art, onOpenMyIdentities }: {
+export function RankingsPage({ view, data, ownedIdentities, hasMarked, ownedEgos, art, onOpenMyIdentities }: {
   view: RankingsView
   data: GameData
   /** Identities you own (base ones included). */
   ownedIdentities: ReadonlySet<string>
   /** You've marked any identities (otherwise "get next" can't be personal). */
   hasMarked: boolean
+  /** E.G.O you own (starting ones included), or null when you haven't marked any. */
+  ownedEgos: ReadonlySet<string> | null
   art: ArtVariant
   onOpenMyIdentities: () => void
 }) {
+  if (view === 'egos') return <BestEgos egos={data.egos ?? []} owned={ownedEgos} />
   return view === 'gifts'
     ? <BestGifts data={data} />
     : <BestIdentities data={data} owned={ownedIdentities} hasMarked={hasMarked} art={art} onOpenMyIdentities={onOpenMyIdentities} />
@@ -54,14 +59,19 @@ function BestGifts({ data }: { data: GameData }) {
     const q = query.trim().toLowerCase()
     return giftsFor(list, filter).filter((g) => !q || g.gift.name.toLowerCase().includes(q))
   }, [list, filter, query])
+  const recipes = useMemo(() => {
+    const names = new Map(data.gifts.map((g) => [g.id, g.name]))
+    return new Map(data.fusions.map((f) => [f.result, f.ingredients.map((i) => names.get(i) ?? i).join(' + ')]))
+  }, [data])
   const valueOf = (g: GiftRanking) => (filter === 'all' ? g.overall : filter === 'any' ? g.anyTeam : g.byKeyword[filter])
 
   return (
     <div className="rankings">
       <p className="muted rankings-intro">
-        The best E.G.O gifts for a Hard Mirror Dungeon run, for any team: each gift is scored for the strongest team of every status
-        keyword, and ranked by the team it helps most. Pick a keyword to see the best gifts for that kind of team, or
-        <b> Any team</b> for gifts that help whatever you bring. For what to take in your own run, use the Shop in the run.
+        The best E.G.O gifts for a Hard Mirror Dungeon run, fusions included. Each gift is judged for the kind of team it suits
+        best (a team built around its status keyword, with no particular identities), by how much it does for that team.
+        Pick a keyword to see the best gifts for that kind of team, or <b>Any team</b> for gifts that help whatever you bring.
+        For what to take in your own run, use the Shop in the run.
       </p>
       <div className="rankings-tools" data-tour="gift-filters">
         <div className="chips-row" role="group" aria-label="Which teams">
@@ -77,8 +87,11 @@ function BestGifts({ data }: { data: GameData }) {
       <ol className="rank-list">
         {rows.slice(0, shown).map((g, k) => {
           const v = valueLabel(valueOf(g))
-          // The reasons are written for "your team"; here it's the keyword team it was scored for.
-          const reason = (g.reasons.find((r) => r.kind === 'good')?.text ?? g.reasons[0]?.text)?.replace(/\byour team\b/g, 'the team')
+          // Only reasons about the gift itself: the stand-in team's makeup ("7/7 of your team use Poise")
+          // says nothing here.
+          const general = g.reasons.filter((r) => !/\byour\b/i.test(r.text))
+          const reason = (general.find((r) => r.kind === 'good') ?? general[0])?.text
+          const recipe = recipes.get(g.gift.id)
           return (
             <li key={g.gift.id} className="rank-row">
               <span className="rank-n">{k + 1}</span>
@@ -87,6 +100,7 @@ function BestGifts({ data }: { data: GameData }) {
                 <span className="rank-title">
                   <TierBadge tier={g.gift.tier} /> <b>{g.gift.name}</b> <KeywordChip keyword={g.gift.keyword} />
                   {g.gift.reward_only && <span className="tag" title="Only from clearing a pack or a hidden boss, never in shops">Reward only</span>}
+                  {recipe && <span className="tag" title={`Fused from ${recipe}`}>Fusion</span>}
                 </span>
                 {reason && <span className="rank-why muted small">{reason}</span>}
               </span>
@@ -114,10 +128,13 @@ function BestIdentities({ data, owned, hasMarked, art, onOpenMyIdentities }: {
   const [sinner, setSinner] = useState<Sinner | ''>('')
   const [keyword, setKeyword] = useState<CoreKeyword | ''>('')
   const [own, setOwn] = useState<OwnFilter>('all')
+  const [query, setQuery] = useState('')
   const [shown, setShown] = useState(40)
   const ranked = useMemo(() => rankIdentitiesOverall(data.identities), [data])
+  const q = query.trim().toLowerCase()
   const picks = useMemo(() => (hasMarked ? getNextPicks(data, owned) : []), [data, owned, hasMarked])
-  const rows = ranked.filter((r) => (!sinner || r.identity.sinner === sinner)
+  const rows = ranked.filter((r) => (!q || `${r.identity.name} ${r.identity.sinner} ${r.identity.traits.join(' ')}`.toLowerCase().includes(q))
+    && (!sinner || r.identity.sinner === sinner)
     && (!keyword || r.identity.keywords.includes(keyword))
     && (own === 'all' || (own === 'owned') === owned.has(r.identity.id)))
 
@@ -158,6 +175,8 @@ function BestIdentities({ data, owned, hasMarked, art, onOpenMyIdentities }: {
         specialists (MD's keyword gifts multiply status damage) and how well each one wins clashes.
       </p>
       <div className="rankings-tools">
+        <input type="search" placeholder="Find an identity or affiliation…" value={query}
+          onChange={(e) => { setQuery(e.target.value); setShown(40) }} aria-label="Find an identity" />
         <select value={sinner} onChange={(e) => { setSinner(e.target.value as Sinner | ''); setShown(40) }} aria-label="Sinner">
           <option value="">All sinners</option>
           {SINNERS.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -199,6 +218,95 @@ function BestIdentities({ data, owned, hasMarked, art, onOpenMyIdentities }: {
       </ol>
       {rows.length > shown && <button className="btn" onClick={() => setShown(shown + 40)}>Show {Math.min(40, rows.length - shown)} more</button>}
       {rows.length === 0 && <p className="muted">No identities match.</p>}
+    </div>
+  )
+}
+
+const EGO_GRADES = ['ZAYIN', 'TETH', 'HE', 'WAW', 'ALEPH'] as const
+
+function egoLabel(v: number): { text: string; cls: string } {
+  if (v >= 0.85) return { text: 'Top pick', cls: 'v-top' }
+  if (v >= 0.7) return { text: 'Strong', cls: 'v-strong' }
+  if (v >= 0.55) return { text: 'Good', cls: 'v-good' }
+  return { text: 'Situational', cls: 'v-sit' }
+}
+
+/** E.G.O ranked for Mirror Dungeon, for any team (rankEgosOverall). */
+function BestEgos({ egos, owned }: { egos: Ego[]; owned: ReadonlySet<string> | null }) {
+  const [grade, setGrade] = useState<Ego['grade'] | ''>('')
+  const [sinner, setSinner] = useState<Sinner | ''>('')
+  const [keyword, setKeyword] = useState<CoreKeyword | ''>('')
+  const [own, setOwn] = useState<OwnFilter>('all')
+  const [query, setQuery] = useState('')
+  const [shown, setShown] = useState(40)
+  const ranked = useMemo(() => rankEgosOverall(egos), [egos])
+  const q = query.trim().toLowerCase()
+  const rows = ranked.filter((r) => (!q || `${r.ego.name} ${r.ego.sinner}`.toLowerCase().includes(q))
+    && (!grade || r.ego.grade === grade)
+    && (!sinner || r.ego.sinner === sinner)
+    && (!keyword || r.keywords.includes(keyword))
+    && (own === 'all' || !owned || (own === 'owned') === owned.has(r.ego.id)))
+
+  return (
+    <div className="rankings">
+      <p className="muted rankings-intro">
+        Every E.G.O ranked for Mirror Dungeon, for any team. There's no community E.G.O tier list to lean on, so this is the site's
+        own rule of thumb: how hard one use hits (power and coins) and the status keywords it inflicts, against its cost, since a cheap
+        E.G.O comes out far more often in a run. Expensive WAW and ALEPH E.G.O rank lower for that reason; filter by grade to compare
+        like with like. Which E.G.O suits <i>your</i> team is on Team &amp; lineups.
+      </p>
+      <div className="rankings-tools">
+        <input type="search" placeholder="Find an E.G.O…" value={query} onChange={(e) => { setQuery(e.target.value); setShown(40) }} aria-label="Find an E.G.O" />
+        <div className="chips-row" role="group" aria-label="Grade">
+          <button className={`chip-btn${grade === '' ? ' on' : ''}`} aria-pressed={grade === ''} onClick={() => { setGrade(''); setShown(40) }}>All grades</button>
+          {EGO_GRADES.filter((g) => egos.some((e) => e.grade === g)).map((g) => (
+            <button key={g} className={`chip-btn${grade === g ? ' on' : ''}`} aria-pressed={grade === g} onClick={() => { setGrade(g); setShown(40) }}>{g}</button>
+          ))}
+        </div>
+        <select value={sinner} onChange={(e) => { setSinner(e.target.value as Sinner | ''); setShown(40) }} aria-label="Sinner">
+          <option value="">All sinners</option>
+          {SINNERS.map((s) => <option key={s} value={s}>{s}</option>)}
+        </select>
+        <select value={keyword} onChange={(e) => { setKeyword(e.target.value as CoreKeyword | ''); setShown(40) }} aria-label="Keyword">
+          <option value="">Any keyword</option>
+          {CORE_KEYWORDS.map((k) => <option key={k} value={k}>{k}</option>)}
+        </select>
+        {owned && (
+          <div className="chips-row" role="group" aria-label="Owned">
+            {(['all', 'owned', 'missing'] as OwnFilter[]).map((o) => (
+              <button key={o} className={`chip-btn${own === o ? ' on' : ''}`} aria-pressed={own === o} onClick={() => { setOwn(o); setShown(40) }}>
+                {o === 'all' ? 'All' : o === 'owned' ? 'Owned' : 'Not owned'}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+      <ol className="rank-list">
+        {rows.slice(0, shown).map((r, k) => {
+          const v = egoLabel(r.score)
+          const mine = owned?.has(r.ego.id)
+          return (
+            <li key={r.ego.id} className={`rank-row${mine ? ' owned' : ''}`}>
+              <span className="rank-n">{k + 1}</span>
+              <span className="rank-ego-art"><EgoArt file={EGO_ART.get(r.ego.id)} name={r.ego.name} /></span>
+              <span className="rank-main">
+                <span className="rank-title">
+                  <span className={`myego-grade g-${r.ego.grade.toLowerCase()}`}>{r.ego.grade}</span>
+                  <b>{r.ego.name}</b> <span className="muted">{r.ego.sinner}</span>
+                  {r.keywords.map((kw) => <KeywordChip key={kw} keyword={kw} />)}
+                </span>
+                <span className="rank-why small muted">
+                  {[`${r.cost}${r.estimated ? '?' : ''} resources per use`, r.ego.skill?.coins ? `${r.ego.skill.coins} coin${r.ego.skill.coins > 1 ? 's' : ''}` : null,
+                    r.ego.sanity ? `${r.ego.sanity} SP` : null, mine ? '✓ You own it' : null].filter(Boolean).join(' · ')}
+                </span>
+              </span>
+              <span className="rank-side"><span className={`rank-value ${v.cls}`}>{v.text}</span></span>
+            </li>
+          )
+        })}
+      </ol>
+      {rows.length > shown && <button className="btn" onClick={() => setShown(shown + 40)}>Show {Math.min(40, rows.length - shown)} more</button>}
+      {rows.length === 0 && <p className="muted">No E.G.O match.</p>}
     </div>
   )
 }

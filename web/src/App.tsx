@@ -58,8 +58,8 @@ import { buildTeam, suggestOrder } from './lib/teambuilder'
 import { addGift } from './lib/vestiges'
 import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
-type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'rank-gifts' | 'rank-ids'
-const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best', 'rank-gifts', 'rank-ids']
+type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'rank-gifts' | 'rank-ids' | 'rank-egos'
+const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best', 'rank-gifts', 'rank-ids', 'rank-egos']
 
 /**
  * Two places (Finley, 2026-11-15): Home, with your team and lineups, owned identities and settings;
@@ -76,7 +76,7 @@ const STAGE_OF: Record<Tab, Stage> = {
   team: 'home', identities: 'home', settings: 'home', start: 'start', prerun: 'start',
   packs: 'packs', rewards: 'fights', events: 'fights',
   gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss',
-  evaluate: 'tools', import: 'tools', best: 'tools', 'rank-gifts': 'rankings', 'rank-ids': 'rankings',
+  evaluate: 'tools', import: 'tools', best: 'tools', 'rank-gifts': 'rankings', 'rank-ids': 'rankings', 'rank-egos': 'rankings',
 }
 /** Left to right, for which way a screen slides in. */
 const STAGE_INDEX: Record<Stage, number> = { home: 0, rankings: 1, start: 2, packs: 3, fights: 4, shop: 5, boss: 6, tools: 7 }
@@ -89,7 +89,7 @@ const STAGES: { id: RunStage; tab: Tab; label: string; hint: string }[] = [
 /** Screens with parts of their own, and the parts. */
 const SUB_TABS: Partial<Record<Stage, { id: Tab; label: string }[]>> = {
   home: [{ id: 'team', label: 'Team & lineups' }, { id: 'identities', label: 'My identities & E.G.O' }, { id: 'settings', label: 'Settings' }],
-  rankings: [{ id: 'rank-gifts', label: 'Best E.G.O gifts' }, { id: 'rank-ids', label: 'Best identities' }],
+  rankings: [{ id: 'rank-gifts', label: 'E.G.O gifts' }, { id: 'rank-ids', label: 'Identities' }, { id: 'rank-egos', label: 'E.G.O' }],
   shop: [{ id: 'gifts', label: 'Buy' }, { id: 'fusion', label: 'Fuse' }, { id: 'upgrades', label: 'Enhance' }, { id: 'skills', label: 'Skill swaps' }],
 }
 /** The questions before floor 1. */
@@ -680,9 +680,9 @@ export default function App() {
             />
           </>
         )}
-        {(tab === 'rank-gifts' || tab === 'rank-ids') && (
-          <RankingsPage view={tab === 'rank-gifts' ? 'gifts' : 'identities'} data={gameData} ownedIdentities={ownedIds}
-            hasMarked={markedIds} art={art} onOpenMyIdentities={() => setTab('identities')} />
+        {(tab === 'rank-gifts' || tab === 'rank-ids' || tab === 'rank-egos') && (
+          <RankingsPage view={tab === 'rank-gifts' ? 'gifts' : tab === 'rank-egos' ? 'egos' : 'identities'} data={gameData} ownedIdentities={ownedIds}
+            hasMarked={markedIds} ownedEgos={ownedEgoIds} art={art} onOpenMyIdentities={() => setTab('identities')} />
         )}
         {tab === 'identities' && (
           <MyCollection identities={gameData.identities} storedIdentities={myIdentities} onIdentitiesChange={setMyIdentities}

@@ -1848,3 +1848,6 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .rankings-tools select { width: auto; flex: 0 1 200px; }
 .welcome-title { font-size: clamp(30px, 4.4vw, 64px); white-space: nowrap; }
 @media (max-width: 900px) { .welcome-title { font-size: clamp(30px, 8.6vw, 64px); } }
+.rank-ego-art .myego-art { width: 44px; height: 44px; }
+.rank-title .myego-grade { position: static; }
+.rank-ego-art .myego-art { filter: none; }
