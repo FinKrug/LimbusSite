@@ -44,6 +44,16 @@ function buyable(g: Gift, availableNow: Set<string>, packGifts: Set<string>): bo
   return (g.pools.includes('main') || packGifts.has(g.id)) && (g.cost ?? 0) > 0 && (g.tier ?? 9) <= 4 && availableNow.has(g.id)
 }
 
+/** Your top picks a shop on this floor can sell, with their value per 100 Cost (1 = a typical good shop gift). */
+export function shopBuys(ctx: RunContext, ranked: GiftScore[], availableNow: Set<string>, shop: number, n: number): ShopBuy[] {
+  const pack = ctx.run.pack ? ctx.data.themePacks.find((p) => p.id === ctx.run.pack) : undefined
+  const packGifts = new Set(pack ? packPool(pack) : [])
+  return ranked
+    .filter((r) => !ctx.owned.has(r.gift.id) && buyable(r.gift, availableNow, packGifts))
+    .slice(0, n)
+    .map((r) => ({ gift: r.gift, ratio: (intrinsicScore(r.gift, ctx).score / r.gift.cost! * 100) / (shop || 1) }))
+}
+
 export function shopAdvice(
   ctx: RunContext, ranked: GiftScore[], levels: Record<string, number>, availableNow: Set<string>, cost: number | null = null,
   /** Cost to keep for the next floor (Cumulating Starcloud). */
@@ -51,12 +61,7 @@ export function shopAdvice(
 ): ShopAdvice {
   const up = planUpgrades(ctx, levels)
   const shop = up.shop || 1
-  const pack = ctx.run.pack ? ctx.data.themePacks.find((p) => p.id === ctx.run.pack) : undefined
-  const packGifts = new Set(pack ? packPool(pack) : [])
-  const buys = ranked
-    .filter((r) => !ctx.owned.has(r.gift.id) && buyable(r.gift, availableNow, packGifts))
-    .slice(0, TOP_PICKS)
-    .map((r) => ({ gift: r.gift, ratio: (intrinsicScore(r.gift, ctx).score / r.gift.cost! * 100) / shop }))
+  const buys = shopBuys(ctx, ranked, availableNow, shop, TOP_PICKS)
   // Worthwhile upgrades, the ones you can pay for first when you've said how much Cost you have.
   const core = up.order.filter((m) => isCore(m.priority))
   const fits = cost === null ? core : affordable(core, cost, keep).moves

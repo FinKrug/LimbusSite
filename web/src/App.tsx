@@ -2,6 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { EvaluateTab } from './components/EvaluateTab'
 import { EventsTab } from './components/EventsTab'
 import { ShopAdvice } from './components/ShopAdvice'
+import { ShopOverview } from './components/ShopOverview'
+import { shopMoves, type ShopMove } from './lib/shopoverview'
+import { floorsWeight, planSwaps } from './lib/skillswap'
 import { ImportTab } from './components/ImportTab'
 import { UpgradesTab } from './components/UpgradesTab'
 import { Welcome } from './components/Welcome'
@@ -58,8 +61,8 @@ import { buildTeam, suggestOrder } from './lib/teambuilder'
 import { addGift } from './lib/vestiges'
 import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
-type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'rank-gifts' | 'rank-ids' | 'rank-egos'
-const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best', 'rank-gifts', 'rank-ids', 'rank-egos']
+type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'shophome' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'rank-gifts' | 'rank-ids' | 'rank-egos'
+const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'shophome', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best', 'rank-gifts', 'rank-ids', 'rank-egos']
 
 /**
  * Two places (Finley, 2026-11-15): Home, with your team and lineups, owned identities and settings;
@@ -75,7 +78,7 @@ type RunStage = 'packs' | 'fights' | 'shop' | 'boss'
 const STAGE_OF: Record<Tab, Stage> = {
   team: 'home', identities: 'home', settings: 'home', start: 'start', prerun: 'start',
   packs: 'packs', rewards: 'fights', events: 'fights',
-  gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss',
+  shophome: 'shop', gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss',
   evaluate: 'yourgifts', import: 'yourgifts', best: 'yourgifts', 'rank-gifts': 'rankings', 'rank-ids': 'rankings', 'rank-egos': 'rankings',
 }
 /** Left to right, for which way a screen slides in. */
@@ -83,7 +86,7 @@ const STAGE_INDEX: Record<Stage, number> = { home: 0, rankings: 1, start: 2, pac
 const STAGES: { id: RunStage; tab: Tab; label: string; hint: string }[] = [
   { id: 'packs', tab: 'packs', label: 'Pick a pack', hint: "The floor's theme pack" },
   { id: 'fights', tab: 'events', label: 'Fights & events', hint: 'Gifts, "?" events' },
-  { id: 'shop', tab: 'gifts', label: 'Shop', hint: 'Buy, fuse, enhance' },
+  { id: 'shop', tab: 'shophome', label: 'Shop', hint: 'Buy, enhance, swap' },
   { id: 'boss', tab: 'boss', label: 'Boss', hint: 'Boss, floor reward' },
 ]
 /** Screens with parts of their own, and the parts. */
@@ -91,7 +94,7 @@ const SUB_TABS: Partial<Record<Stage, { id: Tab; label: string }[]>> = {
   home: [{ id: 'team', label: 'Team & lineups' }, { id: 'identities', label: 'My identities & E.G.O' }, { id: 'settings', label: 'Settings' }],
   yourgifts: [{ id: 'best', label: 'Ranked for your team' }, { id: 'evaluate', label: 'Check a gift or pack' }, { id: 'import', label: 'Import from screenshots' }],
   rankings: [{ id: 'rank-gifts', label: 'E.G.O gifts' }, { id: 'rank-ids', label: 'Identities' }, { id: 'rank-egos', label: 'E.G.O' }],
-  shop: [{ id: 'gifts', label: 'Buy' }, { id: 'fusion', label: 'Fuse' }, { id: 'upgrades', label: 'Enhance' }, { id: 'skills', label: 'Skill swaps' }],
+  shop: [{ id: 'shophome', label: 'Overview' }, { id: 'gifts', label: 'Buy' }, { id: 'fusion', label: 'Fuse' }, { id: 'upgrades', label: 'Enhance' }, { id: 'skills', label: 'Skill swaps' }],
 }
 /** The questions before floor 1. */
 const START_STEPS: { id: Tab; label: string }[] = [
@@ -190,6 +193,8 @@ export default function App() {
   // Which way the screen slides in: forward through the floor, or back.
   const [direction, setDirection] = useState<'fwd' | 'back'>('fwd')
   const setTab = (t: Tab) => {
+    // "Marked done … Undo" on the shop overview only lasts until you go elsewhere.
+    if (t !== 'shophome') setLastMove(null)
     const to = STAGE_OF[t]
     if (SUB_TABS[to]) setSubTabs((m) => ({ ...m, [to]: t }))
     if (to === 'packs' || to === 'fights' || to === 'shop' || to === 'boss') setLastRunTab(t)
@@ -197,7 +202,8 @@ export default function App() {
     setStoredTab(t)
   }
   const openStage = (s: RunStage | 'home' | 'rankings' | 'yourgifts') => {
-    const sub = subTabs[s]
+    // The shop opens on its overview (what to spend on) every time.
+    const sub = s === 'shop' ? undefined : subTabs[s]
     setTab(sub && STAGE_OF[sub] === s ? sub : s === 'home' ? 'team' : s === 'rankings' ? 'rank-gifts' : s === 'yourgifts' ? 'best'
       : STAGES.find((x) => x.id === s)!.tab)
   }
@@ -377,6 +383,29 @@ export default function App() {
   const [showUnreachable, setShowUnreachable] = useState(false)
   const reachable = useMemo(() => (tab !== 'best' ? null
     : rankedGifts.filter((r) => availability(r.gift, ctx, packsForGift).where !== 'no')), [tab, rankedGifts, ctx, packsForGift])
+  // The shop overview: buying, enhancing and skill swaps on one list (lib/shopoverview.ts).
+  const shopOverview = useMemo(() => {
+    if (tab !== 'shophome' || !teamIdentities.length) return []
+    const owned = [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
+    const plans = planSwaps(teamIdentities.slice(0, deployed), swaps, owned, { egos: gameData.egos ?? [], loadout, run })
+    return shopMoves(ctx, shopRanked, enhanced, availableNow, plans)
+  }, [tab, teamIdentities, deployed, swaps, ctx, loadout, run, shopRanked, enhanced, availableNow])
+  // The last move marked done on the overview, with what it changed, so it can be undone.
+  const [lastMove, setLastMove] = useState<{ move: ShopMove; owned: string[]; enhanced: Record<string, number>; swaps: SwapState } | null>(null)
+  const undoMove = () => {
+    if (!lastMove) return
+    setOwned(lastMove.owned); setEnhanced(lastMove.enhanced); setSwaps(lastMove.swaps); setLastMove(null)
+  }
+  const doMove = (m: ShopMove) => {
+    setLastMove({ move: m, owned, enhanced, swaps })
+    if (m.kind === 'buy') own(m.gift!.id)
+    else if (m.kind === 'enhance') setEnhanced({ ...enhanced, [m.gift!.id]: m.to! })
+    else {
+      const log = { ...(swaps[m.identity!.id] ?? {}) }
+      log[m.swap!] = (log[m.swap!] ?? 0) + 1
+      setSwaps({ ...swaps, [m.identity!.id]: log })
+    }
+  }
   const ownedGifts = useMemo(() => [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g), [ctx])
 
   // Cost to leave each floor with, from the Starlight buffs you took (Cumulating Starcloud).
@@ -733,8 +762,13 @@ export default function App() {
             </aside>
             <main className="main">
               <BuffNotes title="Your Starlight buffs at this shop" notes={shopBuffNotes} giftsById={ctx.giftsById} owned={owned} onAdd={addMany} />
-              <ShopAdvice ctx={ctx} ranked={shopRanked} levels={enhanced} availableNow={availableNow} tab={tab} onOpen={setTab} keep={keepCost} />
+              {tab !== 'shophome' && <ShopAdvice ctx={ctx} ranked={shopRanked} levels={enhanced} availableNow={availableNow} tab={tab} onOpen={setTab} keep={keepCost} />}
               {subNav}
+              {tab === 'shophome' && (
+                <ShopOverview moves={shopOverview} hasTeam={teamIdentities.length > 0} hasGifts={owned.length > 0} keep={keepCost}
+                  floorsLeft={floorsWeight(run).floorsLeft} onOpen={setTab} onOpenTeam={() => setTab('team')} onDone={doMove}
+                  justDone={lastMove?.move ?? null} onUndo={undoMove} />
+              )}
               {tab === 'gifts' && (
                 <>
                   {focusLine}

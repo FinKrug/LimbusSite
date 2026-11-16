@@ -1860,3 +1860,39 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .stage.stage-side.active { border-style: solid; }
 .best-gifts-title { margin: 0 0 4px; font-size: 20px; }
 @media (max-width: 760px) { .stages-sep { flex: none; } }
+
+/* Shop overview: what to spend on (ShopOverview.tsx) */
+.shop-home { display: grid; gap: 14px; }
+.shop-home h2 { margin: 0 0 4px; font-size: 20px; }
+.shop-home h3 { margin: 0 0 8px; }
+.shop-home-kinds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+.shop-home-kind {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; min-width: 0;
+  padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); color: var(--text); cursor: pointer; font: inherit;
+}
+.shop-home-kind:hover { border-color: var(--accent); }
+.shop-home-kind-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.shop-home-kind-name { overflow-wrap: anywhere; }
+.shop-home-kind .link-btn { margin-top: auto; padding-top: 4px; }
+.shop-home-cost { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.shop-home-cost input { width: 110px; margin-left: 8px; }
+.shop-home-plan { margin: 10px 0 6px; padding-left: 22px; display: grid; gap: 4px; }
+.shop-home-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.shop-move { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 10px; align-items: center;
+  padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); }
+.shop-move-n { color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+.shop-move-body { min-width: 0; overflow-wrap: anywhere; }
+.shop-move-side { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; white-space: nowrap; }
+.kind-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; margin-right: 4px; vertical-align: 1px; }
+.kind-buy { background: rgb(227 169 60 / 0.16); color: var(--accent); }
+.kind-enhance { background: rgb(127 196 122 / 0.16); color: var(--good); }
+.kind-swap { background: rgb(63 176 217 / 0.16); color: var(--gloom); }
+.worth { font-size: 12px; font-weight: 600; }
+.worth-top { color: var(--accent); } .worth-strong { color: var(--good); } .worth-good { color: var(--text); }
+.worth-fair, .worth-spare { color: var(--muted); }
+@media (max-width: 760px) {
+  .shop-home-kinds { grid-template-columns: minmax(0, 1fr); }
+  .shop-move { grid-template-columns: 20px minmax(0, 1fr); }
+  .shop-move-side { grid-column: 2; flex-direction: row; align-items: center; gap: 10px; }
+}
+.done-note { margin: 0 0 8px; padding: 6px 10px; border-radius: 6px; background: rgb(127 196 122 / 0.12); }
