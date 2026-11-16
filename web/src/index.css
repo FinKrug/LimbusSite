@@ -1851,3 +1851,12 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .rank-ego-art .myego-art { width: 44px; height: 44px; }
 .rank-title .myego-grade { position: static; }
 .rank-ego-art .myego-art { filter: none; }
+
+/* Best gifts for your team: beside the run's steps, not one of them (2026-11-15). */
+.stages { grid-template-columns: repeat(4, minmax(0, 1fr)) auto minmax(0, 1.15fr); }
+.stages-sep { width: 1px; align-self: stretch; margin: 4px 2px; background: var(--line); }
+.stage.stage-side { border-style: dashed; }
+.stage.stage-side .stage-n { color: var(--accent); background: transparent; border: 1px solid var(--accent); }
+.stage.stage-side.active { border-style: solid; }
+.best-gifts-title { margin: 0 0 4px; font-size: 20px; }
+@media (max-width: 760px) { .stages-sep { flex: none; } }

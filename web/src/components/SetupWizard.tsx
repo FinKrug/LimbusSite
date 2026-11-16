@@ -61,7 +61,7 @@ export function SetupWizard({ identities, stored, onIdentitiesChange, egos, stor
           </ol>
         </div>
         {step !== 'done' && (
-          <button className="link-btn setup-skip" onClick={onSkip} title="You can change all of this later (Tools > My identities, and the cloud button)">
+          <button className="link-btn setup-skip" onClick={onSkip} title="You can change all of this later (Home › My identities & E.G.O, and the Sync button)">
             Skip setup
           </button>
         )}

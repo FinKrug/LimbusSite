@@ -70,16 +70,16 @@ const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'gifts
  * Rankings (Finley, 2026-11-15): the best of everything for Mirror Dungeon whatever you own; what to
  * do with what you own stays on Home's Team & lineups.
  */
-type Stage = 'home' | 'rankings' | 'start' | 'packs' | 'fights' | 'shop' | 'boss' | 'tools'
+type Stage = 'home' | 'rankings' | 'start' | 'packs' | 'fights' | 'shop' | 'boss' | 'yourgifts'
 type RunStage = 'packs' | 'fights' | 'shop' | 'boss'
 const STAGE_OF: Record<Tab, Stage> = {
   team: 'home', identities: 'home', settings: 'home', start: 'start', prerun: 'start',
   packs: 'packs', rewards: 'fights', events: 'fights',
   gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss',
-  evaluate: 'tools', import: 'tools', best: 'tools', 'rank-gifts': 'rankings', 'rank-ids': 'rankings', 'rank-egos': 'rankings',
+  evaluate: 'yourgifts', import: 'yourgifts', best: 'yourgifts', 'rank-gifts': 'rankings', 'rank-ids': 'rankings', 'rank-egos': 'rankings',
 }
 /** Left to right, for which way a screen slides in. */
-const STAGE_INDEX: Record<Stage, number> = { home: 0, rankings: 1, start: 2, packs: 3, fights: 4, shop: 5, boss: 6, tools: 7 }
+const STAGE_INDEX: Record<Stage, number> = { home: 0, rankings: 1, start: 2, packs: 3, fights: 4, shop: 5, boss: 6, yourgifts: 7 }
 const STAGES: { id: RunStage; tab: Tab; label: string; hint: string }[] = [
   { id: 'packs', tab: 'packs', label: 'Pick a pack', hint: "The floor's theme pack" },
   { id: 'fights', tab: 'events', label: 'Fights & events', hint: 'Gifts, "?" events' },
@@ -89,6 +89,7 @@ const STAGES: { id: RunStage; tab: Tab; label: string; hint: string }[] = [
 /** Screens with parts of their own, and the parts. */
 const SUB_TABS: Partial<Record<Stage, { id: Tab; label: string }[]>> = {
   home: [{ id: 'team', label: 'Team & lineups' }, { id: 'identities', label: 'My identities & E.G.O' }, { id: 'settings', label: 'Settings' }],
+  yourgifts: [{ id: 'best', label: 'Ranked for your team' }, { id: 'evaluate', label: 'Check a gift or pack' }, { id: 'import', label: 'Import from screenshots' }],
   rankings: [{ id: 'rank-gifts', label: 'E.G.O gifts' }, { id: 'rank-ids', label: 'Identities' }, { id: 'rank-egos', label: 'E.G.O' }],
   shop: [{ id: 'gifts', label: 'Buy' }, { id: 'fusion', label: 'Fuse' }, { id: 'upgrades', label: 'Enhance' }, { id: 'skills', label: 'Skill swaps' }],
 }
@@ -97,16 +98,6 @@ const START_STEPS: { id: Tab; label: string }[] = [
   { id: 'start', label: 'Lineup & difficulty' },
   { id: 'prerun', label: 'Before the run' },
 ]
-type ToolTab = 'best' | 'evaluate' | 'import'
-const TOOLS: ToolTab[] = ['best', 'evaluate', 'import']
-const TOOL_LABEL: Record<ToolTab, string> = {
-  best: 'Best gifts for your team', evaluate: 'Evaluate a gift or pack', import: 'Import gifts from a screenshot',
-}
-const TOOL_HINT: Record<ToolTab, string> = {
-  best: 'Every gift ranked for your team, and where to get it',
-  evaluate: 'Pros and cons of one gift or theme pack for your team',
-  import: 'Read Gifts you have from game screenshots',
-}
 
 /** The guided tour (Welcome › Take the tour, Settings): the real screens, one part at a time. */
 const TOUR: TourStep<Tab>[] = [
@@ -122,7 +113,7 @@ const TOUR: TourStep<Tab>[] = [
   { target: 'get-next', tab: 'rank-ids', title: 'Worth getting next', text: 'Identities you don\'t have yet that would most improve the teams you can build. Handy before spending Lunacy or Thread.' },
   { target: 'run-nav', tab: 'start', title: 'Start a run', text: 'When you go in: pick the lineup and difficulty, then your Starlight buffs and starting gifts. After that it follows each floor: pick a pack, fights and events, the shop, then the boss.' },
   { target: 'start-run', tab: 'start', title: 'During the run', text: 'Every gift, pack and event choice is judged for the team you picked. "Run setup" in the run bar comes back here if you change your mind.' },
-  { target: 'tools', tab: 'team', title: 'Tools', text: 'Rank every gift for your team, check one gift or pack in detail, or read the gifts you have from a screenshot.' },
+  { target: 'your-gifts', tab: 'best', title: 'Gifts for your team', text: 'Next to the floor-by-floor steps, but not one of them: every gift ranked for your team and run right now, a close look at any one gift or pack, and reading the gifts you have from screenshots. Check it any time.' },
   { target: 'sync', title: 'Keep it everywhere', text: 'Sign in with Google to save your team, collection and run to your account, so it\'s there on any computer or phone. Or save a backup file.' },
   { target: 'title', title: "That's it!", text: <>The GesellschaftMD title takes you back to the home page. You can take this tour again from <b>Home › Settings</b>. Good luck down there, Manager.</> },
 ]
@@ -194,7 +185,6 @@ export default function App() {
   const stage = STAGE_OF[tab]
   // A screen with parts opens on the part you used last; Tools' Back returns to the last run screen.
   const [subTabs, setSubTabs] = usePersistentState<Partial<Record<Stage, Tab>>>('limbussite.subtab.v1', {})
-  const [lastStageTab, setLastStageTab] = useState<Tab>(stage === 'tools' ? 'team' : tab)
   // The run screen you were last on, for the Run button.
   const [lastRunTab, setLastRunTab] = useState<Tab | null>(null)
   // Which way the screen slides in: forward through the floor, or back.
@@ -202,14 +192,14 @@ export default function App() {
   const setTab = (t: Tab) => {
     const to = STAGE_OF[t]
     if (SUB_TABS[to]) setSubTabs((m) => ({ ...m, [to]: t }))
-    if (to !== 'tools') setLastStageTab(t)
     if (to === 'packs' || to === 'fights' || to === 'shop' || to === 'boss') setLastRunTab(t)
     if (to !== stage) setDirection(STAGE_INDEX[to] >= STAGE_INDEX[stage] ? 'fwd' : 'back')
     setStoredTab(t)
   }
-  const openStage = (s: RunStage | 'home' | 'rankings') => {
+  const openStage = (s: RunStage | 'home' | 'rankings' | 'yourgifts') => {
     const sub = subTabs[s]
-    setTab(sub && STAGE_OF[sub] === s ? sub : s === 'home' ? 'team' : s === 'rankings' ? 'rank-gifts' : STAGES.find((x) => x.id === s)!.tab)
+    setTab(sub && STAGE_OF[sub] === s ? sub : s === 'home' ? 'team' : s === 'rankings' ? 'rank-gifts' : s === 'yourgifts' ? 'best'
+      : STAGES.find((x) => x.id === s)!.tab)
   }
   // Making or editing a lineup from the start-of-run questions: Home's Team page offers a way back.
   const [buildingForRun, setBuildingForRun] = useState(false)
@@ -535,7 +525,7 @@ export default function App() {
     </>
   )
   const inRun = run.floor !== null
-  const runStage = stage === 'packs' || stage === 'fights' || stage === 'shop' || stage === 'boss'
+  const runStage = stage === 'packs' || stage === 'fights' || stage === 'shop' || stage === 'boss' || stage === 'yourgifts'
   const homeSub = (
     <nav className="tabs sub-tabs home-tabs" role="tablist" aria-label="Home">
       {SUB_TABS.home!.map((t) => (
@@ -570,7 +560,6 @@ export default function App() {
           </button>
         </nav>
         <div className="top-right">
-          <span data-tour="tools"><ToolsMenu current={tab} onPick={(t) => setTab(t)} /></span>
           <span data-tour="sync"><SyncButton onOpen={() => setDataOpen(true)} /></span>
         </div>
       </header>
@@ -641,19 +630,21 @@ export default function App() {
           <RunBar run={run} onChange={setRun} packs={gameData.themePacks} giftCount={owned.length}
             onOpenSettings={() => setRunOpen(true)} onOpenGifts={stage === 'shop' ? undefined : () => setGiftsOpen(true)}
             onOpenSetup={() => setTab('start')} onStart={() => setTab('start')} />
-          <StageNav stage={stage as RunStage} inRun={inRun} floor={run.floor}
+          <StageNav stage={stage as RunStage | 'yourgifts'} lastRun={lastRunTab ? STAGE_OF[lastRunTab] as RunStage : null} inRun={inRun} floor={run.floor}
             noShop={!hasShop ? currentPack?.name ?? null : null} onOpen={openStage} />
         </>
       )}
 
-      {stage === 'tools' && (
-        <div className="tools-head">
-          <h2>{TOOL_LABEL[tab as ToolTab]}</h2>
-          <button className="link-btn" onClick={() => setTab(lastStageTab)}>← Back</button>
-        </div>
+      {stage === 'yourgifts' && (
+        <nav className="tabs sub-tabs home-tabs" role="tablist" aria-label="Gifts for your team">
+          {SUB_TABS.yourgifts!.map((t) => (
+            <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'tab active' : 'tab'}
+              data-tour={`tab-${t.id}`} onClick={() => setTab(t.id)}>{t.label}</button>
+          ))}
+        </nav>
       )}
 
-      <div role="tabpanel" key={stage === 'home' || stage === 'start' || stage === 'rankings' ? tab : stage} className={`phase phase-${direction}`}>
+      <div role="tabpanel" key={stage === 'home' || stage === 'start' || stage === 'rankings' || stage === 'yourgifts' ? tab : stage} className={`phase phase-${direction}`}>
         {tab === 'team' && (
           <>
             {lineupStrip}
@@ -806,8 +797,9 @@ export default function App() {
         {tab === 'best' && (
           <div className="best-gifts">
             <p className="muted small">
-              Every gift ranked for your team, wherever it comes from: shops, theme packs, events or fusing. Open one to see why
-              it ranks there and how to get it. For what to buy right now, use the Shop.
+              Every gift ranked for your team and this run right now, wherever it comes from: shops, theme packs, events or fusing.
+              It updates as your team, the gifts you have and the floor change. Open one to see why it ranks there and how to get it.
+              For what to buy right now, use the Shop; for the best gifts for any team, see Rankings.
             </p>
             {focusLine}
             <GiftList ranked={rankedGifts} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
@@ -862,38 +854,6 @@ function TeamFocus({ focus, traits, size, deployedOnly, deployed, onOpenTeam }: 
   )
 }
 
-/** Best gifts, Evaluate and Import gifts: used now and then, at home or in a run. */
-function ToolsMenu({ current, onPick }: { current: Tab; onPick: (t: Tab) => void }) {
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (!open) return
-    const close = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false) }
-    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false) }
-    window.addEventListener('mousedown', close)
-    window.addEventListener('keydown', esc)
-    return () => { window.removeEventListener('mousedown', close); window.removeEventListener('keydown', esc) }
-  }, [open])
-  return (
-    <div className="tools-menu" ref={ref}>
-      <button className={`sync-btn${(TOOLS as Tab[]).includes(current) ? ' sync-warn' : ''}`} aria-expanded={open} onClick={() => setOpen(!open)}>
-        Tools ▾
-      </button>
-      {open && (
-        <ul className="tools-list" role="menu">
-          {TOOLS.map((t) => (
-            <li key={t}>
-              <button role="menuitem" onClick={() => { onPick(t); setOpen(false) }}>
-                <b>{TOOL_LABEL[t]}</b><small>{TOOL_HINT[t]}</small>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )
-}
-
 /** A modal panel (Saved lineups): closes on Escape, the ✕ or a click outside. */
 function Dialog({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   useEffect(() => {
@@ -938,13 +898,15 @@ function reducedMotion(): boolean {
 }
 
 /** The four screens of a floor as cards; earlier ones get a ✓ during a run. */
-function StageNav({ stage, inRun, floor, noShop, onOpen }: {
-  stage: RunStage
+function StageNav({ stage, inRun, floor, noShop, lastRun, onOpen }: {
+  stage: RunStage | 'yourgifts'
   inRun: boolean
   floor: number | null
   /** The floor's pack, when it has no shop. */
   noShop: string | null
-  onOpen: (s: RunStage) => void
+  /** The run step you were last on (for the ✓ marks while Best gifts is open). */
+  lastRun: RunStage | null
+  onOpen: (s: RunStage | 'yourgifts') => void
 }) {
   const ref = useRef<HTMLElement>(null)
   // On a phone the cards scroll sideways: keep the current one in view.
@@ -953,7 +915,7 @@ function StageNav({ stage, inRun, floor, noShop, onOpen }: {
     const nav = ref.current
     if (el && nav && nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: el.offsetLeft - nav.clientWidth / 2 + el.clientWidth / 2, behavior: 'smooth' })
   }, [stage])
-  const here = STAGES.findIndex((s) => s.id === stage)
+  const here = STAGES.findIndex((s) => s.id === (stage === 'yourgifts' ? lastRun : stage))
   return (
     <nav className="stages" role="tablist" aria-label="Where you are in the run" ref={ref}>
       {STAGES.map((s, k) => {
@@ -974,6 +936,13 @@ function StageNav({ stage, inRun, floor, noShop, onOpen }: {
           </button>
         )
       })}
+      {/* Not a step: something to check at any point in the run (Finley, 2026-11-15). */}
+      <span className="stages-sep" aria-hidden="true" />
+      <button role="tab" aria-selected={stage === 'yourgifts'} data-tour="your-gifts"
+        className={`stage stage-side${stage === 'yourgifts' ? ' active' : ''}`} onClick={() => onOpen('yourgifts')}>
+        <span className="stage-n" aria-hidden="true">★</span>
+        <span className="stage-text"><b>Gifts for your team</b><small>Ranked, check one, import</small></span>
+      </button>
     </nav>
   )
 }
