@@ -372,6 +372,11 @@ export default function App() {
     () => new Set(gameData.gifts.filter((g) => availability(g, ctx, packsForGift).where === 'now').map((g) => g.id)),
     [ctx, packsForGift],
   )
+  // Gifts for your team lists only what this run can still give (Finley, 2026-11-15: an EXTREME-only
+  // gift has no place in a 5-floor run); the rest can be shown on request.
+  const [showUnreachable, setShowUnreachable] = useState(false)
+  const reachable = useMemo(() => (tab !== 'best' ? null
+    : rankedGifts.filter((r) => availability(r.gift, ctx, packsForGift).where !== 'no')), [tab, rankedGifts, ctx, packsForGift])
   const ownedGifts = useMemo(() => [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g), [ctx])
 
   // Cost to leave each floor with, from the Starlight buffs you took (Cumulating Starcloud).
@@ -802,7 +807,16 @@ export default function App() {
               For what to buy right now, use the Shop; for the best gifts for any team, see Rankings.
             </p>
             {focusLine}
-            <GiftList ranked={rankedGifts} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
+            {reachable && reachable.length < rankedGifts.length && (
+              <p className="muted small unreachable-note">
+                {showUnreachable
+                  ? <>Showing all gifts, including {rankedGifts.length - reachable.length} this run can't give.</>
+                  : <>{rankedGifts.length - reachable.length} gifts this run can't give are hidden ({run.difficulty === 'extreme' ? 'EXTREME' : run.difficulty === 'hard' ? 'Hard' : 'Normal'}, {run.floors} floors
+                    {run.floor !== null ? `, from floor ${run.floor}` : ''}): theme packs that don't show up on your floors, packs you've played, and fusions that need them.</>}
+                {' '}<button className="link-btn" onClick={() => setShowUnreachable(!showUnreachable)}>{showUnreachable ? 'Hide them' : 'Show them'}</button>
+              </p>
+            )}
+            <GiftList ranked={showUnreachable || !reachable ? rankedGifts : reachable} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
               teamKeywords={focus.map((f) => f.keyword)}
               onOwn={own} giftsById={ctx.giftsById} owned={ctx.owned} />
           </div>

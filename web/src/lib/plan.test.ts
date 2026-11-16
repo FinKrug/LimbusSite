@@ -122,3 +122,33 @@ describe("last chance: a gift only this floor's pack has (Finley: Spicebush Bran
     expect(order[at('spicebush-branch')].reasons[0].text).toMatch(/Only in Falling Flowers/)
   })
 })
+
+describe('only what this run can give (Finley, 2026-11-15)', () => {
+  const pf = packsByGift(gameData.themePacks)
+  const ctxFor = (run: RunSettings) => makeContext(gameData, gameData.identities.slice(0, 7), [], { run })
+  const byName = (n: string) => gameData.gifts.find((g) => g.name === n)!
+
+  it("EXTREME-floor gifts (11-15) aren't in a 5-floor run", () => {
+    const short = ctxFor({ difficulty: 'hard', floors: 5, floor: null, pack: null })
+    const extreme = ctxFor({ difficulty: 'extreme', floors: 15, floor: null, pack: null })
+    const burningFate = byName('Burning Fate')
+    expect(availability(burningFate, short, pf).where).toBe('no')
+    expect(availability(burningFate, extreme, pf).where).not.toBe('no')
+  })
+
+  it('a fusion is only possible if the run can give what goes in', () => {
+    const normal = ctxFor({ difficulty: 'normal', floors: 5, floor: null, pack: null })
+    const hard = ctxFor({ difficulty: 'hard', floors: 10, floor: null, pack: null })
+    // Needs a Super Shop (Hard floors).
+    expect(availability(byName('Lunar Memory'), normal, pf).where).toBe('no')
+    expect(availability(byName('Lunar Memory'), hard, pf).where).toBe('fuse')
+    // Every fusion that's out of reach names an ingredient this run can't give.
+    const out = gameData.fusions.map((f) => availability(gameData.gifts.find((g) => g.id === f.result)!, normal, pf)).filter((a) => a.where === 'no')
+    expect(out.length).toBeGreaterThan(0)
+    expect(out.every((a) => /can't give|Super Shop/.test(a.text))).toBe(true)
+    // With the ingredient already in hand, the fusion is back on.
+    const recipe = gameData.fusions.find((f) => !f.super_shop && !f.any_of && f.ingredients.some((i) => availability(gameData.gifts.find((g) => g.id === i)!, normal, pf).where === 'no'))!
+    const withIt = makeContext(gameData, gameData.identities.slice(0, 7), recipe.ingredients, { run: normal.run })
+    expect(availability(gameData.gifts.find((g) => g.id === recipe.result)!, withIt, pf).where).not.toBe('no')
+  })
+})

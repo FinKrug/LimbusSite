@@ -38,7 +38,7 @@ function isRecipeResult(id: string, fusions: Fusion[]): boolean {
   return set.has(id)
 }
 
-export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>): Availability {
+export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>, seen: Set<string> = new Set()): Availability {
   if (isGone(ctx, g.id)) return { where: 'no', text: `Already part of ${ctx.gone.get(g.id)}, which you have` }
   // EX gifts (Wealth, A Certain Philosophy) don't show up in shops or rewards: only a rare
   // event gamble gives them, so plans never count on them.
@@ -47,10 +47,7 @@ export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string,
     return { where: 'luck', text: ev ? `Rare: only from the ${ev} event, if you win it` : 'Rare EX gift: not in shops or rewards' }
   }
   if (g.reward_only) return rewardAvailability(g, ctx)
-  if (g.fusion_recipe || isRecipeResult(g.id, ctx.data.fusions)) {
-    const f = ctx.data.fusions.find((x) => x.result === g.id)
-    return { where: 'fuse', text: f?.super_shop ? 'Fusion only (Super Shop, Hard)' : 'Fusion only' }
-  }
+  if (g.fusion_recipe || isRecipeResult(g.id, ctx.data.fusions)) return fusionAvailability(g, ctx, packsForGift, seen)
   const { difficulty, floors } = ctx.run
   const floor = ctx.run.floor ?? 1
   // Packs you've already played (and this floor's pack, once picked) don't come back.
@@ -84,6 +81,35 @@ export function availability(g: Gift, ctx: RunContext, packsForGift: Map<string,
     return { where: 'no', text: `Only in ${gone[0].name}, which you played on floor ${played.get(gone[0].id)}: a pack can't be picked twice` }
   }
   return { where: 'no', text: packs.length ? 'Not in this run’s packs' : 'Not in any theme pack' }
+}
+
+/**
+ * Fusion results: only if this run can give (or you already have) what goes in. A recipe that needs
+ * an EXTREME-only gift can't be made in a 5-floor Normal run (Finley, 2026-11-15: the list for your
+ * team should only show what you can actually get).
+ */
+function fusionAvailability(g: Gift, ctx: RunContext, packsForGift: Map<string, ThemePack[]>, seen: Set<string>): Availability {
+  const f = ctx.data.fusions.find((x) => x.result === g.id)
+  if (!f) return { where: 'fuse', text: 'Fusion only' }
+  if (f.super_shop && ctx.run.difficulty === 'normal') return { where: 'no', text: 'Fusion only, at a Super Shop: Hard floors only' }
+  if (seen.has(g.id)) return { where: 'no', text: 'Fusion only' }
+  const next = new Set(seen).add(g.id)
+  const status = (id: string): Availability['where'] | 'have' => {
+    if (ctx.owned.has(id)) return 'have'
+    const gift = ctx.giftsById.get(id)
+    return gift ? availability(gift, ctx, packsForGift, next).where : 'no'
+  }
+  const name = (id: string) => ctx.giftsById.get(id)?.name ?? id
+  const missing = f.ingredients.filter((id) => status(id) === 'no')
+  const anyOk = f.any_of ? f.any_of.from.filter((id) => status(id) !== 'no').length : 0
+  if (missing.length || (f.any_of && anyOk < f.any_of.count)) {
+    return { where: 'no', text: missing.length
+      ? `Fusion only, and this run can't give ${missing.slice(0, 2).map(name).join(' or ')}`
+      : `Fusion only, and this run can't give enough of ${f.any_of!.from.slice(0, 2).map(name).join(', ')}…` }
+  }
+  const lucky = [...f.ingredients, ...(f.any_of?.from ?? [])].some((id) => status(id) === 'luck') && f.ingredients.some((id) => status(id) === 'luck')
+  if (lucky) return { where: 'luck', text: 'Fusion only, and one ingredient only comes by luck' }
+  return { where: 'fuse', text: f.super_shop ? 'Fusion only (Super Shop, Hard)' : 'Fusion only' }
 }
 
 /** Reward-only gifts: the EXTREME pack whose clear gives it, or a hidden boss. Never fused or bought. */
