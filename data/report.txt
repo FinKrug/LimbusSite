@@ -12,7 +12,8 @@ identity 'Perky Penguins Sinnerling Meursault': missing rarity or affinity categ
 identity 'Perky Penguins Sinnerling Rodion': missing rarity or affinity categories
 Line 4: Masquerade: no Featured Floors in the infobox
 Line 4: Masquerade: no E.G.O Gift Rates section (not a theme pack page?)
-Murder on the WARP Express BokGak Theme Pack: API error: {'code': 'internal_api_error_DBConnectionError', 'info': '[e298cd4cfda2224a5bd0e501] Caught exception of type Wikimedia\\Rdbms\\DBConnectionError', 'errorclass': 'Wikimedia\\Rdbms\\DBConnectionError'}
+The Knight of Despair: no Featured Floors in the infobox
+The Knight of Despair: no E.G.O Gift Rates section (not a theme pack page?)
 added 10 gifts that only pack pages list as Mirror Dungeon drops: ['Aged Sheet Music', 'Brilliant Lamplight', 'Classical-design Letter Opener', 'Goldforged Compass', 'Metal Construct', 'Moonmirror Wine Cup', 'Sea Terror Jerky', 'Sea Terror Notes', 'Silver Key Bundle', 'WB Flask']
 fusion 'Miniature Ferris Wheel': some ingredients can't drop in Mirror Dungeon
 theme pack 'Audio Logs of That Day': no wiki page found
