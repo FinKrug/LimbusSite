@@ -75,3 +75,12 @@ describe('general rankings', () => {
     expect(dear.score).toBeLessThan(cheap.score)
   })
 })
+
+describe('stand-in teams favour no attack type (Finley, 2026-11-16)', () => {
+  it('Punctured, Crushed and Sundered Memory rank alike', () => {
+    const list = rankGiftsOverall(gameData)
+    const v = ['Punctured Memory', 'Crushed Memory', 'Sundered Memory'].map((n) => list.find((g) => g.gift.name === n)!.overall)
+    expect(Math.max(...v) - Math.min(...v)).toBeLessThan(0.05)
+  })
+})
+

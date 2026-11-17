@@ -62,8 +62,11 @@ export function genericTeam(k: CoreKeyword): Identity[] {
     keywords: [k],
     status_effects: [k],
     traits: [],
-    attack_types: [ATTACKS[n % 3], ATTACKS[(n + 1) % 3]],
-    attack_counts: { [ATTACKS[n % 3]]: 2, [ATTACKS[(n + 1) % 3]]: 1 },
+    // One skill of each attack type, for every slot: a stand-in team mustn't favour Slash, Pierce or
+    // Blunt. (With types spread by slot, #1–#2 both had Pierce, so Punctured Memory, which only
+    // affects #1–#2, outranked Crushed and Sundered Memory: Finley, 2026-11-16.)
+    attack_types: [...ATTACKS],
+    attack_counts: Object.fromEntries(ATTACKS.map((a) => [a, 1])),
     wiki_url: '',
   }))
 }
