@@ -1006,10 +1006,12 @@
     "max_level": 0,
     "upgrades": [],
     "pools": [
-      "themed"
+      "themed",
+      "cursed"
     ],
     "theme_packs": [
-      "the-wedge-in-the-wake-of-dawnbreak"
+      "the-wedge-in-the-wake-of-dawnbreak",
+      "the-knight-of-despair"
     ],
     "events": [],
     "fusion_recipe": null,
@@ -11213,10 +11215,12 @@
     "max_level": 0,
     "upgrades": [],
     "pools": [
-      "themed"
+      "themed",
+      "cursed"
     ],
     "theme_packs": [
-      "the-wedge-in-the-wake-of-dawnbreak"
+      "the-wedge-in-the-wake-of-dawnbreak",
+      "the-knight-of-despair"
     ],
     "events": [],
     "fusion_recipe": null,

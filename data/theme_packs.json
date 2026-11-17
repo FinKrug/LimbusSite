@@ -13933,6 +13933,28 @@
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Dawn_of_Green_Theme_Pack"
   },
   {
+    "id": "the-knight-of-despair",
+    "name": "The Knight of Despair",
+    "pool": "cursed",
+    "group": null,
+    "floors": null,
+    "gifts": [
+      "hollow-pride",
+      "pride-of-the-knight"
+    ],
+    "gift_pool": [
+      "hollow-pride",
+      "pride-of-the-knight"
+    ],
+    "layout": null,
+    "event_note": null,
+    "hidden": false,
+    "appear_rate": null,
+    "clear_rewards": [],
+    "reward_auto": false,
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/The_Knight_of_Despair"
+  },
+  {
     "id": "the-master-of-la-manchaland",
     "name": "The Master of La Manchaland",
     "pool": "extreme",
