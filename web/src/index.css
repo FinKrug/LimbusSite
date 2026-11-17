@@ -1971,3 +1971,12 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .best-gifts .evaluate { margin-bottom: 10px; }
 .best-gifts .eval-card { position: relative; margin-top: 8px; }
 .eval-close { position: absolute; top: 8px; right: 10px; font-size: 16px; }
+
+/* Rankings: what All / Any team / a keyword mean */
+.rank-key { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 10px 0 12px; }
+.rank-key > div { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); opacity: 0.75; }
+.rank-key > div.on { opacity: 1; border-color: var(--accent); }
+.rank-key dt { font-weight: 700; font-size: 13px; margin-bottom: 2px; }
+.rank-key > div.on dt { color: var(--accent); }
+.rank-key dd { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.4; }
+@media (max-width: 760px) { .rank-key { grid-template-columns: minmax(0, 1fr); } .rank-key > div:not(.on) { display: none; } }

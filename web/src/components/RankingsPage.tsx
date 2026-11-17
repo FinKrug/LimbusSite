@@ -73,19 +73,33 @@ function BestGifts({ data }: { data: GameData }) {
       <p className="muted rankings-intro">
         The best E.G.O gifts for a Hard Mirror Dungeon run, fusions included. Each gift is judged for the kind of team it suits
         best (a team built around its status keyword, with no particular identities), by how much it does for that team.
-        Pick a keyword to see the best gifts for that kind of team, or <b>Any team</b> for gifts that help whatever you bring.
         For what to take in your own run, use the Shop in the run.
       </p>
       <div className="rankings-tools" data-tour="gift-filters">
         <div className="chips-row" role="group" aria-label="Which teams">
-          <button className={`chip-btn${filter === 'all' ? ' on' : ''}`} aria-pressed={filter === 'all'} onClick={() => { setFilter('all'); setShown(30) }}>All</button>
-          <button className={`chip-btn${filter === 'any' ? ' on' : ''}`} aria-pressed={filter === 'any'} onClick={() => { setFilter('any'); setShown(30) }}>Any team</button>
+          <button className={`chip-btn${filter === 'all' ? ' on' : ''}`} aria-pressed={filter === 'all'} title="Ranked for the team each gift suits best" onClick={() => { setFilter('all'); setShown(30) }}>All</button>
+          <button className={`chip-btn${filter === 'any' ? ' on' : ''}`} aria-pressed={filter === 'any'} title="Gifts that help every kind of team" onClick={() => { setFilter('any'); setShown(30) }}>Any team</button>
           {CORE_KEYWORDS.map((k) => (
             <button key={k} className={`chip-btn${filter === k ? ' on' : ''}`} aria-pressed={filter === k} onClick={() => { setFilter(k); setShown(30) }}>{k}</button>
           ))}
         </div>
         <input type="search" placeholder="Find a gift…" value={query} onChange={(e) => setQuery(e.target.value)} aria-label="Find a gift" />
       </div>
+      {/* What the filters mean (Finley, 2026-11-17: "All" vs "Any team" wasn't obvious). */}
+      <dl className="rank-key" aria-label="What the filters mean">
+        <div className={filter === 'all' ? 'on' : undefined}>
+          <dt>All</dt>
+          <dd>How good a gift can get: ranked for the team it suits <b>best</b>. A top Bleed gift ranks high here even though a Burn team can't use it.</dd>
+        </div>
+        <div className={filter === 'any' ? 'on' : undefined}>
+          <dt>Any team</dt>
+          <dd>Gifts that help <b>whatever you bring</b>: ranked for the team they suit <b>worst</b>, and only ones that stay useful for every keyword.</dd>
+        </div>
+        <div className={filter !== 'all' && filter !== 'any' ? 'on' : undefined}>
+          <dt>{filter !== 'all' && filter !== 'any' ? filter : 'A keyword'}</dt>
+          <dd>The best gifts for a team built around {filter !== 'all' && filter !== 'any' ? filter : 'that keyword'}.</dd>
+        </div>
+      </dl>
       {!list && <p className="muted rankings-loading">Scoring every gift for seven teams…</p>}
       <ol className="rank-list">
         {rows.slice(0, shown).map((g, k) => {
