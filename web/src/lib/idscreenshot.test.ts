@@ -8,8 +8,8 @@ import {
 } from './idscreenshot'
 import { readPng } from './__fixtures__/readpng'
 
-const fixture = (name: string) => readPng(new URL(`./__fixtures__/${name}`, import.meta.url).pathname)
-const refs = readIdentityAtlas(readPng(new URL('../data/identity_art.png', import.meta.url).pathname), atlasMeta as IdentityAtlasMeta)
+const fixture = (name: string) => readPng(new URL(`./__fixtures__/${name}`, import.meta.url))
+const refs = readIdentityAtlas(readPng(new URL('../data/identity_art.png', import.meta.url)), atlasMeta as IdentityAtlasMeta)
 
 /** Sinners > Identities with Obtained ticked; the first 12 are the current team ("SELECTED", dimmed). */
 const SELECTED = [

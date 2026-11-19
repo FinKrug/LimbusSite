@@ -6,8 +6,8 @@ import { gameData } from './data'
 import { findEgoCards, readEgoAtlas, readEgoScreenshot, type EgoAtlasMeta } from './egoscreenshot'
 import { readPng } from './__fixtures__/readpng'
 
-const fixture = (name: string) => readPng(new URL(`./__fixtures__/${name}`, import.meta.url).pathname)
-const refs = readEgoAtlas(readPng(new URL('../data/ego_art.png', import.meta.url).pathname), atlasMeta as EgoAtlasMeta)
+const fixture = (name: string) => readPng(new URL(`./__fixtures__/${name}`, import.meta.url))
+const refs = readEgoAtlas(readPng(new URL('../data/ego_art.png', import.meta.url)), atlasMeta as EgoAtlasMeta)
 
 /** Every card equipped ("SELECTED", tinted yellow). */
 const SELECTED = [

@@ -9,9 +9,9 @@ import {
 import { isVestige } from './vestiges'
 import { readPng } from './__fixtures__/readpng'
 
-const fixture = (name: string) => readPng(new URL(`./__fixtures__/${name}`, import.meta.url).pathname)
+const fixture = (name: string) => readPng(new URL(`./__fixtures__/${name}`, import.meta.url))
 const tierOf = (id: string) => gameData.gifts.find((g) => g.id === id)?.tier ?? null
-const refs = readAtlas(readPng(new URL('../data/gift_icons.png', import.meta.url).pathname), atlasMeta, tierOf)
+const refs = readAtlas(readPng(new URL('../data/gift_icons.png', import.meta.url)), atlasMeta, tierOf)
 const nameOf = (id: string) => gameData.gifts.find((g) => g.id === id)!.name
 const read = (img: Pixels) => findTiles(img).map((t) => matchTile(img, t, refs))
 

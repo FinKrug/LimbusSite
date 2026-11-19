@@ -5,7 +5,9 @@ import { inflateSync } from 'node:zlib'
 import type { Pixels } from '../screenshot'
 
 /** Minimal PNG reader for the fixtures (8-bit RGB/RGBA, not interlaced): node has no image decoder. */
-export function readPng(path: string): Pixels {
+// Takes a file URL (new URL('…', import.meta.url)) as it is: its .pathname is "/C:/…" on Windows,
+// which Node reads as C:\C:\… (Finley, 2026-11-19).
+export function readPng(path: string | URL): Pixels {
   const buf = readFileSync(path)
   let width = 0, height = 0, type = 0
   const idat: Buffer[] = []
