@@ -552,7 +552,7 @@ export default function App() {
     setEnhanced({})
     // Skill swaps only last the run (Finley: they were still there after clearing it).
     setSwaps({})
-    setPrerun({ ...EMPTY_PRERUN, starlight: prerun.starlight })
+    setPrerun({ ...EMPTY_PRERUN, starlight: prerun.starlight, bonus: prerun.bonus ?? null })
     setOffered([])
     setDismissed([])
     setSuperShop(false)

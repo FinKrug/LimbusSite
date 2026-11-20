@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import {
-  BUFFS, COST_PER_STARLIGHT, GIFT_SEARCH, planStarlight, rankStartKeywords, startingChoices, tier3Choices,
+  BONUS_BASE, BUFFS, COST_PER_STARLIGHT, GIFT_SEARCH, planStarlight, rankStartKeywords, startingChoices, tier3Choices,
   type PreRunState, type StarlightStep,
 } from '../lib/prerun'
 import type { GiftScore, RunContext } from '../lib/scoring'
@@ -68,6 +68,9 @@ export function PreRunTab({ ctx, packsForGift, rebuild, state, onStateChange, on
   const takeAdvice = () => set({ buffs: Object.fromEntries(BUFFS.map((b) => [b.id, buyAt.get(b.id)?.level ?? 0])) })
   const took = (s: StarlightStep) => s.kind === 'buff' && (state.buffs[s.buff!.id] ?? 0) >= s.level
   const inBudget = new Set(plan.affordable ?? [])
+  // What you can spend: the Bonus, plus the saved Starlight you entered (none entered: plenty).
+  const budget = state.starlight === null ? null : plan.bonus + state.starlight
+  const num = (v: string) => (v === '' ? null : Math.max(0, Math.round(Number(v)) || 0))
 
   return (
     <div className="prerun">
@@ -78,21 +81,32 @@ export function PreRunTab({ ctx, packsForGift, rebuild, state, onStateChange, on
           <h2>1. Starlight buffs</h2>
           <span className="muted small">Grace of the Star: tap a buff to take it, then + or ++ to upgrade it</span>
         </header>
-        <div className="upgrade-budget">
+        <div className="upgrade-budget prerun-budget">
           <label>
-            <span>Starlight to spend</span>
-            <input type="number" min={0} step={10} inputMode="numeric" placeholder="e.g. 300" value={state.starlight ?? ''}
-              onChange={(e) => set({ starlight: e.target.value === '' ? null : Math.max(0, Math.round(Number(e.target.value))) })} />
+            <span>Starlight Bonus</span>
+            <input type="number" min={0} step={5} inputMode="numeric" placeholder={String(BONUS_BASE)} value={state.bonus ?? ''}
+              aria-describedby="prerun-budget-note" onChange={(e) => set({ bonus: num(e.target.value) })} />
           </label>
-          <p className="muted small prerun-bar">
-            A buff is worth it when it adds more than the Cost its Starlight would convert to ({COST_PER_STARLIGHT} Cost each).
-            {plan.affordable && <> Best first, your Starlight covers <b>{plan.affordable.length}</b> buff and Gift Search levels ({plan.spent} Starlight).</>}
+          <label>
+            <span>Saved Starlight to spend</span>
+            <input type="number" min={0} step={10} inputMode="numeric" placeholder="Plenty" value={state.starlight ?? ''}
+              aria-describedby="prerun-budget-note" onChange={(e) => set({ starlight: num(e.target.value) })} />
+          </label>
+          <p className="muted small prerun-bar" id="prerun-budget-note">
+            The Bonus ({BONUS_BASE} each run plus your loadout's rest bonuses) is spent first, and what's left of it can turn into Cost
+            ({COST_PER_STARLIGHT} each), so a buff paid from it has to beat that. Saved Starlight can't turn into Cost: if you have plenty,
+            every buff that helps is worth it.
+            {plan.affordable ? (
+              <> Best combination for <b>{budget}</b> Starlight: <b>{plan.affordable.length}</b> buff and Gift Search levels
+                ({plan.spent} Starlight{plan.savedSpent > 0 ? `, ${plan.savedSpent} of it saved` : ''})
+                {plan.bonusLeft > 0 && <>, and the {plan.bonusLeft} Bonus left turns into {plan.bonusLeft * COST_PER_STARLIGHT} Cost</>}.</>
+            ) : <> Enter your saved Starlight to see what fits.</>}
           </p>
         </div>
         <div className="sb-bar">
           <span className="sb-total">
             <span className="sb-star" aria-hidden>★</span> <b>{selected}</b> Starlight selected
-            {state.starlight !== null && selected > state.starlight && <span className="sb-over"> ({selected - state.starlight} over)</span>}
+            {budget !== null && selected > budget && <span className="sb-over"> ({selected - budget} over)</span>}
           </span>
           <div className="chips">
             <span className="muted small">Set all to</span>
@@ -119,7 +133,7 @@ export function PreRunTab({ ctx, packsForGift, rebuild, state, onStateChange, on
                   <span className="sb-name">{b.name}{MARK[lv]}</span>
                   <span className="sb-effects">{b.levels[lv - 1].map((e) => <span key={e}>{e}</span>)}</span>
                   <span className={`sb-advice${buy ? ' buy' : worth ? ' worth' : ''}`}
-                    title={tip ? `${buy ? '' : 'Worth it, but past your Starlight. '}${tip.why.join('\n')}` : 'Each level adds less than the Cost its Starlight converts to'}>
+                    title={tip ? `${buy ? '' : 'Worth it, but past your Starlight. '}${tip.why.join('\n')}` : 'It does next to nothing for this run'}>
                     {tip ? <>#{tip.rank} · {buy ? 'Buy' : 'Worth'} {tip.level > 1 ? MARK[tip.level] : 'it'}</> : 'Skip'}
                   </span>
                 </button>
@@ -140,15 +154,15 @@ export function PreRunTab({ ctx, packsForGift, rebuild, state, onStateChange, on
             {plan.steps.map((s) => (
               <li key={stepName(s)} className={`${plan.affordable ? (inBudget.has(s) ? 'now' : 'later') : ''}${took(s) ? ' took' : ''}`}>
                 <b>{stepName(s)}</b>{' '}
-                <span className="muted">{s.starlight} Starlight · about {Math.round(s.value)} Cost ({s.ratio >= 10 ? Math.round(s.ratio) : s.ratio.toFixed(1)}×) · {s.why.join(' · ')}</span>
+                <span className="muted">{s.starlight} Starlight · about {Math.round(s.value)} Cost ({s.ratio >= 10 ? Math.round(s.ratio) : s.ratio.toFixed(1)}×{s.ratio < 1 ? ', only with saved Starlight' : ''}) · {s.why.join(' · ')}</span>
               </li>
             ))}
           </ol>
           {plan.skip.length > 0 && (
             <>
-              <p className="small muted">Not worth their Starlight:</p>
+              <p className="small muted">Next to nothing for this run (skip even with Starlight to spare):</p>
               <ul className="prerun-skip small muted">
-                {plan.skip.map((s) => <li key={stepName(s)}>{stepName(s)} ({s.starlight}): about {Math.round(s.value)} Cost, under the {s.starlight * COST_PER_STARLIGHT} it converts to. {s.why.join(' · ')}</li>)}
+                {plan.skip.map((s) => <li key={stepName(s)}>{stepName(s)} ({s.starlight}): about {Math.round(s.value)} Cost. {s.why.join(' · ')}</li>)}
               </ul>
             </>
           )}

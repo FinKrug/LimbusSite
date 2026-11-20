@@ -7,14 +7,20 @@
  *    its 3 fixed Tier II gifts; Star-shower and Perfected Possibility each add one more choice.
  *    The keyword is "the selected Keyword" that Perfected Possibility and Chance Comet use.
  *  - Starter buffs ("Grace of the Star"): 10 listed, bought with Starlight, each enhanceable twice
- *    at the same price (starter_buffs.json). Leftover Starlight Bonus converts to Cost, 1 to 5.
+ *    at the same price (starter_buffs.json). The run's Starlight Bonus (60 + your loadout's rest
+ *    bonuses) is spent first; what's left of it can be converted to Cost, 1 to 5. Starlight you've
+ *    saved doesn't convert: unspent, it just stays saved.
  *  - E.G.O Gift Search: after the starting gifts, up to 3 gifts of Tier III or lower of your choice
  *    for 70 / 160 / 270 Starlight (the "Gift Search" picks: startgifts.ts).
  *
  * Buff advice: each level is valued in Cost (what it adds over the run, BUFF_VALUES: rough
- * estimates for things that aren't Cost, like Levels and refreshes), and is worth buying when that
- * beats what the Starlight would convert to (5 Cost each). Gift-related parts are valued for your
- * team: a gift's score / what 100 Cost buys in a shop (`shopValue`) x 100.
+ * estimates for things that aren't Cost, like Levels and refreshes). Gift-related parts are valued
+ * for your team: a gift's score / what 100 Cost buys in a shop (`shopValue`) x 100.
+ * Which to buy (Finley, 2026-11-19: "even with unlimited Starlight, some gifts are not selected"):
+ * only the Bonus could have become Cost, so only Starlight paid from the Bonus has to beat 5 Cost
+ * each. Saved Starlight has no other use this run, so with plenty saved every level that helps at
+ * all is worth it (MIN_RATIO). With an amount to spend, the plan is the best combination that fits
+ * (bestCombination: levels in order, Gift Search too), counting the Cost the unspent Bonus gives.
  */
 import buffsJson from '../data/starter_buffs.json'
 import { isGone, scoreGift, type GiftScore, type RunContext } from './scoring'
@@ -39,13 +45,21 @@ export interface PreRunState {
   buffs: BuffLevels
   /** The starting keyword you picked (null: go with the advice). */
   keyword: string | null
-  /** Starlight you can spend (null: not entered). */
+  /** Saved Starlight you're willing to spend on top of the Bonus (null: not entered, plenty). */
   starlight: number | null
+  /** This run's Starlight Bonus (null: not entered, the fixed BONUS_BASE). */
+  bonus?: number | null
 }
-export const EMPTY_PRERUN: PreRunState = { buffs: {}, keyword: null, starlight: null }
+export const EMPTY_PRERUN: PreRunState = { buffs: {}, keyword: null, starlight: null, bonus: null }
 
-/** Leftover Starlight Bonus converts to Cost at this rate: the bar a buff has to beat. */
+/** Leftover Starlight Bonus converts to Cost at this rate: the bar for Starlight paid from the Bonus. */
 export const COST_PER_STARLIGHT = 5
+/** The Starlight Bonus every run gets; loadout rest bonuses add to it (wiki: Mirror of Sisyphe). */
+export const BONUS_BASE = 60
+/** Saved Starlight buys a level when it adds at least this much Cost per Starlight (0.5 Cost each):
+ *  anything that helps at all, but not levels that do nothing for this run (Favor of the Nebulae +
+ *  in a 5-floor run). */
+export const MIN_RATIO = 0.1
 /** E.G.O Gift Search: Starlight for 1, 2 or 3 gifts. */
 export const GIFT_SEARCH = [70, 160, 270]
 
@@ -204,22 +218,28 @@ export interface StarlightStep {
   starlight: number
   /** What it adds over the run, in Cost. */
   value: number
-  /** value / (Starlight x 5): above 1 beats converting the Starlight to Cost. */
+  /** value / (Starlight x 5): above 1 beats converting the Starlight to Cost (worth it even from the Bonus). */
   ratio: number
   /** What the value is made of. */
   why: string[]
-  /** Planned for the levels after it: worth less than its Starlight alone, more with them. */
+  /** Planned for the levels after it: worth (almost) nothing alone, more with them. */
   forNext?: boolean
 }
 
 export interface StarlightPlan {
-  /** Every step worth buying (ratio >= 1, or with the levels after it), best value first, prerequisites first. */
+  /** Every step that helps (ratio >= MIN_RATIO, or with the levels after it), best value first, prerequisites first. */
   steps: StarlightStep[]
-  /** Steps worth less than the Cost the Starlight would convert to. */
+  /** Steps that do (almost) nothing for this run. */
   skip: StarlightStep[]
-  /** With a budget: the steps it covers. */
+  /** With saved Starlight entered: the best combination of steps that fits the Bonus + saved Starlight. */
   affordable: StarlightStep[] | null
+  /** Starlight the affordable steps cost. */
   spent: number
+  /** The Bonus used for this plan (BONUS_BASE when not entered). */
+  bonus: number
+  /** Bonus left over (converts to Cost at 5 each); and saved Starlight spent. */
+  bonusLeft: number
+  savedSpent: number
   /** The keyword the gift parts were valued for. */
   keyword: KeywordPlan
   /** Gift Search picks (best first) the search steps were valued with. */
@@ -325,8 +345,9 @@ export function starlightSteps(ctx: RunContext, keyword: KeywordPlan, search: St
 const stepKey = (s: StarlightStep) => (s.kind === 'buff' ? s.buff!.id : 'search')
 
 /**
- * The Starlight plan: steps worth more than their Starlight in Cost, best value first, each after
- * the step it needs (+ after base, a 2nd Gift Search after the 1st). With a budget, what it covers.
+ * The Starlight plan: every step that helps, best value per Starlight first, each after the step it
+ * needs (+ after base, a 2nd Gift Search after the 1st). With saved Starlight entered, the best
+ * combination that fits the Bonus + saved Starlight.
  */
 export function planStarlight(ctx: RunContext, state: PreRunState,
   /** rankStartKeywords(ctx, 3, 3): gifts are valued as if you had every extra choice. */
@@ -354,8 +375,8 @@ export function planStarlight(ctx: RunContext, state: PreRunState,
     if (!ready.length) break
     const score = new Map(ready.map((s) => [s, ahead(s)]))
     const best = ready.reduce((a, b) => (score.get(b)! > score.get(a)! ? b : a))
-    if (score.get(best)! < 1) break
-    if (best.ratio < 1) {
+    if (score.get(best)! < MIN_RATIO) break
+    if (best.ratio < MIN_RATIO) {
       best.forNext = true
       best.why = [...best.why, `Worth it for the ${'+'.repeat(best.level)} after it`]
     }
@@ -364,17 +385,71 @@ export function planStarlight(ctx: RunContext, state: PreRunState,
     left.splice(left.indexOf(best), 1)
   }
   const skip = left.filter((s) => !order.includes(s)).sort((a, b) => b.ratio - a.ratio)
+  const bonus = Math.max(0, state.bonus ?? BONUS_BASE)
   let affordable: StarlightStep[] | null = null
   let spent = 0
   if (state.starlight !== null) {
-    affordable = []
-    const got = new Map<string, number>()
-    for (const s of order) {
-      if (s.level !== (got.get(stepKey(s)) ?? 0) + 1 || spent + s.starlight > state.starlight) continue
-      affordable.push(s)
-      spent += s.starlight
-      got.set(stepKey(s), s.level)
-    }
+    const picked = new Set(bestCombination(order, bonus, Math.max(0, state.starlight)))
+    affordable = order.filter((s) => picked.has(s))
+    spent = affordable.reduce((t, s) => t + s.starlight, 0)
   }
-  return { steps: order, skip, affordable, spent, keyword, search }
+  return {
+    steps: order, skip, affordable, spent, keyword, search, bonus,
+    bonusLeft: affordable ? Math.max(0, bonus - spent) : 0,
+    savedSpent: affordable ? Math.max(0, spent - bonus) : 0,
+  }
+}
+
+/**
+ * The steps to buy with `bonus` + `saved` Starlight: the combination (levels in order per buff and
+ * for Gift Search) with the most value, counting the unspent Bonus at 5 Cost a Starlight. A
+ * knapsack over each buff's 0-3 levels, in steps of 10 Starlight (every price is a multiple of 10).
+ */
+export function bestCombination(steps: StarlightStep[], bonus: number, saved: number): StarlightStep[] {
+  const UNIT = 10
+  const cap = Math.floor((bonus + saved) / UNIT)
+  // Per buff (and Gift Search): the options "first k levels", with their Starlight and value.
+  const groups = new Map<string, StarlightStep[]>()
+  for (const s of steps) groups.set(stepKey(s), [...(groups.get(stepKey(s)) ?? []), s])
+  const options = [...groups.values()].map((list) => {
+    const sorted = [...list].sort((a, b) => a.level - b.level)
+    const opts: { units: number; value: number; take: StarlightStep[] }[] = [{ units: 0, value: 0, take: [] }]
+    let units = 0, value = 0
+    for (let k = 0; k < sorted.length && sorted[k].level === k + 1; k++) {
+      units += Math.ceil(sorted[k].starlight / UNIT)
+      value += sorted[k].value
+      opts.push({ units, value, take: sorted.slice(0, k + 1) })
+    }
+    return opts
+  })
+  // best[c] = most value spending exactly c units (or -Infinity); choice[g][c] = option used by group g.
+  let best = Array.from({ length: cap + 1 }, (_, c) => (c === 0 ? 0 : -Infinity))
+  const choice: number[][] = []
+  for (const opts of options) {
+    const next = Array.from({ length: cap + 1 }, () => -Infinity)
+    const pick = Array.from({ length: cap + 1 }, () => 0)
+    for (let c = 0; c <= cap; c++) {
+      opts.forEach((o, k) => {
+        if (o.units > c || best[c - o.units] === -Infinity) return
+        const v = best[c - o.units] + o.value
+        if (v > next[c] + 1e-9) { next[c] = v; pick[c] = k }
+      })
+    }
+    choice.push(pick)
+    best = next
+  }
+  // The unspent Bonus becomes Cost; saved Starlight that isn't spent just stays saved.
+  let end = 0, top = -Infinity
+  for (let c = 0; c <= cap; c++) {
+    if (best[c] === -Infinity) continue
+    const total = best[c] + Math.max(0, bonus - c * UNIT) * COST_PER_STARLIGHT
+    if (total > top + 1e-9) { top = total; end = c }
+  }
+  const out: StarlightStep[] = []
+  for (let g = options.length - 1, c = end; g >= 0; g--) {
+    const o = options[g][choice[g][c]]
+    out.push(...o.take)
+    c -= o.units
+  }
+  return out
 }

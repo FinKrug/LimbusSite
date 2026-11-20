@@ -2059,3 +2059,5 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 @media (prefers-reduced-motion: reduce) { .adv-meter i { transition: none; } }
 .stages.stages-5 { grid-template-columns: repeat(5, minmax(0, 1fr)) auto minmax(0, 1.15fr); }
 @media (max-width: 1100px) { .stages.stages-5 { display: flex; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; } .stages.stages-5 .stage { flex: none; } .stages.stages-5 .stage-text small { display: none; } }
+.prerun-budget label { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.prerun-budget .prerun-bar { flex-basis: 100%; margin: 0; }
