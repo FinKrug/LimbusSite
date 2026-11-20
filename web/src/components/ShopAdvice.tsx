@@ -59,7 +59,7 @@ export function KeepLine({ keep: k, cost }: { keep: CostKeep; cost: number | nul
   const pct = Math.round(k.rate * 100)
   return (
     <p className="small keep-line">
-      <b>Leave the floor with {k.keep} Cost</b> for {k.label}: it adds {pct}% of your Cost on the next floor (up to {k.cap}).
+      <b>Try not to go below {k.keep} Cost</b> for {k.label}: it adds {pct}% of your Cost on the next floor (up to {k.cap}). It's a floor, not a target: keeping more is fine.
       {' '}Below {k.keep}, each 100 Cost you spend also takes {pct} off that bonus, so the advice only spends there when it's worth it
       {cost !== null && cost < k.keep ? <> (with your {cost} it adds {Math.round(cost * k.rate)})</> : null}.
     </p>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { canFuse, fodder } from './fusion'
+import { canFuse, fodder, isSpare } from './fusion'
 import { makeContext } from './scoring'
 import { shopFusions } from './shopoverview'
 
@@ -27,5 +27,20 @@ describe('fusing on the shop overview (Finley, 2026-11-15)', () => {
     const ctx = makeContext(gameData, team, owned, { run })
     expect(fodder(ctx, owned).some((n) => n.gift.id === wealth.id)).toBe(false)
     expect(shopFusions(ctx, owned, ['Bleed'], null, false).ideas.every((i) => i.ingredients.every((n) => n.gift.id !== wealth.id))).toBe(true)
+  })
+  it('random fusions only use gifts from "Sell or fuse these": none there, none suggested (Finley, 2026-11-20)', () => {
+    // Gifts the Bleed team uses: nothing spare, so nothing to fuse.
+    const good = gameData.gifts.filter((g) => g.keyword === 'Bleed' && g.pools.includes('main') && !g.fusion_recipe).slice(0, 4).map((g) => g.id)
+    const ctx = makeContext(gameData, team, good, { run })
+    const spare = fodder(ctx, good).filter(isSpare).map((n) => n.gift.id)
+    const r = shopFusions(ctx, good, ['Bleed'], null, false)
+    for (const i of r.ideas) expect(i.ingredients.every((n) => spare.includes(n.gift.id))).toBe(true)
+    if (spare.length < 2) expect(r.ideas).toEqual([])
+    // Off-team gifts are spare: those can be fused.
+    const off = gameData.gifts.filter((g) => g.keyword === 'Charge' && g.pools.includes('main') && !g.fusion_recipe && (g.tier ?? 0) <= 2).slice(0, 4).map((g) => g.id)
+    const ctx2 = makeContext(gameData, team, off, { run })
+    for (const i of shopFusions(ctx2, off, ['Bleed'], null, false).ideas) {
+      expect(i.ingredients.every((n) => fodder(ctx2, off).filter(isSpare).some((x) => x.gift.id === n.gift.id))).toBe(true)
+    }
   })
 })

@@ -164,9 +164,16 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
           <label>Cost you have <input type="number" min={0} step={10} inputMode="numeric" value={cost ?? ''} placeholder="e.g. 450"
             onChange={(e) => setCost(e.target.value === '' ? null : Math.max(0, Math.round(Number(e.target.value))))} /></label>
           {plan && (plan.moves.length
-            ? <span className="small">Spend <b>{plan.spent}</b>, keep <b>{(cost ?? 0) - plan.spent}</b>{plan.lost > 0 ? ` (costs ${plan.lost} of next floor's bonus)` : ''}</span>
-            : <span className="small muted">Nothing worth it fits in {cost} Cost.</span>)}
+            ? <span className="small">Shopping list below: up to <b>{plan.spent}</b> Cost if it all shows up{plan.lost > 0 ? ` (costs ${plan.lost} of next floor's bonus)` : ''}</span>
+            : <span className="small muted">Nothing worth it fits in {cost} Cost: keep it for the next floor.</span>)}
         </div>
+        {plan && plan.moves.length > 0 && (
+          <p className="small shop-list-note">
+            This is a <b>list of what's worth buying</b>, not Cost you need to use up. Shops are random, so you often won't find these
+            gifts: <b>don't spend the rest on gifts that do little for your team</b> just to use it up. Cost you don't spend comes with
+            you to the next floor{keep ? ' (and earns a bonus there, below)' : ''}.
+          </p>
+        )}
         {plan && plan.moves.length > 0 && (
           <ol className="shop-home-plan">
             {plan.moves.filter((m) => !(m.kind === 'swap' && !m.pick && m !== firstRandom)).map((m) => (
