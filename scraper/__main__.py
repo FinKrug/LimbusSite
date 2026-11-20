@@ -6,6 +6,7 @@
     python -m scraper --include-unobtainable   # keep non-Mirror-Dungeon gifts too
     python -m scraper --skip-egos     # don't fetch E.G.O pages (data/egos.json)
     python -m scraper --skip-events   # don't fetch Mirror Dungeon event pages (data/events.json)
+    python -m scraper --skip-adversities   # don't fetch the Mounting Adversities (data/adversities.json)
 """
 
 from __future__ import annotations
@@ -18,7 +19,7 @@ import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import build, egos as egomod, events as eventmod, order, packs as packmod, skills
+from . import adversities as advmod, build, egos as egomod, events as eventmod, order, packs as packmod, skills
 from .lua_table import LuaParseError, parse_module
 from .wiki_api import DEFAULT_API, WikiClient, WikiError
 
@@ -44,6 +45,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="don't fetch theme pack pages (gift pools, floors)")
     ap.add_argument("--skip-egos", action="store_true", help="don't fetch E.G.O pages")
     ap.add_argument("--skip-events", action="store_true", help="don't fetch Mirror Dungeon event pages")
+    ap.add_argument("--skip-adversities", action="store_true",
+                    help="don't fetch the Mounting Adversities (Parallel Superposition EXTREME)")
     ap.add_argument("--api", default=DEFAULT_API, help="MediaWiki api.php URL")
     ap.add_argument("--delay", type=float, default=1.0, help="seconds between requests (default 1)")
     args = ap.parse_args(argv)
@@ -141,6 +144,14 @@ def main(argv: list[str] | None = None) -> int:
         if evs is not None:
             _write(out / "events.json", evs)
             print(f"  {len(evs)} Mirror Dungeon events")
+    # -- Mounting Adversities (Parallel Superposition EXTREME, floors 10-14) -----------
+    adversities: list[dict] | None = None
+    if not args.skip_adversities:
+        adversities, w = fetch_adversities(client)
+        warnings += w
+        if adversities is not None:
+            _write(out / "adversities.json", adversities)
+            print(f"  {len(adversities)} adversity offers")
     print(f"  {len(data['gifts'])} gifts"
           f"{'' if args.include_unobtainable else ' (Mirror Dungeon only)'}, "
           f"{len(data['theme_packs'])} theme packs, {len(data['fusions'])} fusion recipes, "
@@ -153,7 +164,8 @@ def main(argv: list[str] | None = None) -> int:
         "offline": args.offline,
         "pages": {t: {k: v for k, v in p.items() if k != "content"} for t, p in pages.items()},
         "include_unobtainable": args.include_unobtainable,
-        "counts": {name: len(rows) for name, rows in data.items()} | ({"egos": len(egos)} if egos is not None else {}),
+        "counts": {name: len(rows) for name, rows in data.items()} | ({"egos": len(egos)} if egos is not None else {})
+                  | ({"adversities": len(adversities)} if adversities else {}),
         "warnings": len(warnings),
     }
     _write(out / "meta.json", meta)
@@ -161,6 +173,19 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Done in {time.monotonic() - started:.1f}s "
           f"({client.requests_made} requests). {len(warnings)} warnings -> {out / 'report.txt'}")
     return 0
+
+
+def fetch_adversities(client: WikiClient) -> tuple[list[dict] | None, list[str]]:
+    """The Mounting Adversities table; None (keep the old file) if it can't be fetched or read."""
+    print(f"Fetching {advmod.PAGE} (Mounting Adversities) ...")
+    try:
+        page = client.page_sources([advmod.PAGE]).get(advmod.PAGE, {})
+    except WikiError as e:
+        return None, [f"adversities not fetched ({_why(e, client)}); data/adversities.json left as it was"]
+    rows, warnings = advmod.parse_adversities(page.get("content", ""))
+    if not rows:
+        return None, warnings + ["no adversities found; data/adversities.json left as it was"]
+    return rows, warnings
 
 
 def fetch_egos(client: WikiClient) -> tuple[list[dict] | None, list[str]]:

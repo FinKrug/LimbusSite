@@ -159,6 +159,7 @@ export function summarize(snap: Snapshot, look: SummaryLookups): SummaryRow[] {
   const offered = parse<string[]>(snap, 'offered.v1', [])
   const prerun = parse<{ buffs?: Record<string, number> } | null>(snap, 'prerun.v1', null)
   const buffCount = Object.values(prerun?.buffs ?? {}).filter((n) => n > 0).length
+  const advTaken = parse<{ taken?: unknown[] } | null>(snap, 'adversity.v1', null)?.taken?.length ?? 0
   const myIds = parse<string[]>(snap, 'identities.v1', []).map((id) => look.identities.get(id)).filter((i): i is Identity => !!i)
   const myEgoCount = parse<string[]>(snap, 'egos.owned.v1', []).length
 
@@ -191,7 +192,7 @@ export function summarize(snap: Snapshot, look: SummaryLookups): SummaryRow[] {
   ].filter(Boolean).join(' · ')
 
   const covered = ['team.v1', 'selection.v1', 'deployed.v3', 'owned.v1', 'run.v1', 'presets.v1', 'presets.active.v1',
-    'egos.v1', 'swaps.v1', 'enhanced.v1', 'offered.v1', 'prerun.v1', 'identities.v1', 'egos.owned.v1'].map(key)
+    'egos.v1', 'swaps.v1', 'enhanced.v1', 'offered.v1', 'prerun.v1', 'adversity.v1', 'identities.v1', 'egos.owned.v1'].map(key)
 
   return [
     {
@@ -201,10 +202,10 @@ export function summarize(snap: Snapshot, look: SummaryLookups): SummaryRow[] {
       detail: list(deployedNames, 7),
     },
     {
-      id: 'run', label: 'Run', keys: [key('run.v1'), key('offered.v1'), key('prerun.v1')],
+      id: 'run', label: 'Run', keys: [key('run.v1'), key('offered.v1'), key('prerun.v1'), key('adversity.v1')],
       text: runText,
       detail: [pack && `Pack: ${pack}`, offered.length ? `${plural(offered.length, 'pack')} on offer` : '', buffCount ? plural(buffCount, 'starter buff') : '',
-        run?.struggling ? 'Struggling in fights' : '']
+        advTaken ? plural(advTaken, 'adversity', 'adversities') : '', run?.struggling ? 'Struggling in fights' : '']
         .filter(Boolean).join(' · ') || undefined,
     },
     {

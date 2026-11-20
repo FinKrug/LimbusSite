@@ -17,6 +17,8 @@ import { GiftList } from './components/GiftList'
 import { OwnedGifts, PickupBox } from './components/OwnedGifts'
 import { PlanPanel } from './components/PlanPanel'
 import { PreRunTab } from './components/PreRunTab'
+import { AdversityTab } from './components/AdversityTab'
+import { EMPTY_ADVERSITY, FIRST_OFFER, hasAdversities, type AdversityState } from './lib/adversity'
 import { EMPTY_PRERUN, type PreRunState } from './lib/prerun'
 import { starcloudKeep } from './lib/costkeep'
 import { floorNotes, freeRefreshes, shopNotes, shopTierCost, startingCost } from './lib/buffeffects'
@@ -65,8 +67,8 @@ import { buildTeam, suggestOrder } from './lib/teambuilder'
 import { addGift, removeOne } from './lib/vestiges'
 import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
-type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'shophome' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'rank-gifts' | 'rank-ids' | 'rank-egos'
-const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'shophome', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best', 'rank-gifts', 'rank-ids', 'rank-egos']
+type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'shophome' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'rank-gifts' | 'rank-ids' | 'rank-egos' | 'adversity'
+const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'shophome', 'gifts', 'packs', 'fusion', 'upgrades', 'events', 'evaluate', 'skills', 'import', 'rewards', 'boss', 'best', 'rank-gifts', 'rank-ids', 'rank-egos', 'adversity']
 
 /**
  * Two places (Finley, 2026-11-15): Home, with your team and lineups, owned identities and settings;
@@ -77,21 +79,23 @@ const TABS: Tab[] = ['team', 'identities', 'settings', 'start', 'prerun', 'shoph
  * Rankings (Finley, 2026-11-15): the best of everything for Mirror Dungeon whatever you own; what to
  * do with what you own stays on Home's Team & lineups.
  */
-type Stage = 'home' | 'rankings' | 'start' | 'packs' | 'fights' | 'shop' | 'boss' | 'yourgifts'
-type RunStage = 'packs' | 'fights' | 'shop' | 'boss'
+type Stage = 'home' | 'rankings' | 'start' | 'packs' | 'fights' | 'shop' | 'boss' | 'adversity' | 'yourgifts'
+type RunStage = 'packs' | 'fights' | 'shop' | 'boss' | 'adversity'
 const STAGE_OF: Record<Tab, Stage> = {
   team: 'home', identities: 'home', settings: 'home', start: 'start', prerun: 'start',
   packs: 'packs', rewards: 'fights', events: 'fights',
-  shophome: 'shop', gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss',
+  shophome: 'shop', gifts: 'shop', fusion: 'shop', upgrades: 'shop', skills: 'shop', boss: 'boss', adversity: 'adversity',
   evaluate: 'yourgifts', import: 'yourgifts', best: 'yourgifts', 'rank-gifts': 'rankings', 'rank-ids': 'rankings', 'rank-egos': 'rankings',
 }
 /** Left to right, for which way a screen slides in. */
-const STAGE_INDEX: Record<Stage, number> = { home: 0, rankings: 1, start: 2, packs: 3, fights: 4, shop: 5, boss: 6, yourgifts: 7 }
+const STAGE_INDEX: Record<Stage, number> = { home: 0, rankings: 1, start: 2, packs: 3, fights: 4, shop: 5, boss: 6, adversity: 7, yourgifts: 8 }
 const STAGES: { id: RunStage; tab: Tab; label: string; hint: string }[] = [
   { id: 'packs', tab: 'packs', label: 'Pick a pack', hint: "The floor's theme pack" },
   { id: 'fights', tab: 'events', label: 'Fights & events', hint: 'Gifts, "?" events' },
   { id: 'shop', tab: 'shophome', label: 'Shop', hint: 'Buy, enhance, swap' },
   { id: 'boss', tab: 'boss', label: 'Boss', hint: 'Boss, floor reward' },
+  // Parallel Superposition EXTREME only (15-floor EXTREME runs): after clearing floors 10–14.
+  { id: 'adversity', tab: 'adversity', label: 'Adversities', hint: 'After floors 10–14' },
 ]
 /** Screens with parts of their own, and the parts. */
 const SUB_TABS: Partial<Record<Stage, { id: Tab; label: string }[]>> = {
@@ -183,6 +187,8 @@ export default function App() {
   const [enhanced, setEnhanced] = usePersistentState<Record<string, number>>('limbussite.enhanced.v1', {})
   /** Before the run: Starlight buffs you took, your starting keyword, Starlight to spend. */
   const [prerun, setPrerun] = usePersistentState<PreRunState>('limbussite.prerun.v1', EMPTY_PRERUN)
+  /** Parallel Superposition: adversities taken this run, risk setting, Projection Rate this week. */
+  const [adversity, setAdversity] = usePersistentState<AdversityState>('limbussite.adversity.v1', EMPTY_ADVERSITY)
   const [offered, setOffered] = usePersistentState<string[]>('limbussite.offered.v1', [])
   const [firstRun] = useState(legacyRun)
   const [run, setRun] = usePersistentState<RunSettings>('limbussite.run.v1', firstRun)
@@ -200,7 +206,7 @@ export default function App() {
     if (t !== 'shophome') setLastMove(null)
     const to = STAGE_OF[t]
     if (SUB_TABS[to]) setSubTabs((m) => ({ ...m, [to]: t }))
-    if (to === 'packs' || to === 'fights' || to === 'shop' || to === 'boss') setLastRunTab(t)
+    if (to === 'packs' || to === 'fights' || to === 'shop' || to === 'boss' || to === 'adversity') setLastRunTab(t)
     if (to !== stage) setDirection(STAGE_INDEX[to] >= STAGE_INDEX[stage] ? 'fwd' : 'back')
     setStoredTab(t)
   }
@@ -550,6 +556,7 @@ export default function App() {
     setOffered([])
     setDismissed([])
     setSuperShop(false)
+    setAdversity((a) => ({ ...a, taken: [] }))
     setRun({ ...run, floor: null, pack: null, visited: {} })
   }
   const formation = (
@@ -568,7 +575,7 @@ export default function App() {
     </>
   )
   const subNav = SUB_TABS[stage] && (
-    <nav className="tabs sub-tabs" role="tablist" aria-label={STAGES[STAGE_INDEX[stage]]?.label}>
+    <nav className="tabs sub-tabs" role="tablist" aria-label={STAGES.find((x) => x.id === stage)?.label}>
       {SUB_TABS[stage]!.map((t) => (
         <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'tab active' : 'tab'}
           onClick={() => setTab(t.id)}>{t.label}</button>
@@ -588,6 +595,16 @@ export default function App() {
     else openStage(run.pack ? 'fights' : 'packs')
   }
   const backToRun = { label: 'Back to the run', sub: `Floor ${run.floor}`, go: () => { openRun(); toTop() } }
+  const adversities = hasAdversities(run)
+  /** On to the next floor (after the boss, or after choosing adversities). */
+  const floorCleared = (f: number) => ({ label: `Floor ${f} cleared`, sub: `On to floor ${f + 1}`, go: () => {
+    setRun(withFloor(run, f + 1))
+    setOffered([])
+    setBossSearch(false)
+    setCleared((c) => ({ key: (c?.key ?? 0) + 1, title: `Floor ${f} cleared`, sub: `Floor ${f + 1} of ${run.floors}` }))
+    openStage('packs')
+    toTop()
+  } })
   const next: { label: string; sub?: string; go: () => void } | null = (() => {
     const f = run.floor
     switch (tab) {
@@ -599,7 +616,7 @@ export default function App() {
       case 'start':
         return { label: 'Next: Before the run', sub: 'Starlight buffs and starting gifts', go: () => { setTab('prerun'); toTop() } }
       case 'prerun': return f === null
-        ? { label: 'Start the run', sub: 'Floor 1: pick a pack', go: () => { setRun(withFloor(run, 1)); setLastRunTab(null); openStage('packs'); toTop() } }
+        ? { label: 'Start the run', sub: 'Floor 1: pick a pack', go: () => { setRun(withFloor(run, 1)); setAdversity((a) => ({ ...a, taken: [] })); setLastRunTab(null); openStage('packs'); toTop() } }
         : backToRun
     }
     switch (stage) {
@@ -611,14 +628,9 @@ export default function App() {
       case 'shop': return { label: 'Next: Boss', go: () => { openStage('boss'); toTop() } }
       case 'boss':
         if (f === null) return { label: 'Start a run', go: () => { setTab('start'); toTop() } }
-        if (f < run.floors) return { label: `Floor ${f} cleared`, sub: `On to floor ${f + 1}`, go: () => {
-          setRun(withFloor(run, f + 1))
-          setOffered([])
-          setBossSearch(false)
-          setCleared((c) => ({ key: (c?.key ?? 0) + 1, title: `Floor ${f} cleared`, sub: `Floor ${f + 1} of ${run.floors}` }))
-          openStage('packs')
-          toTop()
-        } }
+        // EXTREME floors 10–14: the floor's adversities come before the next floor (Parallel Superposition).
+        if (adversities && f >= FIRST_OFFER && f < run.floors) return { label: 'Next: Adversities', sub: `Floor ${f}'s offer`, go: () => { openStage('adversity'); toTop() } }
+        if (f < run.floors) return floorCleared(f)
         return { label: 'Finish the run', sub: `Floor ${f} was the last`, go: () => {
           setRun(withFloor(run, null))
           // The game puts skills back when the run ends; gifts stay here until Clear run, to look back on.
@@ -628,6 +640,10 @@ export default function App() {
           openStage('home')
           toTop()
         } }
+      case 'adversity':
+        if (f === null) return { label: 'Start a run', sub: 'Pick a lineup and difficulty', go: () => { setTab('start'); toTop() } }
+        if (f >= FIRST_OFFER && f < run.floors) return floorCleared(f)
+        return backToRun
       default: return null
     }
   })()
@@ -642,7 +658,7 @@ export default function App() {
     </>
   )
   const inRun = run.floor !== null
-  const runStage = stage === 'packs' || stage === 'fights' || stage === 'shop' || stage === 'boss' || stage === 'yourgifts'
+  const runStage = stage === 'packs' || stage === 'fights' || stage === 'shop' || stage === 'boss' || stage === 'adversity' || stage === 'yourgifts'
   const homeSub = (
     <nav className="tabs sub-tabs home-tabs" role="tablist" aria-label="Home">
       {SUB_TABS.home!.map((t) => (
@@ -754,7 +770,7 @@ export default function App() {
             onOpenSettings={() => setRunOpen(true)} onOpenGifts={stage === 'shop' ? undefined : () => setGiftsOpen(true)}
             onOpenSetup={() => setTab('start')} onStart={() => setTab('start')} />
           <StageNav stage={stage as RunStage | 'yourgifts'} lastRun={lastRunTab ? STAGE_OF[lastRunTab] as RunStage : null} inRun={inRun} floor={run.floor}
-            noShop={!hasShop ? currentPack?.name ?? null : null} onOpen={openStage} />
+            noShop={!hasShop ? currentPack?.name ?? null : null} adversities={adversities} onOpen={openStage} />
         </>
       )}
 
@@ -824,6 +840,12 @@ export default function App() {
         {tab === 'prerun' && (
           <div className="stage-main">
             {focusLine}
+            {adversities && (
+              <p className="panel hint adv-prerun">
+                This EXTREME run offers <b>adversities</b> after floors 10–14: extra Starlight and Projection Rate for a harder run.{' '}
+                <button className="link-btn" onClick={() => { setTab('adversity'); toTop() }}>See which to take with your team →</button>
+              </p>
+            )}
             <PreRunTab ctx={ctx} packsForGift={packsForGift} rebuild={rebuildCtx} state={prerun} onStateChange={setPrerun}
               onOwn={own} inRun={run.floor !== null} />
           </div>
@@ -921,6 +943,11 @@ export default function App() {
               hint={`Each pack shows the gifts you can choose after its boss (on the pack select screen too). Add the ones offered and they're ranked for your team; you pick ${run.difficulty === 'normal' ? 'one' : 'two on Hard'}. Then press the button below to go to the next floor.`} />
             <PickupBox gifts={gameData.gifts} owned={owned} onChange={addOwned} />
           </div>
+        )}
+
+        {stage === 'adversity' && (
+          <AdversityTab ctx={ctx} run={run} state={adversity} onStateChange={setAdversity} onRunChange={setRun}
+            onOpenTeam={() => setTab('team')} />
         )}
 
         {stage === 'yourgifts' && (
@@ -1041,12 +1068,14 @@ function reducedMotion(): boolean {
 }
 
 /** The four screens of a floor as cards; earlier ones get a ✓ during a run. */
-function StageNav({ stage, inRun, floor, noShop, lastRun, onOpen }: {
+function StageNav({ stage, inRun, floor, noShop, adversities, lastRun, onOpen }: {
   stage: RunStage | 'yourgifts'
   inRun: boolean
   floor: number | null
   /** The floor's pack, when it has no shop. */
   noShop: string | null
+  /** A 15-floor EXTREME run: show the Adversities step. */
+  adversities: boolean
   /** The run step you were last on (for the ✓ marks while Best gifts is open). */
   lastRun: RunStage | null
   onOpen: (s: RunStage | 'yourgifts') => void
@@ -1058,11 +1087,12 @@ function StageNav({ stage, inRun, floor, noShop, lastRun, onOpen }: {
     const nav = ref.current
     if (el && nav && nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: el.offsetLeft - nav.clientWidth / 2 + el.clientWidth / 2, behavior: 'smooth' })
   }, [stage])
-  const here = STAGES.findIndex((s) => s.id === (stage === 'yourgifts' ? lastRun : stage))
+  const steps = STAGES.filter((s) => s.id !== 'adversity' || adversities || stage === 'adversity')
+  const here = steps.findIndex((s) => s.id === (stage === 'yourgifts' ? lastRun : stage))
   return (
-    <nav className="stages" role="tablist" aria-label="Where you are in the run" ref={ref}>
-      {STAGES.map((s, k) => {
-        const done = inRun && k < here
+    <nav className={`stages stages-${steps.length}`} role="tablist" aria-label="Where you are in the run" ref={ref}>
+      {steps.map((s, k) => {
+        const done = inRun && k < here && !(s.id === 'adversity' && (floor ?? 0) < FIRST_OFFER)
         const skipped = s.id === 'shop' && noShop !== null
         return (
           <button key={s.id} role="tab" aria-selected={stage === s.id}
@@ -1073,6 +1103,7 @@ function StageNav({ stage, inRun, floor, noShop, lastRun, onOpen }: {
             <span className="stage-text">
               <b>{s.label}
                 {s.id === 'packs' && floor !== null && <span className="badge">F{floor}</span>}
+                {s.id === 'adversity' && floor !== null && floor < FIRST_OFFER && <span className="badge muted-badge">F10+</span>}
                 {skipped && <span className="badge muted-badge">none</span>}</b>
               <small>{s.hint}</small>
             </span>
