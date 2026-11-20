@@ -55,9 +55,35 @@ export function pointsFor(tier: number, superShop = false): number {
   return lows[tier as 1 | 2 | 3 | 4] ?? 0
 }
 
-/** Does this set of gifts (with repeats) make a recipe? */
-export function matchRecipe(ids: string[], fusions: Fusion[]): Fusion | null {
+/**
+ * Super Shop shortcut (Finley, 2026-11-20: "when fusing for gifts like Ruin you can skip the fusion
+ * for Eerie Effigy assuming it is a super shop and you have all the ingredients"): an ingredient that
+ * is itself a recipe's result can be left out and its own ingredients put in instead, when it all
+ * fits in a Super Shop's 5 slots. Ruin = Broken Revolver + Thunderbranch + Eerie Effigy, so at a
+ * Super Shop Broken Revolver + Thunderbranch + Bone Stake + Shard of Apocalypse make Ruin directly.
+ * Returns each such way of making `f`, with the intermediate recipes it skips.
+ */
+export function superShortcuts(f: Fusion, fusions: Fusion[]): { ingredients: string[]; skipped: string[] }[] {
+  if (f.any_of) return []
+  const byResult = new Map(fusions.filter((x) => !x.any_of).map((x) => [x.result, x]))
+  let ways: { ingredients: string[]; skipped: string[] }[] = [{ ingredients: [], skipped: [] }]
+  for (const id of f.ingredients) {
+    const sub = byResult.get(id)
+    ways = ways.flatMap((w) => [
+      { ingredients: [...w.ingredients, id], skipped: w.skipped },
+      ...(sub ? [{ ingredients: [...w.ingredients, ...sub.ingredients], skipped: [...w.skipped, id] }] : []),
+    ])
+  }
+  return ways.filter((w) => w.skipped.length > 0 && w.ingredients.length <= SUPER_SLOTS)
+}
+
+/** Does this set of gifts (with repeats) make a recipe? At a Super Shop, also through a shortcut. */
+export function matchRecipe(ids: string[], fusions: Fusion[], superShop = false): Fusion | null {
   const sorted = [...ids].sort()
+  const same = (a: string[]) => a.length === sorted.length && [...a].sort().every((x, k) => x === sorted[k])
+  if (superShop) {
+    for (const f of fusions) if (superShortcuts(f, fusions).some((w) => same(w.ingredients))) return f
+  }
   for (const f of fusions) {
     const extra = f.any_of?.count ?? 0
     if (f.ingredients.length + extra !== ids.length) continue
@@ -370,10 +396,16 @@ export interface RecipePlan {
   worthIt: boolean
   /** Ingredients the result does the job of (same keyword): fusing loses little. */
   covered: Gift[]
+  /** The gifts that go in (the recipe's, or a Super Shop shortcut's). */
+  uses: string[]
+  /** Intermediate recipes a Super Shop shortcut skips (superShortcuts): made ready this way. */
+  skipped: Gift[]
+  /** Not at a Super Shop, but one could make it now by skipping these (you have every ingredient). */
+  atSuperShop: Gift[]
 }
 
 /** Recipes you've started (or whose result is great for you), closest first. */
-export function recipePlans(ctx: RunContext, owned: string[]): RecipePlan[] {
+export function recipePlans(ctx: RunContext, owned: string[], opts: { superShop?: boolean } = {}): RecipePlan[] {
   const counts = new Map<string, number>()
   for (const id of owned) counts.set(id, (counts.get(id) ?? 0) + 1)
   const plans: RecipePlan[] = []
@@ -391,10 +423,30 @@ export function recipePlans(ctx: RunContext, owned: string[]): RecipePlan[] {
     if (!started && !(mustHave(f.result) && fusableThisRun(f, ctx))) continue
     // Ingredients the result covers (same keyword) count little: it does their job, better.
     const anyGifts = f.any_of ? f.any_of.from.filter((i) => counts.has(i)).map((i) => ctx.giftsById.get(i)).filter((g): g is Gift => !!g) : []
+    const ready = missing.length === 0 && anyMissing === 0
+    const anyUses = f.any_of ? f.any_of.from.filter((i) => counts.has(i)).slice(0, f.any_of.count) : []
+    // A Super Shop shortcut you have every gift for (and the intermediate you'd otherwise make first).
+    const shortcut = ready ? undefined : superShortcuts(f, ctx.data.fusions).find((w) => {
+      const need = new Map<string, number>()
+      for (const id of w.ingredients) need.set(id, (need.get(id) ?? 0) + 1)
+      return [...need].every(([id, n]) => (counts.get(id) ?? 0) >= n)
+    })
+    if (shortcut && opts.superShop) {
+      const uses = shortcut.ingredients.map((i) => ctx.giftsById.get(i)).filter((g): g is Gift => !!g)
+      const sc = recipeGiveUp(result, uses, ctx)
+      plans.push({
+        fusion: f, result, have: uses, missing: [], anyMissing: 0, ready: true,
+        resultScore, giveUp: sc.value, worthIt: resultScore >= sc.value * 0.8, covered: sc.covered,
+        uses: shortcut.ingredients, skipped: shortcut.skipped.map((i) => ctx.giftsById.get(i)).filter((g): g is Gift => !!g), atSuperShop: [],
+      })
+      continue
+    }
     const { value: giveUp, covered } = recipeGiveUp(result, [...have, ...anyGifts], ctx)
     plans.push({
-      fusion: f, result, have, missing, anyMissing, ready: missing.length === 0 && anyMissing === 0,
+      fusion: f, result, have, missing, anyMissing, ready,
       resultScore, giveUp, worthIt: resultScore >= giveUp * 0.8, covered,
+      uses: [...f.ingredients, ...anyUses], skipped: [],
+      atSuperShop: shortcut ? shortcut.skipped.map((i) => ctx.giftsById.get(i)).filter((g): g is Gift => !!g) : [],
     })
   }
   return plans.sort((a, b) =>

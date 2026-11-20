@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { makeContext, rankGifts, rankThemePacks, scoreGift } from './scoring'
 import {
-  comboFusions, fodder, forecast, fusionIdeas, fusionKeywords, isSpare, setOrComboOf, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans,
+  comboFusions, fodder, forecast, fusionIdeas, fusionKeywords, isSpare, setOrComboOf, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans, superShortcuts,
 } from './fusion'
 
 const g = (name: string) => gameData.gifts.find((x) => x.name === name)!
@@ -277,5 +277,30 @@ describe('affiliation-only gifts', () => {
     // With LCB Sinners and the like on the team it's a keeper.
     const lc = gameData.identities.filter((i) => i.traits.includes('Limbus Company')).slice(0, 7)
     expect(isSpare(gear(lc))).toBe(false)
+  })
+})
+
+describe('Super Shop shortcut: skip an intermediate recipe (Finley, 2026-11-20)', () => {
+  const ruin = gameData.fusions.find((f) => f.result === 'ruin')!
+  const four = ['broken-revolver', 'thunderbranch', 'bone-stake', 'shard-of-apocalypse']
+
+  it('Ruin can be fused from Eerie Effigy\'s ingredients plus the rest, 4 gifts in a Super Shop', () => {
+    const ways = superShortcuts(ruin, gameData.fusions)
+    expect(ways).toContainEqual({ ingredients: four, skipped: ['eerie-effigy'] })
+    expect(ways.every((w) => w.ingredients.length <= 5)).toBe(true)
+    expect(matchRecipe(four, gameData.fusions, true)?.result).toBe('ruin')
+    // Not in a regular shop: 4 gifts don't fit, and there it's Eerie Effigy first.
+    expect(matchRecipe(four, gameData.fusions)).toBeNull()
+  })
+
+  it('a recipe plan is ready at a Super Shop through the shortcut, and says so elsewhere', () => {
+    const ctx = makeContext(gameData, burners, four, { run: { difficulty: 'hard', floors: 10, floor: 4, pack: null } })
+    const regular = recipePlans(ctx, four).find((p) => p.result.id === 'ruin')!
+    expect(regular.ready).toBe(false)
+    expect(regular.atSuperShop.map((x) => x.id)).toEqual(['eerie-effigy'])
+    const atSuper = recipePlans(ctx, four, { superShop: true }).find((p) => p.result.id === 'ruin')!
+    expect(atSuper.ready).toBe(true)
+    expect(atSuper.uses).toEqual(four)
+    expect(atSuper.skipped.map((x) => x.id)).toEqual(['eerie-effigy'])
   })
 })

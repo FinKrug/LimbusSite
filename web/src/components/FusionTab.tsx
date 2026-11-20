@@ -53,7 +53,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
       sort === 'tier' ? (b.tier ?? 0) - (a.tier ?? 0) || a.name.localeCompare(b.name) : value.get(a.id)! - value.get(b.id)!)
   }, [owned, byId, ctx, sort])
 
-  const recipe = bench.length >= 2 ? matchRecipe(bench, ctx.data.fusions) : null
+  const recipe = bench.length >= 2 ? matchRecipe(bench, ctx.data.fusions, isSuper) : null
   const recipeResult = recipe ? byId.get(recipe.result) ?? null : null
   const fc = useMemo(
     () => keyword && bench.length >= 2 && !recipe ? forecast(ctx, keyword, benchGifts, pack, isSuper) : null,
@@ -89,7 +89,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
   const ideas = useMemo(() => {
     return fusionIdeas(ctx, owned, fusionKeywords(ctx, teamKeywords), pack, isSuper).slice(0, 4)
   }, [ctx, owned, teamKeywords, pack, isSuper])
-  const recipes = useMemo(() => recipePlans(ctx, owned), [ctx, owned])
+  const recipes = useMemo(() => recipePlans(ctx, owned, { superShop: isSuper }), [ctx, owned, isSuper])
   const forSets = useMemo(() => comboFusions(ctx, owned, pack, isSuper), [ctx, owned, pack, isSuper])
   const spare = useMemo(() => fodder(ctx, [...new Set(owned)]).filter(isSpare), [ctx, owned])
 
@@ -325,6 +325,16 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                         : `The ingredients are worth more to your team than ${r.result.name}`}
                     </p>
                   )}
+                  {r.skipped.length > 0 && (
+                    <p className="small reason-good">
+                      Super Shop: skip {r.skipped.map((g) => g.name).join(' and ')}. Its ingredients go straight in with the rest, {r.uses.length} gifts in one fusion.
+                    </p>
+                  )}
+                  {r.atSuperShop.length > 0 && (
+                    <p className="muted small">
+                      At a Super Shop you could skip {r.atSuperShop.map((g) => g.name).join(' and ')}: you have every gift to fuse {r.result.name} in one go there.
+                    </p>
+                  )}
                   {r.fusion.super_shop && (
                     <p className="muted small">
                       5 gifts, so only a Super Shop can fuse it. Super Shops only replace shops on Hard floors, with a 3% chance
@@ -336,8 +346,7 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                       <HowToGet gift={g} packsForGift={packsForGift} giftsById={byId} owned={ctx.owned} /></div>
                   ))}
                   {r.ready && <button className="btn" onClick={() => {
-                    const ids = [...r.fusion.ingredients]
-                    if (r.fusion.any_of) ids.push(...r.fusion.any_of.from.filter((i) => owned.includes(i)).slice(0, r.fusion.any_of.count))
+                    const ids = [...r.uses]
                     setBench(ids); if (ids.length > REGULAR_SLOTS) setSuperShop(true)
                     document.querySelector('.fuse-screen')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                   }}>Load</button>}

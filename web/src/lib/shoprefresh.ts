@@ -10,10 +10,11 @@
  *  - Keyword Refresh: 90 Cost, +15 for each refresh (the count is shared with Refresh). The same,
  *    but you pick a keyword the new gifts are more likely to have.
  *  - Free ones: Star of the Beginning (normal: 1, 1, 2), Moon Star-shop (keyword: 1, 1, 2).
+ *  - Finley, 2026-11-20: a free refresh raises the price of every later refresh too (it counts as
+ *    a refresh), and you can't choose to pay while you have free ones: the free ones go first.
  *
  * Not published, so estimated (REFRESH below): how strongly a keyword refresh leans (each gift
- * slot is taken to be the chosen keyword's `keywordShare` of the time), and whether free refreshes
- * raise the price of the paid ones (taken as no). Gifts are drawn evenly from what the shop can sell
+ * slot is taken to be the chosen keyword's `keywordShare` of the time). Gifts are drawn evenly from what the shop can sell
  * (the game's tier odds per floor aren't published either).
  *
  * What a refresh is worth: each new roll can turn up a buy, or a Sinner to swap, that beats what you
@@ -165,13 +166,13 @@ export function refreshAdvice(
     if (g > keywordGain) { keywordGain = g; keyword = { keyword: k, giftChance: rollChance(k), swapChance } }
   }
 
-  const done = opts.paidDone ?? 0
+  const paid = opts.paidDone ?? 0
   const freeTotal = { normal: freeRefreshes(buffs), keyword: freeKeywordRefreshes(buffs) }
-  const used = opts.freeUsed ?? { normal: 0, keyword: 0 }
-  // Free ones left: what the buffs give less what you've used. Paid ones recorded without marking
-  // the free ones: they came after the free ones, so those are gone.
-  const free = done && !opts.freeUsed ? { normal: 0, keyword: 0 }
-    : { normal: Math.max(0, freeTotal.normal - used.normal), keyword: Math.max(0, freeTotal.keyword - used.keyword) }
+  // Paid ones recorded without marking the free ones: the free ones went first, so they're used.
+  const used = opts.freeUsed ?? (paid ? freeTotal : { normal: 0, keyword: 0 })
+  const free = { normal: Math.max(0, freeTotal.normal - used.normal), keyword: Math.max(0, freeTotal.keyword - used.keyword) }
+  // Every refresh done here, free ones included, raises the price of the next (Finley).
+  const done = paid + Math.min(used.normal, freeTotal.normal) + Math.min(used.keyword, freeTotal.keyword)
   const steps: RefreshStep[] = []
   const step = (kind: RefreshKind, price: number, isFree: boolean): RefreshStep => kind === 'keyword' && keyword
     ? { kind, price, free: isFree, giftChance: keyword.giftChance, swapChance, gain: keywordGain }
@@ -180,6 +181,9 @@ export function refreshAdvice(
   const freeKw = keyword ? Array.from({ length: free.keyword }, () => step('keyword', 0, true)) : []
   const freeNormal = Array.from({ length: free.normal }, () => step('normal', 0, true))
   if (normalGain > 0 || keywordGain > 0) steps.push(...(keywordGain >= normalGain ? [...freeKw, ...freeNormal] : [...freeNormal, ...freeKw]))
+  // Paid ones only come after every free one (the game uses those first), and cost more for them.
+  const freeInPlan = steps.length
+  const freeBlocked = free.normal + (keyword ? free.keyword : 0) > freeInPlan
   // Paid ones: every order of normal and keyword refreshes (the +15 count is shared, so doing
   // normal ones first makes a later keyword one dearer), each cut where it's worth the most.
   // A refresh only matters if nothing good has turned up yet, so each step counts for the chance
@@ -193,14 +197,14 @@ export function refreshAdvice(
   let bestPlan: RefreshStep[] = []
   let bestValue = 0
   const n = REFRESH.maxPaid
-  for (let mask = 0; mask < kinds.length ** n; mask++) {
+  for (let mask = 0; mask < (freeBlocked ? 0 : kinds.length ** n); mask++) {
     let miss = missFree
     let value = 0
     let spent = 0
     const seq: RefreshStep[] = []
     for (let i = 0; i < n; i++) {
       const kind = kinds[Math.floor(mask / kinds.length ** i) % kinds.length]
-      const x = step(kind, refreshPrice(kind, done + i, prices), false)
+      const x = step(kind, refreshPrice(kind, done + freeInPlan + i, prices), false)
       if (budget - spent - x.price < cheapest) break
       seq.push(x)
       spent += x.price
@@ -211,7 +215,7 @@ export function refreshAdvice(
   }
   steps.push(...bestPlan)
   // Where to stop: the next refresh after the plan, the cheaper kind.
-  const after = done + bestPlan.length
+  const after = done + freeInPlan + bestPlan.length
   const next = [step('normal', refreshPrice('normal', after, prices), false), ...(keyword ? [step('keyword', refreshPrice('keyword', after, prices), false)] : [])]
   const stop = next.sort((a, b) => a.price - b.price)[0]
   const spentPaid = bestPlan.reduce((a, x) => a + x.price, 0)

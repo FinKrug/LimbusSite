@@ -47,8 +47,12 @@ describe('shop refreshes, both kinds (Finley, 2026-11-15)', () => {
     expect(a.steps.slice(0, 3).every((s) => s.free)).toBe(true)
     const paid = a.steps.filter((s) => !s.free).reduce((x, s) => x + s.price, 0)
     expect(paid).toBeLessThanOrEqual(500)
-    // The +15 count is shared: each paid one costs 15 more than the same kind would have before it.
-    a.steps.filter((s) => !s.free).forEach((s, i) => expect(s.price).toBe((s.kind === 'keyword' ? 90 : 15) + 15 * i))
+    // The +15 count is shared, and the 3 free ones count too (Finley, 2026-11-20): paid ones start at +45.
+    a.steps.filter((s) => !s.free).forEach((s, i) => expect(s.price).toBe((s.kind === 'keyword' ? 90 : 15) + 15 * (3 + i)))
+    // Free ones you haven't used block paying: no paid refresh in a plan that skips a free one.
+    const used = refreshAdvice(ctx, ranked, now, moves, { cost: 500, buffs: { 'star-of-the-beginning': 3, 'moon-star-shop': 1 }, freeUsed: { normal: 2, keyword: 1 } })
+    expect(used.free).toEqual({ normal: 0, keyword: 0 })
+    used.steps.forEach((s, i) => expect(s.price).toBe((s.kind === 'keyword' ? 90 : 15) + 15 * (3 + i)))
   })
 
   it('with no Cost, no paid refreshes; once some are done, prices go on from there and the free ones are gone', () => {

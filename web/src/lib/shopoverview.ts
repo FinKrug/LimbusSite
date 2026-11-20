@@ -198,10 +198,10 @@ export interface ShopFusions {
 }
 
 export function shopFusions(ctx: RunContext, owned: string[], keywords: string[], pack: ThemePack | null, superShop: boolean): ShopFusions {
-  const recipes = recipePlans(ctx, owned).filter((p) => p.ready && p.worthIt).map((plan) => {
+  // At a Super Shop, a recipe can skip an intermediate one (Ruin without making Eerie Effigy first).
+  const recipes = recipePlans(ctx, owned, { superShop }).filter((p) => p.ready && p.worthIt).map((plan) => {
     const f = plan.fusion
-    const anyUses = f.any_of ? f.any_of.from.filter((id) => owned.includes(id)).slice(0, f.any_of.count) : []
-    const uses = [...f.ingredients, ...anyUses].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
+    const uses = plan.uses.map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
     const move: ShopMove = { kind: 'fuse', key: `fuse:${plan.result.id}`, cost: 0, ratio: 0, gift: plan.result, uses, chance: false, why: [] }
     return { plan, uses, needsSuper: !!f.super_shop && !superShop, move }
   })
