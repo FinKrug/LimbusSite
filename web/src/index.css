@@ -2064,3 +2064,5 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .buff-note-done { color: var(--good); font-size: 13px; font-weight: 600; align-self: center; }
 .link-btn.inline-link { padding: 0; font-size: inherit; color: var(--accent); }
 @media (max-width: 760px) { .run-bar-end { flex-wrap: wrap; gap: 8px; } .run-bar-end .wide-only { display: none; } }
+.undo-bar { position: fixed; left: 16px; bottom: 16px; z-index: 55; display: flex; align-items: center; gap: 10px; max-width: min(520px, calc(100vw - 32px)); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); box-shadow: 0 8px 24px rgb(0 0 0 / 0.4); font-size: 14px; }
+@media (max-width: 560px) { .undo-bar { right: 16px; bottom: 92px; } }

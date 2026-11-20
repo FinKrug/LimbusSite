@@ -220,6 +220,8 @@ export default function App() {
   const [buildingForRun, setBuildingForRun] = useState(false)
   // "Floor 3 cleared" / "Run cleared", shown for a moment after the boss.
   const [cleared, setCleared] = useState<{ key: number; title: string; sub: string } | null>(null)
+  // "Run cleared · Undo" for a while after finishing a run.
+  const [finishUndo, setFinishUndo] = useState<{ key: number; undo: () => void } | null>(null)
   const [bossSearch, setBossSearch] = useState(false)
   const [runOpen, setRunOpen] = useState(false)
   const [giftsOpen, setGiftsOpen] = useState(false)
@@ -564,7 +566,24 @@ export default function App() {
     setDismissed([])
     setSuperShop(false)
     setAdversity((a) => ({ ...a, taken: [] }))
+    setShopCost(null)
     setRun({ ...run, floor: null, pack: null, visited: {} })
+  }
+  /** Finishing the run clears it for the next one (Finley, 2026-11-19: gifts shouldn't carry over),
+   *  with an Undo on the banner in case it was pressed by mistake. */
+  const finishRun = () => {
+    const before = { owned, enhanced, swaps, prerun, offered, dismissed, superShop, adversity, run, shopCost }
+    clearRun()
+    setLastRunTab(null)
+    setCleared((c) => ({ key: (c?.key ?? 0) + 1, title: 'Run cleared', sub: 'Gifts and skill swaps are reset for your next run' }))
+    setFinishUndo((u) => ({
+      key: (u?.key ?? 0) + 1,
+      undo: () => {
+        setOwned(before.owned); setEnhanced(before.enhanced); setSwaps(before.swaps); setPrerun(before.prerun)
+        setOffered(before.offered); setDismissed(before.dismissed); setSuperShop(before.superShop)
+        setAdversity(before.adversity); setRun(before.run); setShopCost(before.shopCost)
+      },
+    }))
   }
   const formation = (
     <FormationBar selection={order} equipped={equipped} deployed={deployed} minDeployed={5} maxDeployed={7}
@@ -639,11 +658,7 @@ export default function App() {
         if (adversities && f >= FIRST_OFFER && f < run.floors) return { label: 'Next: Adversities', sub: `Floor ${f}'s offer`, go: () => { openStage('adversity'); toTop() } }
         if (f < run.floors) return floorCleared(f)
         return { label: 'Finish the run', sub: `Floor ${f} was the last`, go: () => {
-          setRun(withFloor(run, null))
-          // The game puts skills back when the run ends; gifts stay here until Clear run, to look back on.
-          setSwaps({})
-          setLastRunTab(null)
-          setCleared((c) => ({ key: (c?.key ?? 0) + 1, title: 'Run cleared', sub: 'Skill swaps are reset; your gifts stay until you Clear run' }))
+          finishRun()
           openStage('home')
           toTop()
         } }
@@ -997,7 +1012,11 @@ export default function App() {
           </button>
         </div>
       )}
-      {cleared && <ClearedToast key={cleared.key} title={cleared.title} sub={cleared.sub} onDone={() => setCleared(null)} />}
+      {cleared && <ClearedToast key={`cleared-${cleared.key}`} title={cleared.title} sub={cleared.sub} onDone={() => setCleared(null)} />}
+      {finishUndo && (
+        <UndoBar key={`undo-${finishUndo.key}`} text="Run finished: your gifts were cleared for the next run." onDone={() => setFinishUndo(null)}
+          onUndo={() => { finishUndo.undo(); setFinishUndo(null); setCleared(null); setTab('boss') }} />
+      )}
 
       <footer className="foot">{dataNote}</footer>
     </div>
@@ -1067,6 +1086,23 @@ function ClearedToast({ title, sub, onDone }: { title: string; sub: string; onDo
         <b>{title}</b>
         <small>{sub}</small>
       </div>
+    </div>
+  )
+}
+
+/** A small bar at the bottom with an Undo, gone after a while (finishing a run clears it). */
+function UndoBar({ text, onUndo, onDone }: { text: string; onUndo: () => void; onDone: () => void }) {
+  const done = useRef(onDone)
+  useEffect(() => { done.current = onDone })
+  useEffect(() => {
+    const t = setTimeout(() => done.current(), 12000)
+    return () => clearTimeout(t)
+  }, [])
+  return (
+    <div className="undo-bar" role="status">
+      <span>{text}</span>
+      <button className="btn small-btn" onClick={onUndo}>Undo</button>
+      <button className="icon-btn" aria-label="Dismiss" onClick={onDone}>✕</button>
     </div>
   )
 }

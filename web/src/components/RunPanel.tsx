@@ -43,14 +43,14 @@ export function RunPanel({ run, onChange, packs, ranked, ctx, onClearRun, showCo
           {run.floor !== null && <button className="link-btn" onClick={() => setFloor(null)}
             title="Stop tracking the floor (keeps your gifts)">End run</button>}
           <button className="link-btn danger" onClick={() => setConfirmClear(!confirmClear)}
-            title="Start a new run: clears the gifts you have, skill swaps, offered theme packs, floor and pack. Your team and saved lineups stay.">
+            title="Start a new run: clears the gifts you have, skill swaps, Cost, offered theme packs, floor and pack. Your team and saved lineups stay.">
             Clear run
           </button>
         </span>
       </header>
       {confirmClear && (
         <div className="run-clear small">
-          <span>Clear the gifts you have, skill swaps, offered theme packs, floor and pack? Your team and saved lineups stay.</span>
+          <span>Clear the gifts you have, skill swaps, Cost, offered theme packs, floor and pack? Your team and saved lineups stay.</span>
           <span className="run-clear-btns">
             <button className="btn small-btn danger-btn" onClick={() => { onClearRun(); setConfirmClear(false) }}>Clear run</button>
             <button className="link-btn" onClick={() => setConfirmClear(false)}>Cancel</button>
