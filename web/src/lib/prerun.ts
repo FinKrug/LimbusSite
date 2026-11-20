@@ -49,6 +49,8 @@ export interface PreRunState {
   starlight: number | null
   /** This run's Starlight Bonus (null: not entered, the fixed BONUS_BASE). */
   bonus?: number | null
+  /** Once-a-run buff rewards already added to Gifts you have this run (BuffNote.claim). */
+  claimed?: string[]
 }
 export const EMPTY_PRERUN: PreRunState = { buffs: {}, keyword: null, starlight: null, bonus: null }
 

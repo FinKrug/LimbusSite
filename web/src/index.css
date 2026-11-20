@@ -2061,3 +2061,6 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 @media (max-width: 1100px) { .stages.stages-5 { display: flex; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; } .stages.stages-5 .stage { flex: none; } .stages.stages-5 .stage-text small { display: none; } }
 .prerun-budget label { display: flex; align-items: center; gap: 8px; font-weight: 600; }
 .prerun-budget .prerun-bar { flex-basis: 100%; margin: 0; }
+.buff-note-done { color: var(--good); font-size: 13px; font-weight: 600; align-self: center; }
+.link-btn.inline-link { padding: 0; font-size: inherit; color: var(--accent); }
+@media (max-width: 760px) { .run-bar-end { flex-wrap: wrap; gap: 8px; } .run-bar-end .wide-only { display: none; } }

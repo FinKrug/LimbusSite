@@ -12,6 +12,8 @@ interface Props {
   onOpenSettings: () => void
   /** Open Gifts you have; omitted where they're already on screen. */
   onOpenGifts?: () => void
+  /** Read Gifts you have from game screenshots. */
+  onImport?: () => void
   /** Back to the start-of-run questions (lineup, difficulty, Starlight buffs, starting gifts). */
   onOpenSetup?: () => void
   /** No run yet: start one (the start-of-run questions). */
@@ -24,7 +26,7 @@ const DIFFICULTY: Record<Difficulty, string> = { normal: 'Normal', hard: 'Hard',
  * One line at the top of every run screen with what changes during a run: the
  * floor and its theme pack. The rest of the run settings sit behind "Run settings".
  */
-export function RunBar({ run, onChange, packs, giftCount, onOpenSettings, onOpenGifts, onOpenSetup, onStart }: Props) {
+export function RunBar({ run, onChange, packs, giftCount, onOpenSettings, onOpenGifts, onImport, onOpenSetup, onStart }: Props) {
   const onFloor = usePacksOnFloor(packs, run)
   const setFloor = (floor: number | null) => onChange(withFloor(run, floor))
   const phase = run.difficulty === 'extreme' && run.floor !== null
@@ -62,6 +64,8 @@ export function RunBar({ run, onChange, packs, giftCount, onOpenSettings, onOpen
         {onOpenGifts
           ? <button className="link-btn" onClick={onOpenGifts}>Gifts you have <b>{giftCount}</b></button>
           : <span className="muted">Gifts you have <b>{giftCount}</b></span>}
+        {onImport && <button className="btn small-btn" onClick={onImport} title="Read the gifts you have from screenshots of the game's E.G.O Gift list">
+          Import<span className="wide-only"> from screenshots</span></button>}
         {run.struggling && <span className="tag" title="Events avoid optional fights (Run settings)">Struggling</span>}
         {onOpenSetup && <button className="btn small-btn" onClick={onOpenSetup}
           title="Change the lineup, difficulty, Starlight buffs or starting gifts">Run setup</button>}

@@ -67,6 +67,9 @@ export interface BuffNote {
   vestiges?: string[]
   /** Vestiges you got, all of them. */
   allVestiges?: string[]
+  /** Something you get once per run: its "Add" button works once (Finley: Perfected Possibility's
+   *  Vestiges could be added again and again). Remembered in PreRunState.claimed. */
+  claim?: string
 }
 
 const name = (b: Buffs, id: string, n: string) => `${n}${plus(lv(b, id))}`
@@ -112,7 +115,7 @@ export function floorNotes(b: Buffs, floor: number, keyword: string | null): Buf
     const pp = lv(b, 'perfected-possibility')
     if (pp) {
       const v = ['dark-vestige', 'faint-vestige', 'twinkling-vestige'].slice(0, pp)
-      out.push({ buff: name(b, 'perfected-possibility', 'Perfected Possibility'), allVestiges: v,
+      out.push({ buff: name(b, 'perfected-possibility', 'Perfected Possibility'), allVestiges: v, claim: 'perfected-possibility-vestiges',
         text: `At the start you got ${pp} random Tier III ${kwText}gift${pp > 1 ? 's' : ''} (add ${pp > 1 ? 'them' : 'it'} in the Got a gift? box) and ${v.length === 1 ? 'a Dark Vestige' : v.length === 2 ? 'a Dark and a Faint Vestige' : 'a Dark, a Faint and a Twinkling Vestige'}.` })
     }
     const moon = lv(b, 'moon-star-shop')

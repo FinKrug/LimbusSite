@@ -88,7 +88,7 @@ export function VestigeCounters({ gifts, owned, onChange }: Props) {
  * you, or a Vestige. In the game a duplicate just shows up as a Vestige of its tier, without saying
  * which gift it was (Finley), so the Vestiges are big one-click buttons of their own.
  */
-export function PickupBox({ gifts, owned, onChange }: Props) {
+export function PickupBox({ gifts, owned, onChange, onImport }: Props & { onImport?: () => void }) {
   const byId = useMemo(() => new Map(gifts.map((g) => [g.id, g])), [gifts])
   const vestiges = useMemo(() => VESTIGES.map((id) => byId.get(id)).filter((g): g is Gift => !!g), [byId])
   const [last, setLast] = useState<{ text: string; added: string } | null>(null)
@@ -103,7 +103,8 @@ export function PickupBox({ gifts, owned, onChange }: Props) {
     <section className="panel pickup-box">
       <div className="pickup-gift">
         <h3>Got a gift?</h3>
-        <p className="muted small">From a fight's reward card or an event: add it to Gifts you have.</p>
+        <p className="muted small">From a fight's reward card or an event: add it to Gifts you have.
+          {onImport && <> Lots of them? <button className="link-btn inline-link" onClick={onImport}>Import from screenshots</button></>}</p>
         <GiftSearch gifts={gifts.filter((g) => !isVestige(g.id))} owned={new Set(owned)} placeholder="Add the gift you got…"
           onPick={(g) => addId(g.id, g.name)} />
       </div>

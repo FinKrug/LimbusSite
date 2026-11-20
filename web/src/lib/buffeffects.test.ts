@@ -32,6 +32,8 @@ describe('Starlight buffs during the run (Finley: Faint Vestiges at every shop)'
   it('says what you got on entering a floor', () => {
     const f1 = floorNotes({ 'perfected-possibility': 3, 'moon-star-shop': 2 }, 1, 'Rupture')
     expect(f1.find((n) => n.buff.startsWith('Perfected'))!.allVestiges).toEqual(['dark-vestige', 'faint-vestige', 'twinkling-vestige'])
+    // Its Vestiges come once a run: the Add button works once (Finley).
+    expect(f1.find((n) => n.buff.startsWith('Perfected'))!.claim).toBe('perfected-possibility-vestiges')
     expect(f1.some((n) => n.text.includes('2 random Tier I gifts'))).toBe(true)
     expect(floorNotes({ 'chance-comet': 3 }, 5, 'Rupture')[0].text).toMatch(/Tier IV Rupture gift/)
     expect(floorNotes({ 'chance-comet': 1 }, 5, null)).toHaveLength(0)

@@ -507,8 +507,15 @@ export default function App() {
     setOwned(after)
   }
   const addMany = (ids: string[]) => addOwned((o) => ids.reduce((acc, id) => addGift(acc, id, ctx.giftsById.get(id)?.tier ?? null), o))
+  // Once-a-run buff rewards (Perfected Possibility's Vestiges): added once, with Undo.
+  const claimBuffGifts = (key: string, ids: string[], on: boolean) => {
+    if (on) addMany(ids)
+    else setOwned(ids.reduce((acc, id) => removeOne(acc, id), owned))
+    setPrerun((p) => ({ ...p, claimed: on ? [...(p.claimed ?? []), key] : (p.claimed ?? []).filter((k) => k !== key) }))
+  }
   const floorBuffBox = (
-    <BuffNotes title={`Your Starlight buffs on floor ${run.floor}`} notes={floorBuffNotes} giftsById={ctx.giftsById} owned={owned} onAdd={addMany} />
+    <BuffNotes title={`Your Starlight buffs on floor ${run.floor}`} notes={floorBuffNotes} giftsById={ctx.giftsById} owned={owned} onAdd={addMany}
+      claimed={prerun.claimed ?? []} onClaim={claimBuffGifts} />
   )
   const own = (id: string) => addOwned((o) => addGift(o, id, ctx.giftsById.get(id)?.tier ?? null))
 
@@ -616,7 +623,7 @@ export default function App() {
       case 'start':
         return { label: 'Next: Before the run', sub: 'Starlight buffs and starting gifts', go: () => { setTab('prerun'); toTop() } }
       case 'prerun': return f === null
-        ? { label: 'Start the run', sub: 'Floor 1: pick a pack', go: () => { setRun(withFloor(run, 1)); setAdversity((a) => ({ ...a, taken: [] })); setLastRunTab(null); openStage('packs'); toTop() } }
+        ? { label: 'Start the run', sub: 'Floor 1: pick a pack', go: () => { setRun(withFloor(run, 1)); setAdversity((a) => ({ ...a, taken: [] })); setPrerun((p) => ({ ...p, claimed: [] })); setLastRunTab(null); openStage('packs'); toTop() } }
         : backToRun
     }
     switch (stage) {
@@ -768,6 +775,7 @@ export default function App() {
         <>
           <RunBar run={run} onChange={setRun} packs={gameData.themePacks} giftCount={owned.length}
             onOpenSettings={() => setRunOpen(true)} onOpenGifts={stage === 'shop' ? undefined : () => setGiftsOpen(true)}
+            onImport={stage === 'yourgifts' ? undefined : () => setImportOpen(true)}
             onOpenSetup={() => setTab('start')} onStart={() => setTab('start')} />
           <StageNav stage={stage as RunStage | 'yourgifts'} lastRun={lastRunTab ? STAGE_OF[lastRunTab] as RunStage : null} inRun={inRun} floor={run.floor}
             noShop={!hasShop ? currentPack?.name ?? null : null} adversities={adversities} onOpen={openStage} />
@@ -919,7 +927,7 @@ export default function App() {
             {formation}
             {/* After a fight the reward card's gift is random (no choice to compare), so this screen
                 is for adding what you got, and the "?" events. */}
-            <PickupBox gifts={gameData.gifts} owned={owned} onChange={addOwned} />
+            <PickupBox gifts={gameData.gifts} owned={owned} onChange={addOwned} onImport={() => setImportOpen(true)} />
             <EventsTab ctx={ctx} events={gameData.events ?? []} team={eventTeam} pack={currentPack}
               owned={owned} onOwnedChange={addOwned} />
           </div>
@@ -941,7 +949,7 @@ export default function App() {
               preset={currentPack?.clear_rewards ?? []} picks={run.difficulty === 'normal' ? 1 : 2}
               title="Boss reward gifts"
               hint={`Each pack shows the gifts you can choose after its boss (on the pack select screen too). Add the ones offered and they're ranked for your team; you pick ${run.difficulty === 'normal' ? 'one' : 'two on Hard'}. Then press the button below to go to the next floor.`} />
-            <PickupBox gifts={gameData.gifts} owned={owned} onChange={addOwned} />
+            <PickupBox gifts={gameData.gifts} owned={owned} onChange={addOwned} onImport={() => setImportOpen(true)} />
           </div>
         )}
 
