@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-11-19T18:20:52+00:00",
+  "generated_at": "2026-11-20T17:52:28+00:00",
   "source": "https://limbuscompany.wiki.gg/api.php",
   "offline": false,
   "pages": {
     "Module:EgoGift/data": {
-      "revid": 202697,
-      "timestamp": "2026-11-19T08:03:44Z"
+      "revid": 203751,
+      "timestamp": "2026-11-19T18:57:09Z"
     },
     "Module:EgoGiftList/data": {
       "revid": 202559,
@@ -18,7 +18,8 @@
     "theme_packs": 126,
     "fusions": 60,
     "identities": 195,
-    "egos": 117
+    "egos": 117,
+    "adversities": 30
   },
   "warnings": 22
 }
