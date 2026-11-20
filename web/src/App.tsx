@@ -3,7 +3,7 @@ import { EvaluateTab } from './components/EvaluateTab'
 import { EventsTab } from './components/EventsTab'
 import { ShopAdvice } from './components/ShopAdvice'
 import { ShopOverview } from './components/ShopOverview'
-import { shopFusions, shopMoves, type ShopMove } from './lib/shopoverview'
+import { NO_SHOP_SWAPS, limitSwaps, shopFusions, shopMoves, swapsLeft, type ShopMove, type ShopSwapsDone } from './lib/shopoverview'
 import { floorsWeight, planSwaps, SWAPS } from './lib/skillswap'
 import { CostNow, type CostChange } from './components/CostNow'
 import { Celebration } from './components/Celebration'
@@ -433,15 +433,25 @@ export default function App() {
     setEnhanced(next)
   }
   /** Skill swaps at the shop: each swap recorded costs its price (one taken back gives it back). */
+  // Skill swaps done at this floor's shop: a regular shop allows 1, a Super Shop 2 + 1 Skill Search
+  // (Finley, 2026-11-19; lib/shopoverview.ts SHOP_SWAPS). A new floor starts at 0.
+  const [storedShopSwaps, setShopSwaps] = usePersistentState<ShopSwapsDone>('limbussite.shopswaps.v1', NO_SHOP_SWAPS)
+  const shopSwaps: ShopSwapsDone = useMemo(() => (storedShopSwaps.floor === run.floor ? storedShopSwaps : { ...NO_SHOP_SWAPS, floor: run.floor }),
+    [storedShopSwaps, run.floor])
+  const isSuperShop = superShop && run.difficulty !== 'normal'
+  const shopSwapsLeft = useMemo(() => swapsLeft(shopSwaps, isSuperShop), [shopSwaps, isSuperShop])
   const shopSetSwaps = (next: SwapState, via: 'random' | 'search' = 'random') => {
+    let count = 0
     for (const id of new Set([...Object.keys(swaps), ...Object.keys(next)])) {
       const name = gameData.identities.find((i) => i.id === id)?.sinner ?? 'Swap'
       for (const sw of SWAPS) {
         const d = (next[id]?.[sw.kind] ?? 0) - (swaps[id]?.[sw.kind] ?? 0)
+        count += d
         // ID Skill Search (Super Shop): you pick the Sinner, at its own price (Trial Plan Guide doesn't lower it).
         if (d) spend(d * (via === 'search' ? sw.search : shopPrices.swap(sw.cost)), `${name}: skill ${sw.from} → ${sw.to}${via === 'search' ? ' (Skill Search)' : ''}${d < 0 ? ' taken back' : ''}`)
       }
     }
+    if (count) setShopSwaps({ ...shopSwaps, [via]: Math.max(0, shopSwaps[via] + count) })
     setSwaps(next)
   }
   // The shop overview: buying, enhancing and skill swaps on one list (lib/shopoverview.ts).
@@ -449,8 +459,9 @@ export default function App() {
     if (tab !== 'shophome' || !teamIdentities.length) return []
     const owned = [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
     const plans = planSwaps(teamIdentities.slice(0, deployed), swaps, owned, { egos: gameData.egos ?? [], loadout, run })
-    return shopMoves(ctx, shopRanked, enhanced, availableNow, plans, { superShop: superShop && run.difficulty !== 'normal' })
-  }, [tab, teamIdentities, deployed, swaps, ctx, loadout, run, shopRanked, enhanced, availableNow, superShop])
+    // Only the swaps this shop still has room for.
+    return limitSwaps(shopMoves(ctx, shopRanked, enhanced, availableNow, plans, { superShop: isSuperShop }), shopSwapsLeft)
+  }, [tab, teamIdentities, deployed, swaps, ctx, loadout, run, shopRanked, enhanced, availableNow, isSuperShop, shopSwapsLeft])
   // Fusing on the overview: free, so it comes first (recipes you can make, the best random fusions).
   const focusKey = focus.map((f) => f.keyword).join('|')
   const focusKeywords = useMemo(() => (focusKey ? focusKey.split('|') : []), [focusKey])
@@ -458,10 +469,10 @@ export default function App() {
     : shopFusions(ctx, owned, focusKeywords, currentPack ?? null, superShop && run.difficulty !== 'normal')),
   [tab, ctx, owned, focusKeywords, currentPack, superShop, run.difficulty])
   // The last move marked done on the overview, with what it changed, so it can be undone.
-  const [lastMove, setLastMove] = useState<{ move: ShopMove; owned: string[]; enhanced: Record<string, number>; swaps: SwapState; cost: number | null } | null>(null)
+  const [lastMove, setLastMove] = useState<{ move: ShopMove; owned: string[]; enhanced: Record<string, number>; swaps: SwapState; cost: number | null; shopSwaps: ShopSwapsDone } | null>(null)
   const undoMove = () => {
     if (!lastMove) return
-    setOwned(lastMove.owned); setEnhanced(lastMove.enhanced); setSwaps(lastMove.swaps)
+    setOwned(lastMove.owned); setEnhanced(lastMove.enhanced); setSwaps(lastMove.swaps); setShopSwaps(lastMove.shopSwaps)
     if (lastMove.cost !== shopCost) {
       setShopCost(lastMove.cost)
       setCostLog((l) => l.slice(1))
@@ -469,7 +480,7 @@ export default function App() {
     setLastMove(null)
   }
   const doMove = (m: ShopMove) => {
-    setLastMove({ move: m, owned, enhanced, swaps, cost: shopCost })
+    setLastMove({ move: m, owned, enhanced, swaps, cost: shopCost, shopSwaps })
     if (m.kind === 'buy') buy(m.gift!.id)
     else if (m.kind === 'fuse') {
       let next = owned
@@ -565,6 +576,7 @@ export default function App() {
     setOffered([])
     setDismissed([])
     setSuperShop(false)
+    setShopSwaps(NO_SHOP_SWAPS)
     setAdversity((a) => ({ ...a, taken: [] }))
     setShopCost(null)
     setRun({ ...run, floor: null, pack: null, visited: {} })
@@ -572,7 +584,7 @@ export default function App() {
   /** Finishing the run clears it for the next one (Finley, 2026-11-19: gifts shouldn't carry over),
    *  with an Undo on the banner in case it was pressed by mistake. */
   const finishRun = () => {
-    const before = { owned, enhanced, swaps, prerun, offered, dismissed, superShop, adversity, run, shopCost }
+    const before = { owned, enhanced, swaps, prerun, offered, dismissed, superShop, adversity, run, shopCost, shopSwaps: storedShopSwaps }
     clearRun()
     setLastRunTab(null)
     setCleared((c) => ({ key: (c?.key ?? 0) + 1, title: 'Run cleared', sub: 'Gifts and skill swaps are reset for your next run' }))
@@ -581,7 +593,7 @@ export default function App() {
       undo: () => {
         setOwned(before.owned); setEnhanced(before.enhanced); setSwaps(before.swaps); setPrerun(before.prerun)
         setOffered(before.offered); setDismissed(before.dismissed); setSuperShop(before.superShop)
-        setAdversity(before.adversity); setRun(before.run); setShopCost(before.shopCost)
+        setAdversity(before.adversity); setRun(before.run); setShopCost(before.shopCost); setShopSwaps(before.shopSwaps)
       },
     }))
   }
@@ -900,7 +912,7 @@ export default function App() {
                 <ShopOverview moves={shopOverview} hasTeam={teamIdentities.length > 0} hasGifts={owned.length > 0} keep={keepCost}
                   floorsLeft={floorsWeight(run).floorsLeft} onOpen={setTab} onOpenTeam={() => setTab('team')} onDone={doMove}
                   justDone={lastMove?.move ?? null} onUndo={undoMove} cost={shopCost} onCostChange={setShopCost}
-                  fusions={shopFusionAdvice}
+                  fusions={shopFusionAdvice} swapsDone={shopSwaps} swapsLeft={shopSwapsLeft}
                   refresh={{ ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop: superShop && run.difficulty !== 'normal', onSuperShopChange: setSuperShop, onSpend: spend }} />
               )}
               {tab === 'gifts' && (
@@ -920,7 +932,7 @@ export default function App() {
               {tab === 'upgrades' && <UpgradesTab ctx={ctx} levels={enhanced} onLevelsChange={shopSetEnhanced} ranked={rankedGifts} keep={keepCost}
                 cost={shopCost} onCostChange={setShopCost} />}
               {tab === 'skills' && (
-                <SkillsTab team={teamIdentities.slice(0, deployed)} backups={teamIdentities.slice(deployed)} swaps={swaps} onSwapsChange={shopSetSwaps} superShop={superShop && run.difficulty !== 'normal'} owned={ownedGifts} art={art}
+                <SkillsTab team={teamIdentities.slice(0, deployed)} backups={teamIdentities.slice(deployed)} swaps={swaps} onSwapsChange={shopSetSwaps} superShop={isSuperShop} swapsLeft={shopSwapsLeft} owned={ownedGifts} art={art}
                   egos={gameData.egos ?? []} loadout={loadout} run={run} battle={ctx.battle} onOpenTeam={() => setTab('team')} />
               )}
             </main>

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { availability } from './plan'
 import { makeContext, packsByGift, rankGifts } from './scoring'
-import { shopMoves, shopPlan, worthLabel, WORTH, type ShopMove } from './shopoverview'
+import { NO_SHOP_SWAPS, SHOP_SWAPS, limitSwaps, shopMoves, shopPlan, swapsLeft, worthLabel, WORTH, type ShopMove } from './shopoverview'
 import { planSwaps } from './skillswap'
 
 describe('shop overview: buy, enhance and swap on one list (Finley, 2026-11-15)', () => {
@@ -64,5 +64,22 @@ describe('shop overview: buy, enhance and swap on one list (Finley, 2026-11-15)'
     expect(sw.filter((m) => m.pick).length).toBeLessThanOrEqual(1)
     expect(sw.filter((m) => !m.pick).length).toBeLessThanOrEqual(2)
     expect(new Set(sw.map((m) => m.identity!.id)).size).toBe(sw.length)
+  })
+  it('a regular shop allows 1 skill swap, a Super Shop 3 (2 offered + 1 Skill Search), less what you did there (Finley)', () => {
+    expect(SHOP_SWAPS.regular.random + SHOP_SWAPS.regular.search).toBe(1)
+    expect(SHOP_SWAPS.super.random + SHOP_SWAPS.super.search).toBe(3)
+    expect(swapsLeft(NO_SHOP_SWAPS, false)).toEqual({ random: 1, search: 0, total: 1, max: 1 })
+    const usedOne = { floor: 4, random: 1, search: 0 }
+    expect(swapsLeft(usedOne, false).total).toBe(0)
+    expect(swapsLeft(usedOne, true)).toEqual({ random: 1, search: 1, total: 2, max: 3 })
+    // Once it's used, a regular shop's list and plan have no swaps.
+    expect(limitSwaps(moves, swapsLeft(usedOne, false)).some((m) => m.kind === 'swap')).toBe(false)
+    expect(shopPlan(moves, 2000, null, { done: usedOne }).moves.some((m) => m.kind === 'swap')).toBe(false)
+    // A Super Shop with 1 offered swap done: at most 1 more offered + 1 Skill Search.
+    const sup = shopMoves(ctx, rankGifts(ctx), {}, now, plans, { superShop: true })
+    const plan = shopPlan(sup, 5000, null, { superShop: true, done: usedOne })
+    const sw = plan.moves.filter((m) => m.kind === 'swap')
+    expect(sw.filter((m) => !m.pick).length).toBeLessThanOrEqual(1)
+    expect(sw.length).toBeLessThanOrEqual(2)
   })
 })

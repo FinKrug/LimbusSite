@@ -104,6 +104,31 @@ export function shopMoves(
   return [...buys, ...upgrades, ...swaps].filter((m) => m.ratio > 0).sort((a, b) => b.ratio - a.ratio)
 }
 
+/**
+ * Skill swaps a shop allows (wiki: Shop Functions › Super Shops; Finley, 2026-11-19: "in a super
+ * shop, there is a max of 3 skill swaps, and in a regular shop there is only one"): a regular shop
+ * replaces 1 Sinner's skill (the one it rolled); a Super Shop 2 rolled Sinners plus 1 of your choice
+ * (ID Skill Search).
+ */
+export const SHOP_SWAPS = { regular: { random: 1, search: 0 }, super: { random: 2, search: 1 } }
+
+/** Swaps recorded at the shop you're in (this floor's). */
+export interface ShopSwapsDone { floor: number | null; random: number; search: number }
+export const NO_SHOP_SWAPS: ShopSwapsDone = { floor: null, random: 0, search: 0 }
+
+/** Swaps this shop still allows, of each kind. */
+export function swapsLeft(done: ShopSwapsDone, superShop: boolean): { random: number; search: number; total: number; max: number } {
+  const cap = SHOP_SWAPS[superShop ? 'super' : 'regular']
+  const random = Math.max(0, cap.random - done.random)
+  const search = Math.max(0, cap.search - done.search)
+  return { random, search, total: random + search, max: cap.random + cap.search }
+}
+
+/** Leave out swaps the shop has no room left for (all random ones once its Sinner(s) are used). */
+export function limitSwaps(moves: ShopMove[], left: { random: number; search: number }): ShopMove[] {
+  return moves.filter((m) => m.kind !== 'swap' || (m.pick ? left.search > 0 : left.random > 0))
+}
+
 /** Below this a move isn't worth spending on when Cost is short (an upgrade's "Low" bar). */
 export const WORTH = UPGRADE_LEVELS.low
 
@@ -112,7 +137,7 @@ export const WORTH = UPGRADE_LEVELS.low
  * With Cost to keep for the next floor (Cumulating Starcloud), a move that dips below it also pays
  * the bonus it loses, and waits unless it's still worth it.
  */
-export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | null = null, opts: { superShop?: boolean } = {}): {
+export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | null = null, opts: { superShop?: boolean; done?: ShopSwapsDone } = {}): {
   moves: ShopMove[]; spent: number; lost: number
   /** A regular shop offers Skill Replacement for one random sinner (a Super Shop, two): the plan's
    *  random swap is for whichever of these it turns out to be (the plan's swap first). */
@@ -122,15 +147,16 @@ export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | nul
   let spent = 0
   let lost = 0
   const swaps = moves.filter((m) => m.kind === 'swap' && !m.pick && m.ratio >= WORTH)
-  // Random swaps: as many as Sinners the shop offers (1, or 2 at a Super Shop); ID Skill Search: 1.
-  // One swap per identity either way.
-  const randomSlots = opts.superShop ? 2 : 1
+  // Random swaps: as many as Sinners the shop offers (1, or 2 at a Super Shop); ID Skill Search: 1
+  // at a Super Shop. Less what you've already done here. One swap per identity either way.
+  const left = swapsLeft(opts.done ?? NO_SHOP_SWAPS, !!opts.superShop)
+  const randomSlots = left.random
   for (const m of moves) {
     if (m.ratio < WORTH || spent + m.cost > budget) continue
     if (m.kind === 'swap') {
       const mine = picked.filter((p) => p.kind === 'swap')
       if (mine.some((p) => p.identity!.id === m.identity!.id)) continue
-      if (m.pick ? mine.some((p) => p.pick) : mine.filter((p) => !p.pick).length >= randomSlots) continue
+      if (m.pick ? mine.filter((p) => p.pick).length >= left.search : mine.filter((p) => !p.pick).length >= randomSlots) continue
     }
     if (keep) {
       const loss = starcloudLoss(keep, budget - spent, m.cost)

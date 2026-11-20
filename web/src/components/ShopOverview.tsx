@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { CostKeep } from '../lib/costkeep'
-import { shopPlan, worthLabel, type MoveKind, type ShopFusions, type ShopMove } from '../lib/shopoverview'
+import { shopPlan, worthLabel, type MoveKind, type ShopFusions, type ShopMove, type ShopSwapsDone } from '../lib/shopoverview'
 import { KeepLine } from './ShopAdvice'
 import { ShopRefresh } from './ShopRefresh'
 import type { Buffs } from '../lib/buffeffects'
@@ -18,6 +18,9 @@ interface Props {
   /** Fusing: free, so it's done first (lib/shopoverview.ts `shopFusions`). */
   fusions: ShopFusions
   onDone: (m: ShopMove) => void
+  /** Skill swaps done at this shop, and how many it still allows (1 at a regular shop, 3 at a Super Shop). */
+  swapsDone?: ShopSwapsDone
+  swapsLeft?: { total: number; max: number }
   /** The move just marked done, to undo it. */
   justDone?: ShopMove | null
   onUndo?: () => void
@@ -61,9 +64,9 @@ function detail(m: ShopMove): string {
  * Shop overview (lib/shopoverview.ts): buying, enhancing and skill swaps on one list, best value
  * per Cost for your team first, plus what to do with the Cost you have.
  */
-export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft, onOpen, onDone, onOpenTeam, justDone = null, onUndo, refresh, cost, onCostChange: setCost, fusions }: Props) {
+export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft, onOpen, onDone, onOpenTeam, justDone = null, onUndo, refresh, cost, onCostChange: setCost, fusions, swapsDone, swapsLeft }: Props) {
   const superShop = refresh.superShop
-  const plan = useMemo(() => (cost === null ? null : shopPlan(moves, cost, keep, { superShop })), [moves, cost, keep, superShop])
+  const plan = useMemo(() => (cost === null ? null : shopPlan(moves, cost, keep, { superShop, done: swapsDone })), [moves, cost, keep, superShop, swapsDone])
   const best = (k: MoveKind) => moves.find((m) => m.kind === k)
   const firstRecipe = fusions.recipes[0]
   const firstIdea = fusions.ideas[0]
@@ -98,7 +101,8 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
                 {m ? <>
                   <span className="shop-home-kind-name">{title(m)}</span>
                   <span className="small"><span className={`worth worth-${w!.cls}`}>{w!.text}</span> · {m.cost} Cost</span>
-                </> : <span className="muted small">{k === 'enhance' && !hasGifts ? 'No gifts to enhance yet' : 'Nothing worth it right now'}</span>}
+                </> : <span className="muted small">{k === 'enhance' && !hasGifts ? 'No gifts to enhance yet'
+                  : k === 'swap' && swapsLeft && swapsLeft.total === 0 ? `Used: this shop allows ${swapsLeft.max} skill swap${swapsLeft.max === 1 ? '' : 's'}` : 'Nothing worth it right now'}</span>}
                 <span className="link-btn small">{KIND[k].open} →</span>
               </button>
             )

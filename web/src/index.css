@@ -2066,3 +2066,5 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 @media (max-width: 760px) { .run-bar-end { flex-wrap: wrap; gap: 8px; } .run-bar-end .wide-only { display: none; } }
 .undo-bar { position: fixed; left: 16px; bottom: 16px; z-index: 55; display: flex; align-items: center; gap: 10px; max-width: min(520px, calc(100vw - 32px)); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); box-shadow: 0 8px 24px rgb(0 0 0 / 0.4); font-size: 14px; }
 @media (max-width: 560px) { .undo-bar { right: 16px; bottom: 92px; } }
+.skills-shop-left { margin: 8px 0 0; padding: 6px 10px; border-radius: 6px; background: var(--panel-2); }
+.skills-shop-left.used { color: var(--accent); }

@@ -17,6 +17,8 @@ interface Props {
   onSwapsChange: (s: SwapState, via?: 'random' | 'search') => void
   /** At a Super Shop: ID Skill Search lets you pick the Sinner (90 / 150 / 240). */
   superShop?: boolean
+  /** Swaps this shop still allows: 1 at a regular shop, 2 rolled + 1 Skill Search at a Super Shop. */
+  swapsLeft?: { random: number; search: number; total: number; max: number }
   owned: Gift[]
   art: ArtVariant
   egos: Ego[]
@@ -36,7 +38,7 @@ const LABEL: Record<SwapKind, string> = { '1to2': 'S1 → S2', '2to3': 'S2 → S
  */
 const DEF_KIND = { guard: 'Guard', evade: 'Evade', counter: 'Counter' } as const
 
-export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art, egos, loadout, run, battle, onOpenTeam, superShop = false }: Props) {
+export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art, egos, loadout, run, battle, onOpenTeam, superShop = false, swapsLeft }: Props) {
   // Deployed units first; once they're done, switch to the backups (remembered across tabs).
   const [view, setView] = usePersistentState<'deployed' | 'backups'>('limbussite.skillsview.v1', 'deployed')
   const showBackups = view === 'backups' && backups.length > 0
@@ -78,10 +80,18 @@ export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art
       <section className="panel skills-intro">
         <p>
           Shops can replace one copy of a skill with a stronger one: <b>S1 → S2</b> 45 Cost, <b>S2 → S3</b> 75, <b>S1 → S3</b> 120.
-          A regular shop offers this for a random sinner; a Super Shop's ID Skill Search lets you choose (90 / 150 / 240 Cost, or 25 / 50 / 75 Starlight).
-          {superShop ? ' Each pick below shows the Skill Search price too.' : ''}
+          A regular shop offers this for one random sinner, once; a Super Shop for 2, plus 1 of your choice with ID Skill Search (90 / 150 / 240 Cost, or 25 / 50 / 75 Starlight).
+          {superShop ? ' Each pick below shows the Skill Search price too.' : ''}{' '}
           When a shop offers someone, do the swap shown on their card, then press <b>Did it</b> so the plan updates.
         </p>
+        {swapsLeft && (
+          <p className={`small skills-shop-left${swapsLeft.total === 0 ? ' used' : ''}`}>
+            {swapsLeft.total === 0
+              ? <>You've used this shop's {swapsLeft.max === 1 ? 'skill swap' : `${swapsLeft.max} skill swaps`}. The next shop has {swapsLeft.max === 1 ? 'another' : 'more'}.</>
+              : <>This shop: <b>{swapsLeft.total}</b> of {swapsLeft.max} skill swap{swapsLeft.max === 1 ? '' : 's'} left
+                {superShop ? ` (${swapsLeft.random} for the Sinners it offers, ${swapsLeft.search} with ID Skill Search)` : ''}.</>}
+          </p>
+        )}
         <div className="sin-bar" aria-label="Your team's skills by sin">
           {SIN_ORDER.filter((s) => sins.get(s)).map((s) => (
             <span key={s} className={`sin-seg sinbg-${s}`} style={{ flexGrow: sins.get(s) }} title={`${s}: ${sins.get(s)} skills`}>
@@ -174,9 +184,9 @@ export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art
                   <div className="skill-best">
                     <div className="skill-best-head">
                       <span><b>If offered:</b> {LABEL[p.best.kind]} <span className="muted small">({p.best.cost} Cost · {gainText(p.best.gain)} team damage)</span></span>
-                      <button className="btn small-btn" title="Record this swap; the advice updates for what's left" onClick={() => didIt(p.identity.id, p.best!.kind)}>I did this</button>
+                      <button className="btn small-btn" disabled={!!swapsLeft && swapsLeft.random === 0} title={swapsLeft && swapsLeft.random === 0 ? 'No swaps left at this shop' : "Record this swap; the advice updates for what's left"} onClick={() => didIt(p.identity.id, p.best!.kind)}>I did this</button>
                     </div>
-                    {superShop && <SearchLine s={p.best} onDid={() => didIt(p.identity.id, p.best!.kind, 'search')} />}
+                    {superShop && <SearchLine s={p.best} used={!!swapsLeft && swapsLeft.search === 0} onDid={() => didIt(p.identity.id, p.best!.kind, 'search')} />}
                     <ul className="reasons">
                       {p.best.pros.map((t) => <li key={t} className="reason reason-good"><span className="reason-icon">+</span>{t}</li>)}
                       {p.best.cons.map((t) => <li key={t} className="reason reason-bad"><span className="reason-icon">−</span>{t}</li>)}
@@ -189,9 +199,9 @@ export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art
                         <b>If you have Cost to spare:</b> {LABEL[p.spare.kind]}{' '}
                         <span className="muted small">({p.spare.cost} Cost · {gainText(p.spare.gain)} team damage)</span>
                       </span>
-                      <button className="btn small-btn" title="Record this swap; the advice updates for what's left" onClick={() => didIt(p.identity.id, p.spare!.kind)}>I did this</button>
+                      <button className="btn small-btn" disabled={!!swapsLeft && swapsLeft.random === 0} title={swapsLeft && swapsLeft.random === 0 ? 'No swaps left at this shop' : "Record this swap; the advice updates for what's left"} onClick={() => didIt(p.identity.id, p.spare!.kind)}>I did this</button>
                     </div>
-                    {superShop && <SearchLine s={p.spare} onDid={() => didIt(p.identity.id, p.spare!.kind, 'search')} />}
+                    {superShop && <SearchLine s={p.spare} used={!!swapsLeft && swapsLeft.search === 0} onDid={() => didIt(p.identity.id, p.spare!.kind, 'search')} />}
                     <ul className="reasons">
                       {p.spare.pros.slice(0, 2).map((t) => <li key={t} className="reason reason-good"><span className="reason-icon">+</span>{t}</li>)}
                       {p.spare.cons.slice(0, 1).map((t) => <li key={t} className="reason reason-bad"><span className="reason-icon">−</span>{t}</li>)}
@@ -244,7 +254,7 @@ const SEARCH_STARLIGHT: Record<SwapKind, number> = { '1to2': 25, '2to3': 50, '1t
  * 2026-11-15; wiki: 90 / 150 / 240 Cost or 25 / 50 / 75 Starlight). Worth it at that price when its
  * value per Cost still clears the "worth buying" bar.
  */
-function SearchLine({ s, onDid }: { s: SwapAdvice; onDid: () => void }) {
+function SearchLine({ s, onDid, used = false }: { s: SwapAdvice; onDid: () => void; used?: boolean }) {
   const worth = s.score * (s.cost / s.search) >= SWAP_WEIGHTS.worth
   return (
     <div className="skill-search">
@@ -252,7 +262,7 @@ function SearchLine({ s, onDid }: { s: SwapAdvice; onDid: () => void }) {
         <b>Or pick it (ID Skill Search):</b> {s.search} Cost or {SEARCH_STARLIGHT[s.kind]} Starlight, no waiting for the shop to offer {''}
         this Sinner. <span className={worth ? 'good' : 'muted'}>{worth ? 'Worth it at that price too.' : 'Pricier than it\'s worth in Cost; fine with spare Starlight.'}</span>
       </span>
-      <button className="btn small-btn" title="Record this swap, bought with ID Skill Search" onClick={onDid}>I picked it</button>
+      <button className="btn small-btn" disabled={used} title={used ? 'This Super Shop\'s ID Skill Search is used' : 'Record this swap, bought with ID Skill Search'} onClick={onDid}>I picked it</button>
     </div>
   )
 }
