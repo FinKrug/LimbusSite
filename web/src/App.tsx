@@ -64,7 +64,7 @@ import type { SwapState } from './lib/skillswap'
 import { withSwaps } from './lib/battle'
 import type { EgoLoadout } from './lib/ego'
 import { buildTeam, suggestOrder } from './lib/teambuilder'
-import { addGift, removeOne } from './lib/vestiges'
+import { addGift, isVestige, removeOne } from './lib/vestiges'
 import { SINNERS, type Gift, type Identity, type Sinner } from './lib/types'
 
 type Tab = 'team' | 'identities' | 'settings' | 'start' | 'prerun' | 'shophome' | 'gifts' | 'packs' | 'fusion' | 'upgrades' | 'events' | 'evaluate' | 'skills' | 'import' | 'rewards' | 'boss' | 'best' | 'rank-gifts' | 'rank-ids' | 'rank-egos' | 'adversity'
@@ -531,6 +531,27 @@ export default function App() {
       claimed={prerun.claimed ?? []} onClaim={claimBuffGifts} />
   )
   const own = (id: string) => addOwned((o) => addGift(o, id, ctx.giftsById.get(id)?.tier ?? null))
+  // At the shop, a gift added to Gifts you have was bought there (Finley, 2026-11-19): its price comes
+  // off the Cost. Taking one back that was added here gives the price back; other removals (sold,
+  // a mistake from earlier) don't touch the Cost.
+  const boughtHere = useRef<{ floor: number | null; ids: string[] }>({ floor: null, ids: [] })
+  const shopOwnedChange = (next: string[]) => {
+    if (boughtHere.current.floor !== run.floor) boughtHere.current = { floor: run.floor, ids: [] }
+    const count = (list: string[], id: string) => list.filter((x) => x === id).length
+    for (const id of new Set([...owned, ...next])) {
+      const g = ctx.giftsById.get(id)
+      if (!g || isVestige(id)) continue
+      const d = count(next, id) - count(owned, id)
+      if (d > 0) {
+        spend(shopPrices.gift(g) ?? 0, `Bought ${g.name}`)
+        boughtHere.current.ids.push(id)
+      } else if (d < 0 && boughtHere.current.ids.includes(id)) {
+        spend(-(shopPrices.gift(g) ?? 0), `${g.name} taken back`)
+        boughtHere.current.ids = boughtHere.current.ids.filter((x) => x !== id)
+      }
+    }
+    addOwned(next)
+  }
 
   if (home) {
     return (
@@ -902,7 +923,8 @@ export default function App() {
             <aside className="side">
               <CostNow cost={shopCost} onChange={setShopCost} log={costLog} discounts={shopPrices.discounts} />
               <section className="panel"><CostBox run={run} ranked={rankedGifts} ctx={ctx} keep={keepCost} buffs={shopBuffs} start={startingCost(prerun.buffs)} /></section>
-              <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={addOwned} />
+              <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={shopOwnedChange}
+                hint="At the shop, a gift you add here counts as bought: its price comes off your Cost." />
             </aside>
             <main className="main">
               <BuffNotes title="Your Starlight buffs at this shop" notes={shopBuffNotes} giftsById={ctx.giftsById} owned={owned} onAdd={addMany} />

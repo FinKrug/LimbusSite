@@ -57,4 +57,15 @@ describe('shop refreshes, both kinds (Finley, 2026-11-15)', () => {
     expect(later.free.normal).toBe(0)
     expect(later.steps[0].price).toBeGreaterThanOrEqual(45)
   })
+  it('free refreshes you marked as used are gone from the plan (Finley, 2026-11-19)', () => {
+    const buffs = { 'star-of-the-beginning': 3, 'moon-star-shop': 3 }
+    const all = refreshAdvice(ctx, ranked, now, moves, { cost: 500, buffs })
+    expect(all.freeTotal).toEqual({ normal: 2, keyword: 2 })
+    expect(all.free).toEqual({ normal: 2, keyword: 2 })
+    const some = refreshAdvice(ctx, ranked, now, moves, { cost: 500, buffs, freeUsed: { normal: 1, keyword: 2 } })
+    expect(some.free).toEqual({ normal: 1, keyword: 0 })
+    expect(some.steps.filter((s) => s.free).length).toBeLessThanOrEqual(1)
+    // Marked, then a paid one recorded: the free ones left still count.
+    expect(refreshAdvice(ctx, ranked, now, moves, { cost: 500, buffs, paidDone: 1, freeUsed: { normal: 1, keyword: 0 } }).free).toEqual({ normal: 1, keyword: 2 })
+  })
 })

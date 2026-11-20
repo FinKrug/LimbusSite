@@ -2068,3 +2068,6 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 @media (max-width: 560px) { .undo-bar { right: 16px; bottom: 92px; } }
 .skills-shop-left { margin: 8px 0 0; padding: 6px 10px; border-radius: 6px; background: var(--panel-2); }
 .skills-shop-left.used { color: var(--accent); }
+.owned-hint { margin: 0 0 8px; }
+.free-used { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.free-used-btns { display: inline-flex; align-items: center; gap: 6px; }

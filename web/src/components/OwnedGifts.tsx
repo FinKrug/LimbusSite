@@ -17,7 +17,7 @@ interface Props {
  * "Gifts you have": search to add, icons, and a row of Vestige counters. Adding a
  * gift you already have adds a Vestige of its tier instead, like the game does.
  */
-export function OwnedGifts({ gifts, owned, onChange }: Props) {
+export function OwnedGifts({ gifts, owned, onChange, hint }: Props & { hint?: React.ReactNode }) {
   const byId = useMemo(() => new Map(gifts.map((g) => [g.id, g])), [gifts])
   const ownedGifts = [...new Set(owned)].filter((id) => !isVestige(id)).map((id) => byId.get(id)).filter((g): g is Gift => !!g)
   const vestigeTotal = owned.filter(isVestige).length
@@ -38,6 +38,7 @@ export function OwnedGifts({ gifts, owned, onChange }: Props) {
           )
         )}
       </header>
+      {hint && <p className="muted small owned-hint">{hint}</p>}
       <GiftSearch gifts={gifts} owned={new Set(owned)} placeholder="Add a gift…"
         onPick={(g) => onChange(addGift(owned, g.id, g.tier))} />
       <VestigeCounters gifts={gifts} owned={owned} onChange={onChange} />

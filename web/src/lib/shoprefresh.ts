@@ -72,6 +72,8 @@ export interface RefreshAdvice {
   /** The best keyword to pick for a keyword refresh, and its chances. */
   keyword: { keyword: string; giftChance: number; swapChance: number } | null
   free: { normal: number; keyword: number }
+  /** Free refreshes a shop gives with your buffs (before any are used). */
+  freeTotal: { normal: number; keyword: number }
   /** What to do, in order: the free ones, then paid ones while they're worth it. */
   steps: RefreshStep[]
   /** The next paid refresh after the plan (where to stop), and why: not worth its price, or it
@@ -105,6 +107,8 @@ export function refreshAdvice(
     buffs?: Buffs; superShop?: boolean; cost?: number | null
     /** Paid refreshes already done at this shop (prices go on from there; free ones were used first). */
     paidDone?: number
+    /** Free refreshes already used at this shop (Finley, 2026-11-19: say which free ones you used). */
+    freeUsed?: { normal: number; keyword: number }
   } = {},
 ): RefreshAdvice {
   const buffs = opts.buffs ?? {}
@@ -162,7 +166,12 @@ export function refreshAdvice(
   }
 
   const done = opts.paidDone ?? 0
-  const free = done ? { normal: 0, keyword: 0 } : { normal: freeRefreshes(buffs), keyword: freeKeywordRefreshes(buffs) }
+  const freeTotal = { normal: freeRefreshes(buffs), keyword: freeKeywordRefreshes(buffs) }
+  const used = opts.freeUsed ?? { normal: 0, keyword: 0 }
+  // Free ones left: what the buffs give less what you've used. Paid ones recorded without marking
+  // the free ones: they came after the free ones, so those are gone.
+  const free = done && !opts.freeUsed ? { normal: 0, keyword: 0 }
+    : { normal: Math.max(0, freeTotal.normal - used.normal), keyword: Math.max(0, freeTotal.keyword - used.keyword) }
   const steps: RefreshStep[] = []
   const step = (kind: RefreshKind, price: number, isFree: boolean): RefreshStep => kind === 'keyword' && keyword
     ? { kind, price, free: isFree, giftChance: keyword.giftChance, swapChance, gain: keywordGain }
@@ -207,5 +216,5 @@ export function refreshAdvice(
   const stop = next.sort((a, b) => a.price - b.price)[0]
   const spentPaid = bestPlan.reduce((a, x) => a + x.price, 0)
   const stopReason: RefreshAdvice['stopReason'] = budget - spentPaid - stop.price < cheapest ? 'cost' : 'odds'
-  return { slots, pool, wanted, fallback, normal, keyword, free, steps, stop, stopReason }
+  return { slots, pool, wanted, fallback, normal, keyword, free, freeTotal, steps, stop, stopReason }
 }

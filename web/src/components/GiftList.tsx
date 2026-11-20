@@ -42,6 +42,9 @@ export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, gif
       if (search && !matches(gift, search)) return false
       if (tier !== 'any' && String(gift.tier) !== tier) return false
       if (smart) return true
+      // Searching a gift by name finds it whatever the Show filter says (Finley, 2026-11-19: Ruptured
+      // Blood Sac, a Bleed gift, didn't show up to buy for a Rupture team).
+      if (search?.kind === 'text' && gift.name.toLowerCase().includes(search.text)) return true
       switch (keyword) {
         case 'team':
           return synergy || teamKeywords.length === 0 || !isCore(gift.keyword) || teamKeywords.includes(gift.keyword!)

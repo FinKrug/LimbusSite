@@ -22,6 +22,20 @@ interface Props {
 
 const pct = (x: number) => `${Math.round(x * 100)}%`
 
+/** "2 free at each shop (Star of the Beginning): 1 left", with buttons to say you used one. */
+function FreeUsed({ total, used, source, onChange }: { total: number; used: number; source: string; onChange: (n: number) => void }) {
+  const left = Math.max(0, total - used)
+  return (
+    <span className="small free-line free-used">
+      <span>{total} free at each shop ({source}): <b>{left ? `${left} left` : 'all used'}</b></span>
+      <span className="free-used-btns">
+        <button className="btn small-btn" disabled={!left} onClick={() => onChange(used + 1)}>Used one</button>
+        {used > 0 && <button className="link-btn" onClick={() => onChange(used - 1)}>Undo</button>}
+      </span>
+    </span>
+  )
+}
+
 function stepText(s: RefreshStep, keyword: string | null) {
   const what = s.kind === 'keyword' ? <>Keyword refresh{keyword ? <> (pick <b>{keyword}</b>)</> : null}</> : <>Refresh</>
   return <>{what}{s.free ? <span className="free-tag">free</span> : <span className="muted"> · {s.price} Cost</span>}</>
@@ -32,12 +46,20 @@ function stepText(s: RefreshStep, keyword: string | null) {
  * this team, and how many to do before stopping.
  */
 export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, superShop, onSuperShopChange, onSpend }: Props) {
-  // Paid refreshes done at this shop, per floor (the price goes up 15 each time).
-  const [done, setDone] = usePersistentState<{ floor: number | null; n: number }>('limbussite.refreshes.v1', { floor: null, n: 0 })
-  const paidDone = done.floor === ctx.run.floor ? done.n : 0
+  // Paid refreshes done at this shop, per floor (the price goes up 15 each time), and free ones used.
+  const [done, setDone] = usePersistentState<{ floor: number | null; n: number; freeNormal?: number; freeKeyword?: number }>(
+    'limbussite.refreshes.v1', { floor: null, n: 0 })
+  const here = done.floor === ctx.run.floor
+  const paidDone = here ? done.n : 0
+  const freeUsed = useMemo(() => ({ normal: here ? done.freeNormal ?? 0 : 0, keyword: here ? done.freeKeyword ?? 0 : 0 }),
+    [here, done.freeNormal, done.freeKeyword])
+  const setFreeUsed = (kind: 'normal' | 'keyword', n: number) => setDone({
+    floor: ctx.run.floor, n: paidDone, freeNormal: freeUsed.normal, freeKeyword: freeUsed.keyword,
+    [kind === 'normal' ? 'freeNormal' : 'freeKeyword']: Math.max(0, n),
+  })
   const prices = pricesFor(ctx)
   const price = (kind: 'normal' | 'keyword', paid: number) => refreshPrice(kind, paid, prices)
-  const setPaid = (n: number) => setDone({ floor: ctx.run.floor, n: Math.max(0, n) })
+  const setPaid = (n: number) => setDone({ floor: ctx.run.floor, n: Math.max(0, n), freeNormal: freeUsed.normal, freeKeyword: freeUsed.keyword })
   // A paid refresh's price comes off your Cost; Undo gives the last one's back.
   const [kinds, setKinds] = useState<('normal' | 'keyword')[]>([])
   const addPaid = (kind: 'normal' | 'keyword') => {
@@ -50,8 +72,8 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
     onSpend(-price(kind, paidDone - 1), kind === 'keyword' ? 'Keyword refresh taken back' : 'Refresh taken back')
     setPaid(paidDone - 1)
   }
-  const a = useMemo(() => refreshAdvice(ctx, ranked, availableNow, moves, { buffs, superShop, cost, paidDone }),
-    [ctx, ranked, availableNow, moves, buffs, superShop, cost, paidDone])
+  const a = useMemo(() => refreshAdvice(ctx, ranked, availableNow, moves, { buffs, superShop, cost, paidDone, freeUsed }),
+    [ctx, ranked, availableNow, moves, buffs, superShop, cost, paidDone, freeUsed])
   const [showWanted, setShowWanted] = useState(false)
   const kw = a.keyword?.keyword ?? null
   const hard = ctx.run.difficulty !== 'normal'
@@ -78,7 +100,8 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
           <b>Refresh</b>
           <span className="small muted">{price('normal', paidDone)} Cost{paidDone ? '' : ', then +15 each time'}. New gifts and a new Sinner for Skill Replacement.</span>
           <span className="small">Each one: <b>{pct(a.normal.giftChance)}</b> chance of a gift worth buying{a.normal.swapChance > 0 && <>, <b>{pct(a.normal.swapChance)}</b> of a swap worth making</>}.</span>
-          {a.free.normal > 0 && <span className="small free-line">{a.free.normal} free at each shop (Star of the Beginning)</span>}
+          {a.freeTotal.normal > 0 && <FreeUsed total={a.freeTotal.normal} used={freeUsed.normal} source="Star of the Beginning"
+            onChange={(n) => setFreeUsed('normal', n)} />}
         </div>
         <div className="refresh-kind">
           <b>Keyword refresh</b>
@@ -89,7 +112,8 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
           {a.keyword && a.steps.length > 0 && !a.steps.some((x) => x.kind === 'keyword') && (
             <span className="small muted">Not in the plan: the cheaper refreshes find a gift worth buying for less Cost here.</span>
           )}
-          {a.free.keyword > 0 && <span className="small free-line">{a.free.keyword} free at each shop (Moon Star-shop)</span>}
+          {a.freeTotal.keyword > 0 && <FreeUsed total={a.freeTotal.keyword} used={freeUsed.keyword} source="Moon Star-shop"
+            onChange={(n) => setFreeUsed('keyword', n)} />}
         </div>
       </div>
 
