@@ -148,7 +148,7 @@ export function PackList({
                   {run.floor !== null && (
                     run.pack === p.pack.id
                       ? <button className="btn" onClick={() => onPickPack(null)}>Unpick</button>
-                      : <button className="btn" onClick={() => onPickPack(p.pack.id)} title="Sets this as your current pack (used by Fusion)">Picking this</button>
+                      : <button className="btn" onClick={() => onPickPack(p.pack.id)} title="Sets this as your floor's pack and goes on to Fights and events (you can come back)">Picking this</button>
                   )}
                 </div>
               </li>

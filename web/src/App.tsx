@@ -913,7 +913,11 @@ export default function App() {
             {focusLine}
             <PackList advice={packAdvice} events={packEvents} allPacks={gameData.themePacks} ranked={rankedPacks}
               offered={offered.filter((id) => packsById.has(id))} onOfferedChange={setOffered}
-              run={run} onPickPack={(id) => setRun(withPack(run, id))}
+              run={run} onPickPack={(id) => {
+                setRun(withPack(run, id))
+                // Picking a pack moves on to its fights (Finley, 2026-11-23); you can still come back.
+                if (id) { openStage('fights'); toTop() }
+              }}
               packsForGift={packsForGift} giftsById={ctx.giftsById} owned={ctx.owned} />
           </div>
         )}
