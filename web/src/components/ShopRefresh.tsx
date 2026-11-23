@@ -47,31 +47,39 @@ function stepText(s: RefreshStep, keyword: string | null) {
  */
 export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, superShop, onSuperShopChange, onSpend }: Props) {
   // Paid refreshes done at this shop, per floor (the price goes up 15 each time), and free ones used.
-  const [done, setDone] = usePersistentState<{ floor: number | null; n: number; freeNormal?: number; freeKeyword?: number }>(
+  // n = paid normal refreshes, kw = paid keyword refreshes (Finley, 2026-11-23: count those too).
+  // log: what each paid one cost, so taking one back refunds what was paid.
+  const [done, setDone] = usePersistentState<{ floor: number | null; n: number; kw?: number; freeNormal?: number; freeKeyword?: number;
+    log?: { k: 'normal' | 'keyword'; p: number }[] }>(
     'limbussite.refreshes.v1', { floor: null, n: 0 })
   const here = done.floor === ctx.run.floor
-  const paidDone = here ? done.n : 0
+  const paid = { normal: here ? done.n : 0, keyword: here ? done.kw ?? 0 : 0 }
+  const paidDone = paid.normal + paid.keyword
+  const log = here ? done.log ?? [] : []
   // Refreshes done here, free ones included: each one raises the price of the next (Finley).
   const freeUsed = useMemo(() => ({ normal: here ? done.freeNormal ?? 0 : 0, keyword: here ? done.freeKeyword ?? 0 : 0 }),
     [here, done.freeNormal, done.freeKeyword])
   const setFreeUsed = (kind: 'normal' | 'keyword', n: number) => setDone({
-    floor: ctx.run.floor, n: paidDone, freeNormal: freeUsed.normal, freeKeyword: freeUsed.keyword,
+    floor: ctx.run.floor, n: paid.normal, kw: paid.keyword, freeNormal: freeUsed.normal, freeKeyword: freeUsed.keyword, log,
     [kind === 'normal' ? 'freeNormal' : 'freeKeyword']: Math.max(0, n),
   })
   const prices = pricesFor(ctx)
   const price = (kind: 'normal' | 'keyword', paid: number) => refreshPrice(kind, paid, prices)
-  const setPaid = (n: number) => setDone({ floor: ctx.run.floor, n: Math.max(0, n), freeNormal: freeUsed.normal, freeKeyword: freeUsed.keyword })
-  // A paid refresh's price comes off your Cost; Undo gives the last one's back.
-  const [kinds, setKinds] = useState<('normal' | 'keyword')[]>([])
+  const setPaid = (kind: 'normal' | 'keyword', n: number, nextLog: typeof log) => setDone({
+    floor: ctx.run.floor, n: kind === 'normal' ? Math.max(0, n) : paid.normal, kw: kind === 'keyword' ? Math.max(0, n) : paid.keyword,
+    freeNormal: freeUsed.normal, freeKeyword: freeUsed.keyword, log: nextLog,
+  })
+  // A paid refresh's price comes off your Cost; taking one back gives back what it cost.
   const addPaid = (kind: 'normal' | 'keyword') => {
-    onSpend(price(kind, count), kind === 'keyword' ? 'Keyword refresh' : 'Refresh')
-    setKinds([...kinds.slice(0, paidDone), kind])
-    setPaid(paidDone + 1)
+    const p = price(kind, count)
+    onSpend(p, kind === 'keyword' ? 'Keyword refresh' : 'Refresh')
+    setPaid(kind, paid[kind] + 1, [...log, { k: kind, p }])
   }
-  const removePaid = () => {
-    const kind = kinds[paidDone - 1] ?? 'normal'
-    onSpend(-price(kind, count - 1), kind === 'keyword' ? 'Keyword refresh taken back' : 'Refresh taken back')
-    setPaid(paidDone - 1)
+  const removePaid = (kind: 'normal' | 'keyword') => {
+    const at = log.map((x) => x.k).lastIndexOf(kind)
+    const p = at >= 0 ? log[at].p : price(kind, count - 1)
+    onSpend(-p, kind === 'keyword' ? 'Keyword refresh taken back' : 'Refresh taken back')
+    setPaid(kind, paid[kind] - 1, at >= 0 ? log.filter((_, i) => i !== at) : log)
   }
   const a = useMemo(() => refreshAdvice(ctx, ranked, availableNow, moves, { buffs, superShop, cost, paidDone, freeUsed }),
     [ctx, ranked, availableNow, moves, buffs, superShop, cost, paidDone, freeUsed])
@@ -109,9 +117,11 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
         <div className="refresh-kind">
           <b>Keyword refresh</b>
           <span className="small muted">{price('keyword', count)} Cost{count ? '' : ', +15 for every refresh before it'}. Pick a keyword: the new gifts lean toward it.</span>
-          {a.keyword
-            ? <span className="small">Pick <b>{a.keyword.keyword}</b>: about <b>{pct(a.keyword.giftChance)}</b> chance of a gift worth buying.</span>
-            : <span className="small muted">No keyword has gifts worth refreshing for.</span>}
+          {a.keyword && a.keyword.weak
+            ? <span className="small">Pick <b>{a.keyword.keyword}</b>: its gifts fit your team best, though none here beat saving the Cost{a.free.keyword > 0 ? '. Worth it with a free one' : ''}.</span>
+            : a.keyword
+              ? <span className="small">Pick <b>{a.keyword.keyword}</b>: about <b>{pct(a.keyword.giftChance)}</b> chance of a gift worth buying.</span>
+              : <span className="small muted">No keyword has gifts worth refreshing for.</span>}
           {a.keyword && a.steps.length > 0 && !a.steps.some((x) => x.kind === 'keyword') && (
             <span className="small muted">Not in the plan: the cheaper refreshes find a gift worth buying for less Cost here.</span>
           )}
@@ -122,7 +132,9 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
 
       {a.steps.length > 0 ? (
         <>
-          <p className="small"><b>Refresh until one of those gifts (or a swap worth making) shows up</b>, in this order:</p>
+          {a.steps.every((x) => x.free) && a.steps.every((x) => x.gain <= 0)
+            ? <p className="small"><b>Use your free refreshes</b>: they cost nothing, and the new gifts might include something. Don't pay for more: nothing the shop can sell here beats saving the Cost.</p>
+            : <p className="small"><b>Refresh until one of those gifts (or a swap worth making) shows up</b>, in this order:</p>}
           <ol className="refresh-steps small">
             {a.steps.map((s, i) => <li key={i}>{stepText(s, kw)}</li>)}
             {a.stop && <li className="muted">Then stop: {a.stopReason === 'cost'
@@ -134,12 +146,17 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
         <p className="small"><b>Don't refresh.</b> {a.wanted.length ? 'The odds of something better are too low for the price.' : 'Nothing the shop can roll beats what you can already do with the Cost.'}</p>
       )}
       <div className="refresh-done small">
-        Paid refreshes done at this shop: <b>{paidDone}</b>
-        <button className="btn small-btn" onClick={() => addPaid('normal')} disabled={freeFirst('normal')}
-          title={freeFirst('normal') ? 'Your free refreshes go first: mark them used above' : undefined}>+ Refresh ({price('normal', count)})</button>
-        {a.keyword && <button className="btn small-btn" onClick={() => addPaid('keyword')} disabled={freeFirst('keyword')}
-          title={freeFirst('keyword') ? 'Your free keyword refreshes go first: mark them used above' : undefined}>+ Keyword ({price('keyword', count)})</button>}
-        <button className="btn small-btn" onClick={removePaid} disabled={!paidDone} aria-label="Take one back">Undo</button>
+        <span className="refresh-done-title">Paid at this shop:</span>
+        {(['normal', 'keyword'] as const).map((k) => (
+          <span key={k} className="refresh-done-kind">
+            {k === 'normal' ? 'Refreshes' : 'Keyword refreshes'} <b>{paid[k]}</b>
+            <button className="btn small-btn" onClick={() => addPaid(k)} disabled={freeFirst(k)}
+              title={freeFirst(k) ? `Your free ${k === 'keyword' ? 'keyword ' : ''}refreshes go first: mark them used above` : undefined}>
+              + {k === 'normal' ? 'Refresh' : 'Keyword'} ({price(k, count)})</button>
+            <button className="link-btn" onClick={() => removePaid(k)} disabled={!paid[k]}
+              aria-label={`Take back a paid ${k === 'keyword' ? 'keyword ' : ''}refresh`}>Undo</button>
+          </span>
+        ))}
       </div>
       <p className="muted small">
         The game doesn't publish how strongly a keyword refresh leans, so this assumes about {pct(REFRESH.keywordShare)} of its gifts

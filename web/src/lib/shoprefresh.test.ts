@@ -72,4 +72,16 @@ describe('shop refreshes, both kinds (Finley, 2026-11-15)', () => {
     // Marked, then a paid one recorded: the free ones left still count.
     expect(refreshAdvice(ctx, ranked, now, moves, { cost: 500, buffs, paidDone: 1, freeUsed: { normal: 1, keyword: 0 } }).free).toEqual({ normal: 1, keyword: 2 })
   })
+  it('free refreshes are always used, and a free keyword one still says which keyword (Finley, 2026-11-23)', () => {
+    // A sure move far better than any gift: nothing in the shop is worth refreshing for.
+    const big = [{ kind: 'enhance', ratio: 1e6, chance: false, cost: 100, key: 'x' }] as never
+    const a = refreshAdvice(ctx, ranked, now, big, { cost: 500, buffs: { 'star-of-the-beginning': 1, 'moon-star-shop': 1 } })
+    expect(a.wanted).toEqual([])
+    expect(a.keyword?.keyword).toBeTruthy()
+    expect(a.keyword?.weak).toBe(true)
+    expect(a.steps.map((s) => [s.kind, s.free])).toEqual(expect.arrayContaining([['keyword', true], ['normal', true]]))
+    expect(a.steps.every((s) => s.free)).toBe(true)
+    // Without free ones: don't refresh.
+    expect(refreshAdvice(ctx, ranked, now, big, { cost: 500 }).steps).toEqual([])
+  })
 })

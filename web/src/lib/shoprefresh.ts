@@ -71,7 +71,7 @@ export interface RefreshAdvice {
   /** Chance one roll has at least one wanted gift / offers a wanted swap. */
   normal: { giftChance: number; swapChance: number }
   /** The best keyword to pick for a keyword refresh, and its chances. */
-  keyword: { keyword: string; giftChance: number; swapChance: number } | null
+  keyword: { keyword: string; giftChance: number; swapChance: number; weak?: boolean } | null
   free: { normal: number; keyword: number }
   /** Free refreshes a shop gives with your buffs (before any are used). */
   freeTotal: { normal: number; keyword: number }
@@ -165,6 +165,16 @@ export function refreshAdvice(
     const g = rollGain(k) + swapGain
     if (g > keywordGain) { keywordGain = g; keyword = { keyword: k, giftChance: rollChance(k), swapChance } }
   }
+  // Nothing worth refreshing for: still say which keyword to pick, for a free keyword refresh
+  // (Finley, 2026-11-23): the one whose best few gifts do the most for the team.
+  if (!keyword && keywords.length) {
+    const fit = (k: string) => {
+      const top = sellable.filter((b) => b.gift.keyword === k).map((b) => b.ratio).sort((a, b) => b - a).slice(0, 3)
+      return top.reduce((a, r) => a + r, 0) / 3
+    }
+    const k = keywords.reduce((a, b) => (fit(b) > fit(a) ? b : a))
+    keyword = { keyword: k, giftChance: rollChance(k), swapChance, weak: true }
+  }
 
   const paid = opts.paidDone ?? 0
   const freeTotal = { normal: freeRefreshes(buffs), keyword: freeKeywordRefreshes(buffs) }
@@ -180,7 +190,8 @@ export function refreshAdvice(
   // Free ones first; a keyword one before a normal one when you're after keyword gifts.
   const freeKw = keyword ? Array.from({ length: free.keyword }, () => step('keyword', 0, true)) : []
   const freeNormal = Array.from({ length: free.normal }, () => step('normal', 0, true))
-  if (normalGain > 0 || keywordGain > 0) steps.push(...(keywordGain >= normalGain ? [...freeKw, ...freeNormal] : [...freeNormal, ...freeKw]))
+  // Free ones are always worth using: they cost nothing and the next roll might have something.
+  steps.push(...(keywordGain >= normalGain ? [...freeKw, ...freeNormal] : [...freeNormal, ...freeKw]))
   // Paid ones only come after every free one (the game uses those first), and cost more for them.
   const freeInPlan = steps.length
   const freeBlocked = free.normal + (keyword ? free.keyword : 0) > freeInPlan

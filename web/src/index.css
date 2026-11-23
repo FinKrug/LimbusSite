@@ -2072,3 +2072,6 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .free-used { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
 .free-used-btns { display: inline-flex; align-items: center; gap: 6px; }
 .shop-list-note { margin: 8px 0 0; padding: 8px 10px; border-left: 3px solid var(--accent); background: var(--panel-2); border-radius: 4px; }
+.refresh-done { gap: 8px 18px; }
+.refresh-done-kind { display: inline-flex; align-items: center; gap: 6px; }
+.refresh-done-title { font-weight: 600; }
