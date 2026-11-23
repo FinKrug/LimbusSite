@@ -110,6 +110,8 @@ export function refreshAdvice(
     paidDone?: number
     /** Free refreshes already used at this shop (Finley, 2026-11-19: say which free ones you used). */
     freeUsed?: { normal: number; keyword: number }
+    /** What keeping the Cost is worth on this floor (costsave.ts bar; default REFRESH.save). */
+    saveBar?: number
   } = {},
 ): RefreshAdvice {
   const buffs = opts.buffs ?? {}
@@ -119,7 +121,7 @@ export function refreshAdvice(
   const pool = sellable.length
   // What the Cost does for sure: the best upgrade, or keeping it for the next floor.
   const sure = Math.max(0, ...moves.filter((m) => !m.chance).map((m) => m.ratio))
-  const fallback = Math.max(sure, REFRESH.save)
+  const fallback = Math.max(sure, opts.saveBar ?? REFRESH.save)
   const wanted = sellable.filter((b) => b.ratio > fallback).sort((a, b) => b.ratio - a.ratio)
   // What buying it adds over spending its price at the fallback rate (at the price you pay).
   const surplus = (b: { price: number; ratio: number }) => (b.ratio - fallback) * b.price / 100

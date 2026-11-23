@@ -2075,3 +2075,8 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .refresh-done { gap: 8px 18px; }
 .refresh-done-kind { display: inline-flex; align-items: center; gap: 6px; }
 .refresh-done-title { font-weight: 600; }
+.save-line { margin: 0 0 12px; padding: 10px 12px; border-radius: 6px; background: var(--panel-2); border-left: 3px solid var(--accent); }
+.save-line p { margin: 0; }
+.save-line p + p { margin-top: 6px; }
+.save-line.save-last { border-left-color: var(--good); }
+.save-meter input { width: 64px; margin: 0 4px; background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; font: inherit; }

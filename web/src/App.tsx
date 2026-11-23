@@ -3,6 +3,7 @@ import { EvaluateTab } from './components/EvaluateTab'
 import { EventsTab } from './components/EventsTab'
 import { ShopAdvice } from './components/ShopAdvice'
 import { ShopOverview } from './components/ShopOverview'
+import { saveAdvice } from './lib/costsave'
 import { NO_SHOP_SWAPS, limitSwaps, shopFusions, shopMoves, swapsLeft, type ShopMove, type ShopSwapsDone } from './lib/shopoverview'
 import { floorsWeight, planSwaps, SWAPS } from './lib/skillswap'
 import { CostNow, type CostChange } from './components/CostNow'
@@ -359,6 +360,11 @@ export default function App() {
   const rankedGifts = useMemo(() => rankGifts(ctx), [ctx])
   // At the shop: gifts only this floor's pack has (now or never) ahead of ones any shop sells.
   const shopRanked = useMemo(() => shoppingOrder(rankedGifts, ctx, packsForGift), [rankedGifts, ctx, packsForGift])
+  // Save or spend on this floor (Finley, 2026-11-23), and the Super Shop chance the shop shows (per floor).
+  const [superMeter, setSuperMeter] = usePersistentState<{ floor: number | null; pct: number | null }>('limbussite.supermeter.v1', { floor: null, pct: null })
+  const meterHere = superMeter.floor === run.floor ? superMeter.pct : null
+  const saveAdv = useMemo(() => (stage === 'shop' ? saveAdvice(ctx, rankedGifts, packsForGift, { meter: meterHere }) : undefined),
+    [stage, ctx, rankedGifts, packsForGift, meterHere])
   // The route over the whole run (packroute.ts) is internal: it orders the packs in view so one
   // that's about to stop showing up comes before one that will still be around later.
   const routeScoresAll = useMemo(() => (tab === 'packs' && ctx.profile.size && run.floor !== null ? routeScores(ctx) : []), [ctx, tab, run.floor])
@@ -598,6 +604,7 @@ export default function App() {
     setDismissed([])
     setSuperShop(false)
     setShopSwaps(NO_SHOP_SWAPS)
+    setSuperMeter({ floor: null, pct: null })
     setAdversity((a) => ({ ...a, taken: [] }))
     setShopCost(null)
     setRun({ ...run, floor: null, pack: null, visited: {} })
@@ -939,7 +946,9 @@ export default function App() {
                   floorsLeft={floorsWeight(run).floorsLeft} onOpen={setTab} onOpenTeam={() => setTab('team')} onDone={doMove}
                   justDone={lastMove?.move ?? null} onUndo={undoMove} cost={shopCost} onCostChange={setShopCost}
                   fusions={shopFusionAdvice} swapsDone={shopSwaps} swapsLeft={shopSwapsLeft}
-                  refresh={{ ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop: superShop && run.difficulty !== 'normal', onSuperShopChange: setSuperShop, onSpend: spend }} />
+                  save={saveAdv} onMeterChange={(pct) => setSuperMeter({ floor: run.floor, pct })}
+                  refresh={{ ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop: superShop && run.difficulty !== 'normal', onSuperShopChange: setSuperShop, onSpend: spend,
+                    saveBar: saveAdv ? saveAdv.bar - saveAdv.meterBonus : undefined }} />
               )}
               {tab === 'gifts' && (
                 <>

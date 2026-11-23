@@ -137,7 +137,12 @@ export const WORTH = UPGRADE_LEVELS.low
  * With Cost to keep for the next floor (Cumulating Starcloud), a move that dips below it also pays
  * the bonus it loses, and waits unless it's still worth it.
  */
-export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | null = null, opts: { superShop?: boolean; done?: ShopSwapsDone } = {}): {
+export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | null = null, opts: {
+  superShop?: boolean; done?: ShopSwapsDone
+  /** Save or spend (costsave.ts): the value per Cost a move needs now (default WORTH), what each
+   *  Cost spent adds toward a Super Shop, and Cost to hold back for later floors. */
+  save?: { bar: number; meterBonus: number; reserve: number }
+} = {}): {
   moves: ShopMove[]; spent: number; lost: number
   /** A regular shop offers Skill Replacement for one random sinner (a Super Shop, two): the plan's
    *  random swap is for whichever of these it turns out to be (the plan's swap first). */
@@ -146,13 +151,16 @@ export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | nul
   const picked: ShopMove[] = []
   let spent = 0
   let lost = 0
-  const swaps = moves.filter((m) => m.kind === 'swap' && !m.pick && m.ratio >= WORTH)
+  const bar = opts.save ? opts.save.bar - opts.save.meterBonus : WORTH
+  const worth = (m: ShopMove) => m.ratio >= bar
+  budget = Math.max(0, budget - heldBack(budget, opts.save?.reserve ?? 0))
+  const swaps = moves.filter((m) => m.kind === 'swap' && !m.pick && worth(m))
   // Random swaps: as many as Sinners the shop offers (1, or 2 at a Super Shop); ID Skill Search: 1
   // at a Super Shop. Less what you've already done here. One swap per identity either way.
   const left = swapsLeft(opts.done ?? NO_SHOP_SWAPS, !!opts.superShop)
   const randomSlots = left.random
   for (const m of moves) {
-    if (m.ratio < WORTH || spent + m.cost > budget) continue
+    if (!worth(m) || spent + m.cost > budget) continue
     if (m.kind === 'swap') {
       const mine = picked.filter((p) => p.kind === 'swap')
       if (mine.some((p) => p.identity!.id === m.identity!.id)) continue
@@ -160,7 +168,7 @@ export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | nul
     }
     if (keep) {
       const loss = starcloudLoss(keep, budget - spent, m.cost)
-      if (loss > 0 && m.ratio * m.cost / (m.cost + loss) < WORTH) continue
+      if (loss > 0 && m.ratio * m.cost / (m.cost + loss) < Math.max(bar, WORTH)) continue
       lost += loss
     }
     picked.push(m)
@@ -171,6 +179,11 @@ export function shopPlan(moves: ShopMove[], budget: number, keep: CostKeep | nul
   const most = Math.max(0, ...randoms.map((m) => m.cost))
   return { moves: picked, spent, lost: Math.round(lost),
     swapFor: randoms.length ? [...randoms, ...swaps.filter((m) => !taken.has(m.identity!.id) && m.cost <= most)] : [] }
+}
+
+/** Cost the plan holds back for floors 11-15: the reserve, but at most 30% of what you have. */
+export function heldBack(cost: number, reserve: number): number {
+  return Math.min(reserve, Math.round(cost * 0.3 / 10) * 10)
 }
 
 /** "Top pick" … "Spare Cost only": how a move's value per Cost compares with a typical good shop gift. */

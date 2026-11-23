@@ -18,6 +18,8 @@ interface Props {
   onSuperShopChange: (v: boolean) => void
   /** Take a paid refresh's price off your Cost (negative: give it back). */
   onSpend: (amount: number, label: string) => void
+  /** What keeping the Cost is worth on this floor (costsave.ts). */
+  saveBar?: number
 }
 
 const pct = (x: number) => `${Math.round(x * 100)}%`
@@ -45,7 +47,7 @@ function stepText(s: RefreshStep, keyword: string | null) {
  * Shop refreshes on the overview (lib/shoprefresh.ts): both kinds, what each one's chances are for
  * this team, and how many to do before stopping.
  */
-export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, superShop, onSuperShopChange, onSpend }: Props) {
+export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, superShop, onSuperShopChange, onSpend, saveBar }: Props) {
   // Paid refreshes done at this shop, per floor (the price goes up 15 each time), and free ones used.
   // n = paid normal refreshes, kw = paid keyword refreshes (Finley, 2026-11-23: count those too).
   // log: what each paid one cost, so taking one back refunds what was paid.
@@ -81,8 +83,8 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
     onSpend(-p, kind === 'keyword' ? 'Keyword refresh taken back' : 'Refresh taken back')
     setPaid(kind, paid[kind] - 1, at >= 0 ? log.filter((_, i) => i !== at) : log)
   }
-  const a = useMemo(() => refreshAdvice(ctx, ranked, availableNow, moves, { buffs, superShop, cost, paidDone, freeUsed }),
-    [ctx, ranked, availableNow, moves, buffs, superShop, cost, paidDone, freeUsed])
+  const a = useMemo(() => refreshAdvice(ctx, ranked, availableNow, moves, { buffs, superShop, cost, paidDone, freeUsed, saveBar }),
+    [ctx, ranked, availableNow, moves, buffs, superShop, cost, paidDone, freeUsed, saveBar])
   const count = paidDone + Math.min(freeUsed.normal, a.freeTotal.normal) + Math.min(freeUsed.keyword, a.freeTotal.keyword)
   const freeFirst = (kind: 'normal' | 'keyword') => (kind === 'normal' ? a.free.normal : a.free.keyword) > 0
   const [showWanted, setShowWanted] = useState(false)
@@ -98,7 +100,7 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
       </div>
       <p className="muted small">
         The shop shows {a.slots} gifts out of the {a.pool} it can sell here. <b>{a.wanted.length}</b> of them
-        {' '}beat {a.fallback > REFRESH.save ? 'your best upgrade' : 'saving the Cost for the next floor'} for your team
+        {' '}beat {a.fallback > (saveBar ?? REFRESH.save) ? 'your best upgrade' : 'saving the Cost for a later floor'} for your team
         {a.wanted.length > 0 && <> (<button className="link-btn" onClick={() => setShowWanted(!showWanted)}>{showWanted ? 'hide' : 'show'}</button>)</>}.
       </p>
       {showWanted && (

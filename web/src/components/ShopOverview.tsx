@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import type { CostKeep } from '../lib/costkeep'
-import { shopPlan, worthLabel, type MoveKind, type ShopFusions, type ShopMove, type ShopSwapsDone } from '../lib/shopoverview'
+import { heldBack, shopPlan, worthLabel, type MoveKind, type ShopFusions, type ShopMove, type ShopSwapsDone } from '../lib/shopoverview'
 import { KeepLine } from './ShopAdvice'
+import { meterAfter, type SaveAdvice } from '../lib/costsave'
 import { ShopRefresh } from './ShopRefresh'
 import type { Buffs } from '../lib/buffeffects'
 import type { GiftScore, RunContext } from '../lib/scoring'
@@ -28,7 +29,10 @@ interface Props {
   cost: number | null
   onCostChange: (c: number | null) => void
   /** For the refresh advice. */
-  refresh: { ctx: RunContext; ranked: GiftScore[]; availableNow: Set<string>; buffs: Buffs; superShop: boolean; onSuperShopChange: (v: boolean) => void; onSpend: (amount: number, label: string) => void }
+  refresh: { ctx: RunContext; ranked: GiftScore[]; availableNow: Set<string>; buffs: Buffs; superShop: boolean; onSuperShopChange: (v: boolean) => void; onSpend: (amount: number, label: string) => void; saveBar?: number }
+  /** Save or spend on this floor (costsave.ts), and the Super Shop chance shown in the shop. */
+  save?: SaveAdvice
+  onMeterChange?: (pct: number | null) => void
 }
 
 const KIND: Record<MoveKind, { label: string; tab: 'gifts' | 'upgrades' | 'skills' | 'fusion'; done: string; open: string }> = {
@@ -64,9 +68,9 @@ function detail(m: ShopMove): string {
  * Shop overview (lib/shopoverview.ts): buying, enhancing and skill swaps on one list, best value
  * per Cost for your team first, plus what to do with the Cost you have.
  */
-export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft, onOpen, onDone, onOpenTeam, justDone = null, onUndo, refresh, cost, onCostChange: setCost, fusions, swapsDone, swapsLeft }: Props) {
+export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft, onOpen, onDone, onOpenTeam, justDone = null, onUndo, refresh, cost, onCostChange: setCost, fusions, swapsDone, swapsLeft, save, onMeterChange }: Props) {
   const superShop = refresh.superShop
-  const plan = useMemo(() => (cost === null ? null : shopPlan(moves, cost, keep, { superShop, done: swapsDone })), [moves, cost, keep, superShop, swapsDone])
+  const plan = useMemo(() => (cost === null ? null : shopPlan(moves, cost, keep, { superShop, done: swapsDone, save })), [moves, cost, keep, superShop, swapsDone, save])
   const best = (k: MoveKind) => moves.find((m) => m.kind === k)
   const firstRecipe = fusions.recipes[0]
   const firstIdea = fusions.ideas[0]
@@ -160,6 +164,7 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
       )}
 
       <section className="panel">
+        {save && <SaveLine save={save} plan={plan} cost={cost} onMeterChange={onMeterChange} hard={refresh.ctx.run.difficulty !== 'normal'} floor={refresh.ctx.run.floor} floors={refresh.ctx.run.floors} />}
         <div className="shop-home-cost">
           <label>Cost you have <input type="number" min={0} step={10} inputMode="numeric" value={cost ?? ''} placeholder="e.g. 450"
             onChange={(e) => setCost(e.target.value === '' ? null : Math.max(0, Math.round(Number(e.target.value))))} /></label>
@@ -231,6 +236,47 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
           {superShop ? '' : ' (tick "This is a Super Shop" above when you\'re in one)'}.
         </p>
       </section>
+    </div>
+  )
+}
+
+/**
+ * Save or spend on this floor (costsave.ts, Finley 2026-11-23): early on, keep Cost for the strong
+ * gifts later theme packs' shops sell; spend it all by the run's last floor (floor 10 of a 15-floor
+ * run, keeping a little for 11-15). On Hard, spending also raises the next shop's Super Shop chance.
+ */
+function SaveLine({ save: s, plan, cost, onMeterChange, hard, floor, floors }: {
+  save: SaveAdvice; plan: { spent: number } | null; cost: number | null; onMeterChange?: (pct: number | null) => void; hard: boolean; floor: number | null; floors: number
+}) {
+  const f = floor ?? 1
+  const w = worthLabel(s.bar)
+  return (
+    <div className={`save-line save-${s.stage}`}>
+      {s.stage === 'save' && <p className="small">
+        <b>Floor {f}: save for later.</b> Buy now only what's <b>{w.text}</b> or better: Cost you keep is worth about that much
+        {' '}on the {s.floorsLeft} floor{s.floorsLeft === 1 ? '' : 's'} before floor {s.spendBy}
+        {s.later.length > 0 && <>, like {s.later.map((x, k) => <span key={x.gift.id}>{k > 0 && ', '}<b>{x.gift.name}</b> <span className="muted">(F{x.floor}, {x.pack!.name})</span></span>)}, which only those packs' shops sell</>}.
+        {' '}Spend it all by floor {s.spendBy}{floors > s.spendBy ? ` (after that, adversities like Inflation make gifts dear)` : ': it\'s no use after the run ends'}.
+      </p>}
+      {s.stage === 'last' && <p className="small">
+        <b>{floors > s.spendBy ? `Floor ${f}: spend most of your Cost now.` : `Last floor: spend it all.`}</b>
+        {floors > s.spendBy
+          ? <> From floor {s.spendBy + 1} on, adversities like Inflation make gifts much dearer. {cost !== null && heldBack(cost, s.reserve) > 0 ? <> The plan keeps about <b>{heldBack(cost, s.reserve)}</b> for one or two things you need there.</> : <> Keep a little for one or two things you need there.</>}</>
+          : <> Cost is no use after the run ends: anything that helps your team is worth buying.</>}
+      </p>}
+      {s.stage === 'late' && <p className="small">
+        {f >= floors ? <><b>Last floor: spend what's left</b> on anything that helps.</> : <><b>Floor {f}: buy only what you need.</b> Cost is scarce from here, and adversities like Inflation make gifts dear.</>}
+      </p>}
+      {hard && s.meterBonus > 0 && (
+        <p className="small muted save-meter">
+          <label>Super Shop chance shown at the top of this shop{' '}
+            <input type="number" min={0} max={100} inputMode="numeric" value={s.meter ?? ''} placeholder="%" aria-label="Super Shop chance, %"
+              onChange={(e) => onMeterChange?.(e.target.value === '' ? null : Math.max(0, Math.min(100, Math.round(Number(e.target.value)))))} />%</label>
+          {' '}Every 20 Cost you spend adds 1% for the next shop
+          {s.meter !== null && plan ? <>: the plan's {plan.spent} would make it about <b>{meterAfter(s.meter, plan.spent)}%</b></> : null}.
+          {' '}A Super Shop shows 7 gifts, so spending also pays off that way.
+        </p>
+      )}
     </div>
   )
 }
