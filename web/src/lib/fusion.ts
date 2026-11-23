@@ -49,6 +49,22 @@ export function keywordChance(count: number): number {
   return count >= 4 ? 0.99 : count === 3 ? 0.9 : count === 2 ? 0.6 : 0
 }
 
+/**
+ * How many gifts random fusions should use (Finley, 2026-11-23): 'safe' prefers 4+ gifts at a Super
+ * Shop for the 99% keyword chance; 'keep' never suggests more than 3 (90%), so you keep more gifts.
+ * Regular shops fuse at most 3 gifts, so it only changes Super Shop suggestions.
+ */
+export type FuseOdds = 'safe' | 'keep'
+
+/** Gift counts the setting allows. */
+export function oddsAllow(count: number, odds: FuseOdds): boolean {
+  return odds === 'keep' ? count <= 3 : true
+}
+/** 1 when the setting prefers this many gifts (4+ at a Super Shop on 'safe'), else 0: compared before value. */
+export function oddsPrefer(count: number, odds: FuseOdds, superShop: boolean): number {
+  return odds === 'safe' && superShop && count >= 4 ? 1 : 0
+}
+
 /** Points still needed to reach a tier (0 if already there). */
 export function pointsFor(tier: number, superShop = false): number {
   const lows = superShop ? { 1: 0, 2: 10, 3: 15, 4: 22 } : { 1: 0, 2: 11, 3: 17, 4: 25 }
@@ -326,16 +342,18 @@ export interface SetAim {
 }
 
 /** The best random fusion for each keyword your team uses, from the gifts you'd miss least. */
-export function fusionIdeas(ctx: RunContext, owned: string[], keywords: string[], pack: ThemePack | null, superShop: boolean): FusionIdea[] {
+export function fusionIdeas(
+  ctx: RunContext, owned: string[], keywords: string[], pack: ThemePack | null, superShop: boolean, odds: FuseOdds = 'safe',
+): FusionIdea[] {
   // Gifts you'd miss least; gifts kept for a recipe or combo are never suggested.
   const pool = fodder(ctx, owned).filter((f) => !f.keepFor).slice(0, superShop ? 14 : 24)
   const max = superShop ? SUPER_SLOTS : REGULAR_SLOTS
   const last = lastChanceGifts(ctx, pack)
   const cache: PoolCache = new Map()
-  // Every set of 2..max spare gifts, once.
+  // Every set of 2..max spare gifts (as many as the odds setting allows), once.
   const combos: KeepNote[][] = []
   const walk = (start: number, combo: KeepNote[]) => {
-    if (combo.length >= 2) combos.push(combo)
+    if (combo.length >= 2 && oddsAllow(combo.length, odds)) combos.push(combo)
     if (combo.length === max) return
     for (let k = start; k < pool.length; k++) walk(k + 1, [...combo, pool[k]])
   }
@@ -361,9 +379,10 @@ export function fusionIdeas(ctx: RunContext, owned: string[], keywords: string[]
       const target = i?.forecast.lastChance.find((x) => x.gift.id === g.id)
       if (!i || !target || i.gain <= 0) continue
       i.chase = target
-      const odds = i.forecast.lastChanceOdds
-      if (!best || odds > best.forecast.lastChanceOdds + 1e-9
-        || (Math.abs(odds - best.forecast.lastChanceOdds) < 1e-9 && i.cost < best.cost)) best = i
+      const hit = i.forecast.lastChanceOdds
+      const pref = oddsPrefer(combo.length, odds, superShop) - (best ? oddsPrefer(best.ingredients.length, odds, superShop) : 0)
+      if (!best || pref > 0 || (pref === 0 && (hit > best.forecast.lastChanceOdds + 1e-9
+        || (Math.abs(hit - best.forecast.lastChanceOdds) < 1e-9 && i.cost < best.cost)))) best = i
     }
     if (best) chased.push(best)
   }
@@ -373,7 +392,9 @@ export function fusionIdeas(ctx: RunContext, owned: string[], keywords: string[]
     let best: FusionIdea | null = null
     for (const combo of combos) {
       const i = idea(keyword, combo)
-      if (i && (!best || i.gain > best.gain)) best = i
+      if (!i || i.gain <= 0) continue
+      const pref = best ? oddsPrefer(combo.length, odds, superShop) - oddsPrefer(best.ingredients.length, odds, superShop) : 1
+      if (pref > 0 || (pref === 0 && i.gain > best!.gain)) best = i
     }
     if (best && best.gain > 0) ideas.push(best)
   }
@@ -513,12 +534,14 @@ export interface ComboFusion {
  * tier with the best odds. The keyword-free sets work for any team, so a Rupture team still fuses
  * Bleed for the Bleed set.
  */
-export function comboFusions(ctx: RunContext, owned: string[], pack: ThemePack | null, superShop: boolean, n = 4): ComboFusion[] {
+export function comboFusions(
+  ctx: RunContext, owned: string[], pack: ThemePack | null, superShop: boolean, n = 4, odds: FuseOdds = 'safe',
+): ComboFusion[] {
   const spare = fodder(ctx, owned).filter(isSpare).slice(0, superShop ? 14 : 24)
   const max = superShop ? SUPER_SLOTS : REGULAR_SLOTS
   const sets: KeepNote[][] = []
   const walk = (start: number, combo: KeepNote[]) => {
-    if (combo.length >= 2) sets.push(combo)
+    if (combo.length >= 2 && oddsAllow(combo.length, odds)) sets.push(combo)
     if (combo.length === max) return
     for (let k = start; k < spare.length; k++) walk(k + 1, [...combo, spare[k]])
   }
@@ -540,14 +563,19 @@ export function comboFusions(ctx: RunContext, owned: string[], pack: ThemePack |
       const pieces = group.filter((g) => pool.some((p) => p.id === g.id))
       if (!pieces.length) continue
       let best: { ingredients: KeepNote[]; odds: number; cost: number } | null = null
-      const better = (odds: number, cost: number) => !best ? true
-        : worth !== undefined ? odds * worth - cost > best.odds * worth - best.cost + 1e-9
-          : odds > best.odds + 1e-9 || (Math.abs(odds - best.odds) < 1e-9 && cost < best.cost)
+      const better = (ing: KeepNote[], hit: number, cost: number) => {
+        if (!best) return true
+        const pref = oddsPrefer(ing.length, odds, superShop) - oddsPrefer(best.ingredients.length, odds, superShop)
+        if (pref) return pref > 0
+        return worth !== undefined ? hit * worth - cost > best.odds * worth - best.cost + 1e-9
+          : hit > best.odds + 1e-9 || (Math.abs(hit - best.odds) < 1e-9 && cost < best.cost)
+      }
       for (const ing of from) {
         if (fusionTier(fusionPoints(ing.map((x) => x.gift)), superShop) !== tier) continue
-        const odds = keywordChance(ing.length) * pieces.length / pool.length
+        const hit = keywordChance(ing.length) * pieces.length / pool.length
         const cost = ing.reduce((s, x) => s + x.value, 0)
-        if (better(odds, cost)) best = { ingredients: ing, odds, cost }
+        if (worth !== undefined && hit * worth <= cost) continue
+        if (better(ing, hit, cost)) best = { ingredients: ing, odds: hit, cost }
       }
       if (!best || (worth !== undefined && best.odds * worth <= best.cost)) continue
       out.push({ combo: c, keyword, tier, pieces, ingredients: best.ingredients, odds: best.odds, poolSize: pool.length, superShop,
@@ -569,7 +597,7 @@ export function comboFusions(ctx: RunContext, owned: string[], pack: ThemePack |
     const usable = fodder(ctx, owned).filter((f) => !f.keepFor).slice(0, superShop ? 14 : 24)
     const usableSets: KeepNote[][] = []
     const walkU = (start: number, combo: KeepNote[]) => {
-      if (combo.length >= 2) usableSets.push(combo)
+      if (combo.length >= 2 && oddsAllow(combo.length, odds)) usableSets.push(combo)
       if (combo.length === max) return
       for (let k = start; k < usable.length; k++) walkU(k + 1, [...combo, usable[k]])
     }
@@ -597,16 +625,18 @@ export function comboFusions(ctx: RunContext, owned: string[], pack: ThemePack |
  * aimed at a set with the same keyword and tier as another idea is folded into it.
  */
 export function suggestedFusions(
-  ctx: RunContext, owned: string[], keywords: string[], pack: ThemePack | null, superShop: boolean, n = 6,
+  ctx: RunContext, owned: string[], keywords: string[], pack: ThemePack | null, superShop: boolean,
+  opts: { n?: number; odds?: FuseOdds } = {},
 ): FusionIdea[] {
-  const ideas = fusionIdeas(ctx, owned, keywords, pack, superShop)
+  const { n = 6, odds = 'safe' } = opts
+  const ideas = fusionIdeas(ctx, owned, keywords, pack, superShop, odds)
   const last = lastChanceGifts(ctx, pack)
   const aimFor = (c: ComboFusion, f: PoolForecast): SetAim => ({
     name: c.combo.name, anyTeam: !!c.combo.any_team, pieces: c.pieces,
     odds: f.pool.length ? f.chance * c.pieces.length / f.pool.length : 0, poolSize: f.pool.length,
     ...(c.mustHave ? { mustHave: c.mustHave } : {}),
   })
-  for (const c of comboFusions(ctx, owned, pack, superShop, 8)) {
+  for (const c of comboFusions(ctx, owned, pack, superShop, 8, odds)) {
     const same = ideas.find((i) => i.keyword === c.keyword && i.forecast.tier === c.tier)
     if (same) {
       const aim = aimFor(c, same.forecast)

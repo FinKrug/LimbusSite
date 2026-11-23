@@ -4,6 +4,7 @@ import { EventsTab } from './components/EventsTab'
 import { ShopAdvice } from './components/ShopAdvice'
 import { ShopOverview } from './components/ShopOverview'
 import { saveAdvice } from './lib/costsave'
+import type { FuseOdds } from './lib/fusion'
 import { NO_SHOP_SWAPS, limitSwaps, shopFusions, shopMoves, swapsLeft, type ShopMove, type ShopSwapsDone } from './lib/shopoverview'
 import { floorsWeight, planSwaps, SWAPS } from './lib/skillswap'
 import { CostNow, type CostChange } from './components/CostNow'
@@ -237,6 +238,8 @@ export default function App() {
   const [dismissed, setDismissed] = usePersistentState<string[]>('limbussite.dismissed.v1', [])
   // Fusion tab: are you at a Super Shop? Stays on across tabs and reloads until you turn it off.
   const [superShop, setSuperShop] = usePersistentState<boolean>('limbussite.supershop.v1', false)
+  // Random fusions at a Super Shop: 4+ gifts for 99%, or at most 3 for 90% to keep more gifts (Finley, 2026-11-23).
+  const [fuseOdds, setFuseOdds] = usePersistentState<FuseOdds>('limbussite.fuseodds.v1', 'safe')
   // Equipped E.G.O per sinner and grade (Team tab).
   const [loadout, setLoadout] = usePersistentState<EgoLoadout>('limbussite.egos.v1', {})
   // Saved lineups (strip above the lineup; Manage opens the full list) and the one last loaded or saved.
@@ -472,8 +475,8 @@ export default function App() {
   const focusKey = focus.map((f) => f.keyword).join('|')
   const focusKeywords = useMemo(() => (focusKey ? focusKey.split('|') : []), [focusKey])
   const shopFusionAdvice = useMemo(() => (tab !== 'shophome' ? { recipes: [], ideas: [] }
-    : shopFusions(ctx, owned, focusKeywords, currentPack ?? null, superShop && run.difficulty !== 'normal')),
-  [tab, ctx, owned, focusKeywords, currentPack, superShop, run.difficulty])
+    : shopFusions(ctx, owned, focusKeywords, currentPack ?? null, superShop && run.difficulty !== 'normal', fuseOdds)),
+  [tab, ctx, owned, focusKeywords, currentPack, superShop, run.difficulty, fuseOdds])
   // The last move marked done on the overview, with what it changed, so it can be undone.
   const [lastMove, setLastMove] = useState<{ move: ShopMove; owned: string[]; enhanced: Record<string, number>; swaps: SwapState; cost: number | null; shopSwaps: ShopSwapsDone } | null>(null)
   const undoMove = () => {
@@ -966,7 +969,7 @@ export default function App() {
               {tab === 'fusion' && (
                 <FusionTab ctx={ctx} owned={owned} onOwnedChange={addOwned} run={run} pack={currentPack}
                   teamKeywords={focus.map((f) => f.keyword)} packsForGift={packsForGift}
-                  superShop={superShop} onSuperShopChange={setSuperShop} />
+                  superShop={superShop} onSuperShopChange={setSuperShop} odds={fuseOdds} onOddsChange={setFuseOdds} />
               )}
               {tab === 'upgrades' && <UpgradesTab ctx={ctx} levels={enhanced} onLevelsChange={shopSetEnhanced} ranked={rankedGifts} keep={keepCost}
                 cost={shopCost} onCostChange={setShopCost} />}

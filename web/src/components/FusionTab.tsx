@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import {
   FUSE_NOW_SHARE, FUSION_KEYWORDS, canFuse as fusable, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, isSpare, fusionPoints, fusionTier, keywordChance,
-  fusionKeywords, matchRecipe, recipePlans, setOrComboOf, suggestedFusions, type FusionIdea, type RecipePlan,
+  fusionKeywords, matchRecipe, recipePlans, setOrComboOf, suggestedFusions, type FuseOdds, type FusionIdea, type RecipePlan,
 } from '../lib/fusion'
 import { mustHave } from '../lib/musthave'
 import { scoreGift, type RunContext, type RunSettings } from '../lib/scoring'
@@ -22,6 +22,9 @@ interface Props {
   /** Super Shop on or off: kept in App (and localStorage) so it stays when you switch tabs. */
   superShop: boolean
   onSuperShopChange: (on: boolean) => void
+  /** Super Shop random fusions: 'safe' = 4+ gifts (99%), 'keep' = at most 3 (90%). Kept in App. */
+  odds: FuseOdds
+  onOddsChange: (odds: FuseOdds) => void
 }
 
 type Sort = 'tier' | 'value'
@@ -33,7 +36,7 @@ type Sort = 'tier' | 'value'
  * can fuse right now (one click), suggested fusions (for your team, its sets and Lunar Memory),
  * recipes you've started, and gifts worth selling or fusing.
  */
-export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, packsForGift, superShop, onSuperShopChange: setSuperShop }: Props) {
+export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, packsForGift, superShop, onSuperShopChange: setSuperShop, odds, onOddsChange }: Props) {
   const canSuper = run.difficulty !== 'normal'
   const isSuper = canSuper && superShop
   const slots = isSuper ? SUPER_SLOTS : REGULAR_SLOTS
@@ -89,8 +92,8 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
   }
 
   const ideas = useMemo(
-    () => suggestedFusions(ctx, owned, fusionKeywords(ctx, teamKeywords), pack, isSuper),
-    [ctx, owned, teamKeywords, pack, isSuper],
+    () => suggestedFusions(ctx, owned, fusionKeywords(ctx, teamKeywords), pack, isSuper, { odds }),
+    [ctx, owned, teamKeywords, pack, isSuper, odds],
   )
   const recipes = useMemo(() => recipePlans(ctx, owned, { superShop: isSuper }), [ctx, owned, isSuper])
   // Recipes you have every gift for get their own list with a one-click Fuse (Finley, 2026-11-23);
@@ -145,6 +148,14 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                 <button className={isSuper ? 'fuse-tool on' : 'fuse-tool'} aria-pressed={isSuper}
                   onClick={() => { setSuperShop(!isSuper); if (isSuper) setBench(bench.slice(0, REGULAR_SLOTS)) }}
                   title="Super Shops (Hard floors) fuse up to 5 gifts, with lower tier thresholds">Super Shop</button>
+              )}
+              {canSuper && (
+                <select className="fuse-tool" value={odds} onChange={(e) => onOddsChange(e.target.value as FuseOdds)}
+                  aria-label="Keyword chance for suggested fusions at a Super Shop"
+                  title="Only changes Super Shop suggestions: regular shops fuse at most 3 gifts (90%)">
+                  <option value="safe">99%: 4+ gifts</option>
+                  <option value="keep">90%: keep gifts</option>
+                </select>
               )}
               <select className="fuse-tool" value={sort} onChange={(e) => setSort(e.target.value as Sort)} aria-label="Sort">
                 <option value="tier">By Tier</option>

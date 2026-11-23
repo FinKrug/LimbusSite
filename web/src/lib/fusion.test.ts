@@ -336,3 +336,29 @@ describe('one Suggested fusions list (Finley, 2026-11-23)', () => {
     expect(list.every((i) => i.gain > 0)).toBe(true)
   })
 })
+
+describe('fuse odds setting: 99% or keep gifts (Finley, 2026-11-23)', () => {
+  const team = gameData.identities.filter((i) => (i.keywords as string[]).includes('Rupture')).slice(0, 7)
+  const run = { difficulty: 'hard' as const, floors: 10, floor: 6, pack: null }
+  const owned = ['respite', 'lowest-star', 'pocket-flashcards', 'faint-vestige', 'dark-vestige', 'twinkling-vestige', 'thrill', 'rest', 'glimpse-of-flames']
+  const ctx = makeContext(gameData, team, owned, { run })
+  const kw = fusionKeywords(ctx, ['Rupture'])
+
+  it("'keep' never suggests more than 3 gifts at a Super Shop", () => {
+    const list = suggestedFusions(ctx, owned, kw, null, true, { odds: 'keep' })
+    expect(list.length).toBeGreaterThan(0)
+    expect(list.every((i) => i.ingredients.length <= 3)).toBe(true)
+  })
+
+  it("'safe' uses 4+ gifts at a Super Shop when it can", () => {
+    const list = suggestedFusions(ctx, owned, kw, null, true, { odds: 'safe' })
+    expect(list.length).toBeGreaterThan(0)
+    expect(list.some((i) => i.ingredients.length >= 4)).toBe(true)
+    expect(list.filter((i) => i.ingredients.length >= 4).every((i) => i.forecast.chance === 0.99)).toBe(true)
+  })
+
+  it('changes nothing at a regular shop (3 gifts at most there)', () => {
+    const ids = (o: 'safe' | 'keep') => suggestedFusions(ctx, owned, kw, null, false, { odds: o }).map((i) => i.ingredients.map((x) => x.gift.id).join() + i.keyword)
+    expect(ids('keep')).toEqual(ids('safe'))
+  })
+})

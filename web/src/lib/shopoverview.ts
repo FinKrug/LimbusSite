@@ -28,7 +28,7 @@ import { isCore, planUpgrades, shopValue, UPGRADE_LEVELS } from './upgrades'
 import { LIST_PRICES } from './shopprices'
 import type { GiftScore, RunContext } from './scoring'
 import type { Gift, Identity, ThemePack } from './types'
-import { fodder, fusionIdeas, fusionKeywords, isSpare, recipePlans, type FusionIdea, type RecipePlan } from './fusion'
+import { fodder, fusionIdeas, fusionKeywords, isSpare, recipePlans, type FuseOdds, type FusionIdea, type RecipePlan } from './fusion'
 
 /** 'fuse': a recipe you can make now (free; never part of the Cost plan). */
 export type MoveKind = 'buy' | 'enhance' | 'swap' | 'fuse'
@@ -210,7 +210,9 @@ export interface ShopFusions {
   ideas: FusionIdea[]
 }
 
-export function shopFusions(ctx: RunContext, owned: string[], keywords: string[], pack: ThemePack | null, superShop: boolean): ShopFusions {
+export function shopFusions(
+  ctx: RunContext, owned: string[], keywords: string[], pack: ThemePack | null, superShop: boolean, odds: FuseOdds = 'safe',
+): ShopFusions {
   // At a Super Shop, a recipe can skip an intermediate one (Ruin without making Eerie Effigy first).
   const recipes = recipePlans(ctx, owned, { superShop }).filter((p) => p.ready && p.worthIt).map((plan) => {
     const f = plan.fusion
@@ -221,7 +223,7 @@ export function shopFusions(ctx: RunContext, owned: string[], keywords: string[]
   // Random fusions only from gifts on the Fuse tab's "Sell or fuse these" list (Finley, 2026-11-20:
   // with nothing there, the overview shouldn't suggest fusing gifts the team uses).
   const spare = new Set(fodder(ctx, [...new Set(owned)]).filter(isSpare).map((n) => n.gift.id))
-  const ideas = spare.size < 2 ? [] : fusionIdeas(ctx, owned, fusionKeywords(ctx, keywords), pack, superShop)
+  const ideas = spare.size < 2 ? [] : fusionIdeas(ctx, owned, fusionKeywords(ctx, keywords), pack, superShop, odds)
     .filter((i) => i.ingredients.every((x) => spare.has(x.gift.id))).slice(0, 2)
   return { recipes, ideas }
 }
