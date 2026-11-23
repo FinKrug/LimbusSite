@@ -934,8 +934,12 @@ export default function App() {
             <aside className="side">
               <CostNow cost={shopCost} onChange={setShopCost} log={costLog} discounts={shopPrices.discounts} />
               <section className="panel"><CostBox run={run} ranked={rankedGifts} ctx={ctx} keep={keepCost} buffs={shopBuffs} start={startingCost(prerun.buffs)} /></section>
-              <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={shopOwnedChange}
-                hint="At the shop, a gift you add here counts as bought: its price comes off your Cost." />
+              {/* On the Fuse page a gift added here is free (Finley, 2026-11-23): the bonus gift a fusion
+                  gives with Chance Comet. Everywhere else at the shop it counts as bought. */}
+              <OwnedGifts gifts={gameData.gifts} owned={owned} onChange={tab === 'fusion' ? addOwned : shopOwnedChange}
+                hint={tab === 'fusion'
+                  ? 'On the Fuse page, a gift you add here is free: use it for a bonus gift from fusing (Chance Comet). To buy a gift, add it on another shop page.'
+                  : 'At the shop, a gift you add here counts as bought: its price comes off your Cost.'} />
             </aside>
             <main className="main">
               <BuffNotes title="Your Starlight buffs at this shop" notes={shopBuffNotes} giftsById={ctx.giftsById} owned={owned} onAdd={addMany} />

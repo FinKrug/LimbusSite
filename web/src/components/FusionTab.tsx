@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import {
-  FUSE_NOW_SHARE, FUSION_KEYWORDS, canFuse as fusable, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, isSpare, fusionIdeas, fusionPoints, fusionTier, keywordChance,
-  comboFusions, fusionKeywords, matchRecipe, recipePlans, setOrComboOf, type ComboFusion, type FusionIdea,
+  FUSE_NOW_SHARE, FUSION_KEYWORDS, canFuse as fusable, REGULAR_SLOTS, SUPER_SLOTS, fodder, forecast, isSpare, fusionPoints, fusionTier, keywordChance,
+  fusionKeywords, matchRecipe, recipePlans, setOrComboOf, suggestedFusions, type FusionIdea, type RecipePlan,
 } from '../lib/fusion'
 import { mustHave } from '../lib/musthave'
 import { scoreGift, type RunContext, type RunSettings } from '../lib/scoring'
@@ -29,8 +29,9 @@ type Sort = 'tier' | 'value'
 
 /**
  * The Fuse E.G.O Gift screen, like in game: pick a keyword, put gifts in the
- * slots, see the forecast, then Fuse (which updates the gifts you have). Below it:
- * suggested fusions, recipes you've started, and gifts worth selling or fusing.
+ * slots, see the forecast, then Fuse (which updates the gifts you have). Below it: recipes you
+ * can fuse right now (one click), suggested fusions (for your team, its sets and Lunar Memory),
+ * recipes you've started, and gifts worth selling or fusing.
  */
 export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, packsForGift, superShop, onSuperShopChange: setSuperShop }: Props) {
   const canSuper = run.difficulty !== 'normal'
@@ -41,6 +42,8 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
   const [sort, setSort] = useState<Sort>('tier')
   const [picking, setPicking] = useState(false)
   const [guide, setGuide] = useState(false)
+  /** The last fusion, to undo it while nothing else has changed your gifts since. */
+  const [lastFuse, setLastFuse] = useState<{ name: string; before: string[]; after: string } | null>(null)
 
   const byId = ctx.giftsById
   const benchGifts = bench.map((id) => byId.get(id)!).filter(Boolean)
@@ -65,12 +68,6 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
 
   const add = (id: string) => { if (bench.length < slots && left(id) > 0) setBench([...bench, id]) }
   const removeAt = (k: number) => setBench(bench.filter((_, j) => j !== k))
-  const loadSet = (c: ComboFusion) => {
-    setKeyword(c.keyword)
-    if (c.superShop) setSuperShop(true)
-    setBench(c.ingredients.map((i) => i.gift.id))
-    document.querySelector('.fuse-screen')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
   const load = (idea: FusionIdea) => {
     setKeyword(idea.keyword)
     if (idea.superShop) setSuperShop(true)
@@ -78,19 +75,29 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
     setPicking(false)
     document.querySelector('.fuse-screen')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-  const fuseInto = (result: Gift) => {
+  const fuse = (ids: string[], result: Gift) => {
     let next = owned
-    for (const id of bench) next = removeOne(next, id)
-    onOwnedChange(addGift(next, result.id, result.tier))
+    for (const id of ids) next = removeOne(next, id)
+    next = addGift(next, result.id, result.tier)
+    onOwnedChange(next)
+    setLastFuse({ name: result.name, before: owned, after: next.join() })
+  }
+  const fuseInto = (result: Gift) => {
+    fuse(bench, result)
     setBench([])
     setPicking(false)
   }
 
-  const ideas = useMemo(() => {
-    return fusionIdeas(ctx, owned, fusionKeywords(ctx, teamKeywords), pack, isSuper).slice(0, 4)
-  }, [ctx, owned, teamKeywords, pack, isSuper])
+  const ideas = useMemo(
+    () => suggestedFusions(ctx, owned, fusionKeywords(ctx, teamKeywords), pack, isSuper),
+    [ctx, owned, teamKeywords, pack, isSuper],
+  )
   const recipes = useMemo(() => recipePlans(ctx, owned, { superShop: isSuper }), [ctx, owned, isSuper])
-  const forSets = useMemo(() => comboFusions(ctx, owned, pack, isSuper), [ctx, owned, pack, isSuper])
+  // Recipes you have every gift for get their own list with a one-click Fuse (Finley, 2026-11-23);
+  // "Recipes to work on" keeps the ones you're still collecting. Worth it first.
+  const ready = recipes.filter((r) => r.ready).sort((a, b) => Number(worthFusing(b)) - Number(worthFusing(a)))
+  const working = recipes.filter((r) => !r.ready)
+  const undo = lastFuse && owned.join() === lastFuse.after ? lastFuse : null
   const spare = useMemo(() => fodder(ctx, [...new Set(owned)]).filter(isSpare), [ctx, owned])
 
   const ring = Array.from({ length: SUPER_SLOTS }, (_, k) => k)
@@ -219,11 +226,54 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
         </section>
       ) : null}
 
+      {undo && (
+        <p className="fuse-undo small" role="status">
+          Fused {undo.name}.{' '}
+          <button className="link-btn" onClick={() => { onOwnedChange(undo.before); setLastFuse(null) }}>Undo</button>
+        </p>
+      )}
+
+      {ready.length > 0 && (
+        <section className="panel fuse-ready" aria-label="Recipes you can fuse now">
+          <h3>Recipes you can fuse now</h3>
+          <ul className="fuse-recipes">
+            {ready.map((r) => {
+              const needsSuper = !isSuper && (r.fusion.super_shop || r.uses.length > REGULAR_SLOTS)
+              return (
+                <li key={r.fusion.result} className="ready">
+                  <div className="fuse-idea-row">
+                    <span className="fuse-ready-gifts">
+                      {r.uses.map((id, k) => { const g = byId.get(id); return g ? <GiftIcon key={k} gift={g} size={32} /> : null })}
+                    </span>
+                    <span className="fuse-arrow" aria-hidden="true">→</span>
+                    <GiftLabel gift={r.result} icon={32} />
+                    <button className={worthFusing(r) ? 'btn primary' : 'btn'} disabled={needsSuper}
+                      title={needsSuper ? 'Only a Super Shop can fuse this many gifts' : `Removes ${r.uses.map((id) => byId.get(id)?.name ?? id).join(', ')} from your gifts and adds ${r.result.name}`}
+                      onClick={() => fuse(r.uses, r.result)}>Fuse it</button>
+                  </div>
+                  <RecipeWhy r={r} />
+                  {r.skipped.length > 0 && (
+                    <p className="small reason-good">
+                      Super Shop: skip {r.skipped.map((g) => g.name).join(' and ')}. Its ingredients go straight in with the rest, {r.uses.length} gifts in one fusion.
+                    </p>
+                  )}
+                  {needsSuper && (
+                    <p className="muted small">
+                      {r.uses.length} gifts, so only a Super Shop can fuse it.{canSuper ? ' At one? Turn on Super Shop in the fuse box.' : ''}
+                    </p>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      )}
+
       <div className="fuse-columns">
         <section className="panel">
           <h3>Suggested fusions</h3>
           {ideas.length === 0 ? (
-            <p className="muted small">Nothing worth fusing yet: none of your spare gifts would add up to something better for your team.</p>
+            <p className="muted small">Nothing worth fusing yet: none of your spare gifts would add up to something better for your team, its gift sets or Lunar Memory.</p>
           ) : (
             <ul className="fuse-ideas">
               {ideas.map((idea) => (
@@ -234,11 +284,20 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                     <span className="fuse-idea-out">Tier {tierLabel(idea.forecast.tier)} <KeywordChip keyword={idea.keyword} /></span>
                     <button className="btn" onClick={() => load(idea)}>Load</button>
                   </div>
-                  <p className="small fuse-for">
+                  {idea.forSet && (
+                    <p className="small fuse-for reason-good">
+                      <b>{idea.forSet.mustHave
+                        ? `${idea.forSet.name} piece (you have ${idea.forSet.mustHave.have} of ${idea.forSet.mustHave.total})`
+                        : `${idea.forSet.name}${idea.forSet.anyTeam ? ' (works for any team)' : ''}`}:</b>{' '}
+                      {idea.forSet.pieces.map((g) => g.name).join(', ')}{' '}
+                      <span className="muted">(about {Math.round(idea.forSet.odds * 100)}%: {idea.forSet.pieces.length} of {idea.forSet.poolSize} possible {idea.keyword} gifts)</span>
+                    </p>
+                  )}
+                  {!(idea.forSet && idea.forecast.targets.every((t) => idea.forSet!.pieces.includes(t.gift))) && <p className="small fuse-for">
                     <b>Fusing for:</b> {idea.forecast.targets.slice(0, 3).map((t) => setOrComboOf(t) && t.fit < 0.35 ? `${t.gift.name} (${setOrComboOf(t)})` : t.gift.name).join(', ')}
                     {idea.forecast.targets.length > 3 && ` and ${idea.forecast.targets.length - 3} more`}
                     {' '}<span className="muted">(about {Math.round(idea.forecast.targetOdds * 100)}% to get one of the {idea.forecast.targets.length} that suit your team, out of {idea.forecast.pool.length} possible)</span>
-                  </p>
+                  </p>}
                   {idea.chase && (
                     <p className="reason reason-good small">
                       Last chance at {idea.chase.gift.name}: only {pack?.name} has it this run, and fusing here can roll it
@@ -262,74 +321,25 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
         </section>
 
         <section className="panel">
-          <h3>Fuse for {forSets.find((c) => c.mustHave)?.combo.name ? `${forSets.find((c) => c.mustHave)!.combo.name} and your gift sets` : 'your gift sets'}</h3>
-          {forSets.length === 0 ? (
-            <p className="muted small">No set piece you're missing can come out of a fusion of the gifts you'd give up{isSuper ? '' : ' here (a Super Shop can reach more tiers)'}.</p>
-          ) : (
-            <ul className="fuse-ideas">
-              {forSets.map((c) => (
-                <li key={c.combo.name + c.keyword + c.tier} className="fuse-idea">
-                  <div className="fuse-idea-row">
-                    {c.ingredients.map((i, k) => <GiftIcon key={k} gift={i.gift} size={32} />)}
-                    <span className="fuse-arrow" aria-hidden="true">→</span>
-                    <span className="fuse-idea-out">Tier {tierLabel(c.tier)} <KeywordChip keyword={c.keyword} /></span>
-                    <button className="btn" onClick={() => loadSet(c)}>Load</button>
-                  </div>
-                  <p className="small fuse-for">
-                    <b>{c.mustHave
-                      ? `${c.combo.name} piece (you have ${c.mustHave.have} of ${c.mustHave.total})`
-                      : `${c.combo.name}${c.combo.any_team ? ' (works for any team)' : ''}`}:</b> {c.pieces.map((g) => g.name).join(', ')}{' '}
-                    <span className="muted">(about {Math.round(c.odds * 100)}%: {c.pieces.length} of {c.poolSize} possible {c.keyword} gifts)</span>
-                  </p>
-                  <p className="muted small">
-                    Gives up {c.ingredients.map((i) => i.gift.name).join(', ')}
-                    {c.mustHave
-                      ? `: worth it ${c.mustHave.have + 1 >= c.mustHave.total ? `for the last piece of ${c.combo.name}` : `to get closer to ${c.combo.name}`} (then fuse it in a Super Shop).`
-                      : ', which do little for your team.'}
-                    {c.superShop ? ' Super Shop.' : ''}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section className="panel">
           <h3>Recipes to work on</h3>
-          {recipes.length === 0 ? (
-            <p className="muted small">Own an ingredient of a recipe and it shows up here. Fusion Guide lists them all.</p>
+          {working.length === 0 ? (
+            <p className="muted small">{ready.length
+              ? 'Every recipe you\'ve started is ready: see Recipes you can fuse now above.'
+              : 'Own an ingredient of a recipe and it shows up here. Fusion Guide lists them all.'}</p>
           ) : (
             <ul className="fuse-recipes">
-              {recipes.slice(0, 8).map((r) => (
-                <li key={r.fusion.result} className={r.ready ? 'ready' : ''}>
+              {working.slice(0, 8).map((r) => (
+                <li key={r.fusion.result}>
                   <div className="fuse-idea-row">
                     <GiftLabel gift={r.result} icon={28} />
                     {r.fusion.super_shop && <span className="pill warn">Super Shop only</span>}
-                    {r.ready && <span className="pill">Ready</span>}
                   </div>
                   <p className="small">
                     {r.have.map((g) => <span key={g.id} className="owned-ingredient">{g.name} ✓ </span>)}
                     {r.missing.map((g) => <span key={g.id} className="muted">{g.name} · </span>)}
                     {r.anyMissing > 0 && <span className="muted">+ {r.anyMissing} more Sin Fragment{r.anyMissing > 1 ? 's' : ''}</span>}
                   </p>
-                  {mustHave(r.result.id) ? (
-                    <p className="small reason-good">
-                      Always build toward it: {mustHave(r.result.id)!.why} Take its pieces whenever they show up, even if you can't fuse it yet.
-                    </p>
-                  ) : (
-                    <p className={r.worthIt ? 'small reason-good' : 'small reason-bad'}>
-                      {r.worthIt
-                        ? r.covered.length
-                          ? `Worth it: ${r.result.name} does what ${r.covered.map((g) => g.name).join(', ')} ${r.covered.length === 1 ? 'does' : 'do'}, better`
-                          : `Worth it: ${r.result.name} beats what you give up`
-                        : `The ingredients are worth more to your team than ${r.result.name}`}
-                    </p>
-                  )}
-                  {r.skipped.length > 0 && (
-                    <p className="small reason-good">
-                      Super Shop: skip {r.skipped.map((g) => g.name).join(' and ')}. Its ingredients go straight in with the rest, {r.uses.length} gifts in one fusion.
-                    </p>
-                  )}
+                  <RecipeWhy r={r} />
                   {r.atSuperShop.length > 0 && (
                     <p className="muted small">
                       At a Super Shop you could skip {r.atSuperShop.map((g) => g.name).join(' and ')}: you have every gift to fuse {r.result.name} in one go there.
@@ -345,11 +355,6 @@ export function FusionTab({ ctx, owned, onOwnedChange, run, pack, teamKeywords, 
                     <div key={g.id} className="fuse-howto"><span className="muted small">{g.name}:</span>
                       <HowToGet gift={g} packsForGift={packsForGift} giftsById={byId} owned={ctx.owned} /></div>
                   ))}
-                  {r.ready && <button className="btn" onClick={() => {
-                    const ids = [...r.uses]
-                    setBench(ids); if (ids.length > REGULAR_SLOTS) setSuperShop(true)
-                    document.querySelector('.fuse-screen')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                  }}>Load</button>}
                 </li>
               ))}
             </ul>
@@ -440,5 +445,31 @@ function OtherResult({ ctx, onPick, onCancel }: { ctx: RunContext; onPick: (g: G
       <ul>{hits.map((g) => <li key={g.id}><button className="fuse-pick" onClick={() => onPick(g)}><GiftLabel gift={g} icon={22} link={false} /></button></li>)}</ul>
       <button className="link-btn" onClick={onCancel}>Cancel</button>
     </div>
+  )
+}
+
+/** A ready recipe worth fusing: a must-have, or the result beats what goes in. */
+function worthFusing(r: RecipePlan): boolean {
+  return !!mustHave(r.result.id) || r.worthIt
+}
+
+/** Why fuse a recipe (or why not). */
+function RecipeWhy({ r }: { r: RecipePlan }) {
+  const m = mustHave(r.result.id)
+  if (m) {
+    return (
+      <p className="small reason-good">
+        Always build toward it: {m.why}{r.ready ? '' : ' Take its pieces whenever they show up, even if you can\'t fuse it yet.'}
+      </p>
+    )
+  }
+  return (
+    <p className={r.worthIt ? 'small reason-good' : 'small reason-bad'}>
+      {r.worthIt
+        ? r.covered.length
+          ? `Worth it: ${r.result.name} does what ${r.covered.map((g) => g.name).join(', ')} ${r.covered.length === 1 ? 'does' : 'do'}, better`
+          : `Worth it: ${r.result.name} beats what you give up`
+        : `The ingredients are worth more to your team than ${r.result.name}`}
+    </p>
   )
 }

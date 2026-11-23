@@ -2080,3 +2080,9 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .save-line p + p { margin-top: 6px; }
 .save-line.save-last { border-left-color: var(--good); }
 .save-meter input { width: 64px; margin: 0 4px; background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; font: inherit; }
+
+/* Fuse page: recipes you can fuse now, and undoing a fusion (2026-11-23) */
+.fuse-ready { margin: 12px 0; }
+.fuse-ready .fuse-idea-row .btn { margin-left: auto; }
+.fuse-ready-gifts { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+.fuse-undo { margin: 8px 0; }

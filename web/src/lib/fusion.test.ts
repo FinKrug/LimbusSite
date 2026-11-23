@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { makeContext, rankGifts, rankThemePacks, scoreGift } from './scoring'
 import {
-  comboFusions, fodder, forecast, fusionIdeas, fusionKeywords, isSpare, setOrComboOf, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans, superShortcuts,
+  comboFusions, suggestedFusions, fodder, forecast, fusionIdeas, fusionKeywords, isSpare, setOrComboOf, fusionPoints, fusionTier, keywordChance, lastChanceGifts, matchRecipe, pointsFor, randomPool, recipePlans, superShortcuts,
 } from './fusion'
 
 const g = (name: string) => gameData.gifts.find((x) => x.name === name)!
@@ -302,5 +302,37 @@ describe('Super Shop shortcut: skip an intermediate recipe (Finley, 2026-11-20)'
     expect(atSuper.ready).toBe(true)
     expect(atSuper.uses).toEqual(four)
     expect(atSuper.skipped.map((x) => x.id)).toEqual(['eerie-effigy'])
+  })
+})
+
+describe('one Suggested fusions list (Finley, 2026-11-23)', () => {
+  const heishou = gameData.identities.filter((i) => (i.keywords as string[]).includes('Rupture')).slice(0, 7)
+  const run = { difficulty: 'hard' as const, floors: 10, floor: 6, pack: null }
+
+  it('folds Lunar Memory pieces into the suggestions, near the top', () => {
+    const owned = ['sundered-memory', 'punctured-memory', 'crushed-memory', 'fragment-of-desire', 'thunderbranch',
+      'broken-compass', 'blue-starshard', 'pink-bouquet', 'downpour', 'rest', 'glimpse-of-flames', 'midwinter-nightmare', 'wealth']
+    const ctx = makeContext(gameData, heishou, owned, { run })
+    const list = suggestedFusions(ctx, owned, fusionKeywords(ctx, ['Rupture']), null, false)
+    const lunar = list.find((i) => i.forSet?.mustHave)
+    expect(lunar).toBeDefined()
+    expect(lunar!.forSet!.name).toBe('Lunar Memory')
+    expect(lunar!.forSet!.odds).toBeGreaterThan(0)
+    // Ahead of the set pieces (only last chances come first).
+    expect(list.filter((i) => !i.chase)[0]).toBe(lunar)
+    // Then ranked by worth, one list.
+    const plain = list.filter((i) => !i.chase && !i.forSet?.mustHave)
+    for (let k = 1; k < plain.length; k++) expect(plain[k - 1].gain).toBeGreaterThanOrEqual(plain[k].gain)
+  })
+
+  it('folds a set fusion into an idea with the same keyword and tier', () => {
+    const owned = ['respite', 'lowest-star', 'pocket-flashcards', 'faint-vestige', 'dark-vestige', 'thrill']
+    const ctx = makeContext(gameData, heishou, owned)
+    const list = suggestedFusions(ctx, owned, fusionKeywords(ctx, ['Rupture']), null, false)
+    expect(list.some((i) => i.forSet?.name === 'Sinking set')).toBe(true)
+    // A set aim never adds a second suggestion for a keyword and tier already suggested.
+    const keys = list.filter((i) => !i.chase).map((i) => `${i.keyword}|${i.forecast.tier}`)
+    expect(new Set(keys).size).toBe(keys.length)
+    expect(list.every((i) => i.gain > 0)).toBe(true)
   })
 })

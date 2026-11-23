@@ -310,6 +310,19 @@ export interface FusionIdea {
   superShop: boolean
   /** Aimed at a pack exclusive you won't get another chance at this run. */
   chase: GiftScore | null
+  /** Also (or only) aimed at a missing piece of a gift set or must-have (Lunar Memory). */
+  forSet?: SetAim
+}
+
+/** The set or must-have pieces a suggested fusion can give. */
+export interface SetAim {
+  name: string
+  anyTeam: boolean
+  pieces: Gift[]
+  /** Chance of getting one of `pieces` with this fusion's gifts. */
+  odds: number
+  poolSize: number
+  mustHave?: { have: number; total: number }
 }
 
 /** The best random fusion for each keyword your team uses, from the gifts you'd miss least. */
@@ -490,6 +503,8 @@ export interface ComboFusion {
   superShop: boolean
   /** A piece of a must-have (Lunar Memory) rather than a set: pieces you have / need. */
   mustHave?: { have: number; total: number }
+  /** What one of the must-have's pieces is worth to you (must-haves only). */
+  worth?: number
 }
 
 /**
@@ -536,7 +551,7 @@ export function comboFusions(ctx: RunContext, owned: string[], pack: ThemePack |
       }
       if (!best || (worth !== undefined && best.odds * worth <= best.cost)) continue
       out.push({ combo: c, keyword, tier, pieces, ingredients: best.ingredients, odds: best.odds, poolSize: pool.length, superShop,
-        rank: weight * best.odds, ...(mustHave ? { mustHave } : {}) })
+        rank: weight * best.odds, ...(mustHave ? { mustHave, worth } : {}) })
     }
   }
   for (const c of ctx.combos) {
@@ -572,4 +587,44 @@ export function comboFusions(ctx: RunContext, owned: string[], pack: ThemePack |
     }
   }
   return out.sort((a, b) => b.rank - a.rank).slice(0, n).map(({ rank: _r, ...x }) => x)
+}
+
+/**
+ * The one list of suggested fusions (Finley, 2026-11-23: no separate list for Lunar Memory and gift
+ * sets). Random fusions for your keywords (`fusionIdeas`) and fusions aimed at set or must-have
+ * pieces (`comboFusions`) are ranked together by what they're worth to your team: a set piece's
+ * value is already in its score, and a must-have piece counts its share of the result. A fusion
+ * aimed at a set with the same keyword and tier as another idea is folded into it.
+ */
+export function suggestedFusions(
+  ctx: RunContext, owned: string[], keywords: string[], pack: ThemePack | null, superShop: boolean, n = 6,
+): FusionIdea[] {
+  const ideas = fusionIdeas(ctx, owned, keywords, pack, superShop)
+  const last = lastChanceGifts(ctx, pack)
+  const aimFor = (c: ComboFusion, f: PoolForecast): SetAim => ({
+    name: c.combo.name, anyTeam: !!c.combo.any_team, pieces: c.pieces,
+    odds: f.pool.length ? f.chance * c.pieces.length / f.pool.length : 0, poolSize: f.pool.length,
+    ...(c.mustHave ? { mustHave: c.mustHave } : {}),
+  })
+  for (const c of comboFusions(ctx, owned, pack, superShop, 8)) {
+    const same = ideas.find((i) => i.keyword === c.keyword && i.forecast.tier === c.tier)
+    if (same) {
+      const aim = aimFor(c, same.forecast)
+      if (!same.forSet) same.forSet = aim
+      if (c.worth !== undefined) same.gain = Math.max(same.gain, aim.odds * c.worth - same.cost)
+      continue
+    }
+    const f = forecast(ctx, c.keyword, c.ingredients.map((i) => i.gift), pack, superShop, last)
+    if (!f.pool.length) continue
+    const cost = c.ingredients.reduce((s, i) => s + i.value, 0)
+    const aim = aimFor(c, f)
+    const gain = Math.max(f.chance * f.expected - cost, c.worth !== undefined ? aim.odds * c.worth - cost : -Infinity)
+    if (gain <= 0) continue
+    ideas.push({ keyword: c.keyword, alsoKeywords: [], alsoTargets: {}, ingredients: c.ingredients, forecast: f, cost, gain, superShop, chase: null, forSet: aim })
+  }
+  // Last chances first (as fusionIdeas has them), then must-have pieces (Finley, 2026-10-27: one away
+  // from Lunar Memory beats a set piece), then by worth.
+  const must = (i: FusionIdea) => Number(!!i.forSet?.mustHave)
+  return ideas.sort((a, b) => Number(!!b.chase) - Number(!!a.chase)
+    || (a.chase || b.chase ? 0 : must(b) - must(a) || b.gain - a.gain)).slice(0, n)
 }
