@@ -299,8 +299,10 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
     }
     // A Skill 2 swap with a reason Skill 3 can't cover comes first; then Skill 3 swaps.
     options.sort((a, b) => Number(b.special) - Number(a.special) || Number(b.to.slot === 3) - Number(a.to.slot === 3) || b.score - a.score)
-    const best = options.find((o) => o.worth) ?? null
-    const spare = best ? null : options.find((o) => !o.hurts) ?? null
+    // Only swaps that help the team are suggested (Finley, 2026-11-23: a swap that lowers team damage
+    // shouldn't show as "If offered"; whoever wants one anyway picks it in All swaps).
+    const best = options.find((o) => o.worth && o.gain > 0) ?? null
+    const spare = best ? null : options.find((o) => !o.hurts && o.gain > 0) ?? null
     return { identity: i, deck: d, skills, defense: i.defense ?? null, defenseUse: base.sim.defenseUse[unit] ?? 0, best, spare, options }
   }
   // Only these identities' plans (the backups view simulates each backup in the team in turn).

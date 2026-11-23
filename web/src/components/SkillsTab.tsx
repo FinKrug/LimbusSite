@@ -210,7 +210,7 @@ export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art
                   </div>
                 ) : p.options.length ? (
                   <p className="muted small skill-best">
-                    Skip it: every swap would hurt your team{p.options[0].cons[0] ? ` (${p.options[0].cons[0]})` : ''}.
+                    Skip it: no swap helps your team{p.options[0].cons[0] ? ` (${p.options[0].cons[0]})` : ''}. To swap anyway, use All swaps below.
                   </p>
                 ) : (
                   <p className="muted small skill-best">Nothing left to swap.</p>

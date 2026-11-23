@@ -170,3 +170,23 @@ describe('skill swaps', () => {
   })
 })
 
+
+describe('only swaps that help are suggested (Finley, 2026-11-23)', () => {
+  it('"If offered" and "Cost to spare" never show a swap that lowers team damage; it stays in All swaps', () => {
+    const byId = (id: string) => gameData.identities.find((x) => x.id === id)!
+    const heishou = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu',
+      'heishou-pack-mao-branch-outis', 'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion', 'heishou-pack-si-branch-gregor'].map(byId)
+    const seen = new Set<string>()
+    const burn = gameData.identities.filter((i) => i.keywords.includes('Burn') && !seen.has(i.sinner) && seen.add(i.sinner)).slice(0, 7)
+    let negative = 0
+    for (const team of [heishou, burn]) {
+      for (const p of planSwaps(team, {}, [], { egos: gameData.egos })) {
+        if (p.best) expect(p.best.gain).toBeGreaterThan(0)
+        if (p.spare) expect(p.spare.gain).toBeGreaterThan(0)
+        negative += p.options.filter((o) => o.gain <= 0).length
+      }
+    }
+    // Those swaps still exist for the All swaps list.
+    expect(negative).toBeGreaterThan(0)
+  })
+})
