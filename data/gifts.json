@@ -6258,8 +6258,8 @@
     "effect": "[Effects apply only to #2 Deployed Identity]\n\nBase skills deal +1% damage for every 1% missing HP on self (max 10%)",
     "max_level": 2,
     "upgrades": [
-      "[Effects apply only to #2 and #4 Deployed Identities]\n\nDeal +1% damage for every 1% missing HP on self (max 10%)",
-      "[Effects apply only to #2 ,#4, and #6 Deployed Identities]\n\nDeal +1% damage for every 1% missing HP on self (max 10%)"
+      "[Effects apply only to #2 and #4 Deployed Identities]\n\nBase Skills deal +1% damage for every 1% missing HP on self (max 10%)",
+      "[Effects apply only to #2 ,#4, and #6 Deployed Identities]\n\nBase Skills deal +1% damage for every 1% missing HP on self (max 10%)"
     ],
     "pools": [
       "themed"
@@ -14548,7 +14548,7 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": false,
-    "effect": "Pierce Base Attack Skills gain Clash Power +2. On Combat Start, gain Offense Level Up equal to the number of Identities who are using Pierce base Attack Skills this turn. (max 3)\n\nAllies with Pierce Attack Type for all of their base Attack Skills gain 2 Pierce DMG Up at Turn Start. (except for Empowered Skills or Skills that need unique conditionals)\n\nEvade Skill Power +2. Every time an allied Identity successfully Evades 2 times within a single turn, they gain 1 Damage Up next turn (max 3)\n\nAt Turn Start, Cinq Association Identities gain 1 Pierce Power Up and 2 Pierce DMG Up; if a Cinq Association Identity, using Base Skills to attack,dealt damage On Hit against an enemy inflicted by their 'Declared Duel', 'Nerve Strike', or 'Focused Attack', gain 2 Pierce DMG Up and 1 Haste next turn. (once per Identity per turn)",
+    "effect": "Pierce Base Attack Skills gain Clash Power +2. On Combat Start, gain Offense Level Up equal to the number of Identities who are using Pierce base Attack Skills this turn. (max 3)\n\nAllies with Pierce Attack Type for all of their base Attack Skills gain 2 Pierce DMG Up at Turn Start. (except for Empowered Skills or Skills that need unique conditionals)\n\nEvade Skill Power +2. Every time an allied Identity successfully Evades 2 times within a single turn, they gain 1 Damage Up next turn (max 3)\n\nAt Turn Start, Cinq Association Identities gain 1 Pierce Power Up and 2 Pierce DMG Up; if a Cinq Association Identity, using Base Skills to attack, dealt damage On Hit against an enemy inflicted by their 'Declared Duel', 'Nerve Strike', or 'Focused Attack', gain 2 Pierce DMG Up and 1 Haste next turn. (once per Identity per turn)",
     "max_level": 0,
     "upgrades": [],
     "pools": [
@@ -16732,7 +16732,7 @@
     ],
     "affinity_bonus": [],
     "team_gate": true,
-    "effect": "Blunt Attack Type Base Skills: Coin Power +1; The Middle Identities gain Coin Power +2 instead\nWhen an ally is hit, all allies gain 2 Offense Level Up next turn (3 times per turn)\n\nThe following effects activate when there are 3 or more \"The Middle\" in the Encounter.\nCombat Start: Gain 1 Attack Power Up and 1 Protection for every Envy Reson. (max 3)\nWhen \"The Middle\" Identity uses an Envy Base Attack Skill, convert its Coins to Unbreakable Coins, they take -50% damage, and gain 2 Blunt DMG Up this turn and next turn",
+    "effect": "Blunt Attack Type Base Skills: Coin Power +1; \"The Middle\" Identities gain Coin Power +2 instead\nWhen an ally is hit, all allies gain 2 Offense Level Up next turn (3 times per turn)\n\nThe following effects activate when there are 3 or more \"The Middle\" in the Encounter.\nCombat Start: Gain 1 Attack Power Up and 1 Protection for every Envy Reson. (max 3)\nWhen \"The Middle\" Identity uses an Envy Base Skill, convert its Coins to Unbreakable Coins, they take -50% damage, and gain 2 Blunt DMG Up this turn and next turn",
     "max_level": 0,
     "upgrades": [],
     "pools": [
