@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { CostKeep } from '../lib/costkeep'
-import { heldBack, shopPlan, worthLabel, type MoveKind, type ShopFusions, type ShopMove, type ShopSwapsDone } from '../lib/shopoverview'
+import { explainMove, heldBack, shopPlan, worthLabel, type MoveKind, type ShopFusions, type ShopMove, type ShopSwapsDone } from '../lib/shopoverview'
 import { KeepLine } from './ShopAdvice'
 import { meterAfter, type SaveAdvice } from '../lib/costsave'
 import { ShopRefresh } from './ShopRefresh'
@@ -218,6 +218,7 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
                   <div className="shop-move-body">
                     <div><span className={`kind-tag kind-${m.kind}`}>{label(m)}</span> {title(m)}</div>
                     <div className="muted small">{detail(m)}</div>
+                    <MoveWhyDetails m={m} />
                   </div>
                   <div className="shop-move-side">
                     <span className={`worth worth-${w.cls}`} title={`${m.ratio.toFixed(2)}× a typical good shop gift's value per Cost`}>{w.text}</span>
@@ -237,6 +238,18 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
         </p>
       </section>
     </div>
+  )
+}
+
+/** "Why?" for a move: the summary, and the steps behind it when opened (Finley, 2026-11-23). */
+function MoveWhyDetails({ m }: { m: ShopMove }) {
+  const x = explainMove(m)
+  if (!x) return null
+  return (
+    <details className="move-why small">
+      <summary><span className="move-why-q">Why?</span> {x.summary}</summary>
+      <ol>{x.steps.map((s, k) => <li key={k}>{s}</li>)}</ol>
+    </details>
   )
 }
 

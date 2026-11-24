@@ -2086,3 +2086,11 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .fuse-ready .fuse-idea-row .btn { margin-left: auto; }
 .fuse-ready-gifts { display: inline-flex; gap: 4px; flex-wrap: wrap; }
 .fuse-undo { margin: 8px 0; }
+
+/* Shop overview: "Why?" on each move (2026-11-23) */
+.move-why { margin-top: 4px; }
+.move-why summary { cursor: pointer; color: var(--muted, inherit); }
+.move-why summary::marker { color: var(--accent, currentColor); }
+.move-why-q { font-weight: 600; color: var(--accent, currentColor); }
+.move-why[open] summary { margin-bottom: 4px; }
+.move-why ol { margin: 4px 0 2px; padding-left: 20px; display: grid; gap: 3px; }

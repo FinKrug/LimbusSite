@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
 import { availability } from './plan'
 import { makeContext, packsByGift, rankGifts } from './scoring'
-import { NO_SHOP_SWAPS, SHOP_SWAPS, limitSwaps, shopMoves, shopPlan, swapsLeft, worthLabel, WORTH, type ShopMove } from './shopoverview'
+import { NO_SHOP_SWAPS, SHOP_SWAPS, explainMove, limitSwaps, shopMoves, shopPlan, swapsLeft, worthLabel, WORTH, type ShopMove } from './shopoverview'
 import { planSwaps } from './skillswap'
 
 describe('shop overview: buy, enhance and swap on one list (Finley, 2026-11-15)', () => {
@@ -81,5 +81,35 @@ describe('shop overview: buy, enhance and swap on one list (Finley, 2026-11-15)'
     const sw = plan.moves.filter((m) => m.kind === 'swap')
     expect(sw.filter((m) => !m.pick).length).toBeLessThanOrEqual(1)
     expect(sw.length).toBeLessThanOrEqual(2)
+  })
+})
+
+describe('Why? on each move (Finley, 2026-11-23)', () => {
+  const ids = ['the-lord-of-hongyuan-hong-lu', 'heishou-pack-mao-branch-adept-faust', 'heishou-pack-mao-branch-ryoshu', 'heishou-pack-mao-branch-outis',
+    'family-hierarch-candidate-ishmael', 'heishou-pack-si-branch-rodion', 'heishou-pack-si-branch-gregor']
+  const team = ids.map((id) => gameData.identities.find((i) => i.id === id)!)
+  const ctx = makeContext(gameData, team, ['crown-of-roses'], { run: { difficulty: 'hard', floors: 10, floor: 3, pack: null } })
+  const pf = packsByGift(gameData.themePacks)
+  const now = new Set(gameData.gifts.filter((g) => availability(g, ctx, pf).where === 'now').map((g) => g.id))
+  const crownGift = [ctx.giftsById.get('crown-of-roses')!]
+  const moves = shopMoves(ctx, rankGifts(ctx), {}, now, planSwaps(team, {}, crownGift, { egos: gameData.egos, run: ctx.run }))
+
+  it('explains an enhance with its numbers, adding up to its place on the list', () => {
+    const crown = moves.find((m) => m.kind === 'enhance' && m.gift!.id === 'crown-of-roses')!
+    expect(crown).toBeDefined()
+    const e = crown.explain!
+    expect(e.after! / e.score!).toBeCloseTo(e.stronger!, 5)
+    expect(e.per100! / e.shop).toBeCloseTo(crown.ratio, 5)
+    const x = explainMove(crown)!
+    expect(x.summary).toMatch(/stronger for only 50 Cost/)
+    expect(x.steps.join(' ')).toContain('2 random enemies')
+    expect(x.steps.join(' ')).toMatch(/middle of the 10 best-value gifts/)
+  })
+
+  it('explains buys and swaps too', () => {
+    const buy = moves.find((m) => m.kind === 'buy')!
+    expect(buy.explain!.per100! / buy.explain!.shop).toBeCloseTo(buy.ratio, 5)
+    expect(explainMove(buy)!.steps.some((s) => s.startsWith(buy.gift!.name))).toBe(true)
+    for (const m of moves.filter((m) => m.kind === 'swap')) expect(explainMove(m)!.summary).toMatch(/team value every turn/)
   })
 })

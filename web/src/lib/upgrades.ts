@@ -85,14 +85,24 @@ export function maxLevel(g: Gift): number {
 
 /** What 100 Cost buys in a shop for this team: the median value per 100 Cost of your best shop gifts. */
 export function shopValue(ctx: RunContext, prices: ShopPrices = pricesFor(ctx)): number {
+  return shopBaseline(ctx, prices).value
+}
+
+/** `shopValue` and the gifts behind it (best value per Cost first), to explain it. */
+export function shopBaseline(ctx: RunContext, prices: ShopPrices = pricesFor(ctx)): {
+  value: number; gifts: { gift: Gift; score: number; price: number; per100: number }[]
+} {
   // At the prices you pay (Wealth: 1 Cost a gift), so 100 Cost buys more when gifts are cheaper.
-  const per = ctx.data.gifts
+  const gifts = ctx.data.gifts
     .filter((g) => g.pools.includes('main') && (g.cost ?? 0) > 0 && !ctx.owned.has(g.id) && (g.tier ?? 9) <= 4)
-    .map((g) => intrinsicScore(g, ctx).score / Math.max(1, prices.gift(g)!) * 100)
-    .sort((a, b) => b - a)
+    .map((g) => {
+      const score = intrinsicScore(g, ctx).score
+      const price = Math.max(1, prices.gift(g)!)
+      return { gift: g, score, price, per100: score / price * 100 }
+    })
+    .sort((a, b) => b.per100 - a.per100)
     .slice(0, SHOP_TOP)
-  if (!per.length) return 1
-  return per[per.length >> 1]
+  return { value: gifts.length ? gifts[gifts.length >> 1].per100 : 1, gifts }
 }
 
 /** One gift's plan, given the level you have it at. */
