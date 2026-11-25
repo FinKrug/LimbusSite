@@ -58,7 +58,7 @@ export function shopGift(g: Gift): boolean {
 }
 
 export function floorCost(ctx: RunContext, floor: number, buffs: ShopBuffs = {}): FloorCost {
-  return floorCostFrom(rankGifts({ ...ctx, run: { ...ctx.run, floor } }), floor, buffs, pricesFor(ctx))
+  return floorCostFrom(rankGifts({ ...ctx, run: { ...ctx.run, floor } }), floor, buffs, pricesFor(ctx, floor))
 }
 
 /** The same from gifts already ranked for that floor (the Best gifts list). */
@@ -77,7 +77,7 @@ export function floorCostFrom(rankedGifts: GiftScore[], floor: number, buffs: Sh
   // The paid ones are 15, then 30; free ones come first.
   const refresh = [15, 30].slice(0, 2 - free).reduce((a, b) => a + prices.refresh('normal', b), 0)
   if (refresh) parts.push({ label: free ? `2 refreshes to find it (${free} free)` : '2 refreshes to find it', cost: refresh })
-  if (floor >= COST_WEIGHTS.healFrom) parts.push({ label: 'A heal', cost: COST_WEIGHTS.heal })
+  if (floor >= COST_WEIGHTS.healFrom) parts.push({ label: 'A heal', cost: prices.other(COST_WEIGHTS.heal) })
   if (buffs.onEntry) parts.push({ label: 'Binary Star-shop gives you this on entering', cost: -buffs.onEntry })
   const round5 = (x: number) => Math.ceil(x / 5) * 5
   const reserve = parts.slice(value ? 1 : 0).reduce((a, p) => a + p.cost, 0)

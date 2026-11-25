@@ -39,7 +39,7 @@ import { buildBattle, perSin, resonanceTriggers, triggerWorth, withBase, type Ba
 export { triggerWorth, type TriggerWorth }
 import type { RunSettings } from './scoring'
 import type { DefenseSkill, Gift, Identity, Sin, Skill } from './types'
-import { pricesFromGifts } from './shopprices'
+import { priceScale, pricesFromGifts } from './shopprices'
 
 export { skillValue }
 
@@ -180,7 +180,9 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
     .filter((e): e is Ego => !!e && (e.skill?.weight ?? 1) > 1))
   const aoeFrom = (except: Identity) => team.filter((m) => m !== except && (m.skills ?? []).some(multiTarget))
   const { floorsLeft, weight } = floorsWeight(opts.run)
-  const swapPrice = pricesFromGifts(owned).swap
+  // At the prices you pay: Trial Plan Guide, and Inflation (Skill Search too).
+  const prices = pricesFromGifts(owned, priceScale(opts.run))
+  const swapPrice = prices.swap
 
   const plan = (i: Identity, unit: number): IdentityPlan => {
     const skills = [...(i.skills ?? [])].sort((a, b) => a.slot - b.slot)
@@ -294,7 +296,7 @@ export function planSwaps(team: Identity[], swaps: SwapState, owned: Gift[], opt
           worth = special && !losesGiftReson && gain > -0.02 && floorsLeft > 1
         }
         const hurts = gain <= SWAP_WEIGHTS.hurtAt || !!losesGiftReson
-        options.push({ kind: sw.kind, from, to, cost: price, search: sw.search, gain, score, worth, special, hurts, pros, cons })
+        options.push({ kind: sw.kind, from, to, cost: price, search: prices.other(sw.search), gain, score, worth, special, hurts, pros, cons })
       }
     }
     // A Skill 2 swap with a reason Skill 3 can't cover comes first; then Skill 3 swaps.

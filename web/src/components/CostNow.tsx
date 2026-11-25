@@ -17,7 +17,7 @@ export interface CostChange {
 export function CostNow({ cost, onChange, log, discounts = [] }: {
   cost: number | null; onChange: (c: number | null) => void; log: CostChange[]
   /** Gifts you have that lower shop prices (shopprices.ts). */
-  discounts?: { gift: Gift; text: string }[]
+  discounts?: { gift: Gift | null; name: string; text: string }[]
 }) {
   return (
     <section className="panel cost-now">
@@ -27,7 +27,7 @@ export function CostNow({ cost, onChange, log, discounts = [] }: {
           onChange={(e) => onChange(e.target.value === '' ? null : Math.max(0, Math.round(Number(e.target.value))))} />
       </label>
       {discounts.length > 0 && (
-        <p className="small cost-discounts">{discounts.map((d, i) => <span key={d.gift.id}>{i > 0 && ' · '}<b>{d.gift.name}</b>: {d.text}</span>)}. Prices here include it.</p>
+        <p className="small cost-discounts">{discounts.map((d, i) => <span key={d.name}>{i > 0 && ' · '}<b>{d.name}</b>: {d.text}</span>)}. Prices here include it.</p>
       )}
       {cost === null && <p className="muted small">Enter it once: buying, enhancing, swaps and refreshes you mark here take their price off. Until then nothing is taken off.</p>}
       {log.length > 0 && (

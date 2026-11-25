@@ -515,6 +515,9 @@ export interface RunSettings {
    *  past it (Finley, 2026-11-15: then there's no point keeping Crushed Memory for Lunar Memory).
    *  Set by the page, not stored. */
   noSuperShopLeft?: boolean
+  /** Inflation adversities taken (Finley, 2026-11-24): from this floor on, every shop price is
+   *  `scale` times as much (I: 2, II: 3). Set by the page from the adversities taken, not stored. */
+  inflation?: { from: number; scale: number }[]
 }
 
 /** Packs picked on floors before this one (pack id -> floor). Once you've entered a theme pack you

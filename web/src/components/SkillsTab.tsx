@@ -4,6 +4,7 @@ import { SWAPS, SWAP_WEIGHTS, floorsWeight, multiTarget, planBackupSwaps, planSw
 import { usePersistentState } from '../lib/storage'
 import type { BattleProfile, Ego, EgoLoadout } from '../lib/ego'
 import type { RunSettings } from '../lib/scoring'
+import { priceScale } from '../lib/shopprices'
 import type { Gift, Identity, Sin } from '../lib/types'
 import { Portrait } from './Portrait'
 import { HowItWorks, KeywordChip, SinDot } from './bits'
@@ -42,6 +43,8 @@ export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art
   // Deployed units first; once they're done, switch to the backups (remembered across tabs).
   const [view, setView] = usePersistentState<'deployed' | 'backups'>('limbussite.skillsview.v1', 'deployed')
   const showBackups = view === 'backups' && backups.length > 0
+  // Inflation (an adversity) multiplies every shop price from the floor after it's chosen.
+  const scale = priceScale(run)
   const plans = useMemo(() => showBackups
     ? planBackupSwaps(team, backups, swaps, owned, { egos, loadout, run })
     : planSwaps(team, swaps, owned, { egos, loadout, run }), [showBackups, team, backups, swaps, owned, egos, loadout, run])
@@ -79,8 +82,9 @@ export function SkillsTab({ team, backups = [], swaps, onSwapsChange, owned, art
     <div className="skills-tab">
       <section className="panel skills-intro">
         <p>
-          Shops can replace one copy of a skill with a stronger one: <b>S1 → S2</b> 45 Cost, <b>S2 → S3</b> 75, <b>S1 → S3</b> 120.
-          A regular shop offers this for one random sinner, once; a Super Shop for 2, plus 1 of your choice with ID Skill Search (90 / 150 / 240 Cost, or 25 / 50 / 75 Starlight).
+          Shops can replace one copy of a skill with a stronger one: <b>S1 → S2</b> {45 * scale} Cost, <b>S2 → S3</b> {75 * scale}, <b>S1 → S3</b> {120 * scale}.
+          A regular shop offers this for one random sinner, once; a Super Shop for 2, plus 1 of your choice with ID Skill Search ({90 * scale} / {150 * scale} / {240 * scale} Cost, or 25 / 50 / 75 Starlight).
+          {scale > 1 ? ` Those include Inflation (${scale === 2 ? 'double' : 'triple'} prices).` : ''}
           {superShop ? ' Each pick below shows the Skill Search price too.' : ''}{' '}
           When a shop offers someone, do the swap shown on their card, then press <b>Did it</b> so the plan updates.
         </p>

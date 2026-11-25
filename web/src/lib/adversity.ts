@@ -336,6 +336,16 @@ export interface Plan {
   takenRewards: Rewards
 }
 
+/**
+ * Inflation from the adversities taken, for shop prices (Finley, 2026-11-24): each one counts from
+ * the floor after the one it was chosen on (you choose after clearing that floor).
+ */
+export function inflationFrom(taken: OfferKey[], all: Adversity[] = ADVERSITIES): { from: number; scale: number }[] {
+  const byKey = new Map(all.map((a) => [offerKey(a), a]))
+  return taken.map((k) => byKey.get(k)).filter((a): a is Adversity => !!a && a.family_id === 'inflation')
+    .map((a) => ({ from: a.floor + 1, scale: (a.tier ?? 1) + 1 }))
+}
+
 /** The floor whose adversities come next: after clearing floor N (10–14) you choose from N's.
  *  Before floor 10 the plan starts at 10; on floor 15 nothing is left. */
 export function nextOfferFloor(floor: number | null): number | null {

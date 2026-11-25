@@ -141,14 +141,14 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
       <div className="refresh-kinds">
         <div className="refresh-kind">
           <b>Refresh</b>
-          <span className="small muted">{price('normal', count)} Cost{count ? '' : ', then +15 each time'}{count ? ` (${count} refresh${count === 1 ? '' : 'es'} done here, free ones included)` : ''}. New gifts and a new Sinner for Skill Replacement.</span>
+          <span className="small muted">{price('normal', count)} Cost{count ? '' : `, then +${price('normal', 1) - price('normal', 0)} each time`}{count ? ` (${count} refresh${count === 1 ? '' : 'es'} done here, free ones included)` : ''}. New gifts and a new Sinner for Skill Replacement.</span>
           <span className="small">Each one: <b>{pct(a.normal.giftChance)}</b> chance of a gift worth buying{a.normal.swapChance > 0 && <>, <b>{pct(a.normal.swapChance)}</b> of a swap worth making</>}.</span>
           {a.freeTotal.normal > 0 && <FreeUsed total={a.freeTotal.normal} used={freeUsed.normal} source="Star of the Beginning"
             onChange={(n) => setFreeUsed('normal', n)} />}
         </div>
         <div className="refresh-kind">
           <b>Keyword refresh</b>
-          <span className="small muted">{price('keyword', count)} Cost{count ? '' : ', +15 for every refresh before it'}. Pick a keyword: the new gifts lean toward it.</span>
+          <span className="small muted">{price('keyword', count)} Cost{count ? '' : `, +${price('keyword', 1) - price('keyword', 0)} for every refresh before it`}. Pick a keyword: the new gifts lean toward it.</span>
           {a.keyword && a.keyword.weak
             ? <span className="small">Pick <b>{a.keyword.keyword}</b>: its gifts fit your team best, though none here beat saving the Cost{a.free.keyword > 0 ? '. Worth it with a free one' : ''}.</span>
             : a.keyword

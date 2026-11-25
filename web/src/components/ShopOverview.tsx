@@ -3,6 +3,7 @@ import type { CostKeep } from '../lib/costkeep'
 import { explainMove, heldBack, shopPlan, worthLabel, type MoveKind, type ShopFusions, type ShopMove, type ShopSwapsDone } from '../lib/shopoverview'
 import { KeepLine } from './ShopAdvice'
 import { meterAfter, type SaveAdvice } from '../lib/costsave'
+import { priceScale } from '../lib/shopprices'
 import { GiftIcon } from './GiftIcon'
 import { ShopRefresh } from './ShopRefresh'
 import type { Buffs } from '../lib/buffeffects'
@@ -73,6 +74,8 @@ function detail(m: ShopMove): string {
  */
 export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft, onOpen, onDone, onOpenTeam, justDone = null, onUndo, refresh, cost, onCostChange: setCost, fusions, swapsDone, swapsLeft, save, onMeterChange }: Props) {
   const superShop = refresh.superShop
+  // Inflation (an adversity) multiplies every shop price from the floor after it's chosen.
+  const scale = priceScale(refresh.ctx.run)
   const plan = useMemo(() => (cost === null ? null : shopPlan(moves, cost, keep, { superShop, done: swapsDone, save })), [moves, cost, keep, superShop, swapsDone, save])
   const best = (k: MoveKind) => moves.find((m) => m.kind === k)
   const firstRecipe = fusions.recipes[0]
@@ -235,8 +238,8 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
         )}
         <p className="muted small">
           Value per Cost compared with a typical good gift from this shop. Fusing isn't listed: see Fuse for recipes you're close to.
-          {' '}Skill swaps come two ways: <b>Skill Replacement</b> (45 / 75 / 120) is for whichever Sinner the shop rolled;
-          {' '}<b>ID Skill Search</b> (90 / 150 / 240, or 25 / 50 / 75 Starlight) lets you pick the Sinner, and only Super Shops have it
+          {' '}Skill swaps come two ways: <b>Skill Replacement</b> ({[45, 75, 120].map((n) => n * scale).join(' / ')}) is for whichever Sinner the shop rolled;
+          {' '}<b>ID Skill Search</b> ({[90, 150, 240].map((n) => n * scale).join(' / ')}, or 25 / 50 / 75 Starlight) lets you pick the Sinner, and only Super Shops have it
           {superShop ? '' : ' (tick "This is a Super Shop" above when you\'re in one)'}.
         </p>
       </section>

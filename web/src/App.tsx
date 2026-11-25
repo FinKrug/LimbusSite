@@ -21,7 +21,7 @@ import { OwnedGifts, PickupBox } from './components/OwnedGifts'
 import { PlanPanel } from './components/PlanPanel'
 import { PreRunTab } from './components/PreRunTab'
 import { AdversityTab } from './components/AdversityTab'
-import { EMPTY_ADVERSITY, FIRST_OFFER, hasAdversities, type AdversityState } from './lib/adversity'
+import { EMPTY_ADVERSITY, FIRST_OFFER, hasAdversities, inflationFrom, type AdversityState } from './lib/adversity'
 import { EMPTY_PRERUN, type PreRunState } from './lib/prerun'
 import { starcloudKeep } from './lib/costkeep'
 import { floorNotes, freeRefreshes, shopNotes, shopTierCost, startingCost } from './lib/buffeffects'
@@ -341,7 +341,12 @@ export default function App() {
   // run, so Super Shop recipes (Lunar Memory) can't be made and their pieces aren't worth keeping.
   const noSuperShopLeft = run.floor !== null && run.floor >= run.floors
     && ((stage === 'shop' && !(superShop && run.difficulty !== 'normal')) || stage === 'boss')
-  const ctxRun = useMemo(() => (noSuperShopLeft ? { ...run, noSuperShopLeft } : run), [run, noSuperShopLeft])
+  // Inflation taken (Finley, 2026-11-24): every shop price goes up from the floor after it's chosen.
+  const inflationKey = adversity.taken.join('|')
+  const ctxRun = useMemo(() => {
+    const inflation = hasAdversities(run) ? inflationFrom(inflationKey ? inflationKey.split('|') : []) : []
+    return noSuperShopLeft || inflation.length ? { ...run, ...(noSuperShopLeft ? { noSuperShopLeft } : {}), ...(inflation.length ? { inflation } : {}) } : run
+  }, [run, noSuperShopLeft, inflationKey])
   const ctx = useMemo(
     () => makeContext(gameData, teamIdentities, owned, { deployed, tiers, run: ctxRun, loadout, swaps }),
     [teamIdentities, owned, deployed, tiers, ctxRun, loadout, swaps],
@@ -458,7 +463,7 @@ export default function App() {
         const d = (next[id]?.[sw.kind] ?? 0) - (swaps[id]?.[sw.kind] ?? 0)
         count += d
         // ID Skill Search (Super Shop): you pick the Sinner, at its own price (Trial Plan Guide doesn't lower it).
-        if (d) spend(d * (via === 'search' ? sw.search : shopPrices.swap(sw.cost)), `${name}: skill ${sw.from} → ${sw.to}${via === 'search' ? ' (Skill Search)' : ''}${d < 0 ? ' taken back' : ''}`)
+        if (d) spend(d * (via === 'search' ? shopPrices.other(sw.search) : shopPrices.swap(sw.cost)), `${name}: skill ${sw.from} → ${sw.to}${via === 'search' ? ' (Skill Search)' : ''}${d < 0 ? ' taken back' : ''}`)
       }
     }
     if (count) setShopSwaps({ ...shopSwaps, [via]: Math.max(0, shopSwaps[via] + count) })
@@ -469,10 +474,10 @@ export default function App() {
     // The Buy tab needs it too, for refreshing the shop (Finley, 2026-11-24).
     if ((tab !== 'shophome' && tab !== 'gifts') || !teamIdentities.length) return []
     const owned = [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
-    const plans = planSwaps(teamIdentities.slice(0, deployed), swaps, owned, { egos: gameData.egos ?? [], loadout, run })
+    const plans = planSwaps(teamIdentities.slice(0, deployed), swaps, owned, { egos: gameData.egos ?? [], loadout, run: ctxRun })
     // Only the swaps this shop still has room for.
     return limitSwaps(shopMoves(ctx, shopRanked, enhanced, availableNow, plans, { superShop: isSuperShop }), shopSwapsLeft)
-  }, [tab, teamIdentities, deployed, swaps, ctx, loadout, run, shopRanked, enhanced, availableNow, isSuperShop, shopSwapsLeft])
+  }, [tab, teamIdentities, deployed, swaps, ctx, loadout, ctxRun, shopRanked, enhanced, availableNow, isSuperShop, shopSwapsLeft])
   // Refreshing the shop, on the overview and the Buy tab (one set of counts, kept in ShopRefresh).
   const refreshProps = {
     ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop: superShop && run.difficulty !== 'normal', onSuperShopChange: setSuperShop,
@@ -983,7 +988,7 @@ export default function App() {
                 cost={shopCost} onCostChange={setShopCost} />}
               {tab === 'skills' && (
                 <SkillsTab team={teamIdentities.slice(0, deployed)} backups={teamIdentities.slice(deployed)} swaps={swaps} onSwapsChange={shopSetSwaps} superShop={isSuperShop} swapsLeft={shopSwapsLeft} owned={ownedGifts} art={art}
-                  egos={gameData.egos ?? []} loadout={loadout} run={run} battle={ctx.battle} onOpenTeam={() => setTab('team')} />
+                  egos={gameData.egos ?? []} loadout={loadout} run={ctxRun} battle={ctx.battle} onOpenTeam={() => setTab('team')} />
               )}
             </main>
           </div>
