@@ -22,7 +22,7 @@ export function HiddenStageCard({ ctx, packId, onStrugglingChange }: {
         return (
           <section key={s.name} className="panel hidden-stage">
             <h3>If a fight turns into the <span className="hidden-stage-name">{s.name}</span></h3>
-            <p className="small muted">A hidden stage this pack can turn up: {s.rules.join(' ')} Clear reward: {s.reward.cost} Cost.</p>
+            <p className="small muted">A hidden stage this pack can turn up: {s.rules.join(' ')} Clear reward: {s.reward.cost} Cost{a.rewardGifts.length ? <> and {a.rewardGifts.map((r) => r.gift.name).join(', ')}</> : null}.</p>
             <p className={`hidden-stage-verdict ${a.verdict}`}>
               <b>{a.verdict === 'enter' ? 'Enter it' : 'Skip it'}</b>
               {a.verdict === 'enter' ? ': the reward is worth the fight unless your team is already struggling.' : ': the reward isn\'t worth risking the run.'}

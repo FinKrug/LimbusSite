@@ -37,3 +37,18 @@ describe('hidden stages: the Dimension Reversal Zone (Finley, 2026-11-24)', () =
     expect(hiddenStageAdvice(makeContext(gameData, team, [], { run: { ...base, floor: 15 } }), zone).superShop).toBe(0)
   })
 })
+
+describe('the hidden boss also gives A Maestro\'s Ring-Turned-Artwork (Finley, 2026-11-24)', () => {
+  const team = gameData.identities.filter((i) => i.keywords.includes('Rupture')).slice(0, 7)
+  const run = { difficulty: 'extreme' as const, floors: 15, floor: 12, pack: 'line-4-section-3' }
+  it('counts the gift, valued for your team, and drops it once you have it', () => {
+    const a = hiddenStageAdvice(makeContext(gameData, team, [], { run }), HIDDEN_STAGES[0])
+    expect(a.rewardGifts.map((r) => r.gift.id)).toEqual(['a-maestro-s-ring-turned-artwork'])
+    expect(a.rewardGifts[0].score).toBeGreaterThan(0)
+    expect(a.rewardGifts[0].costWorth).toBeGreaterThan(0)
+    expect(a.why.join(' ')).toMatch(/Maestro/)
+    const had = hiddenStageAdvice(makeContext(gameData, team, ['a-maestro-s-ring-turned-artwork'], { run }), HIDDEN_STAGES[0])
+    expect(had.rewardGifts).toEqual([])
+  })
+})
+
