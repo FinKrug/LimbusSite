@@ -4,6 +4,7 @@ import { EventsTab } from './components/EventsTab'
 import { ShopAdvice } from './components/ShopAdvice'
 import { ShopRefresh } from './components/ShopRefresh'
 import { HiddenStageCard } from './components/HiddenStage'
+import { CostAsk } from './components/CostAsk'
 import { ShopOverview } from './components/ShopOverview'
 import { saveAdvice } from './lib/costsave'
 import type { FuseOdds } from './lib/fusion'
@@ -420,6 +421,8 @@ export default function App() {
   // The Cost you have at the shop: buying, enhancing, swaps and refreshes marked here take their price
   // off (Finley, 2026-11-15). Nothing comes off until you've entered it.
   const [shopCost, setShopCost] = usePersistentState<number | null>('limbussite.cost.v1', null)
+  // Ask for the Cost on reaching a floor's shop (Finley, 2026-11-24), once per floor: answered or skipped.
+  const [costAsked, setCostAsked] = usePersistentState<number | null>('limbussite.costasked.v1', null)
   const [costLog, setCostLog] = useState<CostChange[]>([])
   // What the shop charges you: Wealth makes gifts and enhancing 1 Cost, Prestige Card & co. 30% off.
   const shopPrices = pricesFor(ctx)
@@ -623,6 +626,7 @@ export default function App() {
     setSuperMeter({ floor: null, pct: null })
     setAdversity((a) => ({ ...a, taken: [] }))
     setShopCost(null)
+    setCostAsked(null)
     setRun({ ...run, floor: null, pack: null, visited: {} })
   }
   /** Finishing the run clears it for the next one (Finley, 2026-11-19: gifts shouldn't carry over),
@@ -782,6 +786,12 @@ export default function App() {
         <Dialog title="Saved lineups" onClose={() => setManaging(false)}>
           <PresetBox presets={presets} onPresetsChange={setPresets} activeId={activePreset} onActiveChange={setActivePreset}
             current={currentTeam} selection={order} onApply={applyLineup} identities={gameData.identities} art={art} />
+        </Dialog>
+      )}
+      {stage === 'shop' && run.floor !== null && costAsked !== run.floor && (
+        <Dialog title={`Floor ${run.floor} shop: how much Cost do you have?`} onClose={() => setCostAsked(run.floor)}>
+          <CostAsk last={shopCost} onSkip={() => setCostAsked(run.floor)}
+            onSet={(c) => { setShopCost(c); setCostLog([]); setCostAsked(run.floor) }} />
         </Dialog>
       )}
       {runOpen && (

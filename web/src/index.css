@@ -2115,3 +2115,10 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .hidden-stage-verdict.skip b { color: #e0574b; }
 .hidden-stage-why { margin: 4px 0 8px; padding-left: 20px; display: grid; gap: 3px; }
 .hidden-stage-opts { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+
+/* Asking for your Cost at the shop (2026-11-24) */
+.cost-ask { display: grid; gap: 12px; }
+.cost-ask p { margin: 0; }
+.cost-ask-row { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+.cost-ask-row input { width: 140px; font-size: 1.2rem; padding: 6px 10px; }
+.cost-ask-btns { display: flex; align-items: center; gap: 16px; }
