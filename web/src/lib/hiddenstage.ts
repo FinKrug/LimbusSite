@@ -2,7 +2,8 @@
  * Hidden stages (Finley, 2026-11-24: "when you are in parallel superposition, you should be able to
  * know if doing a dimension reversal zone is worth it or not").
  *
- * Not on the wiki yet, so from Finley's screenshots (EXTREME, floor 12, Line 4 - Section #3): one of
+ * Not on the wiki yet, so from Finley's screenshots (EXTREME, floor 12, Line 4 - Section #3; he got it
+ * in Line 4 - Section #4 too on 2026-11-25): one of
  * the pack's fights turned into a hidden stage, "Dimension Reversal Zone - COGNITION ERROR WARNING":
  *  - "Upon entry, you will not be able to leave the Stage until its Combat Encounter is cleared."
  *  - "Clearing this Stage will heal allies to their max HP and revive any defeated allies."
@@ -37,7 +38,7 @@ export interface HiddenStage {
 }
 
 export const HIDDEN_STAGES: HiddenStage[] = [{
-  packs: ['line-4-section-3'],
+  packs: ['line-4-section-3', 'line-4-section-4'],
   name: 'Dimension Reversal Zone - Cognition Error Warning',
   rules: [
     'You can\'t leave until its fight is won.',
@@ -45,7 +46,7 @@ export const HIDDEN_STAGES: HiddenStage[] = [{
   ],
   enemies: [{ name: 'The Ring Nursefather - Callisto', hp: 24200 }, { name: 'The Ring Apprentice - Albina', hp: 15093 }],
   reward: { cost: 1000, healAll: true, gifts: ['a-maestro-s-ring-turned-artwork'] },
-  seen: 'EXTREME, floor 12',
+  seen: 'EXTREME, Line 4 - Section #3 and #4',
 }]
 
 /** The hidden stages a pack can turn up. */

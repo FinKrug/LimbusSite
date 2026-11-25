@@ -9,10 +9,12 @@ describe('hidden stages: the Dimension Reversal Zone (Finley, 2026-11-24)', () =
   const zone = HIDDEN_STAGES[0]
   const base = { difficulty: 'extreme' as const, floors: 15, floor: 12, pack: 'line-4-section-3' }
 
-  it('belongs to Line 4 - Section #3, which is in the data', () => {
-    expect(hiddenStagesFor('line-4-section-3')).toEqual([zone])
+  it('belongs to Line 4 - Section #3 and #4, which are in the data', () => {
+    for (const id of ['line-4-section-3', 'line-4-section-4']) {
+      expect(hiddenStagesFor(id)).toEqual([zone])
+      expect(gameData.themePacks.some((p) => p.id === id)).toBe(true)
+    }
     expect(hiddenStagesFor('line-5')).toEqual([])
-    expect(gameData.themePacks.some((p) => p.id === 'line-4-section-3')).toBe(true)
   })
 
   it('says enter, with what the 1000 Cost buys, unless fights are going badly', () => {
