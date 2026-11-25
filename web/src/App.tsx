@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { EvaluateTab } from './components/EvaluateTab'
 import { EventsTab } from './components/EventsTab'
 import { ShopAdvice } from './components/ShopAdvice'
+import { ShopRefresh } from './components/ShopRefresh'
 import { ShopOverview } from './components/ShopOverview'
 import { saveAdvice } from './lib/costsave'
 import type { FuseOdds } from './lib/fusion'
@@ -465,12 +466,18 @@ export default function App() {
   }
   // The shop overview: buying, enhancing and skill swaps on one list (lib/shopoverview.ts).
   const shopOverview = useMemo(() => {
-    if (tab !== 'shophome' || !teamIdentities.length) return []
+    // The Buy tab needs it too, for refreshing the shop (Finley, 2026-11-24).
+    if ((tab !== 'shophome' && tab !== 'gifts') || !teamIdentities.length) return []
     const owned = [...ctx.owned].map((id) => ctx.giftsById.get(id)).filter((g): g is Gift => !!g)
     const plans = planSwaps(teamIdentities.slice(0, deployed), swaps, owned, { egos: gameData.egos ?? [], loadout, run })
     // Only the swaps this shop still has room for.
     return limitSwaps(shopMoves(ctx, shopRanked, enhanced, availableNow, plans, { superShop: isSuperShop }), shopSwapsLeft)
   }, [tab, teamIdentities, deployed, swaps, ctx, loadout, run, shopRanked, enhanced, availableNow, isSuperShop, shopSwapsLeft])
+  // Refreshing the shop, on the overview and the Buy tab (one set of counts, kept in ShopRefresh).
+  const refreshProps = {
+    ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop: superShop && run.difficulty !== 'normal', onSuperShopChange: setSuperShop,
+    onSpend: spend, saveBar: saveAdv ? saveAdv.bar - saveAdv.meterBonus : undefined,
+  }
   // Fusing on the overview: free, so it comes first (recipes you can make, the best random fusions).
   const focusKey = focus.map((f) => f.keyword).join('|')
   const focusKeywords = useMemo(() => (focusKey ? focusKey.split('|') : []), [focusKey])
@@ -954,13 +961,14 @@ export default function App() {
                   justDone={lastMove?.move ?? null} onUndo={undoMove} cost={shopCost} onCostChange={setShopCost}
                   fusions={shopFusionAdvice} swapsDone={shopSwaps} swapsLeft={shopSwapsLeft}
                   save={saveAdv} onMeterChange={(pct) => setSuperMeter({ floor: run.floor, pct })}
-                  refresh={{ ctx, ranked: shopRanked, availableNow, buffs: prerun.buffs, superShop: superShop && run.difficulty !== 'normal', onSuperShopChange: setSuperShop, onSpend: spend,
-                    saveBar: saveAdv ? saveAdv.bar - saveAdv.meterBonus : undefined }} />
+                  refresh={refreshProps} />
               )}
               {tab === 'gifts' && (
                 <>
                   {focusLine}
                   <PlanPanel ctx={ctx} ranked={rankedGifts} packsForGift={packsForGift} onOwn={buy} prices={shopPrices} />
+                  {/* The same refresh advice as the overview, where you're looking at the gifts (Finley, 2026-11-24). */}
+                  <ShopRefresh {...refreshProps} moves={shopOverview} cost={shopCost} />
                   <GiftList ranked={shopRanked} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
                     teamKeywords={focus.map((f) => f.keyword)} initialFilter={run.floor === null ? 'team' : 'now'}
                     onOwn={buy} prices={shopPrices} giftsById={ctx.giftsById} owned={ctx.owned} />
