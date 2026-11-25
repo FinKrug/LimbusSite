@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react'
 import type { Buffs } from '../lib/buffeffects'
 import type { GiftScore, RunContext } from '../lib/scoring'
 import type { ShopMove } from '../lib/shopoverview'
-import { REFRESH, refreshAdvice, refreshPrice, type RefreshStep } from '../lib/shoprefresh'
+import { REFRESH, refreshAdvice, refreshPrice, type GiftHunt, type RefreshStep } from '../lib/shoprefresh'
 import { usePersistentState } from '../lib/storage'
 import { pricesFor } from '../lib/shopprices'
-import { KeywordChip } from './bits'
+import { GiftLabel } from './bits'
 
 interface Props {
   ctx: RunContext
@@ -42,6 +42,42 @@ function stepText(s: RefreshStep, keyword: string | null) {
   const what = s.kind === 'keyword' ? <>Keyword refresh{keyword ? <> (pick <b>{keyword}</b>)</> : null}</> : <>Refresh</>
   return <>{what}{s.free ? <span className="free-tag">free</span> : <span className="muted"> · {s.price} Cost</span>}</>
 }
+
+/** Kinds in a hunt's paid refreshes: "2 refreshes and 1 keyword refresh". */
+function huntKinds(h: GiftHunt) {
+  const n = h.paid.filter((x) => x.kind === 'normal').length
+  const k = h.paid.length - n
+  return [n ? `${n} refresh${n === 1 ? '' : 'es'}` : '', k ? `${k} keyword refresh${k === 1 ? '' : 'es'} picking ${h.gift.keyword}` : '']
+    .filter(Boolean).join(' and ')
+}
+
+/** One gift: how far refreshing for it alone is worth going (Finley, 2026-11-24). */
+function HuntRow({ h }: { h: GiftHunt }) {
+  // No stopping point in reach: Cost isn't known and is worth little (see the hunt's `stop`).
+  const chance = <>Each refresh: <b>{pct(h.normal)}</b> to show it{h.keyword !== null && h.keyword > h.normal ? <>, <b>{pct(h.keyword)}</b> with a keyword refresh picking {h.gift.keyword}</> : null}.</>
+  const free = h.free ? `your ${h.free} free refresh${h.free === 1 ? '' : 'es'}` : ''
+  const stop = h.stop ? (h.stopReason === 'cost'
+    ? <>Then stop: another would leave too little Cost to buy it.</>
+    : <>Past that, stop: the next {h.stop.kind === 'keyword' ? 'keyword refresh' : 'refresh'} ({h.stop.price} Cost) costs more than it's worth for this gift.</>) : null
+  return (
+    <li className="hunt">
+      <div className="hunt-head"><GiftLabel gift={h.gift} icon={36} /> <span className="muted small">{h.price} Cost</span></div>
+      <p className="small">
+        {chance}{' '}
+        {!h.stop
+          ? <><b>Worth refreshing for until it shows up</b>, as long as you have the Cost: this late, Cost does little else for you.{h.keyword !== null && h.keyword > h.normal ? <> Use keyword refreshes picking {h.gift.keyword}.</> : null}</>
+          : h.paid.length
+          ? <>Worth up to <b>{h.paid.length} more paid refresh{h.paid.length === 1 ? '' : 'es'}</b> for it ({huntKinds(h)}{free ? `, after ${free}` : ''}): <b>{h.spent} Cost</b>, about <b>{pct(h.find)}</b> to find it. {stop}</>
+          : free
+            ? <>Only {free}: about <b>{pct(h.find)}</b> to find it. {stop}</>
+            : <><b>Not worth a paid refresh</b> for it alone: {h.stopReason === 'cost' ? 'you\'d have too little Cost left to buy it' : <>the next one ({h.stop?.price} Cost) costs more than it's worth for this gift</>}.</>}
+      </p>
+    </li>
+  )
+}
+
+/** How many gifts the hunt list shows before "Show all". */
+const HUNTS_SHOWN = 4
 
 /**
  * Shop refreshes on the overview (lib/shoprefresh.ts): both kinds, what each one's chances are for
@@ -100,14 +136,8 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
       </div>
       <p className="muted small">
         The shop shows {a.slots} gifts out of the {a.pool} it can sell here. <b>{a.wanted.length}</b> of them
-        {' '}beat {a.fallback > (saveBar ?? REFRESH.save) ? 'your best upgrade' : 'saving the Cost for a later floor'} for your team
-        {a.wanted.length > 0 && <> (<button className="link-btn" onClick={() => setShowWanted(!showWanted)}>{showWanted ? 'hide' : 'show'}</button>)</>}.
+        {' '}beat {a.fallback > (saveBar ?? REFRESH.save) ? 'your best upgrade' : 'saving the Cost for a later floor'} for your team.
       </p>
-      {showWanted && (
-        <ul className="refresh-wanted small">
-          {a.wanted.map((w) => <li key={w.gift.id}>{w.gift.name} <KeywordChip keyword={w.gift.keyword} /> <span className="muted">{w.price}</span></li>)}
-        </ul>
-      )}
       <div className="refresh-kinds">
         <div className="refresh-kind">
           <b>Refresh</b>
@@ -147,6 +177,48 @@ export function ShopRefresh({ ctx, ranked, availableNow, moves, buffs, cost, sup
       ) : (
         <p className="small"><b>Don't refresh.</b> {a.wanted.length ? 'The odds of something better are too low for the price.' : 'Nothing the shop can roll beats what you can already do with the Cost.'}</p>
       )}
+      {a.hunts.length > 0 && (() => {
+        // Gifts worth paying to refresh for on their own get a row; the rest share one line.
+        const worth = a.hunts.filter((h) => h.paid.length > 0)
+        const rest = a.hunts.filter((h) => h.paid.length === 0)
+        const odds = (xs: number[]) => {
+          const lo = Math.min(...xs)
+          const hi = Math.max(...xs)
+          return Math.round(lo * 100) === Math.round(hi * 100) ? pct(lo) : `${pct(lo)} to ${pct(hi)}`
+        }
+        const kwOdds = rest.map((h) => h.keyword).filter((x): x is number => x !== null)
+        const paidPlan = a.steps.some((x) => !x.free)
+        return (
+          <div className="refresh-hunts">
+            <h4>Refreshing for one gift</h4>
+            <p className="muted small">
+              How far a gift is worth refreshing for on its own. Prices go up every refresh, so each gift has a point past which
+              {' '}another refresh costs more than the gift is worth to your team.
+            </p>
+            {worth.length > 0 && (
+              <>
+                <ul className="refresh-hunt-list">
+                  {(showWanted ? worth : worth.slice(0, HUNTS_SHOWN)).map((h) => <HuntRow key={h.gift.id} h={h} />)}
+                </ul>
+                {worth.length > HUNTS_SHOWN && (
+                  <button className="link-btn small" onClick={() => setShowWanted(!showWanted)}>
+                    {showWanted ? 'Show fewer' : `Show all ${worth.length}`}
+                  </button>
+                )}
+              </>
+            )}
+            {rest.length > 0 && (
+              <p className="small">
+                <b>{worth.length ? 'Not worth paying to refresh for on their own' : 'No single gift is worth paying to refresh for on its own'}</b>
+                {': '}{rest.slice(0, 4).map((h) => h.gift.name).join(', ')}{rest.length > 4 ? ` and ${rest.length - 4} more` : ''}.
+                {' '}A refresh has about {odds(rest.map((h) => h.normal))} to show any one of them
+                {kwOdds.length ? <> ({odds(kwOdds)} with a keyword refresh picking its keyword)</> : null}, which isn't enough for its price.
+                {paidPlan && <> The refreshes above still pay off because any of the {a.wanted.length} gifts worth buying{a.normal.swapChance > 0 ? ', or a swap,' : ''} can turn up.</>}
+              </p>
+            )}
+          </div>
+        )
+      })()}
       <div className="refresh-done small">
         <span className="refresh-done-title">Paid at this shop:</span>
         {(['normal', 'keyword'] as const).map((k) => (

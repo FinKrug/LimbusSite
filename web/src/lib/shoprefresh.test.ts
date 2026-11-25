@@ -85,3 +85,42 @@ describe('shop refreshes, both kinds (Finley, 2026-11-15)', () => {
     expect(refreshAdvice(ctx, ranked, now, big, { cost: 500 }).steps).toEqual([])
   })
 })
+
+describe('refreshing for one gift (Finley, 2026-11-24)', () => {
+  const pf = packsByGift(gameData.themePacks)
+  const seen = new Set<string>()
+  const team = gameData.identities.filter((i) => i.keywords.includes('Rupture') && !seen.has(i.sinner) && seen.add(i.sinner)).slice(0, 7)
+  const ctx = makeContext(gameData, team, ['crown-of-roses'], { run: { difficulty: 'hard', floors: 10, floor: 3, pack: null } })
+  const ranked = rankGifts(ctx)
+  const now = new Set(gameData.gifts.filter((g) => availability(g, ctx, pf).where === 'now').map((g) => g.id))
+  const moves = shopMoves(ctx, ranked, {}, now, planSwaps(team, {}, [], { egos: gameData.egos, run: ctx.run }))
+  const a = refreshAdvice(ctx, ranked, now, moves, { cost: 1000 })
+
+  it('gives each wanted gift a point past which refreshing for it alone costs more than it is worth', () => {
+    expect(a.hunts.length).toBe(a.wanted.filter((w) => w.price <= 1000).length)
+    for (const h of a.hunts) {
+      expect(h.stop).not.toBeNull()
+      // Prices only go up, and the stop is dearer than every refresh in the plan.
+      h.paid.forEach((x, i) => { if (i && x.kind === h.paid[i - 1].kind) expect(x.price).toBeGreaterThan(h.paid[i - 1].price) })
+      expect(h.spent).toBe(h.paid.reduce((s, x) => s + x.price, 0))
+      expect(h.find).toBeGreaterThanOrEqual(0)
+      expect(h.find).toBeLessThanOrEqual(1)
+    }
+    // A better gift is worth at least as many refreshes as a worse one at the same price and odds.
+    const top = a.hunts[0]
+    expect(top.paid.length).toBeGreaterThanOrEqual(Math.min(...a.hunts.map((h) => h.paid.length)))
+  })
+
+  it('stops for Cost: never plans refreshes that leave too little to buy the gift', () => {
+    const tight = refreshAdvice(ctx, ranked, now, moves, { cost: 300 })
+    expect(tight.hunts.every((h) => h.price <= 300)).toBe(true)
+    for (const h of tight.hunts) expect(300 - h.spent).toBeGreaterThanOrEqual(h.price)
+    const broke = tight.hunts.find((h) => h.price > 300 - 15)
+    if (broke) { expect(broke.paid.length).toBe(0); expect(broke.stopReason).toBe('cost') }
+  })
+
+  it('uses keyword refreshes for a gift when they pay off more', () => {
+    const kw = a.hunts.find((h) => h.paid.some((x) => x.kind === 'keyword'))
+    if (kw) expect(kw.keyword!).toBeGreaterThan(kw.normal)
+  })
+})

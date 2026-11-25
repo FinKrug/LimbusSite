@@ -78,7 +78,7 @@ export function UpgradesTab({ ctx, levels, onLevelsChange, ranked, keep: starclo
               Keep {reserve} for your top shop picks
             </label>
           )}
-          {can && (
+          {can && overview.order.length > 0 && (
             <p className="upgrade-budget-sum">
               {can.moves.length
                 ? <>You can do <b>{can.moves.length}</b> upgrade{can.moves.length === 1 ? '' : 's'} ({can.spent} Cost){keep && reserve > 0 ? `, keeping ${reserve} for shop gifts` : ''}; {cost! - can.spent - (keep ? reserve : 0) > 0 ? `${cost! - can.spent - (keep ? reserve : 0)} left over` : 'nothing left over'}. They're marked <span className="pill pill-now">Do now</span>.</>
@@ -102,7 +102,7 @@ export function UpgradesTab({ ctx, levels, onLevelsChange, ranked, keep: starclo
                     <span className="start-rank">{k + 1}</span>
                     <div className="upgrade-body">
                       <div className="plan-now-top">
-                        <GiftLabel gift={m.gift} icon={32} />
+                        <GiftLabel gift={m.gift} icon={44} />
                         <span className="pill">{m.to - m.from > 1 ? `Straight to ${plus(m.to)}` : `To ${plus(m.to)}`}</span>
                         <span className={`pill pill-prio-${m.priority}`}>{PRIORITY[m.priority]}</span>
                         {doNow.has(`${m.gift.id}:${m.to}`) && <span className="pill pill-now">Do now</span>}
@@ -130,7 +130,7 @@ export function UpgradesTab({ ctx, levels, onLevelsChange, ranked, keep: starclo
             return (
               <li key={p.gift.id} className={`upgrade-gift verdict-row-${p.verdict}`}>
                 <div className="plan-now-top">
-                  <GiftLabel gift={p.gift} icon={28} />
+                  <GiftLabel gift={p.gift} icon={40} />
                   <span className={`pill upgrade-verdict-${p.verdict}`}>{VERDICT[p.verdict]}</span>
                   <label className="upgrade-level small">
                     <span className="muted">Now:</span>

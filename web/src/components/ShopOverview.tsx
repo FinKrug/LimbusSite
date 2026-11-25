@@ -3,6 +3,7 @@ import type { CostKeep } from '../lib/costkeep'
 import { explainMove, heldBack, shopPlan, worthLabel, type MoveKind, type ShopFusions, type ShopMove, type ShopSwapsDone } from '../lib/shopoverview'
 import { KeepLine } from './ShopAdvice'
 import { meterAfter, type SaveAdvice } from '../lib/costsave'
+import { GiftIcon } from './GiftIcon'
 import { ShopRefresh } from './ShopRefresh'
 import type { Buffs } from '../lib/buffeffects'
 import type { GiftScore, RunContext } from '../lib/scoring'
@@ -48,10 +49,12 @@ const SEARCH_STARLIGHT = { '1to2': 25, '2to3': 50, '1to3': 75 } as const
 const pct = (x: number) => `${Math.round(x * 100)}%`
 const label = (m: ShopMove) => (m.pick ? 'Skill search' : KIND[m.kind].label)
 
-function title(m: ShopMove) {
-  if (m.kind === 'buy') return <><b>{m.gift!.name}</b></>
-  if (m.kind === 'enhance') return <><b>{m.gift!.name}</b> to {'+'.repeat(m.to!)}</>
-  if (m.kind === 'fuse') return <><b>{m.gift!.name}</b> <span className="muted">from {m.uses!.map((g) => g.name).join(' + ')}</span></>
+/** A move's name; with `icon`, the gift's picture before it (Finley, 2026-11-24: see what the gift looks like). */
+function title(m: ShopMove, icon?: number) {
+  const pic = icon && m.gift ? <GiftIcon gift={m.gift} size={icon} /> : null
+  if (m.kind === 'buy') return <span className="move-title">{pic}<b>{m.gift!.name}</b></span>
+  if (m.kind === 'enhance') return <span className="move-title">{pic}<span><b>{m.gift!.name}</b> to {'+'.repeat(m.to!)}</span></span>
+  if (m.kind === 'fuse') return <span className="move-title">{pic}<span><b>{m.gift!.name}</b> <span className="muted">from {m.uses!.map((g) => g.name).join(' + ')}</span></span></span>
   return <><b>{m.identity!.name}</b> <span className="muted">{SWAP_TEXT[m.swap!]}{m.pick ? ', picked with ID Skill Search' : ''}</span></>
 }
 
@@ -103,7 +106,7 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
               <button key={k} className="shop-home-kind" onClick={() => onOpen(KIND[k].tab)}>
                 <span className="shop-home-kind-label">Best {KIND[k].label.toLowerCase()}</span>
                 {m ? <>
-                  <span className="shop-home-kind-name">{title(m)}</span>
+                  <span className="shop-home-kind-name">{title(m, 40)}</span>
                   <span className="small"><span className={`worth worth-${w!.cls}`}>{w!.text}</span> · {m.cost} Cost</span>
                 </> : <span className="muted small">{k === 'enhance' && !hasGifts ? 'No gifts to enhance yet'
                   : k === 'swap' && swapsLeft && swapsLeft.total === 0 ? `Used: this shop allows ${swapsLeft.max} skill swap${swapsLeft.max === 1 ? '' : 's'}` : 'Nothing worth it right now'}</span>}
@@ -187,7 +190,7 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
                   ? <>{randomCount > 1 ? ` ×${randomCount}` : ''} for whichever {randomCount > 1 ? `${randomCount} Sinners` : 'Sinner'} the shop offers: {plan.swapFor.slice(0, 5).map((s, k) => (
                     <span key={s.key} title={s.identity!.name}>{k > 0 && ', '}<b>{s.identity!.sinner}</b> <span className="muted">({SWAP_SHORT[s.swap!]})</span></span>
                   ))}</>
-                  : title(m)} <span className="muted small">{m.kind === 'swap' && !m.pick && randomCount > 1 ? `${randomCount} × ${m.cost}` : m.cost}</span>
+                  : title(m, 22)} <span className="muted small">{m.kind === 'swap' && !m.pick && randomCount > 1 ? `${randomCount} × ${m.cost}` : m.cost}</span>
               </li>
             ))}
           </ol>
@@ -216,7 +219,7 @@ export function ShopOverview({ moves, hasTeam, hasGifts, keep = null, floorsLeft
                 <li key={m.key} className="shop-move">
                   <span className="shop-move-n">{i + 1}</span>
                   <div className="shop-move-body">
-                    <div><span className={`kind-tag kind-${m.kind}`}>{label(m)}</span> {title(m)}</div>
+                    <div className="move-head"><span className={`kind-tag kind-${m.kind}`}>{label(m)}</span> {title(m, 32)}</div>
                     <div className="muted small">{detail(m)}</div>
                     <MoveWhyDetails m={m} />
                   </div>

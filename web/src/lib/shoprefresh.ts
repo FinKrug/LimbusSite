@@ -81,7 +81,40 @@ export interface RefreshAdvice {
    *  would leave too little Cost to buy what turns up. */
   stop: RefreshStep | null
   stopReason: 'odds' | 'cost'
+  /** Refreshing for one gift alone (Finley, 2026-11-24): how far it's worth going for each wanted gift. */
+  hunts: GiftHunt[]
 }
+
+/**
+ * How many refreshes one gift is worth on its own (Finley, 2026-11-24: "see if it is worth to
+ * refresh past a certain point for getting certain gifts"). A refresh is worth it for a gift while
+ * its chance of showing the gift times what the gift adds (over spending its price at the fallback
+ * rate) beats what the refresh's own Cost would do. Prices go up 15 each time, so there's a point
+ * past which it isn't: `stop`. Each step takes the kind (normal, or keyword picking the gift's
+ * keyword) that's worth more for the gift.
+ */
+export interface GiftHunt {
+  gift: Gift
+  price: number
+  ratio: number
+  /** Chance one refresh shows it: a normal one, and a keyword one picking its keyword (null: none). */
+  normal: number
+  keyword: number | null
+  /** Free refreshes you have left, and the paid ones worth doing for it, in order. */
+  free: number
+  paid: { kind: RefreshKind; price: number }[]
+  spent: number
+  /** Chance it shows up within all of those. */
+  find: number
+  /** The first refresh past the point: not worth its price for this gift, or it would leave too
+   *  little Cost to buy it. Null when there's no such point within HUNT_MAX refreshes (Cost not
+   *  entered, and worth little this late): then refresh for it as long as the Cost lasts. */
+  stop: { kind: RefreshKind; price: number } | null
+  stopReason: 'odds' | 'cost'
+}
+
+/** Refreshes looked at for one gift, at most (prices keep rising, so it stops well before). */
+const HUNT_MAX = 20
 
 export function shopSlots(b: Buffs, superShop: boolean): number {
   return (superShop ? 7 : 4) + ((b['star-of-the-beginning'] ?? 0) > 0 ? 1 : 0) + ((b['binary-star-shop'] ?? 0) > 0 ? 1 : 0)
@@ -233,5 +266,40 @@ export function refreshAdvice(
   const stop = next.sort((a, b) => a.price - b.price)[0]
   const spentPaid = bestPlan.reduce((a, x) => a + x.price, 0)
   const stopReason: RefreshAdvice['stopReason'] = budget - spentPaid - stop.price < cheapest ? 'cost' : 'odds'
-  return { slots, pool, wanted, fallback, normal, keyword, free, freeTotal, steps, stop, stopReason }
+
+  // Refreshing for one gift alone.
+  // Only gifts you could pay for (with Cost to spare for a refresh or not).
+  const hunts: GiftHunt[] = wanted.filter((b) => b.price <= budget).map((b) => {
+    const g = b.gift
+    const pN = Math.min(1, slots * slotChance(g, null))
+    const pK = g.keyword && byKeyword.has(g.keyword) ? Math.min(1, slots * slotChance(g, g.keyword)) : null
+    let miss = Math.pow(1 - pN, free.normal) * Math.pow(1 - (pK ?? pN), free.keyword)
+    const plan: GiftHunt['paid'] = []
+    let spent = 0
+    let stopAt: GiftHunt['stop'] = null
+    let reason: GiftHunt['stopReason'] = 'odds'
+    for (let i = 0; i < HUNT_MAX; i++) {
+      const at = done + free.normal + free.keyword + i
+      const options = [{ kind: 'normal' as const, p: pN }, ...(pK !== null ? [{ kind: 'keyword' as const, p: pK }] : [])]
+        .map((o) => ({ ...o, price: refreshPrice(o.kind, at, prices) }))
+        .map((o) => ({ ...o, net: o.p * surplus(b) - o.price / 100 * fallback }))
+        .sort((x, y) => y.net - x.net)
+      const o = options[0]
+      if (budget - spent - o.price < b.price) {
+        stopAt = { kind: o.kind, price: o.price }
+        reason = 'cost'
+        break
+      }
+      if (o.net <= 0) {
+        // Past the point, even with the kind that's worth the most for it.
+        stopAt = { kind: o.kind, price: o.price }
+        break
+      }
+      plan.push({ kind: o.kind, price: o.price })
+      spent += o.price
+      miss *= 1 - o.p
+    }
+    return { gift: g, price: b.price, ratio: b.ratio, normal: pN, keyword: pK, free: free.normal + free.keyword, paid: plan, spent, find: 1 - miss, stop: stopAt, stopReason: reason }
+  })
+  return { slots, pool, wanted, fallback, normal, keyword, free, freeTotal, steps, stop, stopReason, hunts }
 }

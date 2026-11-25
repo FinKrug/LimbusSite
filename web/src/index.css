@@ -2094,3 +2094,14 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .move-why-q { font-weight: 600; color: var(--accent, currentColor); }
 .move-why[open] summary { margin-bottom: 4px; }
 .move-why ol { margin: 4px 0 2px; padding-left: 20px; display: grid; gap: 3px; }
+
+/* Gift pictures in the shop overview, and refreshing for one gift (2026-11-24) */
+.move-title { display: inline-flex; align-items: center; gap: 8px; vertical-align: middle; }
+.move-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.shop-home-plan .move-title { gap: 6px; }
+.refresh-hunts { margin-top: 14px; }
+.refresh-hunts h4 { margin: 0 0 4px; }
+.refresh-hunt-list { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 8px; }
+.hunt { border: 1px solid var(--line, #3a332c); border-radius: 8px; padding: 8px 10px; }
+.hunt-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hunt p { margin: 6px 0 0; }
