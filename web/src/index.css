@@ -2122,3 +2122,7 @@ html.drag-scrolling, html.drag-scrolling * { cursor: grabbing !important; user-s
 .cost-ask-row { display: flex; align-items: center; gap: 12px; font-weight: 600; }
 .cost-ask-row input { width: 140px; font-size: 1.2rem; padding: 6px 10px; }
 .cost-ask-btns { display: flex; align-items: center; gap: 16px; }
+
+/* Take it / Maybe / Skip on each gift in Gifts for your team (2026-11-24) */
+.gift-verdict { margin: 6px 0 2px; line-height: 1.45; }
+.gift-verdict .verdict { margin-right: 6px; }

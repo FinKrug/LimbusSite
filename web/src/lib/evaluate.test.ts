@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { gameData } from './data'
-import { evaluateGift, evaluatePack } from './evaluate'
+import { evaluateGift, evaluatePack, giftVerdict } from './evaluate'
 import { makeContext, packOnFloor, packsByGift, rankGifts } from './scoring'
 
 const burners = gameData.identities.filter((i) => i.keywords.length === 1 && i.keywords[0] === 'Burn').slice(0, 7)
@@ -55,5 +55,28 @@ describe('evaluator', () => {
     const v = packs.map((p) => evaluatePack(p, ctx).verdict)
     expect(v.filter((x) => x === 'take').length).toBeGreaterThanOrEqual(3)
     expect(v.filter((x) => x === 'maybe').length).toBeGreaterThan(packs.length / 4)
+  })
+})
+
+describe('Take it / Maybe / Skip on the Gifts for your team list (Finley, 2026-11-24)', () => {
+  const team = gameData.identities.filter((i) => i.keywords.includes('Rupture')).slice(0, 7)
+  const ctx = makeContext(gameData, team, ['thrill'], { run: { difficulty: 'hard', floors: 10, floor: 4, pack: null } })
+  const ranked = rankGifts(ctx)
+  const pf = packsByGift(gameData.themePacks)
+
+  it('gives every listed gift the same verdict as checking it on its own', () => {
+    const sample = [...ranked.slice(0, 15), ...ranked.slice(150, 160), ...ranked.slice(-10)]
+    for (const s of sample) {
+      const v = giftVerdict(s, ctx, ranked, ranked.indexOf(s))
+      const e = evaluateGift(s.gift, ctx, pf)
+      expect(v.verdict, s.gift.name).toBe(e.verdict)
+      expect(v.headline, s.gift.name).toBe(e.headline)
+    }
+  })
+
+  it('tops the list with Take it and ends it with Skip', () => {
+    expect(giftVerdict(ranked[0], ctx, ranked, 0).verdict).toBe('take')
+    const last = ranked[ranked.length - 1]
+    expect(giftVerdict(last, ctx, ranked, ranked.length - 1).verdict).toBe('skip')
   })
 })

@@ -96,6 +96,17 @@ export function evaluateGift(gift: Gift, ctx: RunContext, packsForGift: Map<stri
   return { score: s, verdict, headline, pros: dedupe(pros), cons: dedupe(cons), notes: dedupe(notes) }
 }
 
+/**
+ * Take / Maybe / Skip for a gift already ranked (Finley, 2026-11-24: Gifts for your team "does not
+ * tell me if I should get the gift or not"): the same verdict and headline as checking it on its own.
+ * `ranked` is the full ranking (rankGifts), `pos` its place there (-1: not in it).
+ */
+export function giftVerdict(s: GiftScore, ctx: RunContext, ranked: GiftScore[], pos: number): { verdict: Verdict; headline: string } {
+  if (isVestige(s.gift.id)) return { verdict: 'skip', headline: 'A Vestige does nothing on its own: sell it or use it as fusion fodder.' }
+  if (ctx.profile.size === 0) return { verdict: 'maybe', headline: 'Pick your team on the Team tab to judge this for your team.' }
+  return judgeGift(s.gift, s, ctx, ranked, pos, s.reasons.filter((r) => r.kind === 'bad').map((r) => r.text))
+}
+
 /** How the verdict is set (Finley: "everything is a skip"; a gift that needs Cost, a partner or a
  *  fusion to pay off is a Maybe with that condition, not a Skip). */
 export const VERDICT_WEIGHTS = {

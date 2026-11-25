@@ -22,11 +22,15 @@ interface Props {
   prices?: ShopPrices
   /** The Show filter to start on ('now' in a shop: what you can get on this floor). */
   initialFilter?: string
+  /** Take it / Maybe / Skip for a gift, with why (Gifts for your team). */
+  judge?: (s: GiftScore) => { verdict: 'take' | 'maybe' | 'skip'; headline: string }
 }
+
+const VERDICT_TEXT = { take: 'Take it', maybe: 'Maybe', skip: 'Skip' }
 
 const PAGE = 10
 
-export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, giftsById, owned, availableNow, initialFilter = 'team', prices }: Props) {
+export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, giftsById, owned, availableNow, initialFilter = 'team', prices, judge }: Props) {
   const [query, setQuery] = useState('')
   const [keyword, setKeyword] = useState(initialFilter)
   const [tier, setTier] = useState('any')
@@ -106,6 +110,7 @@ export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, gif
       ) : (
         <ol className="cards">
           {filtered.slice(0, shown).map((s) => {
+            const v = judge?.(s)
             return (
               <li key={s.gift.id} className={['card', s.synergy && 'synergy'].filter(Boolean).join(' ')}>
                 <div className="card-main">
@@ -115,6 +120,11 @@ export function GiftList({ ranked, packsForGift, teamKeywords, packs, onOwn, gif
                   </span>
                   <RatingBar rating={s.rating} />
                 </div>
+                {v && (
+                  <p className="gift-verdict small">
+                    <span className={`verdict verdict-${v.verdict === 'take' ? 'go' : v.verdict}`}>{VERDICT_TEXT[v.verdict]}</span> {v.headline}
+                  </p>
+                )}
                 <Reasons reasons={s.reasons} />
                 <div className="card-foot">
                   <span className="source">{sourceText(s.gift, packsForGift.get(s.gift.id) ?? [])}</span>

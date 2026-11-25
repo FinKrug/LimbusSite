@@ -46,8 +46,9 @@ import { KeywordChip } from './components/bits'
 import { gameData } from './lib/data'
 import {
   DEFAULT_RUN, ENHANCE_COST, defaultFloors, makeContext, withPack, packInDifficulty, playedPacks, packOnFloor, packsByGift, rankGifts, rankThemePacks, teamFocus,
-  type Difficulty, type RunSettings,
+  type Difficulty, type GiftScore, type RunSettings,
 } from './lib/scoring'
+import { giftVerdict } from './lib/evaluate'
 import { DEFAULT_DEPLOYED } from './lib/lineup'
 import { usePersistentState } from './lib/storage'
 import { OWNED_IDENTITIES_KEY, hasMarkedIdentities, ownedIdentitySet } from './lib/myidentities'
@@ -416,6 +417,11 @@ export default function App() {
   // Gifts for your team lists only what this run can still give (Finley, 2026-11-15: an EXTREME-only
   // gift has no place in a 5-floor run); the rest can be shown on request.
   const [showUnreachable, setShowUnreachable] = useState(false)
+  // Take it / Maybe / Skip on each gift here (Finley, 2026-11-24), judged as in the quick check.
+  const judgeGift = useMemo(() => {
+    const pos = new Map(rankedGifts.map((g, i) => [g.gift.id, i]))
+    return (s: GiftScore) => giftVerdict(s, ctx, rankedGifts, pos.get(s.gift.id) ?? -1)
+  }, [ctx, rankedGifts])
   const reachable = useMemo(() => (stage !== 'yourgifts' ? null
     : rankedGifts.filter((r) => availability(r.gift, ctx, packsForGift).where !== 'no')), [stage, rankedGifts, ctx, packsForGift])
   // The Cost you have at the shop: buying, enhancing, swaps and refreshes marked here take their price
@@ -1077,7 +1083,7 @@ export default function App() {
               </p>
             )}
             <GiftList ranked={showUnreachable || !reachable ? rankedGifts : reachable} packsForGift={packsForGift} packs={gameData.themePacks} availableNow={availableNow}
-              teamKeywords={focus.map((f) => f.keyword)}
+              teamKeywords={focus.map((f) => f.keyword)} judge={judgeGift}
               onOwn={own} giftsById={ctx.giftsById} owned={ctx.owned} />
           </div>
         )}
