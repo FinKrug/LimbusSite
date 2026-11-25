@@ -3,6 +3,7 @@ import { EvaluateTab } from './components/EvaluateTab'
 import { EventsTab } from './components/EventsTab'
 import { ShopAdvice } from './components/ShopAdvice'
 import { ShopRefresh } from './components/ShopRefresh'
+import { HiddenStageCard } from './components/HiddenStage'
 import { ShopOverview } from './components/ShopOverview'
 import { saveAdvice } from './lib/costsave'
 import type { FuseOdds } from './lib/fusion'
@@ -1005,6 +1006,7 @@ export default function App() {
                 <button className="link-btn" onClick={() => { openStage('packs'); toTop() }}>Pick a pack</button>
               </p>
             )}
+            <HiddenStageCard ctx={ctx} packId={currentPack?.id} onStrugglingChange={(v) => setRun({ ...run, struggling: v })} />
             {floorBuffBox}
             {formation}
             {/* After a fight the reward card's gift is random (no choice to compare), so this screen
