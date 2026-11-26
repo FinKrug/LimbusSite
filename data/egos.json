@@ -1988,8 +1988,8 @@
         "Poise",
         "Charge",
         "Crit DMG Up",
-        "Poise Identity",
-        "Charge Identity",
+        "Poise ID",
+        "Charge ID",
         "Damage Up",
         "The Knight's Loyal Protection",
         "Unbreakable Coin"
@@ -1997,7 +1997,7 @@
     },
     "statuses": [
       "Charge",
-      "Charge Identity",
+      "Charge ID",
       "Crit DMG Up",
       "Damage Up",
       "Duality",
@@ -2005,7 +2005,7 @@
       "Pierce Fragility",
       "Pierce Power Up",
       "Poise",
-      "Poise Identity",
+      "Poise ID",
       "Pride DMG Up",
       "SP Healing",
       "Sword Sharpened with Tears",

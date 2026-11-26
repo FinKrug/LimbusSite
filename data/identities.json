@@ -924,6 +924,154 @@
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/Effloresced_E.G.O::Spicebush_Yi_Sang"
   },
   {
+    "id": "haute-couture-le-noir-b3f-drying-room-yi-sang",
+    "name": "Haute Couture::Le Noir B3F Drying Room Yi Sang",
+    "sinner": "Yi Sang",
+    "rarity": 3,
+    "affinities": [
+      "gloom",
+      "gluttony",
+      "sloth"
+    ],
+    "keywords": [
+      "Tremor",
+      "Charge"
+    ],
+    "status_effects": [
+      "Ammo",
+      "Blunt Fragility",
+      "Charge",
+      "Charge Potency",
+      "Clashable Guard",
+      "Guard Skills",
+      "HP Healing",
+      "Increased Atk Weight",
+      "Preservation",
+      "Reload",
+      "Shield",
+      "Tremor",
+      "Tremor Burst",
+      "Unbreakable Coin",
+      "Unfocused Volley",
+      "Unique Ammo",
+      "unique Status Effects"
+    ],
+    "traits": [
+      "Le Noir",
+      "Sisyphe"
+    ],
+    "attack_types": [
+      "Blunt"
+    ],
+    "attack_counts": {
+      "Blunt": 4
+    },
+    "order_notes": [],
+    "skills": [
+      {
+        "slot": 1,
+        "name": "Flaying",
+        "sin": "gluttony",
+        "type": "Blunt",
+        "base": 3,
+        "coin_power": 4,
+        "coins": 2,
+        "copies": 3,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Tremor",
+          "Tanned Prisoner",
+          "Preservation"
+        ],
+        "enemy": [
+          "Tanned Prisoner",
+          "Tremor"
+        ],
+        "self": [
+          "Preservation"
+        ]
+      },
+      {
+        "slot": 2,
+        "name": "Splitting",
+        "sin": "gloom",
+        "type": "Blunt",
+        "base": 4,
+        "coin_power": 4,
+        "coins": 3,
+        "copies": 2,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Tremor",
+          "Tanned Prisoner",
+          "Preservation",
+          "Ammo - Prisoner",
+          "Blunt Fragility",
+          "Tremor Burst"
+        ],
+        "enemy": [
+          "Tremor",
+          "Tanned Prisoner",
+          "Blunt Fragility",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Preservation",
+          "Ammo - Prisoner"
+        ]
+      },
+      {
+        "slot": 3,
+        "name": "Leather Tumbling in Brain Fat: Original Sin Style",
+        "sin": "sloth",
+        "type": "Blunt",
+        "base": 5,
+        "coin_power": 4,
+        "coins": 3,
+        "copies": 1,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Ammo - Prisoner",
+          "Unfocused Volley",
+          "Tremor",
+          "Tanned Prisoner",
+          "Preservation",
+          "Tremor Burst"
+        ],
+        "enemy": [
+          "Tanned Prisoner",
+          "Tremor",
+          "Tremor Burst"
+        ],
+        "self": [
+          "Preservation",
+          "Ammo - Prisoner"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "ControllingOversightForControl",
+      "sin": "sloth",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Preservation",
+        "Tanned Prisoner",
+        "ViolenceForRulesViolated",
+        "Tannery Rule Violation (Yi Sang)",
+        "Unbreakable Coin"
+      ]
+    },
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Le_Noir_B3F_Drying_Room_Yi_Sang"
+  },
+  {
     "id": "heishou-pack-wu-branch-adept-yi-sang",
     "name": "Heishou Pack - Wu Branch Adept Yi Sang",
     "sinner": "Yi Sang",
@@ -5769,6 +5917,7 @@
     ],
     "status_effects": [
       "Amplitude Conversion",
+      "Coin Reuse",
       "Evade Skills",
       "Field Analysis",
       "Haste",
@@ -16886,12 +17035,12 @@
     "order_notes": [
       {
         "kind": "first",
-        "text": "Combat Start Apply the following effects to this unit, 1 other ally with the earliest Deployment Order (prioritizes Charge Identity), and 1 ally with the lowest current HP percentage (once per turn):",
+        "text": "Combat Start Apply the following effects to this unit, 1 other ally with the earliest Deployment Order (prioritizes Charge ID), and 1 ally with the lowest current HP percentage (once per turn):",
         "source": "Pin and Trim Along the Patterns"
       },
       {
         "kind": "first",
-        "text": "Combat Start Apply the following effects to this unit, 1 other ally with the earliest Deployment Order (prioritizes Charge Identity), and 1 ally with the lowest HP percentage (once per turn):",
+        "text": "Combat Start Apply the following effects to this unit, 1 other ally with the earliest Deployment Order (prioritizes Charge ID), and 1 ally with the lowest HP percentage (once per turn):",
         "source": "Coupez dans le Biais"
       }
     ],
@@ -16912,14 +17061,14 @@
           "Charge",
           "Offense Level Up",
           "Second is Welcome-snipping",
-          "Charge Identity",
+          "Charge ID",
           "Attack Power Up"
         ],
         "enemy": [
           "Charge",
           "Offense Level Up",
           "Second is Welcome-snipping",
-          "Charge Identity",
+          "Charge ID",
           "Attack Power Up"
         ],
         "self": []
@@ -16936,7 +17085,7 @@
         "weight": 1,
         "weight_bonus": 0,
         "statuses": [
-          "Charge Identity",
+          "Charge ID",
           "Offense Level Up",
           "Tremor",
           "Inertia of Drifting",
@@ -16950,7 +17099,7 @@
           "Sloth Resist Down"
         ],
         "self": [
-          "Charge Identity",
+          "Charge ID",
           "Inertia of Drifting"
         ]
       },
@@ -16967,7 +17116,7 @@
         "weight_bonus": 0,
         "statuses": [
           "Blossom Scissors",
-          "Charge Identity",
+          "Charge ID",
           "Second is Welcome-snipping",
           "Tremor",
           "Inertia of Drifting",
@@ -16982,7 +17131,7 @@
         ],
         "self": [
           "Blossom Scissors",
-          "Charge Identity",
+          "Charge ID",
           "Inertia of Drifting"
         ]
       }
@@ -19400,6 +19549,7 @@
       "Evade Skills",
       "Guard Skills",
       "HP Healing",
+      "Increased Atk Weight",
       "Lust Fragility",
       "Offense Level Up",
       "Power Up",
@@ -19472,7 +19622,7 @@
           "Pulsation (Ally)",
           "Clash Power Up",
           "Desperate Hunger",
-          "Charge Identity",
+          "Charge ID",
           "Charge",
           "Offense Level Up",
           "Bleed"
@@ -19480,7 +19630,7 @@
         "enemy": [
           "Clash Power Up",
           "Desperate Hunger",
-          "Charge Identity",
+          "Charge ID",
           "Charge",
           "Offense Level Up",
           "Bleed"
@@ -23390,6 +23540,161 @@
       "statuses": []
     },
     "wiki_url": "https://limbuscompany.wiki.gg/wiki/G_Corp._Manager_Corporal_Gregor"
+  },
+  {
+    "id": "haute-couture-le-rouge-b2f-skein-nest-gregor",
+    "name": "Haute Couture::Le Rouge B2F Skein Nest Gregor",
+    "sinner": "Gregor",
+    "rarity": 3,
+    "affinities": [
+      "envy",
+      "gluttony",
+      "lust",
+      "pride"
+    ],
+    "keywords": [
+      "Bleed",
+      "Charge"
+    ],
+    "status_effects": [
+      "Attack Power Up",
+      "Bleed",
+      "Charge",
+      "Charge Potency",
+      "Clashable Guard",
+      "Damage Up",
+      "Defense Level Down",
+      "Duality",
+      "Guard Skills",
+      "HP Healing",
+      "Increased Atk Weight",
+      "Offense Level Up",
+      "Pulsation",
+      "Unbreakable Coin",
+      "Unclashable Skills",
+      "unique Status Effects"
+    ],
+    "traits": [
+      "Le Rouge",
+      "Sisyphe"
+    ],
+    "attack_types": [
+      "Pierce"
+    ],
+    "attack_counts": {
+      "Pierce": 5
+    },
+    "order_notes": [],
+    "skills": [
+      {
+        "slot": 1,
+        "name": "Pulsating Thread",
+        "sin": "gluttony",
+        "type": "Pierce",
+        "base": 2,
+        "coin_power": 3,
+        "coins": 3,
+        "copies": 3,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Thread Tether",
+          "Pulsation (Ally)",
+          "Bleed"
+        ],
+        "enemy": [
+          "Bleed"
+        ],
+        "self": [
+          "Pulsation (Ally)"
+        ]
+      },
+      {
+        "slot": 2,
+        "name": "Yearning and Desire into a Single Strand",
+        "sin": "lust",
+        "type": "Pierce",
+        "base": 4,
+        "coin_power": 6,
+        "coins": 2,
+        "copies": 2,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Charge",
+          "Thread Tether",
+          "Offense Level Up",
+          "Pulsation (Ally)",
+          "Bleed"
+        ],
+        "enemy": [
+          "Charge",
+          "Thread Tether",
+          "Offense Level Up",
+          "Bleed"
+        ],
+        "self": [
+          "Pulsation (Ally)"
+        ]
+      },
+      {
+        "slot": 3,
+        "name": "A Radiant Tangle of Thread",
+        "sin": "lust",
+        "type": "Pierce",
+        "base": 5,
+        "coin_power": 4,
+        "coins": 3,
+        "copies": 1,
+        "weight": 1,
+        "weight_bonus": 0,
+        "statuses": [
+          "Offense Level Up",
+          "Thread Tether",
+          "Attack Power Up",
+          "Stitched",
+          "Damage Up",
+          "Pulsation (Ally)",
+          "Bleed",
+          "Bound in Crimson",
+          "Charge",
+          "Defense Level Down"
+        ],
+        "enemy": [
+          "Thread Tether",
+          "Attack Power Up",
+          "Stitched",
+          "Damage Up",
+          "Bleed",
+          "Pulsation (Ally)",
+          "Charge",
+          "Defense Level Down"
+        ],
+        "self": [
+          "Offense Level Up",
+          "Pulsation (Ally)",
+          "Bound in Crimson"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "Where the Thread Entwines",
+      "sin": "lust",
+      "type": "Guard",
+      "kind": "guard",
+      "base": 3,
+      "coin_power": 10,
+      "coins": 1,
+      "statuses": [
+        "Clashable Guard",
+        "Duality",
+        "Stitched",
+        "Charge",
+        "Pulsation (Ally)",
+        "Unbreakable Coin"
+      ]
+    },
+    "wiki_url": "https://limbuscompany.wiki.gg/wiki/Haute_Couture::Le_Rouge_B2F_Skein_Nest_Gregor"
   },
   {
     "id": "heishou-pack-si-branch-gregor",

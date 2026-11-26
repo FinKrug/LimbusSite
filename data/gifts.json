@@ -2695,7 +2695,7 @@
     "keyword": "Charge",
     "secondary_keyword": null,
     "status_effects": [
-      "Charge Identity",
+      "Charge ID",
       "Offense Level Up",
       "Power Up"
     ],
@@ -2708,7 +2708,7 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": false,
-    "effect": "Identities that equipped Defense Skills this turn take -20% damage from enemy attacks\n- Combat End: If the affected Identity is a Charge Identity, gain 2 Offense Level Up next turn\n- Combat End: If the affected Identity is a \"Sisyphe\" Identity, gain 1 Power Up next turn",
+    "effect": "Identities that equipped Defense Skills this turn take -20% damage from enemy attacks\n- Combat End: If the affected Identity is a Charge ID, gain 2 Offense Level Up next turn\n- Combat End: If the affected Identity is a \"Sisyphe\" Identity, gain 1 Power Up next turn",
     "max_level": 0,
     "upgrades": [],
     "pools": [
@@ -2854,7 +2854,7 @@
     "keyword": "Charge",
     "secondary_keyword": null,
     "status_effects": [
-      "Charge Identity"
+      "Charge ID"
     ],
     "traits": [
       "Sisyphe"
@@ -2867,11 +2867,11 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": false,
-    "effect": "[Effects apply only to #1 Deployed Identity]\n\n\"Sisyphe\" Identity or Charge Identity: On Base Skill final Coin Hit, deal Slash Damage equal to 5% of the said Coin's final damage on the main target (once per Skill)",
+    "effect": "[Effects apply only to #1 Deployed Identity]\n\n\"Sisyphe\" Identity or Charge ID: On Base Skill final Coin Hit, deal Slash Damage equal to 5% of the said Coin's final damage on the main target (once per Skill)",
     "max_level": 2,
     "upgrades": [
-      "[Effects apply only to #1 Deployed Identity]\n\n\"Sisyphe\" Identity or Charge Identity: On Base Skill final Coin Hit, deal Slash Damage equal to 10% of the said Coin's final damage on the main target (once per Skill)",
-      "[Effects apply only to #1 Deployed Identity]\n\n\"Sisyphe\" Identity or Charge Identity: On Base Skill final Coin Hit, deal Slash Damage equal to 15% of the said Coin's final damage on the main target (once per Skill)"
+      "[Effects apply only to #1 Deployed Identity]\n\n\"Sisyphe\" Identity or Charge ID: On Base Skill final Coin Hit, deal Slash Damage equal to 10% of the said Coin's final damage on the main target (once per Skill)",
+      "[Effects apply only to #1 Deployed Identity]\n\n\"Sisyphe\" Identity or Charge ID: On Base Skill final Coin Hit, deal Slash Damage equal to 15% of the said Coin's final damage on the main target (once per Skill)"
     ],
     "pools": [
       "themed"
@@ -10318,7 +10318,7 @@
     "keyword": "Charge",
     "secondary_keyword": null,
     "status_effects": [
-      "Charge Identity"
+      "Charge ID"
     ],
     "traits": [],
     "needs": [],
@@ -10327,7 +10327,7 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": false,
-    "effect": "Combat Start: On Hit from an Identity that has the highest Shield, deal (current Shield / 2) Sloth Damage (2 times per Skill, max 100 damage per tick; rounded down)\n- If 2+ Identities have the same Shield HP, applies to the Identity with the earlier Deployment Order\n\nIf the affected Identity is a Charge Identity, deal Sloth Damage equal to current Shield instead (3 times per skill, max 100 per tick; rounded down)",
+    "effect": "Combat Start: On Hit from an Identity that has the highest Shield, deal (current Shield / 2) Sloth Damage (2 times per Skill, max 100 damage per tick; rounded down)\n- If 2+ Identities have the same Shield HP, applies to the Identity with the earlier Deployment Order\n\nIf the affected Identity is a Charge ID, deal Sloth Damage equal to current Shield instead (3 times per skill, max 100 per tick; rounded down)",
     "max_level": 0,
     "upgrades": [],
     "pools": [
