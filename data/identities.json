@@ -17035,12 +17035,12 @@
     "order_notes": [
       {
         "kind": "first",
-        "text": "Combat Start Apply the following effects to this unit, 1 other ally with the earliest Deployment Order (prioritizes Charge ID), and 1 ally with the lowest current HP percentage (once per turn):",
+        "text": "Combat Start Apply the following effects to this unit, 1 other ally with the earliest Deployment Order (prioritizes Charge IDs), and 1 ally with the lowest current HP percentage (once per turn):",
         "source": "Pin and Trim Along the Patterns"
       },
       {
         "kind": "first",
-        "text": "Combat Start Apply the following effects to this unit, 1 other ally with the earliest Deployment Order (prioritizes Charge ID), and 1 ally with the lowest HP percentage (once per turn):",
+        "text": "Combat Start Apply the following effects to this unit, 1 other ally with the earliest Deployment Order (prioritizes Charge IDs), and 1 ally with the lowest HP percentage (once per turn):",
         "source": "Coupez dans le Biais"
       }
     ],

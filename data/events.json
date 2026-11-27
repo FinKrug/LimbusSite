@@ -14237,7 +14237,7 @@
           },
           {
             "label": "Brew our own batch of ssanghwa-cha.",
-            "desc": "Wrath Advantage check. Pass to gain a Keywordless E.G.O Gift.",
+            "desc": "Wrath Advantage check. Pass to gain a Pierce E.G.O Gift.",
             "check": {
               "sins": [
                 "wrath"
@@ -14313,7 +14313,7 @@
               "nothing": false
             },
             "fail": {
-              "text": "The selected Identity took 45 damage!",
+              "text": "Random Friendly Units lost 45!",
               "gifts": [],
               "unknown_gifts": [],
               "cost": 0,
@@ -14368,7 +14368,7 @@
         "choices": [
           {
             "label": "Ask if we can work with them.",
-            "desc": "Select to gain a Keywordless E.G.O Gift",
+            "desc": "Select to gain a Pierce E.G.O Gift",
             "check": null,
             "result": {
               "text": "E.G.O Gift White Cravat obtained!",
