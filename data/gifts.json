@@ -17157,7 +17157,7 @@
     "secondary_keyword": null,
     "status_effects": [
       "Sinking",
-      "Charge"
+      "Deep Tears"
     ],
     "traits": [],
     "needs": [],
@@ -17168,7 +17168,7 @@
     "affinities": [],
     "affinity_bonus": [],
     "team_gate": false,
-    "effect": "Pierce Base Skills that inflict Sinking Potency, Count, or Unique Sinking gain Final Power +1\n\nOn Hit by an ally using a Skill, if target has -20 or lower SP, deal Gloom damage equal to Sinking Potency to target (once per Skill)\n- If the said Skill was a Pierce Skill, deal additional fixed damage equal to (Sinking Count on target / 2) (once per Skill)\n\n[Lobotomy E.G.O::The Sword Sharpened with Tears Rodion Exclusive Effect]\nOn Hit against an enemy using the final Coin of a Base Skill that consumes Charge and has 1 Atk Weight, deal Pride damage to all enemies equal to (Charge Potency consumed)% of final damage (including Unique Charge)\n\n[The Sword Sharpened with Tears Hong Lu E.G.O Skill Exclusive Effect]\nE.G.O Skill Final Power +1",
+    "effect": "Pierce Base Skills that inflict Sinking Potency, Count, or Unique Sinking gain Final Power +1\n\nOn Hit by an ally using a Skill, if target has -20 or lower SP, deal Gloom damage equal to Sinking Potency to target (once per Skill)\n- If the said Skill was a Pierce Skill, deal additional fixed damage equal to (Sinking Count on target / 2) (once per Skill)\n\n[Lobotomy E.G.O::The Sword Sharpened with Tears Rodion Exclusive Effect]\nOn Hit against an enemy using the final Coin of a Base Skill that consumes Deep Tears and has 1 Atk Weight, deal Pride damage to all enemies equal to (Deep Tears Potency consumed)% of final damage\n\n[The Sword Sharpened with Tears Hong Lu E.G.O Skill Exclusive Effect]\nE.G.O Skill Final Power +1",
     "max_level": 0,
     "upgrades": [],
     "pools": [
