@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { sync, useSync, type SyncStatus } from '../lib/sync'
+import { sync, useSync, type SyncProblem, type SyncStatus } from '../lib/sync'
 import {
   backupFileName, compareRows, makeBackup, parseBackup, takeSnapshot, timeAgo,
   type Snapshot, type SummaryLookups,
@@ -23,8 +23,79 @@ function buttonText(s: SyncStatus): { text: string; tone: 'off' | 'ok' | 'busy' 
     case 'signed-out': return { text: 'Sync', tone: 'off' }
     case 'working': return { text: 'Syncing…', tone: 'busy' }
     case 'ask': return { text: 'Pick a copy', tone: 'warn' }
-    case 'synced': return s.error ? { text: 'Sync problem', tone: 'warn' } : s.saving ? { text: 'Saving…', tone: 'busy' } : { text: 'Synced', tone: 'ok' }
+    case 'synced':
+      if (s.error) return { text: s.error.kind === 'offline' ? 'Offline' : s.error.during === 'save' ? 'Not saved' : 'Sync problem', tone: 'warn' }
+      return s.saving ? { text: 'Saving…', tone: 'busy' } : { text: 'Synced', tone: 'ok' }
   }
+}
+
+/** When it'll fix itself, if it will (offline problems already say "once the connection is back"). */
+function nextLine(p: SyncProblem): string | null {
+  if (p.next === 'soon') return 'Trying again automatically.'
+  return null
+}
+
+/**
+ * A sign-in or save problem: what happened, what it means for your data, and Try again (t11).
+ * `compact`: one line with Try again and a Details link (My identities, Settings).
+ */
+export function ProblemNote({ problem, compact, onDetails }: { problem: SyncProblem; compact?: boolean; onDetails?: () => void }) {
+  if (compact) {
+    return (
+      <span className="sync-problem compact" role="alert">
+        <span>{problem.title}</span>
+        <ProblemRetry />
+        {onDetails && <button className="link-btn" onClick={onDetails}>Details</button>}
+      </span>
+    )
+  }
+  const next = nextLine(problem)
+  return (
+    <div className="sync-problem" role="alert">
+      <p className="sync-problem-title">{problem.title}</p>
+      <p className="sync-problem-detail">{problem.detail}{next ? ` ${next}` : ''}</p>
+      <div className="sync-actions">
+        <ProblemRetry />
+        {problem.kind === 'popup-blocked' && (
+          <button className="btn" onClick={() => void sync.signInOnGooglePage()}>Sign in on Google's page</button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+/**
+ * A bar under the header while saving to your account isn't working, so it's seen without
+ * opening Your data. Hide dismisses this problem; a different one shows again.
+ */
+export function SyncProblemBar({ onOpen }: { onOpen: () => void }) {
+  const { status } = useSync()
+  const [hidden, setHidden] = useState<string | null>(null)
+  const p = status.kind === 'synced' ? status.error : undefined
+  if (!p) return null
+  const key = `${p.kind}:${p.during}`
+  if (hidden === key) return null
+  return (
+    <div className="sync-bar" role="alert">
+      <span className="sync-bar-text"><b>{p.title}</b> {p.during === 'save' || p.kind === 'offline' ? 'Your changes are kept on this computer.' : 'Your data on this computer is untouched.'}</span>
+      <span className="sync-bar-btns">
+        <ProblemRetry />
+        <button className="link-btn" onClick={onOpen}>Details</button>
+        <button className="link-btn" onClick={() => setHidden(key)}>Hide</button>
+      </span>
+    </div>
+  )
+}
+
+/** Try again: redoes the sign-in, load or save that failed. */
+function ProblemRetry() {
+  const [busy, setBusy] = useState(false)
+  return (
+    <button className="btn sync-retry" disabled={busy}
+      onClick={() => { setBusy(true); void sync.retryNow().finally(() => setBusy(false)) }}>
+      {busy ? 'Trying…' : 'Try again'}
+    </button>
+  )
 }
 
 interface DialogsProps {
@@ -59,7 +130,12 @@ export function SyncDialogs({ open, onClose, look }: DialogsProps) {
           theirsMeta={status.cloud.device ? `Saved from ${status.cloud.device}, ${timeAgo(status.cloud.updatedAt)}` : `Saved ${timeAgo(status.cloud.updatedAt)}`}
           keepLabel="Keep this computer's" useLabel="Use the cloud copy"
           onKeep={() => { onClose(); void sync.choose('local') }} onUse={() => { onClose(); void sync.choose('cloud') }} />
-        {status.error && <p className="sync-error">{status.error}</p>}
+        {status.error && (
+          <div className="sync-problem" role="alert">
+            <p className="sync-problem-title">{status.error.title}</p>
+            <p className="sync-problem-detail">{status.error.detail}</p>
+          </div>
+        )}
         <p className="small muted">
           Either way, "Undo" in Your data can bring back the copy you didn't pick.{' '}
           <button className="link-btn" onClick={() => void sync.signOut()}>Don't sync for now (sign out)</button>
@@ -150,10 +226,13 @@ function CloudSection({ status }: { status: SyncStatus }) {
       return (
         <>
           <p className="hint">Sign in with Google and your team, run and gifts follow you to any computer, saved as you go.</p>
-          <div className="sync-actions">
-            <button className="btn primary" onClick={() => void sync.signIn()}>Sign in with Google</button>
-          </div>
-          {status.error && <p className="sync-error">{status.error}</p>}
+          {status.error
+            ? <ProblemNote problem={status.error} />
+            : (
+              <div className="sync-actions">
+                <button className="btn primary" onClick={() => void sync.signIn()}>Sign in with Google</button>
+              </div>
+            )}
         </>
       )
     case 'working':
@@ -167,7 +246,7 @@ function CloudSection({ status }: { status: SyncStatus }) {
             Signed in as <b>{status.user.email ?? status.user.name ?? 'you'}</b>
           </p>
           {status.error
-            ? <p className="sync-error">{status.error} {status.saving ? 'Trying again shortly.' : ''}</p>
+            ? <ProblemNote problem={status.error} />
             : <p className={status.saving ? 'hint sync-busy' : 'sync-ok'}>
                 {status.saving ? 'Saving…' : `Everything's saved to the cloud${status.savedAt ? ` (${timeAgo(status.savedAt)})` : ''}.`}
               </p>}

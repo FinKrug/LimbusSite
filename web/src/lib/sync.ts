@@ -14,13 +14,17 @@ import { onLocalWrite, writeStored } from './storage'
 import {
   SYNC_PREFIX, changedKeys, planSync, takeSnapshot, writesFor, type Snapshot, type SummaryLookups,
 } from './transfer'
+import { describeProblem, isOnline, retryDelay, withTimeout, type ProblemDuring, type SyncProblem } from './syncproblem'
+
+export type { SyncProblem } from './syncproblem'
 
 export type SyncStatus =
   | { kind: 'unavailable'; why: CloudUnavailable }
-  | { kind: 'signed-out'; error?: string }
+  | { kind: 'signed-out'; error?: SyncProblem }
   | { kind: 'working'; what: string }
-  | { kind: 'ask'; user: CloudUser; cloud: CloudCopy; local: Snapshot; error?: string }
-  | { kind: 'synced'; user: CloudUser; saving: boolean; savedAt: number | null; error?: string; lastIn?: { device: string | null; at: number } }
+  | { kind: 'ask'; user: CloudUser; cloud: CloudCopy; local: Snapshot; error?: SyncProblem }
+  /** `error`: the last save or load failed; your changes stay on this computer until one works. */
+  | { kind: 'synced'; user: CloudUser; saving: boolean; savedAt: number | null; error?: SyncProblem; lastIn?: { device: string | null; at: number } }
 
 export interface UndoInfo {
   /** What "Undo" puts back. */
@@ -42,7 +46,8 @@ const K = {
 
 /** How long after your last change the cloud copy is saved. */
 const SAVE_DELAY = 1000
-const RETRY_DELAY = 10000
+/** A load or save that hasn't answered by then counts as failed (Firestore waits forever when offline). */
+const CLOUD_TIMEOUT = 15000
 
 function get(key: string): string | null {
   try { return localStorage.getItem(key) } catch { return null }
@@ -70,13 +75,7 @@ function deviceId(): string {
   return id
 }
 
-function message(e: unknown): string {
-  const code = (e as { code?: string })?.code ?? ''
-  if (code.includes('network') || code === 'unavailable') return "Can't reach the cloud right now (are you offline?)."
-  if (code === 'permission-denied') return 'The cloud refused the request (permission denied).'
-  if (code === 'auth/unauthorized-domain') return "Sign-in isn't allowed on this web address yet (add it under Authentication > Settings > Authorized domains in Firebase)."
-  return (e as { message?: string })?.message ?? String(e)
-}
+const OFFLINE = { code: 'unavailable' }
 
 class SyncEngine {
   private state: State = { status: { kind: 'signed-out' }, undo: null }
@@ -89,6 +88,8 @@ class SyncEngine {
   private timer: ReturnType<typeof setTimeout> | undefined
   private authStarted: Promise<void> | null = null
   private signingIn = false
+  /** Failed tries in a row, for the wait before the next one. */
+  private attempts = 0
 
   subscribe = (l: () => void) => {
     this.listeners.add(l)
@@ -111,7 +112,59 @@ class SyncEngine {
     if (undo) this.state = { ...this.state, undo: { what: undo.what, at: undo.at } }
     const why = cloud.cloudUnavailable()
     if (why) return this.setStatus({ kind: 'unavailable', why })
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', this.onOnline)
+      window.addEventListener('offline', this.onOffline)
+    }
     if (get(K.uid)) void this.startAuth()
+  }
+
+  /** Back online: finish whatever failed while offline. */
+  private onOnline = () => {
+    const s = this.state.status
+    if (s.kind === 'synced' && s.error) void this.retryNow()
+    // A sign-in popup needs a click, so only clear the "you're offline" note.
+    if ((s.kind === 'signed-out' || s.kind === 'ask') && s.error?.kind === 'offline') this.setStatus({ ...s, error: undefined })
+  }
+
+  /** Went offline: say so now, instead of after a save times out. */
+  private onOffline = () => {
+    const s = this.state.status
+    if (s.kind !== 'synced') return
+    const pending = !!this.timer || s.saving || changedKeys(this.base, takeSnapshot(localStorage)).length > 0
+    this.fail(OFFLINE, pending ? 'save' : 'live')
+  }
+
+  /** Show what went wrong and plan the next try: when back online, or after a wait. */
+  private fail(e: unknown, during: ProblemDuring) {
+    const s = this.state.status
+    if (s.kind !== 'synced') return
+    const problem = describeProblem(e, during)
+    clearTimeout(this.timer)
+    this.timer = undefined
+    if (problem.kind === 'offline' && !isOnline()) {
+      problem.next = 'online'
+    } else {
+      problem.next = 'soon'
+      const delay = retryDelay(this.attempts++)
+      this.timer = setTimeout(() => void (during === 'save' ? this.flush() : this.check()), delay)
+    }
+    this.setStatus({ ...s, saving: during === 'save' || s.saving, error: problem })
+  }
+
+  /** The Try again button: redo what failed, now. */
+  async retryNow() {
+    const s = this.state.status
+    if (s.kind === 'signed-out') return this.signIn()
+    if (s.kind !== 'synced' || !s.error) return
+    clearTimeout(this.timer)
+    this.timer = undefined
+    if (s.error.during === 'save') {
+      this.patchSynced({ saving: true })
+      await this.flush()
+    } else {
+      await this.check()
+    }
   }
 
   private startAuth(): Promise<void> {
@@ -119,27 +172,44 @@ class SyncEngine {
       this.setStatus({ kind: 'working', what: 'Connecting…' })
       try {
         await cloud.watchUser((u) => void this.onUser(u))
+        // Coming back from Google's sign-in page with an error.
+        const failed = await cloud.redirectError()
+        if (failed && !this.user) this.setStatus({ kind: 'signed-out', error: describeProblem(failed, 'sign-in') })
       } catch (e) {
         this.authStarted = null
-        this.setStatus({ kind: 'signed-out', error: message(e) })
+        this.setStatus({ kind: 'signed-out', error: describeProblem(e, 'sign-in') })
       }
     })()
     return this.authStarted
   }
 
   async signIn() {
+    if (!isOnline() && !this.user) return this.setStatus({ kind: 'signed-out', error: describeProblem(OFFLINE, 'sign-in') })
     await this.startAuth()
     if (this.user) return
+    if (this.state.status.kind === 'signed-out' && this.state.status.error && !this.authStarted) return // Firebase didn't load
     this.setStatus({ kind: 'working', what: 'Signing in with Google…' })
     this.signingIn = true
     try {
       await cloud.signIn() // onUser picks it up
     } catch (e) {
       const code = (e as { code?: string }).code
-      const closed = code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request'
-      if (!this.user) this.setStatus({ kind: 'signed-out', error: closed ? undefined : message(e) })
+      const closed = code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request' || code === 'auth/user-cancelled'
+      if (!this.user) this.setStatus({ kind: 'signed-out', error: closed ? undefined : describeProblem(e, 'sign-in') })
     } finally {
       this.signingIn = false
+    }
+  }
+
+  /** Sign in on Google's page instead of a popup (when pop-ups are blocked). The page reloads signed in. */
+  async signInOnGooglePage() {
+    if (!isOnline()) return this.setStatus({ kind: 'signed-out', error: describeProblem(OFFLINE, 'sign-in') })
+    this.setStatus({ kind: 'working', what: 'Opening Google sign-in…' })
+    try {
+      await this.startAuth()
+      await cloud.signInOnGooglePage()
+    } catch (e) {
+      this.setStatus({ kind: 'signed-out', error: describeProblem(e, 'sign-in') })
     }
   }
 
@@ -172,21 +242,29 @@ class SyncEngine {
     const u = this.user
     if (!u || !this.look) return
     this.stop()
+    const prev = this.state.status
+    if (!isOnline()) {
+      // Keep working from this computer's data; sync when the connection is back.
+      this.setStatus({ kind: 'synced', user: u, saving: false, savedAt: prev.kind === 'synced' ? prev.savedAt : null, error: { ...describeProblem(OFFLINE, 'load'), next: 'online' } })
+      return
+    }
     this.setStatus({ kind: 'working', what: 'Checking your cloud copy…' })
     try {
-      const copy = await cloud.readCloud(u.uid)
+      const copy = await withTimeout(cloud.readCloud(u.uid), CLOUD_TIMEOUT)
       const local = takeSnapshot(localStorage)
       const saved = getJson<{ uid: string; data: Snapshot }>(K.base)
       const base = saved?.uid === u.uid ? saved.data : null
       const plan = planSync(local, copy?.data ?? null, base, this.look)
       if (plan === 'ask') return this.setStatus({ kind: 'ask', user: u, cloud: copy!, local })
-      if (plan === 'push') await cloud.writeCloud(u.uid, local, this.who(), true)
+      if (plan === 'push') await withTimeout(cloud.writeCloud(u.uid, local, this.who(), true), CLOUD_TIMEOUT)
       if (plan === 'pull') this.replaceLocal(copy!.data, 'This computer’s data from before it synced', false)
       this.setBase(plan === 'pull' ? copy!.data : local)
+      this.attempts = 0
       this.goLive(plan === 'pull' && copy ? { device: copy.device, at: copy.updatedAt } : undefined)
     } catch (e) {
-      this.setStatus({ kind: 'synced', user: u, saving: false, savedAt: null, error: message(e) })
-      this.retry(() => this.check())
+      if (this.user?.uid !== u.uid) return
+      this.setStatus({ kind: 'synced', user: u, saving: false, savedAt: prev.kind === 'synced' ? prev.savedAt : null })
+      this.fail(e, 'load')
     }
   }
 
@@ -194,11 +272,12 @@ class SyncEngine {
   async choose(which: 'local' | 'cloud') {
     const s = this.state.status
     if (s.kind !== 'ask') return
+    if (which === 'local' && !isOnline()) return this.setStatus({ ...s, error: describeProblem(OFFLINE, 'choose') })
     this.setStatus({ kind: 'working', what: which === 'local' ? 'Saving this computer’s data to the cloud…' : 'Loading the cloud copy…' })
     try {
       if (which === 'local') {
         const local = takeSnapshot(localStorage)
-        await cloud.writeCloud(s.user.uid, local, this.who(), true)
+        await withTimeout(cloud.writeCloud(s.user.uid, local, this.who(), true), CLOUD_TIMEOUT)
         this.keepUndo(s.cloud.data, 'The cloud copy you replaced')
         this.setBase(local)
         this.goLive()
@@ -208,7 +287,7 @@ class SyncEngine {
         this.goLive({ device: s.cloud.device, at: s.cloud.updatedAt })
       }
     } catch (e) {
-      this.setStatus({ ...s, error: message(e) })
+      this.setStatus({ ...s, error: describeProblem(e, 'choose') })
     }
   }
 
@@ -254,9 +333,9 @@ class SyncEngine {
     this.stopLive.push(onLocalWrite(() => this.schedule()))
     let cancelled = false
     this.stopLive.push(() => { cancelled = true })
-    cloud.watchCloud(u.uid, (c) => this.onRemote(c), (e) => this.patchSynced({ error: message(e) }))
+    cloud.watchCloud(u.uid, (c) => this.onRemote(c), (e) => this.fail(e, 'live'))
       .then((unwatch) => { if (cancelled) unwatch(); else this.stopLive.push(unwatch) })
-      .catch((e) => this.patchSynced({ error: message(e) }))
+      .catch((e) => this.fail(e, 'live'))
     // Changes made while it was checking.
     if (changedKeys(this.base, takeSnapshot(localStorage)).length) this.schedule()
   }
@@ -273,20 +352,23 @@ class SyncEngine {
   }
 
   private schedule(delay = SAVE_DELAY) {
-    if (this.state.status.kind !== 'synced') return
-    clearTimeout(this.timer)
+    const s = this.state.status
+    if (s.kind !== 'synced') return
+    // Offline: the change is kept here; going back online saves it (onOnline).
+    if (s.error?.next === 'online' && !isOnline()) {
+      return this.setStatus({ ...s, saving: true, error: s.error.during === 'save' ? s.error : { ...describeProblem(OFFLINE, 'save'), next: 'online' } })
+    }
     this.patchSynced({ saving: true })
-    this.timer = setTimeout(() => void this.flush(), delay)
-  }
-
-  private retry(f: () => void) {
+    // A failed load is retried by its own timer, which saves your changes once it works.
+    if (s.error && s.error.during !== 'save' && this.timer) return
     clearTimeout(this.timer)
-    this.timer = setTimeout(f, RETRY_DELAY)
+    this.timer = setTimeout(() => void this.flush(), delay)
   }
 
   /** Save anything not yet in the cloud right away (before signing out or closing the page). */
   async flushNow() {
-    if (this.timer && this.state.status.kind === 'synced') {
+    const s = this.state.status
+    if (s.kind === 'synced' && (this.timer || s.saving) && isOnline()) {
       clearTimeout(this.timer)
       await this.flush()
     }
@@ -298,18 +380,21 @@ class SyncEngine {
     this.timer = undefined
     const local = takeSnapshot(localStorage)
     const changes = writesFor(this.base, local)
-    if (!Object.keys(changes).length) return this.patchSynced({ saving: false })
+    if (!Object.keys(changes).length) return this.patchSynced({ saving: false, error: undefined })
+    if (!isOnline()) return this.fail(OFFLINE, 'save')
     try {
-      await cloud.writeCloud(u.uid, changes, this.who())
+      await withTimeout(cloud.writeCloud(u.uid, changes, this.who()), CLOUD_TIMEOUT)
+      if (this.user?.uid !== u.uid) return
       const next = { ...this.base }
       for (const [k, v] of Object.entries(changes)) { if (v === null) delete next[k]; else next[k] = v }
       this.setBase(next)
+      this.attempts = 0
       this.patchSynced({ saving: false, savedAt: Date.now(), error: undefined })
       // Something changed while saving.
       if (changedKeys(this.base, takeSnapshot(localStorage)).length) this.schedule()
     } catch (e) {
-      this.patchSynced({ error: message(e) })
-      this.schedule(RETRY_DELAY)
+      if (this.user?.uid !== u.uid) return
+      this.fail(e, 'save')
     }
   }
 

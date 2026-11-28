@@ -89,20 +89,44 @@ export async function watchUser(cb: (u: CloudUser | null) => void): Promise<() =
   return fb.auth.onAuthStateChanged(fb.authObj, (u) => cb(u ? toUser(u) : null))
 }
 
-export async function signIn(): Promise<void> {
-  const fb = await firebase()
+function googleProvider(fb: Firebase) {
   const provider = new fb.auth.GoogleAuthProvider()
   provider.setCustomParameters({ prompt: 'select_account' })
+  return provider
+}
+
+/**
+ * Sign in with Google in a popup. A blocked popup throws auth/popup-blocked, so the
+ * player sees why and can allow pop-ups or use signInOnGooglePage (t11).
+ */
+export async function signIn(): Promise<void> {
+  const fb = await firebase()
   try {
-    await fb.auth.signInWithPopup(fb.authObj, provider)
+    await fb.auth.signInWithPopup(fb.authObj, googleProvider(fb))
   } catch (e) {
-    const code = (e as { code?: string }).code
-    // Popups blocked (some phones and strict browsers): go to Google's page and come back.
-    if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment') {
-      await fb.auth.signInWithRedirect(fb.authObj, provider)
+    // Popups can't work here at all (some in-app browsers): go to Google's page and come back.
+    if ((e as { code?: string }).code === 'auth/operation-not-supported-in-this-environment') {
+      await fb.auth.signInWithRedirect(fb.authObj, googleProvider(fb))
       return
     }
     throw e
+  }
+}
+
+/** Sign in on Google's own page instead of a popup; the site reloads signed in. */
+export async function signInOnGooglePage(): Promise<void> {
+  const fb = await firebase()
+  await fb.auth.signInWithRedirect(fb.authObj, googleProvider(fb))
+}
+
+/** After coming back from Google's page: the error, if that sign-in failed (else null). */
+export async function redirectError(): Promise<unknown> {
+  const fb = await firebase()
+  try {
+    await fb.auth.getRedirectResult(fb.authObj)
+    return null
+  } catch (e) {
+    return e
   }
 }
 

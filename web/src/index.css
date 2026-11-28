@@ -1184,6 +1184,17 @@ p.skill-best { background: none; border-color: var(--line); }
 .sync-ok { color: var(--good); margin: 6px 0 0; font-size: 14px; }
 .sync-error { color: var(--bad); margin: 8px 0 0; font-size: 14px; }
 .sync-busy { margin-top: 6px; }
+/* Sign-in / save problems with Try again (t11). */
+.sync-problem { margin: 8px 0 0; padding: 10px 12px; border: 1px solid var(--bad); border-radius: 8px; background: rgb(224 103 90 / 0.08); }
+.sync-problem-title { margin: 0; color: var(--bad); font-weight: 600; font-size: 14px; }
+.sync-problem-detail { margin: 4px 0 0; font-size: 14px; color: var(--text); }
+.sync-problem .sync-actions { margin-top: 8px; }
+.sync-problem.compact { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; padding: 0; border: 0; background: none; color: var(--bad); }
+.sync-problem.compact .link-btn { padding: 0 2px; }
+.btn.sync-retry { padding: 3px 10px; font-size: 13px; }
+.sync-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; margin: 10px 0 0; padding: 8px 14px; border: 1px solid var(--bad); border-radius: 8px; background: rgb(224 103 90 / 0.1); font-size: 14px; }
+.sync-bar-text b { color: var(--bad); }
+.sync-bar-btns { display: flex; align-items: center; gap: 10px; }
 
 .compare { display: grid; gap: 12px; }
 .compare-grid { display: grid; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }

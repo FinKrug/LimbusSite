@@ -21,6 +21,12 @@ const fake = vi.hoisted(() => ({
   user: null as CloudUser | null,
   cloudCbs: [] as ((c: CloudCopy | null) => void)[],
   writes: 0,
+  /** t11: make the next calls fail. `writeErrors` are used one per write; 'hang' never answers. */
+  writeErrors: [] as (unknown | 'hang')[],
+  readErrors: [] as unknown[],
+  signInErrors: [] as unknown[],
+  signIns: 0,
+  redirects: 0,
 }))
 
 vi.mock('./cloud', () => {
@@ -30,15 +36,29 @@ vi.mock('./cloud', () => {
     deviceLabel: () => 'Test · Browser',
     // Like Firebase: the signed-in user stays signed in across page loads.
     watchUser: async (cb: (u: CloudUser | null) => void) => { fake.userCb = cb; cb(fake.user); return () => {} },
-    signIn: async () => { fake.user = { uid: 'u1', name: 'Fin', email: 'fin@example.com' }; fake.userCb?.(fake.user) },
+    signIn: async () => {
+      fake.signIns++
+      const err = fake.signInErrors.shift()
+      if (err) throw err
+      fake.user = { uid: 'u1', name: 'Fin', email: 'fin@example.com' }; fake.userCb?.(fake.user)
+    },
+    signInOnGooglePage: async () => { fake.redirects++ },
+    redirectError: async () => null,
     signOut: async () => { fake.user = null; fake.userCb?.(null) },
-    readCloud: async () => copy(),
+    readCloud: async () => {
+      const err = fake.readErrors.shift()
+      if (err) throw err
+      return copy()
+    },
     watchCloud: async (_uid: string, cb: (c: CloudCopy | null) => void) => {
       fake.cloudCbs.push(cb)
       return () => { fake.cloudCbs = fake.cloudCbs.filter((f) => f !== cb) }
     },
     writeCloud: async (_uid: string, changes: Record<string, string | null>, who: { device: string; deviceId: string }, replace = false) => {
       fake.writes++
+      const err = fake.writeErrors.shift()
+      if (err === 'hang') return new Promise<void>(() => {})
+      if (err) throw err
       const data = replace || !fake.doc ? {} : { ...fake.doc.data }
       for (const [k, v] of Object.entries(changes)) { if (v === null) delete data[k]; else data[k] = v }
       fake.doc = { data, updatedAt: Date.now(), device: who.device, deviceId: who.deviceId }
@@ -48,6 +68,13 @@ vi.mock('./cloud', () => {
 
 const storage = new MemoryStorage()
 vi.stubGlobal('localStorage', storage)
+// The browser's connection state and online/offline events (t11).
+const net = { onLine: true }
+vi.stubGlobal('navigator', net)
+const win = new EventTarget()
+vi.stubGlobal('window', win)
+function goOffline() { net.onLine = false; win.dispatchEvent(new Event('offline')) }
+function goOnline() { net.onLine = true; win.dispatchEvent(new Event('online')) }
 
 const look: SummaryLookups = {
   identities: new Map(gameData.identities.map((i) => [i.id, i])),
@@ -84,6 +111,12 @@ beforeEach(() => {
   fake.user = null
   fake.cloudCbs = []
   fake.writes = 0
+  fake.writeErrors = []
+  fake.readErrors = []
+  fake.signInErrors = []
+  fake.signIns = 0
+  fake.redirects = 0
+  net.onLine = true
 })
 
 describe('cloud sync', () => {
@@ -214,5 +247,147 @@ describe('cloud sync', () => {
     await vi.advanceTimersByTimeAsync(1500)
     expect(fake.writes).toBe(before)
     expect(storage.getItem('limbussite.team.v1')).toBe(team)
+  })
+})
+
+describe('sync problems: a specific message, Try again, and changes kept here until saved (t11)', () => {
+  async function signedIn() {
+    storage.setItem('limbussite.team.v1', team)
+    const e = await engine()
+    await e.sync.signIn()
+    await flush()
+    expect(e.sync.getState().status).toMatchObject({ kind: 'synced' })
+    return e
+  }
+  const owned = 'limbussite.owned.v1'
+  type Engine = Awaited<ReturnType<typeof engine>>['sync']
+  const errorOf = (sync: Engine) => { const s = sync.getState().status; return 'error' in s ? s.error : undefined }
+
+  it('a failed save says so, keeps the change here and tries again on its own', async () => {
+    const { sync, writeStored } = await signedIn()
+    vi.useFakeTimers()
+    fake.writeErrors.push({ code: 'internal', message: 'Firebase: Error (firestore/internal).' })
+    writeStored({ [owned]: '["thrill"]' }, { asLocal: true })
+    await vi.advanceTimersByTimeAsync(1500)
+    const s = sync.getState().status
+    expect(s).toMatchObject({ kind: 'synced', saving: true, error: { kind: 'failed', during: 'save', next: 'soon' } })
+    if (s.kind === 'synced') expect(s.error!.title).toMatch(/Couldn't save your latest changes/)
+    expect(storage.getItem(owned)).toBe('["thrill"]')
+    expect(fake.doc!.data[owned]).toBeUndefined()
+    await vi.advanceTimersByTimeAsync(5000)
+    expect(fake.doc!.data[owned]).toBe('["thrill"]')
+    expect(sync.getState().status).toMatchObject({ kind: 'synced', saving: false })
+    expect(errorOf(sync)).toBeUndefined()
+  })
+
+  it('Try again saves right away', async () => {
+    const { sync, writeStored } = await signedIn()
+    vi.useFakeTimers()
+    fake.writeErrors.push({ code: 'permission-denied' })
+    writeStored({ [owned]: '["thrill"]' }, { asLocal: true })
+    await vi.advanceTimersByTimeAsync(1500)
+    expect(sync.getState().status).toMatchObject({ error: { kind: 'denied', during: 'save' } })
+    await sync.retryNow()
+    expect(fake.doc!.data[owned]).toBe('["thrill"]')
+    expect(sync.getState().status).toMatchObject({ saving: false })
+    expect(errorOf(sync)).toBeUndefined()
+  })
+
+  it('a save that never answers counts as failed after 15 s', async () => {
+    const { sync, writeStored } = await signedIn()
+    vi.useFakeTimers()
+    fake.writeErrors.push('hang')
+    writeStored({ [owned]: '["thrill"]' }, { asLocal: true })
+    await vi.advanceTimersByTimeAsync(1000 + 14000)
+    expect(sync.getState().status).toMatchObject({ saving: true })
+    expect(errorOf(sync)).toBeUndefined()
+    await vi.advanceTimersByTimeAsync(1500)
+    const s = sync.getState().status
+    expect(s).toMatchObject({ error: { kind: 'offline', during: 'save', next: 'soon' } })
+    if (s.kind === 'synced') expect(s.error!.title).toMatch(/Can't reach your account/)
+  })
+
+  it('offline: says so at once, waits without trying, and saves when the connection is back', async () => {
+    const { sync, writeStored } = await signedIn()
+    vi.useFakeTimers()
+    goOffline()
+    expect(sync.getState().status).toMatchObject({ error: { kind: 'offline', during: 'live', next: 'online' } })
+    const before = fake.writes
+    writeStored({ [owned]: '["thrill"]' }, { asLocal: true })
+    await vi.advanceTimersByTimeAsync(120000)
+    expect(fake.writes).toBe(before)
+    expect(sync.getState().status).toMatchObject({ saving: true, error: { kind: 'offline', during: 'save', next: 'online' } })
+    expect(storage.getItem(owned)).toBe('["thrill"]')
+    goOnline()
+    await vi.advanceTimersByTimeAsync(10)
+    expect(fake.doc!.data[owned]).toBe('["thrill"]')
+    expect(sync.getState().status).toMatchObject({ kind: 'synced', saving: false })
+    expect(errorOf(sync)).toBeUndefined()
+  })
+
+  it('changes not yet saved survive closing the page: the next visit uploads them', async () => {
+    let { sync, writeStored } = await signedIn()
+    vi.useFakeTimers()
+    fake.writeErrors.push({ code: 'unavailable' }, { code: 'unavailable' })
+    writeStored({ [owned]: '["thrill"]' }, { asLocal: true })
+    await vi.advanceTimersByTimeAsync(1500)
+    expect(sync.getState().status).toMatchObject({ error: { during: 'save' } })
+    // Page closed before a retry worked; opened again later.
+    vi.clearAllTimers()
+    vi.useRealTimers()
+    fake.cloudCbs = []
+    fake.writeErrors = []
+    ;({ sync, writeStored } = await engine())
+    await flush()
+    await flush()
+    expect(sync.getState().status).toMatchObject({ kind: 'synced' })
+    expect(errorOf(sync)).toBeUndefined()
+    expect(fake.doc!.data[owned]).toBe('["thrill"]')
+  })
+
+  it('loading the cloud copy fails: this computer keeps working, Try again finishes syncing', async () => {
+    storage.setItem('limbussite.team.v1', team)
+    const { sync } = await engine()
+    fake.readErrors.push({ code: 'unavailable' })
+    vi.useFakeTimers()
+    await sync.signIn()
+    await vi.advanceTimersByTimeAsync(10)
+    expect(sync.getState().status).toMatchObject({ kind: 'synced', error: { during: 'load', next: 'soon' } })
+    expect(storage.getItem('limbussite.team.v1')).toBe(team)
+    await sync.retryNow()
+    expect(sync.getState().status).toMatchObject({ kind: 'synced' })
+    expect(errorOf(sync)).toBeUndefined()
+    expect(fake.doc!.data['limbussite.team.v1']).toBe(team)
+  })
+
+  it('a blocked sign-in popup explains why; Try again opens it again, or use Google\'s page', async () => {
+    const { sync } = await engine()
+    fake.signInErrors.push({ code: 'auth/popup-blocked' })
+    await sync.signIn()
+    const s = sync.getState().status
+    expect(s).toMatchObject({ kind: 'signed-out', error: { kind: 'popup-blocked', during: 'sign-in' } })
+    if (s.kind === 'signed-out') expect(s.error!.title).toMatch(/blocked the Google sign-in window/)
+    await sync.retryNow()
+    await flush()
+    expect(fake.signIns).toBe(2)
+    expect(sync.getState().status.kind).toBe('synced')
+    await sync.signOut()
+    fake.signInErrors.push({ code: 'auth/popup-blocked' })
+    await sync.signIn()
+    await sync.signInOnGooglePage()
+    expect(fake.redirects).toBe(1)
+  })
+
+  it('closing the popup isn\'t an error; signing in offline says so without opening it', async () => {
+    const { sync } = await engine()
+    fake.signInErrors.push({ code: 'auth/popup-closed-by-user' })
+    await sync.signIn()
+    expect(sync.getState().status).toEqual({ kind: 'signed-out', error: undefined })
+    net.onLine = false
+    await sync.signIn()
+    expect(fake.signIns).toBe(1)
+    expect(sync.getState().status).toMatchObject({ kind: 'signed-out', error: { kind: 'offline', during: 'sign-in' } })
+    goOnline()
+    expect(sync.getState().status).toEqual({ kind: 'signed-out', error: undefined })
   })
 })

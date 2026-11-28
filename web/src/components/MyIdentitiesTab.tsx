@@ -5,6 +5,7 @@ import { groupBySinner, hasMarkedIdentities, isBaseIdentity, normalizeOwned, own
 import { useSync } from '../lib/sync'
 import type { Identity, Sinner } from '../lib/types'
 import { IdentityImport } from './IdentityImport'
+import { ProblemNote } from './SyncPanel'
 import { Portrait } from './Portrait'
 
 type Show = 'all' | 'owned' | 'missing'
@@ -113,13 +114,14 @@ export function SaveStatus({ onOpenData }: { onOpenData: () => void }) {
   const { status } = useSync()
   switch (status.kind) {
     case 'synced':
-      if (status.error) return <p className="myids-save warn" role="status">Couldn't save to your account. <button className="link-btn" onClick={onOpenData}>Details</button></p>
+      if (status.error) return <p className="myids-save warn"><ProblemNote problem={status.error} compact onDetails={onOpenData} /></p>
       return status.saving
         ? <p className="myids-save busy" role="status">Saving…</p>
         : <p className="myids-save ok" role="status">✓ Saved to your account</p>
     case 'working': return <p className="myids-save busy" role="status">Syncing…</p>
     case 'ask': return <p className="myids-save warn" role="status"><button className="link-btn" onClick={onOpenData}>Pick which copy to keep</button> to finish signing in</p>
     case 'signed-out':
+      if (status.error) return <p className="myids-save warn"><ProblemNote problem={status.error} compact onDetails={onOpenData} /></p>
       return <p className="myids-save" role="status">Saved on this computer. <button className="link-btn accent" onClick={onOpenData}>Sign in</button> to keep it on your account.</p>
     default:
       return <p className="myids-save" role="status">Saved on this computer.</p>

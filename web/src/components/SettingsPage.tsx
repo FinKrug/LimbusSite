@@ -1,6 +1,7 @@
 import type { ArtVariant } from '../lib/images'
 import { useSync } from '../lib/sync'
 import { timeAgo } from '../lib/transfer'
+import { ProblemNote } from './SyncPanel'
 
 /** Home › Settings: card art, your data (sign in, backups), and the first-time setup. */
 export function SettingsPage({ art, onArtChange, onOpenData, onSetup, onTour, dataNote, celebrate, onCelebrateChange, onPreviewCelebration }: {
@@ -24,7 +25,7 @@ export function SettingsPage({ art, onArtChange, onOpenData, onSetup, onTour, da
       case 'working': return `${status.what}…`
       case 'ask': return 'This computer and your account both have data: pick which copy to keep.'
       case 'synced': return status.error
-        ? `Signed in, but the last save failed: ${status.error}`
+        ? `Signed in as ${status.user.name ?? status.user.email ?? 'you'}.`
         : `Signed in as ${status.user.name ?? status.user.email ?? 'you'}. ${status.saving ? 'Saving…' : status.savedAt ? `Saved ${timeAgo(status.savedAt)}.` : 'Everything is saved.'}`
     }
   })()
@@ -34,6 +35,7 @@ export function SettingsPage({ art, onArtChange, onOpenData, onSetup, onTour, da
       <section className="panel settings-card">
         <h2>Your data</h2>
         <p className={status.kind === 'synced' && !status.error ? 'good' : 'muted'}>{syncLine}</p>
+        {(status.kind === 'synced' || status.kind === 'signed-out') && status.error && <ProblemNote problem={status.error} />}
         <div className="settings-row">
           <button className="btn primary" onClick={onOpenData}>
             {status.kind === 'signed-out' ? 'Sign in or load a backup' : 'Sync and backups'}

@@ -40,7 +40,7 @@ import { RunBar } from './components/RunBar'
 import { RewardPicker } from './components/RewardPicker'
 import { withFloor } from './lib/run'
 import { SkillsTab } from './components/SkillsTab'
-import { SyncButton, SyncDialogs } from './components/SyncPanel'
+import { SyncButton, SyncDialogs, SyncProblemBar } from './components/SyncPanel'
 import { TeamTab } from './components/TeamTab'
 import { KeywordChip } from './components/bits'
 import { gameData } from './lib/data'
@@ -784,6 +784,7 @@ export default function App() {
           <span data-tour="sync"><SyncButton onOpen={() => setDataOpen(true)} /></span>
         </div>
       </header>
+      {!dataOpen && <SyncProblemBar onOpen={() => setDataOpen(true)} />}
       {syncDialogs}
       {rare && <Celebration key={rare.gift.id + rare.why} find={rare} onDone={closeRare} />}
       {touring && <Tour steps={TOUR} onOpenTab={(t) => { setBuildingForRun(false); setTab(t) }} onClose={() => { setTouring(false); setTab('team'); window.scrollTo(0, 0) }} />}

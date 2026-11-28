@@ -7,6 +7,7 @@ import { ownedIdentitySet } from '../lib/myidentities'
 import { sync, useSync } from '../lib/sync'
 import type { Identity } from '../lib/types'
 import { MyCollection } from './MyCollection'
+import { ProblemNote } from './SyncPanel'
 
 /** limbussite.setup.v1: null until you finish or skip the setup. */
 export type SetupState = 'done' | 'skipped' | null
@@ -143,6 +144,7 @@ function DataStep({ hasTeam, marked, owned, onOpenData, onDone }: {
           <div className={`setup-card${signedIn ? ' ok' : ''}`}>
             <h3>Sign in with Google</h3>
             {status.kind === 'synced' && <p className="good">✓ Signed in as {status.user.name ?? status.user.email ?? 'you'}. Your data saves as you go.</p>}
+            {status.kind === 'synced' && status.error && <ProblemNote problem={status.error} />}
             {status.kind === 'working' && <p className="muted">{status.what}…</p>}
             {status.kind === 'ask' && (
               <p>Both this computer and your account have data. <button className="link-btn accent" onClick={onOpenData}>Pick which copy to keep</button></p>
@@ -150,8 +152,9 @@ function DataStep({ hasTeam, marked, owned, onOpenData, onDone }: {
             {status.kind === 'signed-out' && (
               <>
                 <p className="muted">Free, and only you can see your data.</p>
-                {status.error && <p className="bad small">{status.error}</p>}
-                <button className="btn primary" onClick={() => void sync.signIn()}>Sign in with Google</button>
+                {status.error
+                  ? <ProblemNote problem={status.error} />
+                  : <button className="btn primary" onClick={() => void sync.signIn()}>Sign in with Google</button>}
               </>
             )}
           </div>
